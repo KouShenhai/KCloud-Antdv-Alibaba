@@ -1,6 +1,6 @@
 <h1 align="center">RuoYi-Antdv</h1>
 
-> RuoYi-Antdv 是RuoYi-Vue和Ant Design Vue Pro的结合。
+> KCloud-Antdv 是RuoYi-Vue和Ant Design Vue Pro的结合。
 
 <p align="center">
  <a href="https://gitee.com/fuzui/RuoYi-Antdv" target="_blank"><img src="https://gitee.com/fuzui/RuoYi-Antdv/badge/star.svg?theme=dark" alt="Build Status"></a>&nbsp;
