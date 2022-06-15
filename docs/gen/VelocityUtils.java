@@ -1,5 +1,3 @@
-package com.ruoyi.generator.util;
-
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
