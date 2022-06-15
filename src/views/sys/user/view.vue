@@ -13,7 +13,7 @@
                   </a-form-item>
                 </a-col>
                 <a-col :md="8" :sm="24">
-                  <span class="table-page-search-submitButtons">
+                  <span class="table-page-search-submitButtons" v-hasPermi="['sys:user:query']">
                     <a-button type="primary" @click="handleQuery"><a-icon type="search" />查询</a-button>
                     <a-button style="margin-left: 8px" @click="resetQuery"><a-icon type="redo" />重置</a-button>
                   </span>
@@ -58,21 +58,21 @@
               <img style="width:50px;height:50px" :src="record.imgUrl" />
             </span>
             <span slot="operation" slot-scope="text, record" v-if="record.id !== 1">
-              <a @click="$refs.createForm.handleUpdate(record)">
+              <a @click="$refs.createForm.handleUpdate(record)" v-hasPermi="['sys:user:update']">
                 <a-icon type="edit" />
                 修改
               </a>
-              <a-divider type="vertical"/>
-              <a @click="$refs.createForm.handleAdd()">
+              <a-divider type="vertical" v-hasPermi="['sys:user:insert']"/>
+              <a @click="$refs.createForm.handleAdd()" v-hasPermi="['sys:user:insert']">
                 <a-icon type="plus" />新增
               </a>
-              <a-divider type="vertical"/>
-              <a @click="handleDelete(record)">
+              <a-divider type="vertical" v-hasPermi="['sys:user:delete']"/>
+              <a @click="handleDelete(record)" v-hasPermi="['sys:user:delete']">
                 <a-icon type="delete" />
                 删除
               </a>
-              <a-divider type="vertical"/>
-              <a @click="$refs.resetPassword.handleResetPwd(record)">
+              <a-divider type="vertical" v-hasPermi="['sys:user:update']"/>
+              <a @click="$refs.resetPassword.handleResetPwd(record)" v-hasPermi="['sys:user:update']">
                 <a-icon type="key" />
                 重置密码
               </a>
@@ -253,8 +253,8 @@ export default {
     },
     /** 删除按钮操作 */
     handleDelete (row) {
-      var that = this
-      const userIds = row.userId || this.ids
+      const that = this
+      const userIds = row.id
       this.$confirm({
         title: '确认删除所选中数据?',
         content: '当前选中编号为' + userIds + '的数据',

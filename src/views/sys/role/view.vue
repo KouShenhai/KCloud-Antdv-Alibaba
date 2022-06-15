@@ -74,7 +74,7 @@
 
 <script>
 
-import { listRole, delRole } from '@/api/sys/role'
+import { pageRole, delRole } from '@/api/sys/role'
 import CreateForm from './modules/CreateForm'
 import { tableMixin } from '@/store/table-mixin'
 
@@ -143,7 +143,7 @@ export default {
     /** 查询角色列表 */
     getList () {
       this.loading = true
-      listRole(this.queryParam).then(response => {
+      pageRole(this.queryParam).then(response => {
           this.list = response.data.records
           this.total = response.data.total - 0
           this.loading = false

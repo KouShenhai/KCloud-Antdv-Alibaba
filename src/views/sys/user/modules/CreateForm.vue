@@ -16,17 +16,17 @@
           <a-radio-button v-for="(d, index) in statusOptions" :key="index" :value="d.value">{{ d.label }}</a-radio-button>
         </a-radio-group>
       </a-form-model-item>
-      <!--      <a-form-model-item label="角色" prop="roleIds">-->
-      <!--        <a-select-->
-      <!--          mode="multiple"-->
-      <!--          v-model="form.roleIds"-->
-      <!--          placeholder="请选择"-->
-      <!--        >-->
-      <!--          <a-select-option v-for="(d, index) in roleOptions" :key="index" :value="d.roleId">-->
-      <!--            {{ d.roleName }}-->
-      <!--          </a-select-option>-->
-      <!--        </a-select>-->
-      <!--      </a-form-model-item>-->
+            <a-form-model-item label="角色" prop="roleIds">
+              <a-select
+                mode="multiple"
+                v-model="form.roleIds"
+                placeholder="请选择"
+              >
+                <a-select-option v-for="(d, index) in roleOptions" :key="index" :value="d.id">
+                  {{ d.name }}
+                </a-select-option>
+              </a-select>
+            </a-form-model-item>
       <div class="bottom-control">
         <a-space>
           <a-button type="primary" :loading="submitLoading" @click="submitForm">
@@ -44,7 +44,7 @@
 <script>
 
   import { getUser, addUser, updateUser } from '@/api/sys/user'
-
+  import { listRole } from '@/api/sys/role'
   export default {
     name: 'CreateForm',
     props: {
@@ -55,18 +55,15 @@
     data () {
       return {
         submitLoading: false,
-        replaceFields: { children: 'children', title: 'label', key: 'id', value: 'id' },
-        // 岗位选项
-        postOptions: [],
         // 角色选项
         roleOptions: [],
         statusOptions: [
           {
-            label: "正常",
+            label: '正常',
             value: 0
           },
           {
-            label: "停用",
+            label: '停用',
             value: 1
           }
         ],
@@ -114,26 +111,25 @@
       // 表单重置
       reset () {
         this.form = {
-          userId: undefined,
-          deptId: undefined,
-          userName: undefined,
-          nickName: undefined,
+          id: undefined,
+          username: undefined,
           password: undefined,
-          phonenumber: undefined,
-          email: undefined,
-          sex: '3',
-          status: '0',
-          remark: undefined,
-          postIds: [],
+          status: 0,
           roleIds: []
         }
       },
       /** 新增按钮操作 */
       handleAdd () {
         this.reset()
-        getUser().then(response => {
-          this.postOptions = response.posts
-          this.roleOptions = response.roles
+        listRole({}).then(response => {
+          const roles = []
+          response.data.forEach(item => {
+            roles.push({
+              id:item.id,
+              name:item.name
+            })
+          })
+          this.roleOptions = roles
           this.open = true
           this.formTitle = '新增用户'
           this.form.password = this.initPassword
@@ -142,24 +138,32 @@
       /** 修改按钮操作 */
       handleUpdate (row) {
         this.reset()
+        // eslint-disable-next-line no-unused-vars
         const userId = row.id
-        // getUser(userId).then(response => {
-        //   this.form = response.data
-        //   this.postOptions = response.posts
-        //   this.roleOptions = response.roles
-        //   this.form.postIds = response.postIds
-        //   this.form.roleIds = response.roleIds
-        //   this.open = true
-        //   this.formTitle = '修改用户'
-        //   this.form.password = ''
-        // })
+        listRole({}).then(response => {
+          const roles = []
+          response.data.forEach(item => {
+            roles.push({
+              id:item.id,
+              name:item.name
+            })
+          })
+          this.roleOptions = roles
+        })
+        getUser(userId).then(response => {
+          this.form = response.data
+          this.form.roleIds = this.form.roleIds
+          this.open = true
+          this.formTitle = '修改用户'
+          this.form.password = ''
+        })
       },
       /** 提交按钮 */
       submitForm: function () {
         this.$refs.form.validate(valid => {
           if (valid) {
             this.submitLoading = true
-            if (this.form.userId !== undefined) {
+            if (this.form.id !== undefined) {
               updateUser(this.form).then(response => {
                 this.$message.success(
                   '修改成功',

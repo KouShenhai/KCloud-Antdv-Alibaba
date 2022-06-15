@@ -13,15 +13,14 @@ export function listUser (query) {
 // 查询用户详细
 export function getUser (userId) {
   return request({
-    url: '/system/user/' + parseStrEmpty(userId),
+    url: '/admin/sys/user/api/detail?id=' + parseStrEmpty(userId),
     method: 'get'
   })
 }
-
 // 新增用户
 export function addUser (data) {
   return request({
-    url: '/system/user',
+    url: '/admin/sys/user/api/insert',
     method: 'post',
     data: data
   })
@@ -30,7 +29,7 @@ export function addUser (data) {
 // 修改用户
 export function updateUser (data) {
   return request({
-    url: '/system/user',
+    url: '/admin/sys/user/api/update',
     method: 'put',
     data: data
   })
@@ -39,7 +38,7 @@ export function updateUser (data) {
 // 删除用户
 export function delUser (userId) {
   return request({
-    url: '/system/user/' + userId,
+    url: '/admin/sys/user/api/delete?id=' + userId,
     method: 'delete'
   })
 }
@@ -96,15 +95,6 @@ export function updateUserPwd (oldPassword, newPassword) {
 export function uploadAvatar (data) {
   return request({
     url: '/system/user/profile/avatar',
-    method: 'post',
-    data: data
-  })
-}
-
-// 导入用户
-export function importData (data) {
-  return request({
-    url: '/system/user/importData',
     method: 'post',
     data: data
   })
