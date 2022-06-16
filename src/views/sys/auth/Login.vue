@@ -11,7 +11,7 @@
         :after-close="handleCloseLoginError"
       />
       <a-form-model-item prop="username">
-        <a-input v-model="form.username" allow-clear size="large" placeholder="请输入用户名" >
+        <a-input v-model="form.username" allow-clear size="large" placeholder="请输入账号" >
           <a-icon slot="prefix" type="user" :style="{ color: 'rgba(0,0,0,.25)' }"/>
         </a-input>
       </a-form-model-item>
@@ -75,7 +75,7 @@ export default {
         uuid: '',
       },
       rules: {
-        username: [{ required: true, message: '请输入帐户名', trigger: 'blur' }],
+        username: [{ required: true, message: '请输入账号', trigger: 'blur' }],
         password: [{ required: true, message: '请输入密码', trigger: 'blur' }],
         captcha: [{ required: true, message: '请输入验证码', trigger: 'blur' }]
       },
