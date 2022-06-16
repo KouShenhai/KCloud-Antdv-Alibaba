@@ -43,13 +43,6 @@
           @click="handleSubmit"
         >确定</a-button>
       </a-form-item>
-      <div class="user-login-other">
-        <!--
-          ruoyi后台不支持获取是否开启账户.
-          故此处不做隐藏处理. 在ruoyi原前端中是在注册页面定义一个属性手动修改处理.
-        -->
-        <router-link class="register" :to="{ name: 'register' }">注册账户</router-link>
-      </div>
     </a-form-model>
   </div>
 </template>

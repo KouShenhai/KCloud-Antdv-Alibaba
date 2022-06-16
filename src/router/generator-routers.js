@@ -77,8 +77,13 @@ export const generatorDynamicRouter = (token) => {
 
 export function buildRouters(routerData) {
   routerData.forEach(route => {
-    route.component = route.url.replaceAll('/','-')
+    route.component = route.url.replace("http://","").replaceAll(".","").replaceAll("https://","").replaceAll('/','')
     route.path = route.url
+    if (route.path.indexOf('https://') != -1 || route.path.indexOf("http://") != -1) {
+      route.link = true
+    } else {
+      route.link = false
+    }
     if (route.children && route.children.length > 0) {
       return buildRouters(route.children)
     }
@@ -117,12 +122,11 @@ export const generator = (routerMap, parent, routers) => {
       item = item.children[0]
       item.children = undefined
     }
-    item.target = '_blank'
-    const name = item.name || ''
+    const name = item.component || ''
     const isRouter = item.component && item.component !== 'Layout' && item.component !== 'ParentView'
     const currentRouter = {
       // 如果路由设置了 path，则作为默认 path，否则 路由地址 动态拼接生成如 /dashboard/workplace
-      path: item.path || `${parent && parent.path || ''}/${item.path}`,
+      path: item.link ? item.url : item.path || `${parent && parent.path || ''}/${item.path}`,
       // 路由名称，建议唯一
       name: name,
       // 该路由对应页面的 组件(动态加载)
@@ -133,7 +137,7 @@ export const generator = (routerMap, parent, routers) => {
         title: item.name,
         icon: allIcon[item.icon + 'Icon'] || item.icon,
         // 目前只能通过判断path的http链接来判断是否外链
-        target: validURL(item.uri) ? '_blank' : '',
+        target: item.link ? '_blank' : '',
         permission: item.permissions,
         keepAlive: true,
         hidden: false,
