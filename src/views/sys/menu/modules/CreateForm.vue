@@ -26,7 +26,7 @@
         <a-radio-group v-model="form.method" button-style="solid">
           <a-radio-button value="GET">GET</a-radio-button>
           <a-radio-button value="POST">POST</a-radio-button>
-          <a-radio-button value="UPDATE">UPDATE</a-radio-button>
+          <a-radio-button value="PUT">PUT</a-radio-button>
           <a-radio-button value="DELETE">DELETE</a-radio-button>
         </a-radio-group>
       </a-form-model-item>
