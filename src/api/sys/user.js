@@ -4,7 +4,7 @@ import { parseStrEmpty } from '@/utils/ruoyi'
 // 查询用户列表
 export function listUser (query) {
   return request({
-    url: '/admin/sys/user/api/page',
+    url: '/admin/sys/user/api/query',
     method: 'post',
     data: query
   })

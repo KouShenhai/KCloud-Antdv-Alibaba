@@ -5,7 +5,7 @@
         <a-col :span="20">
           <!-- 条件搜索 -->
           <div class="table-page-search-wrapper">
-            <a-form layout="inline">
+            <a-form layout="inline" v-hasPermi="['sys:user:query']">
               <a-row :gutter="48">
                 <a-col :md="8" :sm="24">
                   <a-form-item label="用户名">
@@ -13,7 +13,7 @@
                   </a-form-item>
                 </a-col>
                 <a-col :md="8" :sm="24">
-                  <span class="table-page-search-submitButtons" v-hasPermi="['sys:user:query']">
+                  <span class="table-page-search-submitButtons">
                     <a-button type="primary" @click="handleQuery"><a-icon type="search" />查询</a-button>
                     <a-button style="margin-left: 8px" @click="resetQuery"><a-icon type="redo" />重置</a-button>
                   </span>
@@ -38,6 +38,7 @@
             :columns="columns"
             :data-source="list"
             :pagination="false"
+            :row-selection="{ selectedRowKeys: selectedRowKeys, onChange: onSelectChange }"
             :bordered="tableBordered">
             <span slot="status" slot-scope="text, record">
               <a-popconfirm
@@ -110,6 +111,7 @@ export default {
   data () {
     return {
       list: [],
+      selectedRowKeys: [],
       selectedRows: [],
       // 非单个禁用
       single: true,
@@ -182,6 +184,13 @@ export default {
   watch: {
   },
   methods: {
+    onSelectChange (selectedRowKeys, selectedRows) {
+      this.selectedRowKeys = selectedRowKeys
+      this.selectedRows = selectedRows
+      this.ids = this.selectedRows.map(item => item.userId)
+      this.single = selectedRowKeys.length !== 1
+      this.multiple = !selectedRowKeys.length
+    },
     superAdminFormat(row) {
       if (row.superAdmin == '1') {
         return '超级管理员'

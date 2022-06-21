@@ -138,7 +138,6 @@
 
 <script>
 import { getGenTable, updateGenTable } from '@/api/tool/gen'
-import { optionselect as getDictOptionselect } from '@/api/sys/dict/type'
 import { listMenu as getMenuTreeselect } from '@/api/sys/menu'
 import BasicInfoForm from './BasicInfoForm'
 import GenInfoForm from './GenInfoForm'
@@ -290,10 +289,6 @@ export default {
         this.info = res.data.info
         this.tables = res.data.tables
         this.tableLoading = false
-      })
-      /** 查询字典下拉列表 */
-      getDictOptionselect().then(response => {
-        this.dictOptions = response.data
       })
       /** 查询菜单下拉列表 */
       getMenuTreeselect().then(response => {

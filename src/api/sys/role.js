@@ -3,7 +3,7 @@ import request from '@/utils/request'
 // 查询角色列表-分页
 export function pageRole (query) {
   return request({
-    url: '/admin/sys/role/api/page',
+    url: '/admin/sys/role/api/query',
     method: 'post',
     data: query
   })

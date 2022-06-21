@@ -3,7 +3,7 @@
     <a-card :bordered="false">
       <!-- 条件搜索 -->
       <div class="table-page-search-wrapper">
-        <a-form layout="inline">
+        <a-form layout="inline" v-hasPermi="['sys:menu:query']">
           <a-row :gutter="48">
             <a-col :md="8" :sm="24">
               <a-form-item label="菜单名称">
@@ -11,7 +11,7 @@
               </a-form-item>
             </a-col>
             <a-col :md="8" :sm="24">
-              <span class="table-page-search-submitButtons" v-hasPermi="['sys:menu:query']">
+              <span class="table-page-search-submitButtons">
                 <a-button type="primary" @click="handleQuery"><a-icon type="search" />查询</a-button>
                 <a-button style="margin-left: 8px" @click="resetQuery"><a-icon type="redo" />重置</a-button>
               </span>

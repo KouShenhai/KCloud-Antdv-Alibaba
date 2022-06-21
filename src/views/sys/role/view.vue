@@ -3,7 +3,7 @@
     <a-card :bordered="false">
       <!-- 条件搜索 -->
       <div class="table-page-search-wrapper">
-        <a-form layout="inline">
+        <a-form layout="inline" v-hasPermi="['sys:role:query']">
           <a-row :gutter="48">
             <a-col :md="8" :sm="24">
               <a-form-item label="角色名称">
@@ -37,6 +37,7 @@
         :columns="columns"
         :data-source="list"
         :pagination="false"
+        :row-selection="{ selectedRowKeys: selectedRowKeys, onChange: onSelectChange }"
         :bordered="tableBordered">
         <span slot="operation" slot-scope="text, record">
           <a @click="$refs.createForm.handleUpdate(record, undefined)" v-hasPermi="['sys:role:update']">
@@ -86,6 +87,7 @@ export default {
   data () {
     return {
       list: [],
+      selectedRowKeys: [],
       selectedRows: [],
       // 高级搜索 展开/关闭
       single: true,
@@ -138,6 +140,13 @@ export default {
   watch: {
   },
   methods: {
+    onSelectChange (selectedRowKeys, selectedRows) {
+      this.selectedRowKeys = selectedRowKeys
+      this.selectedRows = selectedRows
+      this.ids = this.selectedRows.map(item => item.id)
+      this.single = selectedRowKeys.length !== 1
+      this.multiple = !selectedRowKeys.length
+    },
     /** 查询角色列表 */
     getList () {
       this.loading = true
