@@ -36,7 +36,6 @@
         rowKey="id"
         :columns="columns"
         :data-source="list"
-        :row-selection="{ selectedRowKeys: selectedRowKeys, onChange: onSelectChange }"
         :pagination="false"
         :bordered="tableBordered">
         <span slot="operation" slot-scope="text, record">
@@ -87,7 +86,6 @@ export default {
   data () {
     return {
       list: [],
-      selectedRowKeys: [],
       selectedRows: [],
       // 高级搜索 展开/关闭
       single: true,
@@ -174,13 +172,6 @@ export default {
       this.queryParam.pageNum = current
       this.queryParam.pageSize = pageSize
       this.getList()
-    },
-    onSelectChange (selectedRowKeys, selectedRows) {
-      this.selectedRowKeys = selectedRowKeys
-      this.selectedRows = selectedRows
-      this.ids = this.selectedRows.map(item => item.id)
-      this.single = selectedRowKeys.length !== 1
-      this.multiple = !selectedRowKeys.length
     },
     cancelHandleStatus (row) {
     },
