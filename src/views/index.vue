@@ -9,6 +9,7 @@
           <div class="content-title">
             {{ timeFix }}，{{ nickname }}<span class="welcome-text"></span>
           </div>
+          <span v-for="(w, index) in roles" :key="index">{{ w.name }}<a-divider type="vertical" v-if="index != roles.length - 1"/></span>
         </div>
       </div>
     </template>
@@ -26,13 +27,15 @@ export default {
   },
   data () {
     return {
+      roleNames:[],
       timeFix: timeFix(),
     }
   },
   computed: {
     ...mapGetters([
       'avatar',
-      'nickname'
+      'nickname',
+      'roles'
     ])
   },
   created () {
@@ -43,7 +46,7 @@ export default {
   methods: {
     onSponsorTabChange (key, type) {
       this[type] = key
-    }
+    },
   }
 }
 </script>
