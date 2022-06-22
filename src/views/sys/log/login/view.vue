@@ -3,16 +3,16 @@
     <a-card :bordered="false">
       <!-- 条件搜索 -->
       <div class="table-page-search-wrapper">
-        <a-form layout="inline" v-hasPermi="['log:operate:query']">
+        <a-form layout="inline" v-hasPermi="['log:login:query']">
           <a-row :gutter="48">
             <a-col :md="8" :sm="24">
-              <a-form-item label="模块名称">
-                <a-input v-model="queryParam.module" placeholder="请输入模块名称" allow-clear/>
+              <a-form-item label="登录名称">
+                <a-input v-model="queryParam.loginName" style="width: 100%" allow-clear/>
               </a-form-item>
             </a-col>
             <a-col :md="8" :sm="24">
-              <a-form-item label="状态">
-                <a-select placeholder="操作状态" v-model="queryParam.requestStatus" style="width: 100%" allow-clear>
+              <a-form-item label="使用状态">
+                <a-select placeholder="请选择状态" v-model="queryParam.requestStatus" style="width: 100%" allow-clear>
                   <a-select-option v-for="(d, index) in statusOptions" :key="index" :value="d.value">{{ d.label }}</a-select-option>
                 </a-select>
               </a-form-item>
@@ -34,8 +34,8 @@
         :columns="columns"
         :data-source="list"
         :pagination="false"
-        :bordered="tableBordered"
         @change="handleTableChange"
+        :bordered="tableBordered"
       >
         <span slot="requestStatus" slot-scope="text, record">
           {{ statusFormat(record) }}
@@ -59,10 +59,11 @@
 
 <script>
 
-import { list} from '@/api/sys/operate'
+import { list} from '@/api/sys/login'
 import { tableMixin } from '@/store/table-mixin'
+
 export default {
-  name: 'Operate',
+  name: 'Login',
   components: {
   },
   mixins: [tableMixin],
@@ -75,6 +76,7 @@ export default {
       loading: false,
       // 非多个禁用
       multiple: true,
+      ids: [],
       total: 0,
       // 状态数据字典
       statusOptions: [
@@ -85,86 +87,55 @@ export default {
           label: '失败',value: 1
         }
       ],
-      typeOptions: [],
       // 日期范围
       dateRange: [],
       queryParam: {
         pageNum: 1,
         pageSize: 10,
-        module: undefined,
+        loginName: undefined,
         requestStatus: undefined
       },
       columns: [
         {
-          title: '模块名称',
-          dataIndex: 'module',
+          title: '用户名称',
+          dataIndex: 'loginName',
           align: 'center'
         },
         {
-          title: '操作名称',
-          dataIndex: 'operation',
-          align: 'center'
-        },
-        {
-          title: '操作人员',
-          dataIndex: 'operator',
-          align: 'center'
-        },
-        {
-          title: '请求方式',
-          dataIndex: 'requestMethod',
-          align: 'center'
-        },
-        {
-          title: '请求地址',
-          dataIndex: 'requestUri',
-          align: 'center',
-          ellipsis: true,
-        },
-        {
-          title: '主机',
+          title: '登录地址',
           dataIndex: 'requestIp',
           align: 'center'
         },
         {
-          title: '操作地点',
+          title: '登录地点',
           dataIndex: 'requestAddress',
           align: 'center'
         },
         {
           title: '浏览器',
-          dataIndex: 'userAgent',
-          align: 'center',
-          ellipsis: true
+          dataIndex: 'browser',
+          align: 'center'
         },
         {
-          title: '方法名称',
-          dataIndex: 'methodName',
-          align: 'center',
-          ellipsis: true
+          title: '操作系统',
+          dataIndex: 'os',
+          align: 'center'
         },
         {
-          title: '请求参数',
-          dataIndex: 'requestParams',
-          align: 'center',
-          ellipsis: true
-        },
-        {
-          title: '状态',
+          title: '登录状态',
           dataIndex: 'requestStatus',
           scopedSlots: { customRender: 'requestStatus' },
           align: 'center'
         },
         {
-          title: '错误信息',
-          dataIndex: 'errorMsg',
+          title: '登录信息',
+          dataIndex: 'msg',
           align: 'center'
         },
         {
-          title: '操作时间',
+          title: '登录时间',
           dataIndex: 'createDate',
-          align: 'center',
-          width: '12%',
+          align: 'center'
         }
       ]
     }
@@ -188,7 +159,7 @@ export default {
     /** 查询登录日志列表 */
     getList () {
       this.loading = true
-      list(this.queryParam).then(response => {
+      list(this.addDateRange(this.queryParam, this.dateRange)).then(response => {
           this.list = response.data.records
           this.total = response.data.total - 0
           this.loading = false
@@ -212,7 +183,7 @@ export default {
       this.queryParam = {
         pageNum: 1,
         pageSize: 10,
-        module: undefined,
+        loginName: undefined,
         requestStatus: undefined
       }
       this.handleQuery()
@@ -228,7 +199,7 @@ export default {
     },
     toggleAdvanced () {
       this.advanced = !this.advanced
-    }
+    },
   }
 }
 </script>
