@@ -22,7 +22,7 @@ import './permission' // permission control
 import './utils/filter' // global filter
 import './global.less' // global style
 import { getConfigKey } from '@/api/sys/config'
-import { parseTime, resetForm, addDateRange, selectDictLabel, selectDictLabels, handleTree, tableSorter } from '@/utils/ruoyi'
+import { parseTime, resetForm, addDateRange, selectDictLabel, selectDictLabels, handleTree, tableSorter } from '@/utils/laokou'
 import { download } from '@/utils/request'
 
 // 全局方法挂载

@@ -7,7 +7,7 @@ import { VueAxios } from './axios'
 import { ACCESS_TOKEN } from '@/store/mutation-types'
 import errorCode from '@/utils/errorCode'
 import qs from 'qs'
-import { blobValidate } from '@/utils/ruoyi'
+import { blobValidate } from '@/utils/laokou'
 import { saveAs } from 'file-saver'
 
 // 是否显示重新登录
@@ -17,7 +17,6 @@ let isReloginShow
 const request = axios.create({
   // API 请求的默认前缀
   baseURL: process.env.VUE_APP_BASE_API,
-  // baseURL: 'https://ruoyi.setworld.net',
   timeout: 6000 // 请求超时时间
 })
 

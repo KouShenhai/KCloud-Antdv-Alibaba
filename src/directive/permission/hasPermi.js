@@ -1,6 +1,6 @@
  /**
  * 操作权限处理
- * Copyright (c) 2019 ruoyi
+ * Copyright (c) 2022 laokou
  */
 import store from '@/store'
 

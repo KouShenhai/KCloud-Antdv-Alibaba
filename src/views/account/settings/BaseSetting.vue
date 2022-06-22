@@ -10,13 +10,6 @@
           ref="form"
         >
           <a-form-model-item
-            label="昵称"
-            ref="nickName"
-            prop="nickName"
-          >
-            <a-input v-model="user.nickName" placeholder="给自己起个名字" :maxLength="30" />
-          </a-form-model-item>
-          <a-form-model-item
             label="手机"
             prop="phonenumber"
           >
@@ -27,15 +20,6 @@
             prop="email"
           >
             <a-input v-model="user.email" placeholder="请填写手机号邮箱"/>
-          </a-form-model-item>
-          <a-form-model-item
-            label="性别"
-            prop="sex"
-          >
-            <a-radio-group v-model="user.sex">
-              <a-radio :value="sexValue.men">男</a-radio>
-              <a-radio :value="sexValue.women">女</a-radio>
-            </a-radio-group>
           </a-form-model-item>
           <a-form-model-item>
             <a-button type="primary" :loading="submitLoading" @click="submit">保存</a-button>
@@ -142,7 +126,7 @@ export default {
           message: '提示',
           description:
             '修改成功',
-          icon: <a-icon type="check" style="color: #1890FF" />,
+          icon: '<a-icon type="check" style="color: #1890FF" />',
           duration: 3
         })
       }).finally(() => {

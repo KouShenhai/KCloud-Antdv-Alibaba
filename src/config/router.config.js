@@ -22,8 +22,17 @@ export const indexRouterMap = [
     name: '首页',
     component: 'index',
     permissions: '',
-    icon:'dashboard'
-  }
+    icon:'dashboard',
+    hidden: false
+  },
+  {
+    path: '/account/settings',
+    name: '个人设置',
+    permissions: '',
+    component: 'AccountSettings',
+    icon: 'user',
+    hidden: true
+  },
 ]
 
 /**

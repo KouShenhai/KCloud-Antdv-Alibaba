@@ -6,10 +6,6 @@
     </span>
     <template v-slot:overlay>
       <a-menu class="ant-pro-drop-down menu" :selected-keys="[]">
-        <a-menu-item v-if="menu" key="center" @click="handleToCenter">
-          <a-icon type="user" />
-          个人中心
-        </a-menu-item>
         <a-menu-item v-if="menu" key="settings" @click="handleToSettings">
           <a-icon type="setting" />
           个人设置
@@ -46,9 +42,6 @@ export default {
     ])
   },
   methods: {
-    handleToCenter () {
-      this.$router.push({ path: '/account/center' })
-    },
     handleToSettings () {
       this.$router.push({ path: '/account/settings' })
     },

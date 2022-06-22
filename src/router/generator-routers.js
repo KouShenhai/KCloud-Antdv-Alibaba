@@ -79,6 +79,7 @@ export function buildRouters(routerData) {
   routerData.forEach(route => {
     route.component = route.url.replace("http://","").replaceAll(".","").replaceAll("https://","").replaceAll('/','')
     route.path = route.url
+    route.hidden = false
     if (route.path.indexOf('https://') != -1 || route.path.indexOf("http://") != -1) {
       route.link = true
     } else {
@@ -117,7 +118,7 @@ export function filterDynamicRoutes (routes) {
 export const generator = (routerMap, parent, routers) => {
   const names = parent ? parent.meta.names : []
   return routerMap.map(item => {
-    // 适配ruoyi一级菜单
+    // 适配laokou一级菜单
     if (item.path === '/' && item.children && item.children.length === 1) {
       item = item.children[0]
       item.children = undefined
@@ -131,7 +132,7 @@ export const generator = (routerMap, parent, routers) => {
       name: name,
       // 该路由对应页面的 组件(动态加载)
       component: (() => import(`@/views${item.path}`)),
-      hidden: false,
+      hidden: item.hidden,
       // meta: 页面标题, 菜单图标, 页面权限(供指令权限用，可去掉)
       meta: {
         title: item.name,
@@ -140,7 +141,7 @@ export const generator = (routerMap, parent, routers) => {
         target: item.link ? '_blank' : '',
         permission: item.permissions,
         keepAlive: true,
-        hidden: false,
+        hidden: item.hidden,
         // 因菜单路由分离，通过此names确定菜单树的展开
         names: names.concat([name])
       }
