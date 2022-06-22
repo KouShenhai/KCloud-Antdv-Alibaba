@@ -158,7 +158,8 @@ export default {
         {
           title: '错误信息',
           dataIndex: 'errorMsg',
-          align: 'center'
+          align: 'center',
+          ellipsis: true
         },
         {
           title: '操作时间',

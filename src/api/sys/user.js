@@ -46,7 +46,7 @@ export function delUser (userId) {
 // 用户密码重置
 export function resetUserPwd (data) {
   return request({
-    url: '/admin/sys/user/api/update',
+    url: '/admin/sys/user/api/password',
     method: 'put',
     data: data
   })
@@ -62,17 +62,17 @@ export function changeUserStatus (data) {
 }
 
 // 查询用户个人信息
-export function getUserProfile () {
+export function getUserInfo () {
   return request({
-    url: '/system/user/profile',
+    url: '/admin/sys/auth/api/userInfo',
     method: 'get'
   })
 }
 
 // 修改用户个人信息
-export function updateUserProfile (data) {
+export function updateInfo (data) {
   return request({
-    url: '/system/user/profile',
+    url: '/admin/sys/user/api/updateInfo',
     method: 'put',
     data: data
   })
@@ -97,22 +97,5 @@ export function uploadAvatar (data) {
     url: '/system/user/profile/avatar',
     method: 'post',
     data: data
-  })
-}
-
-// 查询授权角色
-export function getAuthRole (userId) {
-  return request({
-    url: '/system/user/authRole/' + userId,
-    method: 'get'
-  })
-}
-
-// 保存授权角色
-export function updateAuthRole (data) {
-  return request({
-    url: '/system/user/authRole',
-    method: 'put',
-    params: data
   })
 }

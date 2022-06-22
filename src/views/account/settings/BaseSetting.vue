@@ -11,15 +11,15 @@
         >
           <a-form-model-item
             label="手机"
-            prop="phonenumber"
+            prop="mobile"
           >
-            <a-input v-model="user.phonenumber" placeholder="请填写手机号"/>
+            <a-input v-model="user.mobile" placeholder="请填写手机号"/>
           </a-form-model-item>
           <a-form-model-item
-            label="电子邮件"
+            label="电子邮箱"
             prop="email"
           >
-            <a-input v-model="user.email" placeholder="请填写手机号邮箱"/>
+            <a-input v-model="user.email" placeholder="请填写电子邮箱"/>
           </a-form-model-item>
           <a-form-model-item>
             <a-button type="primary" :loading="submitLoading" @click="submit">保存</a-button>
@@ -39,14 +39,14 @@
 
     </a-row>
 
-    <avatar-modal ref="modal" @ok="setavatar"/>
+    <avatar-modal ref="modal" @ok="setAvatar"/>
 
   </div>
 </template>
 
 <script>
 import AvatarModal from './AvatarModal'
-import { getUserProfile, updateUserProfile } from '@/api/sys/user'
+import { getUserInfo, updateInfo } from '@/api/sys/user'
 import { mapGetters } from 'vuex'
 
 export default {
@@ -57,12 +57,11 @@ export default {
   data () {
     return {
       submitLoading: false,
-      // cropper
-      sexValue: {
-        men: '0',
-        women: '1'
+      user: {
+        id: '',
+        email: '',
+        mobile: ''
       },
-      user: {},
       preview: {},
       option: {
         img: this.avatar,
@@ -80,18 +79,15 @@ export default {
         fixedNumber: [1, 1]
       },
       rules: {
-        nickName: [
-          { required: true, message: '请输入昵称', trigger: 'blur' }
-        ],
         email: [
-          { required: true, message: '邮箱不能为空', trigger: 'blur' },
+          { required: true, message: '电子邮箱不能为空', trigger: 'blur' },
           {
             type: 'email',
             message: '请正确填写邮箱地址',
             trigger: ['blur', 'change']
           }
         ],
-        phonenumber: [
+        mobile: [
           { required: true, message: '手机号不能为空', trigger: 'blur' },
           {
             pattern: /^1[3|4|5|6|7|8|9][0-9]\d{8}$/,
@@ -110,27 +106,28 @@ export default {
   },
   methods: {
     getUser () {
-      getUserProfile().then(response => {
-        this.user = response.data
-        this.roleGroup = response.roleGroup
-        this.postGroup = response.postGroup
+      getUserInfo().then(response => {
+        this.user.email = response.data.email
+        this.user.id = response.data.userId
+        this.user.mobile = response.data.mobile
       })
     },
-    setavatar (url) {
+    setAvatar (url) {
       this.option.img = url
     },
     submit () {
-      this.submitLoading = true
-      updateUserProfile(this.user).then(response => {
-        this.$notification.open({
-          message: '提示',
-          description:
-            '修改成功',
-          icon: '<a-icon type="check" style="color: #1890FF" />',
-          duration: 3
-        })
-      }).finally(() => {
-        this.submitLoading = false
+      this.$refs.form.validate(valid => {
+        if (valid) {
+          this.submitLoading = true
+          updateInfo(this.user).then(response => {
+            this.$notification.success({
+              message: '提示',
+              description: '修改成功'
+            })
+          }).finally(() => {
+            this.submitLoading = false
+          })
+        }
       })
     }
   }

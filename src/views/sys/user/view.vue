@@ -71,8 +71,8 @@
                 <a-icon type="delete" />
                 删除
               </a>
-              <a-divider type="vertical" v-hasPermi="['sys:user:update']"/>
-              <a @click="$refs.resetPassword.handleResetPwd(record)" v-hasPermi="['sys:user:update']">
+              <a-divider type="vertical" v-hasPermi="['sys:user:password']"/>
+              <a @click="$refs.resetPassword.handleResetPwd(record)" v-hasPermi="['sys:user:password']">
                 <a-icon type="key" />
                 重置密码
               </a>
