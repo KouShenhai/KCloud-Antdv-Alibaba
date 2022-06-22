@@ -91,9 +91,7 @@ export default {
       this.resetQuery()
       if (!this.visible) {
         if (this.typeOptions.length === 0) {
-          this.getDicts('sys_notice_type').then(response => {
-            this.typeOptions = response.data
-          })
+
         }
         this.getList()
       }

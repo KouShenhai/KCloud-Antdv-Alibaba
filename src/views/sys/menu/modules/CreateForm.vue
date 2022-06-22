@@ -76,7 +76,7 @@
           权限标识
           <a-tooltip>
             <template slot="title">
-              控制器中定义的权限字符，如 system:user:list
+              控制器中定义的权限字符，如 sys:user:query
             </template>
             <a-icon type="question-circle-o" />
           </a-tooltip>

@@ -2,7 +2,7 @@
   <div :class="wrpCls">
     <a-space size="middle">
       <screenfull />
-      <notice-icon v-hasPermi="['system:notice:list']" />
+      <notice-icon/>
       <avatar-dropdown :menu="showMenu" :current-user="currentUser" :class="prefixCls" />
       <!-- 暂只支持中文，国际化可自行扩展 -->
       <select-lang :class="prefixCls" />
