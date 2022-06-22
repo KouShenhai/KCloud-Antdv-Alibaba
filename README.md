@@ -19,10 +19,6 @@ KCloud-Antdv 是LaoKou-Vue和Ant Design Vue Pro的结合。
    * 安装 [node](http://nodejs.org) 和 [git](https://git-scm.com)
 
 2. 安装
-
-   ```shell
-   git clone https://gitee.com/tttt_wmh_cn/KCloud-Platform.git
-   ```
    
    ```shell
    git clone https://gitee.com/tttt_wmh_cn/KCloud-Antdv.git
