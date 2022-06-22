@@ -1,7 +1,5 @@
 <h1 align="center">LaoKou-Antdv</h1>
-> KCloud-Antdv 是LaoKou-Vue和Ant Design Vue Pro的结合。
-
-
+KCloud-Antdv 是LaoKou-Vue和Ant Design Vue Pro的结合。
 
 ## 简介
 
@@ -11,14 +9,14 @@
 >
 > 拥有用户管理、菜单管理、角色管理、操作日志、登录日志、服务监控、连接池监视等功能。
 
-* Ant Design Vue文档：[https://www.antdv.com/docs/vue/introduce-cn/](https://www.antdv.com/docs/vue/introduce-cn/)
+* Ant Design Vue文档：[https://www.antdv.com/docs/vue/introduce-cn](https://www.antdv.com/docs/vue/introduce-cn)
 
 
 
 ## 开始使用
 
 1. 环境准备
-   * 安装 [node](http://nodejs.org/) 和 [git](https://git-scm.com)
+   * 安装 [node](http://nodejs.org) 和 [git](https://git-scm.com)
 
 2. 安装
 
