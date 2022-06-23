@@ -80,11 +80,6 @@ export function buildRouters(routerData) {
     route.component = route.url.replace("http://","").replaceAll(".","").replaceAll("https://","").replaceAll('/','')
     route.path = route.url
     route.hidden = false
-    if (route.path.indexOf('https://') != -1 || route.path.indexOf("http://") != -1) {
-      route.link = true
-    } else {
-      route.link = false
-    }
     if (route.children && route.children.length > 0) {
       return buildRouters(route.children)
     }
@@ -127,7 +122,7 @@ export const generator = (routerMap, parent, routers) => {
     const isRouter = item.component && item.component !== 'Layout' && item.component !== 'ParentView'
     const currentRouter = {
       // 如果路由设置了 path，则作为默认 path，否则 路由地址 动态拼接生成如 /dashboard/workplace
-      path: item.link ? item.url : item.path || `${parent && parent.path || ''}/${item.path}`,
+      path: validURL(item.url) ? item.url : item.path || `${parent && parent.path || ''}/${item.path}`,
       // 路由名称，建议唯一
       name: name,
       // 该路由对应页面的 组件(动态加载)
@@ -138,7 +133,7 @@ export const generator = (routerMap, parent, routers) => {
         title: item.name,
         icon: allIcon[item.icon + 'Icon'] || item.icon,
         // 目前只能通过判断path的http链接来判断是否外链
-        target: item.link ? '_blank' : '',
+        target: validURL(item.url) ? '_blank' : '',
         permission: item.permissions,
         keepAlive: true,
         hidden: item.hidden,

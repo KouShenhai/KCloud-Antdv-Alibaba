@@ -20,7 +20,7 @@ export function validUsername (str) {
  * @returns {Boolean}
  */
 export function validURL (url) {
-  const reg = /^([hH][tT]{2}[pP]:\/\/|[hH][tT]{2}[pP][sS]:\/\/)(([A-Za-z0-9-~]+)\.)+([A-Za-z0-9-~/])+$/
+  const reg = /(http|https):\/\/([\w.]+\/?)\S*/
   return reg.test(url)
 }
 
