@@ -27,32 +27,29 @@
         </a-form-model>
 
       </a-col>
-      <a-col :md="24" :lg="8" :style="{ minHeight: '180px' }">
-        <div class="ant-upload-preview" @click="$refs.modal.edit(1)" >
-          <a-icon type="cloud-upload-o" class="upload-icon"/>
-          <div class="mask">
-            <a-icon type="plus" />
+      <a-col :md="24" :lg="8" :style="{ minHeight: '180px' }" style="padding-left: 100px;">
+        <a-upload name="file" :max-count="1" :before-upload="beforeUpload" @change="uploadImg" :showUploadList="false">
+          <div class="ant-upload-preview">
+            <a-icon type="cloud-upload-o" class="upload-icon"/>
+            <div class="mask">
+              <a-icon type="plus" />
+            </div>
+            <img :src="user.imgUrl"/>
           </div>
-          <img :src="avatar"/>
-        </div>
+        </a-upload>
       </a-col>
-
     </a-row>
-
-    <avatar-modal ref="modal" @ok="setAvatar"/>
-
   </div>
 </template>
 
 <script>
-import AvatarModal from './AvatarModal'
-import { getUserInfo, updateInfo } from '@/api/sys/user'
+import { getUserInfo, updateInfo,uploadAvatar } from '@/api/sys/user'
 import { mapGetters } from 'vuex'
 
 export default {
   name: 'BaseSettings',
   components: {
-    AvatarModal
+
   },
   data () {
     return {
@@ -60,24 +57,10 @@ export default {
       user: {
         id: '',
         email: '',
-        mobile: ''
+        mobile: '',
+        imgUrl: ''
       },
       preview: {},
-      option: {
-        img: this.avatar,
-        info: true,
-        size: 1,
-        outputType: 'jpeg',
-        canScale: false,
-        autoCrop: true,
-        // 只有自动截图开启 宽度高度才生效
-        autoCropWidth: 180,
-        autoCropHeight: 180,
-        fixedBox: true,
-        // 开启宽度和高度比例
-        fixed: true,
-        fixedNumber: [1, 1]
-      },
       rules: {
         email: [
           { required: true, message: '电子邮箱不能为空', trigger: 'blur' },
@@ -99,21 +82,29 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['nickname', 'avatar'])
+    ...mapGetters(['nickname'])
   },
   mounted () {
     this.getUser()
   },
   methods: {
+    uploadImg(data) {
+      const formData = new FormData()
+      formData.append('file', data.file)
+      uploadAvatar(formData).then(response => {
+        this.user.imgUrl = response.data.url
+      })
+    },
+    beforeUpload() {
+      return false
+    },
     getUser () {
       getUserInfo().then(response => {
         this.user.email = response.data.email
         this.user.id = response.data.userId
         this.user.mobile = response.data.mobile
+        this.user.imgUrl = response.data.imgUrl
       })
-    },
-    setAvatar (url) {
-      this.option.img = url
     },
     submit () {
       this.$refs.form.validate(valid => {

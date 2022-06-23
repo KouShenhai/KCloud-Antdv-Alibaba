@@ -78,19 +78,6 @@ export function updateInfo (data) {
   })
 }
 
-// 用户密码重置
-export function updateUserPwd (oldPassword, newPassword) {
-  const data = {
-    oldPassword,
-    newPassword
-  }
-  return request({
-    url: '/system/user/profile/updatePwd',
-    method: 'put',
-    params: data
-  })
-}
-
 // 用户头像上传
 export function uploadAvatar (data) {
   return request({

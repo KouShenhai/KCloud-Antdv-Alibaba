@@ -7,9 +7,6 @@
     @cancel="cancel"
   >
     <a-form-model ref="form" :model="form" :rules="rules">
-      <a-form-model-item has-feedback label="旧密码" prop="oldPassword">
-        <a-input-password v-model="form.oldPassword" placeholder="请输入旧密码" :maxLength="20" />
-      </a-form-model-item>
       <a-form-model-item has-feedback label="新密码" prop="newPassword">
         <a-input-password v-model="form.newPassword" placeholder="请输入新密码" :maxLength="20" />
       </a-form-model-item>
@@ -20,8 +17,8 @@
   </a-modal>
 </template>
 <script>
-import { updateUserPwd } from '@/api/sys/user'
-
+import { updateInfo } from '@/api/sys/user'
+import { mapGetters } from 'vuex'
 export default {
   props: {
   },
@@ -54,14 +51,14 @@ export default {
       childrenDrawer: false,
       formLayout: 'horizontal',
       form: {
-        oldPassword: undefined,
         newPassword: undefined,
         confirmPassword: undefined
       },
+      submitDataForm: {
+        id: undefined,
+        password: undefined
+      },
       rules: {
-        oldPassword: [
-          { required: true, message: '密码不能为空', trigger: 'blur' }
-        ],
         newPassword: [
           { required: true, validator: validateNewPass, trigger: 'change' }
         ],
@@ -75,6 +72,9 @@ export default {
       }
     }
   },
+  computed: {
+  ...mapGetters(['id'])
+  },
   methods: {
     // 取消按钮
     cancel () {
@@ -84,7 +84,6 @@ export default {
     // 表单重置
     reset () {
       this.form = {
-        oldPassword: undefined,
         newPassword: undefined,
         confirmPassword: undefined
       }
@@ -96,8 +95,10 @@ export default {
     submitForm: function () {
       this.$refs.form.validate(valid => {
         if (valid) {
+          this.submitDataForm.id = this.id
+          this.submitDataForm.password = this.form.newPassword
           this.submitLoading = true
-          updateUserPwd(this.form.oldPassword, this.form.newPassword).then(response => {
+          updateInfo(this.submitDataForm).then(response => {
             this.$message.success(
               '修改成功',
               3
@@ -105,6 +106,7 @@ export default {
             this.open = false
           }).finally(() => {
             this.submitLoading = false
+            this.reset()
           })
         } else {
           return false
