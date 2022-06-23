@@ -3,7 +3,7 @@
     <a-card :bordered="false">
       <!-- 条件搜索 -->
       <div class="table-page-search-wrapper">
-        <a-form layout="inline" v-hasPermi="['log:login:query']">
+        <a-form layout="inline" v-hasPermi="['sys:log:login:query']">
           <a-row :gutter="48">
             <a-col :md="8" :sm="24">
               <a-form-item label="登录名称">
