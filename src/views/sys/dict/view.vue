@@ -75,7 +75,7 @@
 
 <script>
 
-import { listDict, delType } from '@/api/sys/dict'
+import { listDict, delDict } from '@/api/sys/dict'
 import CreateForm from './modules/CreateForm'
 import { tableMixin } from '@/store/table-mixin'
 
@@ -225,12 +225,12 @@ export default {
     /** 删除按钮操作 */
     handleDelete (row) {
       const that = this
-      const dictIds = row.dictId || this.ids
+      const dictIds = row.id
       this.$confirm({
         title: '确认删除所选中数据?',
         content: '当前选中字典编号为' + dictIds + '的数据',
         onOk () {
-          return delType(dictIds)
+          return delDict(dictIds)
             .then(() => {
               that.onSelectChange([], [])
               that.getList()

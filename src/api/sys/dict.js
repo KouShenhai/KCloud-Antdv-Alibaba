@@ -10,51 +10,35 @@ export function listDict (query) {
 }
 
 // 查询字典类型详细
-export function getType (dictId) {
+export function getDict (dictId) {
   return request({
-    url: '/system/dict/type/' + dictId,
+    url: '/admin/sys/dict/api/detail?id=' + dictId,
     method: 'get'
   })
 }
 
 // 新增字典类型
-export function addType (data) {
+export function addDict (data) {
   return request({
-    url: '/system/dict/type',
+    url: '/admin/sys/dict/api/insert',
     method: 'post',
     data: data
   })
 }
 
 // 修改字典类型
-export function updateType (data) {
+export function updateDict (data) {
   return request({
-    url: '/system/dict/type',
+    url: '/admin/sys/dict/api/update',
     method: 'put',
     data: data
   })
 }
 
 // 删除字典类型
-export function delType (dictId) {
+export function delDict (dictId) {
   return request({
-    url: '/system/dict/type/' + dictId,
+    url: '/admin/sys/dict/api/delete?id=' + dictId,
     method: 'delete'
-  })
-}
-
-// 刷新参数缓存
-export function refreshCache () {
-  return request({
-    url: '/system/dict/type/refreshCache',
-    method: 'delete'
-  })
-}
-
-// 获取字典选择框列表
-export function optionselect () {
-  return request({
-    url: '/system/dict/type/optionselect',
-    method: 'get'
   })
 }

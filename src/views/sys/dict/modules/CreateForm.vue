@@ -4,17 +4,28 @@
       <b>{{ formTitle }}</b>
     </a-divider>
     <a-form-model ref="form" :model="form" :rules="rules">
-      <a-form-model-item label="字典名称" prop="dictName">
-        <a-input v-model="form.dictName" placeholder="请输入字典名称" />
+      <a-form-model-item label="字典名称" prop="dictLabel">
+        <a-input v-model="form.dictLabel" placeholder="请输入字典名称" />
       </a-form-model-item>
-      <a-form-model-item label="字典类型" prop="dictType">
-        <a-input v-model="form.dictType" placeholder="请输入字典类型" />
+
+      <a-form-model-item label="字典值" prop="dictValue">
+        <a-input v-model="form.dictValue" placeholder="请输入字典值" type="textarea" allow-clear />
       </a-form-model-item>
+
+      <a-form-model-item label="字典类型" prop="type">
+        <a-input v-model="form.type" placeholder="请输入字典类型" />
+      </a-form-model-item>
+
       <a-form-model-item label="状态" prop="status">
         <a-select placeholder="请选择" v-model="form.status">
-          <a-select-option v-for="(d, index) in statusOptions" :key="index" :value="d.dictValue" >{{ d.dictLabel }}</a-select-option>
+          <a-select-option v-for="(d, index) in statusOptions" :key="index" :value="d.value" >{{ d.label }}</a-select-option>
         </a-select>
       </a-form-model-item>
+
+      <a-form-model-item label="排序" prop="sort">
+        <a-input-number placeholder="请输入排序" v-model="form.sort" :min="0" style="width: 100%"/>
+      </a-form-model-item>
+
       <a-form-model-item label="备注" prop="remark">
         <a-input v-model="form.remark" placeholder="请输入内容" type="textarea" allow-clear />
       </a-form-model-item>
@@ -34,34 +45,44 @@
 
 <script>
 
-import { getType, addType, updateType } from '@/api/sys/dict'
+import { getDict, addDict, updateDict } from '@/api/sys/dict'
 
 export default {
   name: 'CreateForm',
   props: {
-    statusOptions: {
-      type: Array,
-      required: true
-    }
+
   },
   components: {
   },
   data () {
     return {
+      statusOptions: [
+        {
+          label: '正常',
+          value: 0
+        },
+        {
+          label: '停用',
+          value: 1
+        }
+      ],
       submitLoading: false,
       formTitle: '',
       // 表单参数
       form: {
-        dictId: undefined,
-        dictName: undefined,
-        dictType: undefined,
-        status: '0',
+        id: undefined,
+        dictLabel: undefined,
+        type: undefined,
+        status: 0,
+        dictValue:'',
+        sort: 1,
         remark: undefined
       },
       open: false,
       rules: {
-        dictName: [{ required: true, message: '字典名称不能为空', trigger: 'blur' }],
-        dictType: [{ required: true, message: '字典类型不能为空', trigger: 'blur' }]
+        dictLabel: [{ required: true, message: '字典名称不能为空', trigger: 'blur' }],
+        dictValue: [{ required: true, message: '字典值不能为空', trigger: 'blur' }],
+        type: [{ required: true, message: '字典类型不能为空', trigger: 'blur' }]
       }
     }
   },
@@ -85,10 +106,12 @@ export default {
     // 表单重置
     reset () {
       this.form = {
-        dictId: undefined,
-        dictName: undefined,
-        dictType: undefined,
-        status: '0',
+        id: undefined,
+        dictLabel: undefined,
+        type: undefined,
+        status: 0,
+        dictValue:'',
+        sort: 1,
         remark: undefined
       }
     },
@@ -101,11 +124,11 @@ export default {
     /** 修改按钮操作 */
     handleUpdate (row, ids) {
       this.reset()
-      const dictId = row ? row.dictId : ids
-      getType(dictId).then(response => {
+      const dictId = row ? row.id : ids
+      getDict(dictId).then(response => {
         this.form = response.data
         this.open = true
-        this.formTitle = '修改字典类型'
+        this.formTitle = '修改字典'
       })
     },
     /** 提交按钮 */
@@ -113,8 +136,8 @@ export default {
       this.$refs.form.validate(valid => {
         if (valid) {
           this.submitLoading = true
-          if (this.form.dictId !== undefined) {
-            updateType(this.form).then(response => {
+          if (this.form.id !== undefined) {
+            updateDict(this.form).then(response => {
               this.$message.success(
                 '修改成功',
                 3
@@ -125,7 +148,7 @@ export default {
               this.submitLoading = false
             })
           } else {
-            addType(this.form).then(response => {
+            addDict(this.form).then(response => {
               this.$message.success(
                 '新增成功',
                 3
