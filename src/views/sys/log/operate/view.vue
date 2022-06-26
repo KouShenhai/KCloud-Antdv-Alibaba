@@ -124,6 +124,7 @@ export default {
         {
           title: '主机',
           dataIndex: 'requestIp',
+          width: '12%',
           align: 'center'
         },
         {
