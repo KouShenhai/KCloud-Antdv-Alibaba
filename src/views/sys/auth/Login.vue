@@ -50,7 +50,6 @@ export default {
     return {
       publicKey: 'MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC6fp5DbG9HX6jat08UHudyTXfwt60XaDBt5fp+wo0xgOtMujvrLGf4+ZM8Ba1QWksCJKQSF9Y/zYTk39rPiLcI1NXZYiig+g2uJAQAWhiT8A0mGVaNOT5mssEW9dZJ4o4F3SKuHP2J+LSG2oKBOKRJAVnikXvhKVHnbK59ZlYf5QIDAQAB',
       codeUrl: '',
-      isLoginError: false,
       form: {
         username: '',
         password: '',
@@ -110,15 +109,11 @@ export default {
           description: `${timeFix()}，欢迎回来`
         })
       }, 1000)
-      this.handleCloseLoginError()
+
     },
     requestFailed (err) {
-      this.isLoginError = true
       this.form.captcha = ''
       this.getCode();
-    },
-    handleCloseLoginError () {
-      this.isLoginError = false
     }
   }
 }
