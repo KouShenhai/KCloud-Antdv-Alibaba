@@ -24,6 +24,8 @@ import './global.less' // global style
 import { getConfigKey } from '@/api/sys/config'
 import { parseTime, resetForm, addDateRange, selectDictLabel, selectDictLabels, handleTree, tableSorter } from '@/utils/laokou'
 import { download } from '@/utils/request'
+import mavonEditor from 'mavon-editor'
+import 'mavon-editor/dist/css/index.css'
 
 // 全局方法挂载
 Vue.prototype.getConfigKey = getConfigKey
@@ -49,6 +51,7 @@ Vue.component('table-setting', TableSetting)
 
 Vue.use(permission)
 Vue.use(style)
+Vue.use(mavonEditor)
 
 window.umi_plugin_ant_themeVar = themePluginConfig.theme
 new Vue({

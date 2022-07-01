@@ -7,18 +7,6 @@
       <a-form-model-item label="角色名称" prop="name">
         <a-input v-model="form.name" placeholder="请输入" />
       </a-form-model-item>
-      <a-form-model-item prop="tag">
-        <span slot="label">
-          角色标识
-          <a-tooltip>
-            <template slot="title">
-              控制器中定义的标识字符，如：admin_role
-            </template>
-            <a-icon type="question-circle-o" />
-          </a-tooltip>
-        </span>
-        <a-input v-model="form.tag" placeholder="请输入" />
-      </a-form-model-item>
       <a-form-model-item label="角色排序" prop="sort">
         <a-input-number placeholder="请输入" v-model="form.sort" :min="0" style="width: 100%"/>
       </a-form-model-item>
@@ -84,7 +72,6 @@ export default {
       form: {
         id: undefined,
         name: undefined,
-        tag: undefined,
         sort: 0,
         menuIds: [],
         menuCheckStrictly: true
@@ -94,7 +81,6 @@ export default {
       menuNodeAll: false,
       rules: {
         name: [{ required: true, message: '角色名称不能为空', trigger: 'blur' }],
-        tag: [{ required: true, message: '权限字符不能为空', trigger: 'blur' }],
         sort: [{ required: true, message: '显示顺序不能为空', trigger: 'blur' }]
       },
       defaultProps: {
@@ -233,7 +219,6 @@ export default {
       this.form = {
         id: undefined,
         name: '',
-        tag: '',
         sort: 1,
         menuIds: [],
         menuCheckStrictly: true,

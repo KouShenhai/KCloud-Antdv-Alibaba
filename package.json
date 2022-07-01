@@ -21,6 +21,7 @@
     "lodash.clonedeep": "^4.5.0",
     "lodash.get": "^4.4.2",
     "lodash.pick": "^4.4.0",
+    "mavon-editor": "^2.10.4",
     "md5": "^2.3.0",
     "moment": "^2.29.1",
     "nprogress": "^0.2.0",
