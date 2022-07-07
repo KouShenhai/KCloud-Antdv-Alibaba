@@ -3,10 +3,10 @@
     <a-card :bordered="false">
       <!-- 条件搜索 -->
       <div class="table-page-search-wrapper">
-        <a-form layout="inline" v-hasPermi="['sys:role:query']">
+        <a-form layout="inline">
           <a-row :gutter="48">
             <a-col :md="8" :sm="24">
-              <a-form-item label="角色名称">
+              <a-form-item label="流程名称">
                 <a-input v-model="queryParam.name" placeholder="请输入" allow-clear/>
               </a-form-item>
             </a-col>
@@ -34,6 +34,9 @@
         :pagination="false"
         :row-selection="{ selectedRowKeys: selectedRowKeys, onChange: onSelectChange }"
         :bordered="tableBordered">
+        <span slot="suspended" slot-scope="text, record">
+          {{ statusFormat(record) }}
+        </span>
         <span slot="operation" slot-scope="text, record">
           <a @click="$refs.createForm.handleUpdate(record, undefined)" v-hasPermi="['sys:role:update']">
             <a-icon type="edit" />
@@ -69,12 +72,12 @@
 
 <script>
 
-import { pageRole, delRole } from '@/api/sys/role'
+import { pageDefinition, delRole } from '@/api/workflow/definition'
 import CreateForm from './modules/CreateForm'
 import { tableMixin } from '@/store/table-mixin'
 
 export default {
-  name: 'Role',
+  name: 'Definition',
   components: {
     CreateForm
   },
@@ -98,14 +101,20 @@ export default {
       },
       columns: [
         {
-          title: '角色名称',
-          dataIndex: 'name',
+          title: '流程标识',
+          dataIndex: 'definitionId',
           ellipsis: true,
           align: 'center'
         },
         {
-          title: '角色顺序',
-          dataIndex: 'sort',
+          title: '流程名称',
+          dataIndex: 'processName',
+          align: 'center'
+        },
+        {
+          title: '状态',
+          dataIndex: 'suspended',
+          scopedSlots: { customRender: 'suspended' },
           align: 'center'
         },
         {
@@ -135,10 +144,16 @@ export default {
       this.single = selectedRowKeys.length !== 1
       this.multiple = !selectedRowKeys.length
     },
-    /** 查询角色列表 */
+    statusFormat(row) {
+      if (row.suspended) {
+        return '挂起'
+      }
+      return '激活'
+    },
+    /** 查询流程定义列表 */
     getList () {
       this.loading = true
-      pageRole(this.queryParam).then(response => {
+      pageDefinition(this.queryParam).then(response => {
           this.list = response.data.records
           this.total = response.data.total - 0
           this.loading = false
