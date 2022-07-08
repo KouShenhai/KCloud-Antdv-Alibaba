@@ -4,33 +4,15 @@
       <b>{{ formTitle }}</b>
     </a-divider>
     <a-form-model ref="form" :model="form" :rules="rules">
-      <a-form-model-item label="角色名称" prop="name">
-        <a-input v-model="form.name" placeholder="请输入" />
+      <a-form-model-item label="流程名称" prop="name">
+        <a-input v-model="form.name" placeholder="请输入流程名称" />
       </a-form-model-item>
-      <a-form-model-item label="角色排序" prop="sort">
-        <a-input-number placeholder="请输入" v-model="form.sort" :min="0" style="width: 100%"/>
-      </a-form-model-item>
-      <a-form-model-item label="菜单列表">
-        <a-checkbox @change="handleCheckedTreeExpand($event)">
-          展开/折叠
-        </a-checkbox>
-        <a-checkbox @change="handleCheckedTreeNodeAll($event)">
-          全选/全不选
-        </a-checkbox>
-        <a-checkbox @change="handleCheckedTreeConnect($event)" :checked="form.menuCheckStrictly">
-          父子联动
-        </a-checkbox>
-        <a-tree
-          v-model="menuCheckedKeys"
-          checkable
-          :checkStrictly="!form.menuCheckStrictly"
-          :expanded-keys="menuExpandedKeys"
-          :auto-expand-parent="autoExpandParent"
-          :tree-data="menuOptions"
-          @check="onCheck"
-          @expand="onExpandMenu"
-          :replaceFields="defaultProps"
-        />
+      <a-form-model-item label="流程图" prop="file">
+      <a-upload-dragger name="file" :max-count="1" :disabled="false" @change="uploadFile" accept=".xml" :before-upload="beforeUpload" :showUploadList="false">
+        <div class="ant-upload-preview">
+          <a-icon type="cloud-upload-o" class="upload-icon"/>
+        </div>
+      </a-upload-dragger>
       </a-form-model-item>
       <div class="bottom-control">
         <a-space>
@@ -48,9 +30,7 @@
 
 <script>
 
-import { getRole, addRole, updateRole } from '@/api/sys/role'
-import { treeSelect as menuTreeSelect, roleMenuTreeSelect } from '@/api/sys/menu'
-
+import { insertDefinition } from '@/api/workflow/definition'
 export default {
   name: 'CreateForm',
   props: {
@@ -61,141 +41,28 @@ export default {
   data () {
     return {
       submitLoading: false,
-      menuExpandedKeys: [],
-      autoExpandParent: false,
-      menuCheckedKeys: [],
-      halfCheckedKeys: [],
-      menuOptions: [],
-      menuOptionsAll: [],
       formTitle: '',
+      fileData: {},
       // 表单参数
       form: {
-        id: undefined,
-        name: undefined,
-        sort: 0,
-        menuIds: [],
-        menuCheckStrictly: true
+        name: undefined
       },
       open: false,
-      menuExpand: false,
-      menuNodeAll: false,
       rules: {
-        name: [{ required: true, message: '角色名称不能为空', trigger: 'blur' }],
-        sort: [{ required: true, message: '显示顺序不能为空', trigger: 'blur' }]
-      },
-      defaultProps: {
-        children: 'children',
-        title: 'name',
-        key: 'id'
+        name: [{ required: true, message: '流程名称不为空', trigger: 'blur' }],
       }
     }
   },
   filters: {
   },
   created () {
-    this.getMenuTreeSelect()
+
   },
   computed: {
   },
   watch: {
   },
   methods: {
-    onExpandMenu (expandedKeys) {
-      this.menuExpandedKeys = expandedKeys
-      this.autoExpandParent = false
-    },
-    /** 查询菜单树结构 */
-    getMenuTreeSelect () {
-      menuTreeSelect().then(response => {
-        this.menuOptions = response.data.children
-        this.menuOptionsAll = this.menuOptions
-      })
-    },
-    // 所有菜单节点数据
-    getMenuAllCheckedKeys () {
-      // 全选与半选
-      return this.menuCheckedKeys.concat(this.halfCheckedKeys)
-    },
-    getAllMenuNode (nodes) {
-      if (!nodes || nodes.length === 0) {
-        return []
-      }
-      nodes.forEach(node => {
-        this.menuCheckedKeys.push(node.id)
-        return this.getAllMenuNode(node.children)
-      })
-    },
-    // 回显过滤
-    selectNodeFilter (nodes, parentIds) {
-      if (!nodes || nodes.length === 0) {
-        return []
-      }
-      nodes.forEach(node => {
-        // 父子关联模式且当前元素有父级
-        const currentIndex = this.menuCheckedKeys.indexOf(node.id)
-        // 当前节点存在,且父节点不存在，则说明父节点应是半选中状态
-        if (currentIndex !== -1) {
-          parentIds.forEach(parentId => {
-            if (this.halfCheckedKeys.indexOf(parentId) === -1) {
-              this.halfCheckedKeys.push(parentId)
-            }
-          })
-          parentIds = []
-        }
-        // 防重
-        const isExist = this.halfCheckedKeys.indexOf(node.id)
-        const isExistParentIds = parentIds.indexOf(node.id)
-        if (isExist === -1 && isExistParentIds === -1 && currentIndex === -1) {
-          parentIds.push(node.id)
-        }
-        return this.selectNodeFilter(node.children, parentIds)
-      })
-    },
-    handleCheckedTreeNodeAll (value) {
-      if (value.target.checked) {
-        this.getAllMenuNode(this.menuOptions)
-      } else {
-        this.menuCheckedKeys = []
-        this.halfCheckedKeys = []
-      }
-    },
-    handleCheckedTreeExpand (value) {
-      if (value.target.checked) {
-        const treeList = this.menuOptions
-        for (let i = 0; i < treeList.length; i++) {
-          this.menuExpandedKeys.push(treeList[i].id)
-        }
-      } else {
-        this.menuExpandedKeys = []
-      }
-    },
-    // 树权限（父子联动）
-    handleCheckedTreeConnect (value) {
-      this.form.menuCheckStrictly = !this.form.menuCheckStrictly
-    },
-    /** 根据角色ID查询菜单树结构 */
-    getRoleMenuTreeSelect (roleId) {
-      return roleMenuTreeSelect(roleId).then(response => {
-        this.menuOptions = this.menuOptionsAll
-        return response
-      })
-    },
-    onCheck (checkedKeys, info) {
-      if (!this.form.menuCheckStrictly) {
-        let currentCheckedKeys = []
-        if (this.menuCheckedKeys.checked) {
-          currentCheckedKeys = currentCheckedKeys.concat(this.menuCheckedKeys.checked)
-        }
-        if (this.menuCheckedKeys.halfChecked) {
-          currentCheckedKeys = currentCheckedKeys.concat(this.menuCheckedKeys.halfChecked)
-        }
-        this.menuCheckedKeys = currentCheckedKeys
-      } else {
-        // 半选节点
-        this.halfCheckedKeys = info.halfCheckedKeys
-        this.menuCheckedKeys = checkedKeys
-      }
-    },
     onClose () {
       this.open = false
     },
@@ -206,71 +73,33 @@ export default {
     },
     // 表单重置
     reset () {
-      if (this.$refs.menu !== undefined) {
-        this.menuCheckedKeys = []
-        this.halfCheckedKeys = []
-      }
-      this.menuExpand = false
-      this.menuNodeAll = false
-      this.menuExpandedKeys = []
-      this.autoExpandParent = false
-      this.menuCheckedKeys = []
-      this.halfCheckedKeys = []
+      this.fileData = {}
       this.form = {
-        id: undefined,
-        name: '',
-        sort: 1,
-        menuIds: [],
-        menuCheckStrictly: true,
+        name: ''
       }
     },
      /** 新增按钮操作 */
     handleAdd () {
       this.reset()
       this.open = true
-      this.formTitle = '添加角色'
+      this.formTitle = '流程新增'
     },
-    /** 修改按钮操作 */
-    handleUpdate (row, ids) {
-      this.reset()
-      const roleId = row.id
-      const roleMenu = this.getRoleMenuTreeSelect(roleId)
-      getRole(roleId).then(response => {
-        this.form = response.data
-        this.form.menuCheckStrictly = false;
-        this.open = true
-        this.$nextTick(() => {
-          roleMenu.then(res => {
-            this.menuCheckedKeys = res.data
-            // 过滤回显时的半选中node(父)
-            if (this.form.menuCheckStrictly) {
-              this.selectNodeFilter(this.menuOptions, [])
-            }
-          })
-        })
-        this.formTitle = '修改角色'
-      })
+    beforeUpload() {
+      return false
+    },
+    uploadFile(data) {
+      this.fileData = data.file;
     },
     /** 提交按钮 */
     submitForm: function () {
       this.$refs.form.validate(valid => {
         if (valid) {
-          this.submitLoading = true
-          if (this.form.id !== undefined) {
-            this.form.menuIds = this.getMenuAllCheckedKeys()
-            updateRole(this.form).then(response => {
-              this.$message.success(
-                '修改成功',
-                3
-              )
-              this.open = false
-              this.$emit('ok')
-            }).finally(() => {
-              this.submitLoading = false
-            })
-          } else {
-            this.form.menuIds = this.getMenuAllCheckedKeys()
-            addRole(this.form).then(response => {
+          if (Object.keys(this.fileData).length != 0) {
+            this.submitLoading = true
+            const formData = new FormData()
+            formData.append('file', this.fileData)
+            formData.append("name", this.form.name)
+            insertDefinition(formData).then(response => {
               this.$message.success(
                 '新增成功',
                 3
@@ -279,7 +108,13 @@ export default {
               this.$emit('ok')
             }).finally(() => {
               this.submitLoading = false
+              this.reset();
             })
+          } else {
+            this.$message.error(
+              '请上传相关流程图',
+              3
+            )
           }
         } else {
           return false

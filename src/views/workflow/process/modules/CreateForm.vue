@@ -84,7 +84,7 @@ export default {
      /** 新增按钮操作 */
     handleAudit (row) {
       this.form.taskId = row.taskId
-      this.form.instanceId = row.instanceId
+      this.form.instanceId = row.processInstanceId
       this.form.taskName = row.taskName
       this.open = true
       this.formTitle = '审批'

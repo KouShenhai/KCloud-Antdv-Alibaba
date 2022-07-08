@@ -17,6 +17,15 @@ export function startProcess (definitionId) {
   })
 }
 
+//新增
+export function insertDefinition (data) {
+  return request({
+    url: '/admin/workflow/definition/api/insert',
+    method: 'post',
+    data: data
+  })
+}
+
 // 挂起
 export function suspendDefinition (definitionId) {
   return request({

@@ -3,11 +3,11 @@
     <a-card :bordered="false">
       <!-- 条件搜索 -->
       <div class="table-page-search-wrapper">
-        <a-form layout="inline">
+        <a-form layout="inline" v-hasPermi="['workflow:definition:query']">
           <a-row :gutter="48">
             <a-col :md="8" :sm="24">
               <a-form-item label="流程名称">
-                <a-input v-model="queryParam.processName" placeholder="请输入" allow-clear/>
+                <a-input v-model="queryParam.processName" placeholder="请输入流程名称" allow-clear/>
               </a-form-item>
             </a-col>
             <a-col :md="8" :sm="24">
@@ -18,6 +18,11 @@
             </a-col>
           </a-row>
         </a-form>
+      </div>
+      <div class="table-operations">
+        <a-button type="primary" @click="$refs.createForm.handleAdd()" v-hasPermi="['workflow:definition:insert']">
+          <a-icon type="plus" />新增
+        </a-button>
       </div>
       <!-- 增加修改 -->
       <create-form
@@ -37,32 +42,32 @@
           {{ statusFormat(record) }}
         </span>
         <span slot="operation" slot-scope="text, record">
-          <a @click="$refs.createForm.handleAdd()" >
+          <a @click="$refs.createForm.handleAdd()" v-hasPermi="['workflow:definition:insert']">
             <a-icon type="plus" />
             新增
           </a>
-          <a-divider type="vertical" />
-          <a @click="suspendFlow(record)" >
+          <a-divider type="vertical"  v-hasPermi="['workflow:definition:suspend']"/>
+          <a @click="suspendFlow(record)"  v-hasPermi="['workflow:definition:suspend']">
             <a-icon type="pause-circle" />
             挂起
           </a>
-          <a-divider type="vertical" />
-          <a @click="activateFlow(record)" >
+          <a-divider type="vertical"  v-hasPermi="['workflow:definition:activate']"/>
+          <a @click="activateFlow(record)"  v-hasPermi="['workflow:definition:activate']">
             <a-icon type="play-circle" />
             激活
           </a>
-          <a-divider type="vertical" />
-          <a @click="startFlow(record)">
+          <a-divider type="vertical"  v-hasPermi="['workflow:process:start']"/>
+          <a @click="startFlow(record)"  v-hasPermi="['workflow:process:start']">
             <a-icon type="cluster" />
             发起
           </a>
-          <a-divider type="vertical" />
-          <a @click="handleDelete(record)" >
+          <a-divider type="vertical"  v-hasPermi="['workflow:definition:delete']"/>
+          <a @click="handleDelete(record)"  v-hasPermi="['workflow:definition:delete']">
             <a-icon type="delete" />
             删除
           </a>
-          <a-divider type="vertical" />
-          <a @click="getDefinition(record)" >
+          <a-divider type="vertical"  v-hasPermi="['workflow:definition:image']"/>
+          <a @click="getDefinition(record)"  v-hasPermi="['workflow:definition:image']">
             <a-icon type="eye" />
             查看
           </a>

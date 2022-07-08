@@ -21,6 +21,11 @@
               </a-row>
             </a-form>
           </div>
+          <div class="table-operations">
+            <a-button type="primary" @click="$refs.createForm.handleAdd()" v-hasPermi="['sys:user:insert']">
+              <a-icon type="plus" />新增
+            </a-button>
+          </div>
           <!-- 创建/编辑用户,单独封装了组件 -->
           <create-form
             ref="createForm"

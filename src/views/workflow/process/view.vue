@@ -3,7 +3,7 @@
     <a-card :bordered="false">
       <!-- 条件搜索 -->
       <div class="table-page-search-wrapper">
-        <a-form layout="inline">
+        <a-form layout="inline" v-hasPermi="['workflow:process:query']">
           <a-row :gutter="48">
             <a-col :md="8" :sm="24">
               <a-form-item label="流程名称">
@@ -35,8 +35,13 @@
         :bordered="tableBordered">
         <span slot="operation" slot-scope="text, record">
           <a @click="$refs.createForm.handleAudit(record)" >
-            <a-icon type="audit" />
+            <a-icon type="audit" v-hasPermi="['workflow:task:audit']"/>
             审批
+          </a>
+          <a-divider type="vertical" v-hasPermi="['workflow:task:diagram']"/>
+          <a @click="getDiagram(record)" v-hasPermi="['workflow:task:diagram']">
+            <a-icon type="eye" />
+            查看
           </a>
         </span>
       </a-table>
@@ -91,6 +96,11 @@ export default {
           align: 'center'
         },
         {
+          title: '流程名称',
+          dataIndex: 'processName',
+          align: 'center'
+        },
+        {
           title: '任务名称',
           dataIndex: 'taskName',
           align: 'center'
@@ -124,6 +134,9 @@ export default {
   watch: {
   },
   methods: {
+    getDiagram(row) {
+      window.open(process.env.VUE_APP_BASE_API + "/admin/workflow/task/api/diagram?processInstanceId=" + row.processInstanceId)
+    },
     /** 查询流程定义列表 */
     getList () {
       this.loading = true

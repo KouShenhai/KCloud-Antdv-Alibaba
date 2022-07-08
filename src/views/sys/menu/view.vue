@@ -19,6 +19,11 @@
           </a-row>
         </a-form>
       </div>
+      <div class="table-operations">
+        <a-button type="primary" @click="$refs.createForm.handleAdd()" v-hasPermi="['sys:menu:insert']">
+          <a-icon type="plus" />新增
+        </a-button>
+      </div>
       <!-- 增加修改 -->
       <create-form
         ref="createForm"
