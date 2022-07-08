@@ -38,7 +38,6 @@
         :columns="columns"
         :data-source="list"
         :pagination="false"
-        :row-selection="{ selectedRowKeys: selectedRowKeys, onChange: onSelectChange }"
         :bordered="tableBordered">
         <span slot="status" slot-scope="text, record">
           {{ statusFormat(record) }}
@@ -212,13 +211,6 @@ export default {
       this.queryParam.pageSize = pageSize
       this.getList()
     },
-    onSelectChange (selectedRowKeys, selectedRows) {
-      this.selectedRowKeys = selectedRowKeys
-      this.selectedRows = selectedRows
-      this.ids = this.selectedRows.map(item => item.dictId)
-      this.single = selectedRowKeys.length !== 1
-      this.multiple = !selectedRowKeys.length
-    },
     toggleAdvanced () {
       this.advanced = !this.advanced
     },
@@ -232,7 +224,6 @@ export default {
         onOk () {
           return delDict(dictIds)
             .then(() => {
-              that.onSelectChange([], [])
               that.getList()
               that.$message.success(
                 '删除成功',

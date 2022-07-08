@@ -7,7 +7,7 @@
           <a-row :gutter="48">
             <a-col :md="8" :sm="24">
               <a-form-item label="流程名称">
-                <a-input v-model="queryParam.name" placeholder="请输入" allow-clear/>
+                <a-input v-model="queryParam.processName" placeholder="请输入" allow-clear/>
               </a-form-item>
             </a-col>
             <a-col :md="8" :sm="24">
@@ -28,17 +28,20 @@
       <a-table
         :loading="loading"
         :size="tableSize"
-        rowKey="id"
+        rowKey="definitionId"
         :columns="columns"
         :data-source="list"
         :pagination="false"
-        :row-selection="{ selectedRowKeys: selectedRowKeys, onChange: onSelectChange }"
         :bordered="tableBordered">
         <span slot="suspended" slot-scope="text, record">
           {{ statusFormat(record) }}
         </span>
         <span slot="operation" slot-scope="text, record">
-          <a @click="$refs.createForm.handleUpdate(record, undefined)" v-hasPermi="['sys:role:update']">
+          <a @click="$refs.createForm.handleUpdate(record, undefined)">
+            <a-icon type="edit" />
+            修改
+          </a>
+          <a @click="$refs.createForm.handleUpdate(record, undefined)">
             <a-icon type="edit" />
             修改
           </a>
@@ -72,7 +75,7 @@
 
 <script>
 
-import { pageDefinition, delRole } from '@/api/workflow/definition'
+import { pageDefinition, delDefinition } from '@/api/workflow/definition'
 import CreateForm from './modules/CreateForm'
 import { tableMixin } from '@/store/table-mixin'
 
@@ -97,12 +100,12 @@ export default {
       queryParam: {
         pageNum: 1,
         pageSize: 10,
-        name: ''
+        processName: ''
       },
       columns: [
         {
           title: '流程标识',
-          dataIndex: 'definitionId',
+          dataIndex: 'processKey',
           ellipsis: true,
           align: 'center'
         },
@@ -137,13 +140,6 @@ export default {
   watch: {
   },
   methods: {
-    onSelectChange (selectedRowKeys, selectedRows) {
-      this.selectedRowKeys = selectedRowKeys
-      this.selectedRows = selectedRows
-      this.ids = this.selectedRows.map(item => item.id)
-      this.single = selectedRowKeys.length !== 1
-      this.multiple = !selectedRowKeys.length
-    },
     statusFormat(row) {
       if (row.suspended) {
         return '挂起'
@@ -171,7 +167,7 @@ export default {
       this.queryParam = {
         pageNum: 1,
         pageSize: 10,
-        name: ''
+        processName: ''
       }
       this.handleQuery()
     },
@@ -189,14 +185,13 @@ export default {
     /** 删除按钮操作 */
     handleDelete (row) {
       const that = this
-      const roleIds = row.id
+      const deploymentId = row.deploymentId
       this.$confirm({
         title: '确认删除所选中数据?',
-        content: '当前选中编号为' + roleIds + '的数据',
+        content: '当前选中编号为' + deploymentId + '的数据',
         onOk () {
-          return delRole(roleIds)
+          return delDefinition(deploymentId)
             .then(() => {
-              that.onSelectChange([], [])
               that.getList()
               that.$message.success(
                 '删除成功',

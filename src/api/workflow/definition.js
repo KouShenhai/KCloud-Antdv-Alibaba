@@ -45,9 +45,9 @@ export function updateRole (data) {
 }
 
 // 删除角色
-export function delRole (roleId) {
+export function delDefinition (deploymentId) {
   return request({
-    url: '/admin/sys/role/api/delete?id=' + roleId,
+    url: '/admin/workflow/definition/api/delete?deploymentId=' + deploymentId,
     method: 'delete'
   })
 }

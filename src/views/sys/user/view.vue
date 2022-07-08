@@ -38,7 +38,6 @@
             :columns="columns"
             :data-source="list"
             :pagination="false"
-            :row-selection="{ selectedRowKeys: selectedRowKeys, onChange: onSelectChange }"
             :bordered="tableBordered">
             <span slot="status" slot-scope="text, record">
               <a-popconfirm
@@ -184,13 +183,6 @@ export default {
   watch: {
   },
   methods: {
-    onSelectChange (selectedRowKeys, selectedRows) {
-      this.selectedRowKeys = selectedRowKeys
-      this.selectedRows = selectedRows
-      this.ids = this.selectedRows.map(item => item.userId)
-      this.single = selectedRowKeys.length !== 1
-      this.multiple = !selectedRowKeys.length
-    },
     superAdminFormat(row) {
       if (row.superAdmin == '1') {
         return '超级管理员'
@@ -261,7 +253,6 @@ export default {
         onOk () {
           return delUser(userIds)
             .then(() => {
-              that.onSelectChange([], [])
               that.getList()
               that.$message.success(
                 '删除成功',

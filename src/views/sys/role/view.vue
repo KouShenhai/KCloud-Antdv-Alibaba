@@ -32,7 +32,6 @@
         :columns="columns"
         :data-source="list"
         :pagination="false"
-        :row-selection="{ selectedRowKeys: selectedRowKeys, onChange: onSelectChange }"
         :bordered="tableBordered">
         <span slot="operation" slot-scope="text, record">
           <a @click="$refs.createForm.handleUpdate(record, undefined)" v-hasPermi="['sys:role:update']">
@@ -128,13 +127,6 @@ export default {
   watch: {
   },
   methods: {
-    onSelectChange (selectedRowKeys, selectedRows) {
-      this.selectedRowKeys = selectedRowKeys
-      this.selectedRows = selectedRows
-      this.ids = this.selectedRows.map(item => item.id)
-      this.single = selectedRowKeys.length !== 1
-      this.multiple = !selectedRowKeys.length
-    },
     /** 查询角色列表 */
     getList () {
       this.loading = true
@@ -181,7 +173,6 @@ export default {
         onOk () {
           return delRole(roleIds)
             .then(() => {
-              that.onSelectChange([], [])
               that.getList()
               that.$message.success(
                 '删除成功',
