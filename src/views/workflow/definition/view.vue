@@ -37,23 +37,34 @@
           {{ statusFormat(record) }}
         </span>
         <span slot="operation" slot-scope="text, record">
-          <a @click="$refs.createForm.handleUpdate(record, undefined)">
-            <a-icon type="edit" />
-            修改
-          </a>
-          <a @click="$refs.createForm.handleUpdate(record, undefined)">
-            <a-icon type="edit" />
-            修改
-          </a>
-          <a-divider type="vertical" v-hasPermi="['sys:role:insert']" />
-          <a @click="$refs.createForm.handleAdd()" v-hasPermi="['sys:role:insert']">
+          <a @click="$refs.createForm.handleAdd()" >
             <a-icon type="plus" />
             新增
           </a>
-          <a-divider type="vertical" v-hasPermi="['sys:role:delete']" />
-          <a @click="handleDelete(record)" v-hasPermi="['sys:role:delete']">
+          <a-divider type="vertical" />
+          <a @click="suspendFlow(record)" >
+            <a-icon type="pause-circle" />
+            挂起
+          </a>
+          <a-divider type="vertical" />
+          <a @click="activateFlow(record)" >
+            <a-icon type="play-circle" />
+            激活
+          </a>
+          <a-divider type="vertical" />
+          <a @click="startFlow(record)">
+            <a-icon type="cluster" />
+            发起
+          </a>
+          <a-divider type="vertical" />
+          <a @click="handleDelete(record)" >
             <a-icon type="delete" />
             删除
+          </a>
+          <a-divider type="vertical" />
+          <a @click="getDefinition(record)" >
+            <a-icon type="eye" />
+            查看
           </a>
         </span>
       </a-table>
@@ -75,10 +86,9 @@
 
 <script>
 
-import { pageDefinition, delDefinition } from '@/api/workflow/definition'
+import { pageDefinition, delDefinition,suspendDefinition,activateDefinition,startProcess } from '@/api/workflow/definition'
 import CreateForm from './modules/CreateForm'
 import { tableMixin } from '@/store/table-mixin'
-
 export default {
   name: 'Definition',
   components: {
@@ -123,9 +133,9 @@ export default {
         {
           title: '操作',
           dataIndex: 'operation',
-          width: '20%',
           scopedSlots: { customRender: 'operation' },
-          align: 'center'
+          align: 'center',
+          width: '40%',
         }
       ]
     }
@@ -146,6 +156,16 @@ export default {
       }
       return '激活'
     },
+    startFlow(row) {
+      const that = this
+      startProcess(row.definitionId).then(response => {
+        that.getList()
+        this.$message.success(
+          '发起成功',
+          3
+        )
+      })
+    },
     /** 查询流程定义列表 */
     getList () {
       this.loading = true
@@ -155,6 +175,9 @@ export default {
           this.loading = false
         }
       )
+    },
+    getDefinition(row) {
+      window.open(process.env.VUE_APP_BASE_API + "/admin/workflow/definition/api/image?definitionId=" + row.definitionId)
     },
     /** 搜索按钮操作 */
     handleQuery () {
@@ -171,6 +194,26 @@ export default {
       }
       this.handleQuery()
     },
+    suspendFlow(row) {
+      const that = this
+      suspendDefinition(row.definitionId).then(response => {
+        that.getList()
+        this.$message.success(
+          '挂起成功',
+          3
+        )
+      })
+    },
+    activateFlow(row) {
+      const that = this
+      activateDefinition(row.definitionId).then(response => {
+        that.getList()
+        this.$message.success(
+          '激活成功',
+          3
+        )
+      })
+    },
     onShowSizeChange (current, pageSize) {
       this.queryParam.pageSize = pageSize
       this.getList()
@@ -179,8 +222,6 @@ export default {
       this.queryParam.pageNum = current
       this.queryParam.pageSize = pageSize
       this.getList()
-    },
-    cancelHandleStatus (row) {
     },
     /** 删除按钮操作 */
     handleDelete (row) {

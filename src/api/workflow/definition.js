@@ -1,6 +1,6 @@
 import request from '@/utils/request'
 
-// 查询角色列表-分页
+// 分页
 export function pageDefinition (query) {
   return request({
     url: '/admin/workflow/definition/api/query',
@@ -9,42 +9,31 @@ export function pageDefinition (query) {
   })
 }
 
-// 查询角色详细
-export function getRole (roleId) {
+// 开始
+export function startProcess (definitionId) {
   return request({
-    url: '/admin/sys/role/api/detail?id=' + roleId,
-    method: 'get'
+    url: '/admin/workflow/process/api/start?definitionId=' + definitionId,
+    method: 'post'
   })
 }
 
-// 查询角色列表
-export function listRole (query) {
+// 挂起
+export function suspendDefinition (definitionId) {
   return request({
-    url: '/admin/sys/role/api/list',
-    method: 'post',
-    data: query
+    url: '/admin/workflow/definition/api/suspend?definitionId=' + definitionId,
+    method: 'put'
   })
 }
 
-// 新增角色
-export function addRole (data) {
+// 激活
+export function activateDefinition (definitionId) {
   return request({
-    url: '/admin/sys/role/api/insert',
-    method: 'post',
-    data: data
+    url: '/admin/workflow/definition/api/activate?definitionId=' + definitionId,
+    method: 'put'
   })
 }
 
-// 修改角色
-export function updateRole (data) {
-  return request({
-    url: '/admin/sys/role/api/update',
-    method: 'put',
-    data: data
-  })
-}
-
-// 删除角色
+// 删除
 export function delDefinition (deploymentId) {
   return request({
     url: '/admin/workflow/definition/api/delete?deploymentId=' + deploymentId,
