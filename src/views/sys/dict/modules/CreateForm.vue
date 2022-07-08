@@ -119,7 +119,7 @@ export default {
     handleAdd () {
       this.reset()
       this.open = true
-      this.formTitle = '添加字典类型'
+      this.formTitle = '字典新增'
     },
     /** 修改按钮操作 */
     handleUpdate (row, ids) {
@@ -128,7 +128,7 @@ export default {
       getDict(dictId).then(response => {
         this.form = response.data
         this.open = true
-        this.formTitle = '修改字典'
+        this.formTitle = '字典修改'
       })
     },
     /** 提交按钮 */

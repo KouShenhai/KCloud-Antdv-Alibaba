@@ -131,7 +131,7 @@
           })
           this.roleOptions = roles
           this.open = true
-          this.formTitle = '新增用户'
+          this.formTitle = '用户新增'
           this.form.password = this.initPassword
         })
       },
@@ -154,7 +154,7 @@
           this.form = response.data
           this.form.roleIds = this.form.roleIds
           this.open = true
-          this.formTitle = '修改用户'
+          this.formTitle = '用户修改'
           this.form.password = ''
         })
       },

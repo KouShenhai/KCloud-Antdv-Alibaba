@@ -189,7 +189,7 @@ export default {
         this.form.pid = 0
       }
       this.open = true
-      this.formTitle = '添加菜单'
+      this.formTitle = '菜单新增'
     },
     /** 修改按钮操作 */
     handleUpdate (row) {
@@ -200,7 +200,7 @@ export default {
         this.form.type = "" + response.data.type
         this.form.authLevel = "" + response.data.authLevel
         this.open = true
-        this.formTitle = '修改菜单'
+        this.formTitle = '菜单修改'
       })
     },
     /** 提交按钮 */

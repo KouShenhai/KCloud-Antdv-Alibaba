@@ -228,7 +228,7 @@ export default {
     handleAdd () {
       this.reset()
       this.open = true
-      this.formTitle = '添加角色'
+      this.formTitle = '角色新增'
     },
     /** 修改按钮操作 */
     handleUpdate (row, ids) {
@@ -248,7 +248,7 @@ export default {
             }
           })
         })
-        this.formTitle = '修改角色'
+        this.formTitle = '角色修改'
       })
     },
     /** 提交按钮 */
