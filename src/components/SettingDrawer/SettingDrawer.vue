@@ -6,7 +6,7 @@
       @close="onClose"
       :closable="false"
       :visible="visible"
-      style="z-index: 999"
+      style="z-index: 10000"
     >
       <div class="setting-drawer-index-content">
 
