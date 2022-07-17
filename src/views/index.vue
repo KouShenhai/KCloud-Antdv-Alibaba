@@ -251,8 +251,7 @@ export default {
         '</if>\n' +
         '```\n' +
         '### 联系\n' +
-        '如果讨论后端技术，推荐添加：\n' +
-        '[![加入QQ群](https://img.shields.io/badge/Q群-218686225-blue.svg)](https://qm.qq.com/cgi-bin/qm/qr?k=WFANTXDEjrDw6UxsrRFCv_rQsEu6LTxH&jump_from=webapi)\n'
+        '后端技术交流群 [![加入QQ群](https://img.shields.io/badge/Q群-218686225-blue.svg)](https://qm.qq.com/cgi-bin/qm/qr?k=WFANTXDEjrDw6UxsrRFCv_rQsEu6LTxH&jump_from=webapi)'
     }
   },
   computed: {
