@@ -40,6 +40,11 @@ KCloud-Antdv 是LaoKou-Vue和Ant Design Vue Pro的结合。
 
    > 打开浏览器访问 [http://localhost:8000](http://localhost:8000/)
 
+3. 生产部署
+   ```shell
+   npm run build
+   ```
+
 ## 致谢
 
 * [RuoYi-Vue](https://gitee.com/y_project/RuoYi-Vue) 基于SpringBoot，Spring Security，JWT，Vue 的前后端分离权限管理系统
