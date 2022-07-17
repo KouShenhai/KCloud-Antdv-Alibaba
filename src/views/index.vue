@@ -96,7 +96,7 @@ export default {
         '###### 1.架构升级\n' +
         '* MVC <=> 三层架构 => 四层架构 <=> DDD\n' +
         '* 集中式架构 => 分布式微服务架构',
-      content1:'### 项目备注\n' +
+      content1: '### 项目备注\n' +
         '* 项目：KCloud\n' +
         '* 作者：老寇\n' +
         '* 语言：Java\n' +
@@ -250,7 +250,9 @@ export default {
         '    and ${qo.sqlFilter}\n' +
         '</if>\n' +
         '```\n' +
-        '\n'
+        '### 联系\n' +
+        '如果讨论后端技术，推荐添加：\n' +
+        '[![加入QQ群](https://img.shields.io/badge/Q群-218686225-blue.svg)](https://qm.qq.com/cgi-bin/qm/qr?k=WFANTXDEjrDw6UxsrRFCv_rQsEu6LTxH&jump_from=webapi)\n'
     }
   },
   computed: {
