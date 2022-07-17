@@ -64,7 +64,7 @@ export function changeUserStatus (data) {
 // 查询用户个人信息
 export function getUserInfo () {
   return request({
-    url: '/admin/sys/auth/api/userInfo',
+    url: '/auth/sys/auth/api/userInfo',
     method: 'get'
   })
 }
