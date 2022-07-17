@@ -1,11 +1,11 @@
 import request from '@/utils/request'
 
 export const userApi = {
-  Login: '/admin/sys/auth/api/login',
-  Logout: '/admin/sys/auth/api/logout',
+  Login: '/auth/sys/auth/api/login',
+  Logout: '/auth/sys/auth/api/logout',
   Register: '/register',
-  UserInfo: '/admin/sys/auth/api/userInfo',
-  Captcha: '/admin/sys/auth/api/captcha'
+  UserInfo: '/auth/sys/auth/api/userInfo',
+  Captcha: '/auth/sys/auth/api/captcha'
 }
 
 /**
