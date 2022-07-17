@@ -40,17 +40,20 @@ KCloud-Antdv 是LaoKou-Vue和Ant Design Vue Pro的结合。
 
    > 打开浏览器访问 [http://localhost:8000](http://localhost:8000/)
 
-3. 生产部署
+4. 生产部署
    ```shell
    npm run build
    ```
-
+5. 插件安装
+   ```shel
+   npm install mavon-editor --save
+   ```
+  
 ## 致谢
-
-* [RuoYi-Vue](https://gitee.com/y_project/RuoYi-Vue) 基于SpringBoot，Spring Security，JWT，Vue 的前后端分离权限管理系统
+* [LaoKou-Vue](https://gitee.com/y_project/RuoYi-Vue) 基于SpringBoot，SpringCloud，Shiro，JWT，Vue 的前后端分离权限管理系统
 * [Ant Design Vue](https://github.com/vueComponent/ant-design-vue/) An enterprise-class UI components based on Ant Design and Vue
 * [Ant Design Vue Pro](https://github.com/vueComponent/ant-design-vue-pro) Use Ant Design Vue like a Pro
-* [wangEditor](https://github.com/wangeditor-team/wangEditor) 轻量级web富文本框
+* [mavonEditor](https://github.com/hinesboy/mavonEditor) markdown编辑器
 
 ## 联系
 
