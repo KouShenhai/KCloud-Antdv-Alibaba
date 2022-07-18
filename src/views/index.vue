@@ -16,6 +16,11 @@
     <div>
       <a-row :gutter="24">
         <a-col :xl="12" :lg="24" :md="24" :sm="24" :xs="24">
+          <a-card
+            class="project-list"
+            :bordered="true"
+            title="项目简介"
+            :body-style="{ padding: 0 }">
           <mavon-editor
             class="md"
             :value="content1"
@@ -25,8 +30,14 @@
             :toolbarsFlag="prop.toolbarsFlag"
             :editable="prop.editable"
             :scrollStyle="prop.scrollStyle"/>
+          </a-card>
         </a-col>
         <a-col :xl="12" :lg="24" :md="24" :sm="24" :xs="24">
+          <a-card
+            class="project-list"
+            :bordered="true"
+            title="更新日志"
+            :body-style="{ padding: 0 }">
           <mavon-editor
             class="md"
             :value="content2"
@@ -36,6 +47,7 @@
             :toolbarsFlag="prop.toolbarsFlag"
             :editable="prop.editable"
             :scrollStyle="prop.scrollStyle"/>
+          </a-card>
         </a-col>
       </a-row>
     </div>
@@ -408,5 +420,5 @@ export default {
       display: none;
     }
   }
-
+  .v-note-wrapper{ z-index:1 !important; }
 </style>
