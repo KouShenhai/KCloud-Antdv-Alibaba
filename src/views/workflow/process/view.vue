@@ -62,7 +62,8 @@
 </template>
 
 <script>
-
+import { ACCESS_TOKEN } from '@/store/mutation-types'
+import storage from 'store'
 import { pageProcess } from '@/api/workflow/process'
 import { tableMixin } from '@/store/table-mixin'
 import CreateForm from './modules/CreateForm'
@@ -135,7 +136,7 @@ export default {
   },
   methods: {
     getDiagram(row) {
-      window.open(process.env.VUE_APP_BASE_API + "/admin/workflow/task/api/diagram?processInstanceId=" + row.processInstanceId)
+      window.open(process.env.VUE_APP_BASE_API + "/admin/workflow/task/api/diagram?processInstanceId=" + row.processInstanceId + "&Authorization=" + storage.get(ACCESS_TOKEN))
     },
     /** 查询流程定义列表 */
     getList () {

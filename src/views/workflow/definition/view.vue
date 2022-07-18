@@ -94,6 +94,8 @@
 import { pageDefinition, delDefinition,suspendDefinition,activateDefinition,startProcess } from '@/api/workflow/definition'
 import CreateForm from './modules/CreateForm'
 import { tableMixin } from '@/store/table-mixin'
+import { ACCESS_TOKEN } from '@/store/mutation-types'
+import storage from 'store'
 export default {
   name: 'Definition',
   components: {
@@ -182,7 +184,7 @@ export default {
       )
     },
     getDefinition(row) {
-      window.open(process.env.VUE_APP_BASE_API + "/admin/workflow/definition/api/image?definitionId=" + row.definitionId)
+      window.open(process.env.VUE_APP_BASE_API + "/admin/workflow/definition/api/image?definitionId=" + row.definitionId + "&Authorization=" + storage.get(ACCESS_TOKEN))
     },
     /** 搜索按钮操作 */
     handleQuery () {
