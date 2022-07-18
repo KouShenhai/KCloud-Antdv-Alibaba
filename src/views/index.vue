@@ -54,7 +54,11 @@ export default {
     return {
       roleNames:[],
       timeFix: timeFix(),
-      content2: '### 2022.07.17 更新日志\n' +
+      content2: '### 2022.07.18 更新日志\n' +
+        '###### 1.增加模板\n' +
+        '* laokou-security => 服务认证模块\n' +
+        '\n' +
+        '### 2022.07.17 更新日志\n' +
         '###### 1.增加模板\n' +
         '* laokou-auth => 认证模块\n' +
         '\n' +
@@ -250,8 +254,30 @@ export default {
         '    and ${qo.sqlFilter}\n' +
         '</if>\n' +
         '```\n' +
+        '\n' +
+        '### 服务认证\n' +
+        '##### 代码引入\n' +
+        '说明：@PreAuthorize 根据请求头携带的ticket判断，ticket有值且等于ticket，则说明已经在网关认证过了直接跳过，否则需要认证\n' +
+        '```java\n' +
+        '@RestController\n' +
+        '@AllArgsConstructor\n' +
+        '@Api(value = "系统用户API",protocols = "http",tags = "系统用户API")\n' +
+        '@RequestMapping("/sys/user/api")\n' +
+        'public class SysUserApiController {\n' +
+        '\n' +
+        '    private final SysUserApplicationService sysUserApplicationService;\n' +
+        '\n' +
+        '    @PostMapping("/query")\n' +
+        '    @ApiOperation("系统用户>查询")\n' +
+        '    @PreAuthorize("sys:user:query")\n' +
+        '    public HttpResultUtil<IPage<SysUserVO>> query(@RequestBody SysUserQO qo) {\n' +
+        '        return new HttpResultUtil<IPage<SysUserVO>>().ok(sysUserApplicationService.queryUserPage(qo));\n' +
+        '    }\n' +
+        '}\n' +
+        '```\n' +
+        '\n' +
         '### 联系\n' +
-        '后端技术交流群 [![加入QQ群](https://img.shields.io/badge/Q群-218686225-blue.svg)](https://qm.qq.com/cgi-bin/qm/qr?k=WFANTXDEjrDw6UxsrRFCv_rQsEu6LTxH&jump_from=webapi)'
+        '后端技术交流群 [![加入QQ群](https://img.shields.io/badge/Q群-218686225-blue.svg)](https://qm.qq.com/cgi-bin/qm/qr?k=WFANTXDEjrDw6UxsrRFCv_rQsEu6LTxH&jump_from=webapi)\n'
     }
   },
   computed: {
