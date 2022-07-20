@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import { getNotice } from '@/api/sys/notice'
+import { getNotice } from '@/api/sys/message'
 
 export default {
   name: 'NoticeDetail',

@@ -21,14 +21,12 @@ import './core/lazy_use' // use lazy load components
 import './permission' // permission control
 import './utils/filter' // global filter
 import './global.less' // global style
-import { getConfigKey } from '@/api/sys/config'
 import { parseTime, resetForm, addDateRange, selectDictLabel, selectDictLabels, handleTree, tableSorter } from '@/utils/laokou'
 import { download } from '@/utils/request'
 import mavonEditor from 'mavon-editor'
 import 'mavon-editor/dist/css/index.css'
 
 // 全局方法挂载
-Vue.prototype.getConfigKey = getConfigKey
 Vue.prototype.parseTime = parseTime
 Vue.prototype.resetForm = resetForm
 Vue.prototype.addDateRange = addDateRange

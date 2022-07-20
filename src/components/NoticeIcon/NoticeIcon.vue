@@ -46,7 +46,7 @@
 </template>
 
 <script>
-import { listNotice } from '@/api/sys/notice'
+import { listNotice } from '@/api/sys/message'
 import Ellipsis from '@/components/Ellipsis'
 import NoticeDetail from './NoticeDetail'
 
