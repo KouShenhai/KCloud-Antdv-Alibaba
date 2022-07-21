@@ -86,3 +86,11 @@ export function uploadAvatar (data) {
     data: data
   })
 }
+
+//用户下拉列表
+export function userOption () {
+  return request({
+    url: '/admin/sys/user/api/option/list',
+    method: 'get'
+  })
+}

@@ -1,11 +1,26 @@
 import request from '@/utils/request'
 
-// 查询公告列表
 export function listMessage (query) {
   return request({
     url: '/admin/sys/message/api/query',
     method: 'post',
     data: query
+  })
+}
+
+export function listUnRead (query) {
+  return request({
+    url: '/admin/sys/message/api/unread/list',
+    method: 'post',
+    data: query
+  })
+}
+
+export function sendMessage (data) {
+  return request({
+    url: '/admin/sys/message/api/send',
+    method: 'post',
+    data: data
   })
 }
 
@@ -32,13 +47,5 @@ export function updateNotice (data) {
     url: '/system/notice',
     method: 'put',
     data: data
-  })
-}
-
-// 删除公告
-export function delNotice (noticeId) {
-  return request({
-    url: '/system/notice/' + noticeId,
-    method: 'delete'
   })
 }

@@ -12,7 +12,7 @@
     </template>
     <template v-slot:extra>
       <a-space>
-        <a-button type="primary" @click="handleSubmit">
+        <a-button type="primary" @click="submitForm">
           发送
         </a-button>
         <a-button type="dashed" @click="back">
@@ -29,6 +29,7 @@
             </a-form-model-item>
             <a-form-model-item prop="content">
               <mavon-editor
+                placeholder="请输入内容"
                 v-model="form.content"
                 :toolbars="toolbars"
                 :ishljs="true"
@@ -37,6 +38,23 @@
                 :editable="prop.editable"
                 :scrollStyle="prop.scrollStyle"
               />
+            </a-form-model-item>
+            <a-form-model-item prop="sendChannel">
+              <a-radio-group v-model="form.sendChannel" button-style="solid">
+                <a-radio-button value="0">平台</a-radio-button>
+                <a-radio-button value="1">微信公众号</a-radio-button>
+                <a-radio-button value="2">邮箱</a-radio-button>
+              </a-radio-group>
+            </a-form-model-item>
+            <a-form-model-item prop="receiver">
+              <a-select
+                mode="multiple"
+                v-model="form.receiver"
+                placeholder="请选择">
+                <a-select-option v-for="(d, index) in userOptions" :key="index" :value="d.value">
+                  {{ d.label }}
+                </a-select-option>
+              </a-select>
             </a-form-model-item>
           </a-form-model>
         </a-col>
@@ -47,9 +65,9 @@
 
 <script>
 
-import { addNotice, updateNotice } from '@/api/sys/message'
+import { sendMessage } from '@/api/sys/message'
 import Editor from '@/components/Editor'
-
+import { userOption } from '@/api/sys/user'
 export default {
   name: 'NoticeForm',
   components: {
@@ -57,6 +75,7 @@ export default {
   },
   data () {
     return {
+      userOptions:[],
       toolbars: {
         strikethrough: true, // 中划线
         subscript: true, // 下角标
@@ -106,14 +125,15 @@ export default {
       form: {
         title: undefined,
         content: '',
+        sendChannel:0,
+        receiver:[]
       },
       baseRules: {
-        noticeTitle: [{ required: true, message: '公告标题不能为空', trigger: 'blur' }]
-      },
-      rules: {
-        noticeType: [{ required: true, message: '公告类型不能为空', trigger: 'change' }]
-      },
-      open: false
+        title: [{ required: true, message: '标题不能为空', trigger: 'blur' }],
+        content: [{ required: true, message: '内容不能为空', trigger: 'blur' }],
+        sendChannel: [{ required: true, message: '发送渠道不能为空', trigger: 'blur' }],
+        receiver: [{ required: true, message: '接收人不能为空', trigger: 'change' }],
+      }
     }
   },
   filters: {
@@ -136,6 +156,9 @@ export default {
   mounted () {
     this.formTitle = this.$route.params.formTitle
     this.handleAdd()
+    userOption().then(response => {
+      this.userOptions = response.data;
+    })
   },
   methods: {
     // 表单重置
@@ -143,6 +166,8 @@ export default {
       this.form = {
         title: undefined,
         content: '',
+        sendChannel:0,
+        receiver:[]
       }
     },
      /** 新增按钮操作 */
@@ -152,30 +177,18 @@ export default {
     },
     /** 提交按钮 */
     submitForm: function () {
-      this.$refs.form.validate(valid => {
+      this.$refs.baseForm.validate(valid => {
         if (valid) {
           this.submitLoading = true
-          if (this.form.noticeId !== undefined) {
-            updateNotice(this.form).then(response => {
-              this.$message.success(
-                '修改成功',
-                3
-              )
-              this.back()
-            }).finally(() => {
-              this.submitLoading = false
-            })
-          } else {
-            addNotice(this.form).then(response => {
-              this.$message.success(
-                '新增成功',
-                3
-              )
-              this.back()
-            }).finally(() => {
-              this.submitLoading = false
-            })
-          }
+          sendMessage(this.form).then(response => {
+            this.$message.success(
+              '发送成功',
+              3
+            )
+            this.back()
+          }).finally(() => {
+            this.submitLoading = false
+          })
         } else {
           return false
         }
@@ -183,18 +196,6 @@ export default {
     },
     back () {
       this.$router.push('/sys/message/view')
-    },
-    onClose () {
-      this.open = false
-    },
-    handleSubmit () {
-      this.$refs.baseForm.validate(valid => {
-        if (valid) {
-          this.open = true
-        } else {
-          return false
-        }
-      })
     }
   }
 }

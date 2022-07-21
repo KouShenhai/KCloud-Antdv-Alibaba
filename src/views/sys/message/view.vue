@@ -6,13 +6,13 @@
         <a-form layout="inline">
           <a-row :gutter="48">
             <a-col :md="8" :sm="24">
-              <a-form-item label="公告标题">
-                <a-input v-model="queryParam.noticeTitle" placeholder="请输入" allow-clear/>
+              <a-form-item label="标题">
+                <a-input v-model="queryParam.title" placeholder="请输入" allow-clear/>
               </a-form-item>
             </a-col>
             <a-col :md="8" :sm="24">
-              <a-form-item label="操作人员">
-                <a-input v-model="queryParam.createBy" placeholder="请输入" allow-clear/>
+              <a-form-item label="创建者">
+                <a-input v-model="queryParam.username" placeholder="请输入" allow-clear/>
               </a-form-item>
             </a-col>
             <a-col :md="8" :sm="24">
