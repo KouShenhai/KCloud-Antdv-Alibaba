@@ -7,7 +7,7 @@
     :footer="null"
   >
     <template slot="title" >
-      <center><a-tag color="red">{{ typeFormat(form.sendChannel) }}</a-tag>{{ form.title }}</center>
+      <center><a-tag color="blue">平台</a-tag>{{ form.title }}</center>
     </template>
     <mavon-editor
       class="md"
@@ -22,7 +22,7 @@
 </template>
 
 <script>
-
+  import {getMessageByDetailId} from '@/api/sys/message'
 export default {
   name: 'NoticeDetail',
   components: {
@@ -36,12 +36,6 @@ export default {
         toolbarsFlag: false,
         scrollStyle: true,
       }
-    }
-  },
-  props: {
-    typeOptions: {
-      type: Array,
-      required: true
     }
   },
   data () {
@@ -59,18 +53,18 @@ export default {
   methods: {
     /** 修改按钮操作 */
     getNotice (row) {
-      this.form.title = row.title
-      this.form.content = row.content
       this.visible = true
+      getMessageByDetailId(row.id).then(response => {
+        this.form.title = response.data.title
+        this.form.content = response.data.content
+      })
     },
     // 关闭模态框
     close () {
       this.visible = false
-      this.form = {}
-    },
-    // 公告类型字典翻译
-    typeFormat (sendChannel) {
-      return sendChannel == 0 ? "平台" : sendChannel == 1 ? "微信公众号" : "邮箱"
+      this.form.title = ''
+      this.form.content = ''
+      this.$emit('ok')
     }
   }
 }

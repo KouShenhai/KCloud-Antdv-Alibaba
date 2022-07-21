@@ -16,36 +16,31 @@ export function listUnRead (query) {
   })
 }
 
-export function sendMessage (data) {
+export function saveMessage (data) {
   return request({
-    url: '/admin/sys/message/api/send',
+    url: '/admin/sys/message/api/insert',
     method: 'post',
     data: data
   })
 }
 
-// 查询公告详细
-export function getNotice (noticeId) {
+export function unReadCount () {
   return request({
-    url: '/system/notice/' + noticeId,
+    url: '/admin/sys/message/api/count',
     method: 'get'
   })
 }
 
-// 新增公告
-export function addNotice (data) {
+export function getMessageByDetailId (id) {
   return request({
-    url: '/system/notice',
-    method: 'post',
-    data: data
+    url: '/admin/sys/message/api/get?id=' + id,
+    method: 'get'
   })
 }
 
-// 修改公告
-export function updateNotice (data) {
+export function getMessageById (id) {
   return request({
-    url: '/system/notice',
-    method: 'put',
-    data: data
+    url: '/admin/sys/message/api/detail?id=' + id,
+    method: 'get'
   })
 }

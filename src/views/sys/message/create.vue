@@ -12,10 +12,10 @@
     </template>
     <template v-slot:extra>
       <a-space>
-        <a-button type="primary" @click="submitForm">
-          发送
+        <a-button type="primary" :loading="submitLoading" @click="submitForm">
+          确认
         </a-button>
-        <a-button type="dashed" @click="back">
+        <a-button type="dashed" :loading="submitLoading" @click="back">
           取消
         </a-button>
       </a-space>
@@ -42,8 +42,6 @@
             <a-form-model-item prop="sendChannel">
               <a-radio-group v-model="form.sendChannel" button-style="solid">
                 <a-radio-button value="0">平台</a-radio-button>
-                <a-radio-button value="1">微信公众号</a-radio-button>
-                <a-radio-button value="2">邮箱</a-radio-button>
               </a-radio-group>
             </a-form-model-item>
             <a-form-model-item prop="receiver">
@@ -65,7 +63,7 @@
 
 <script>
 
-import { sendMessage } from '@/api/sys/message'
+import { saveMessage } from '@/api/sys/message'
 import Editor from '@/components/Editor'
 import { userOption } from '@/api/sys/user'
 export default {
@@ -180,11 +178,12 @@ export default {
       this.$refs.baseForm.validate(valid => {
         if (valid) {
           this.submitLoading = true
-          sendMessage(this.form).then(response => {
+          saveMessage(this.form).then(response => {
             this.$message.success(
               '发送成功',
               3
             )
+            this.reset()
             this.back()
           }).finally(() => {
             this.submitLoading = false

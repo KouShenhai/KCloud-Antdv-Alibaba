@@ -8,11 +8,13 @@
       :getPopupContainer="() => $refs.noticeRef.parentElement"
       :autoAdjustOverflow="true"
       :arrowPointAtCenter="true"
-      :overlayStyle="{ width: '300px', top: '50px' }"
+      :overlayStyle="{ width: '200px', top: '50px' }"
     >
       <template slot="content">
         <a-spin :spinning="loading">
-          <a-list>
+          <a-tabs v-model="noticeType" @change="changeType">
+            <a-tab-pane :key="noticeType" :tab="noticeType">
+              <a-list style="max-height: 200px; overflow:auto;">
             <div
               v-if="showLoadingMore"
               slot="loadMore"
@@ -25,23 +27,27 @@
             <a-list-item v-for="(item, index) in list" :key="index">
               <a-list-item-meta :description="item.createDate">
                 <a slot="title" @click="$refs.noticeDetail.getNotice(item)">
-                  <ellipsis :length="32" tooltip>{{ item.title }}</ellipsis>
+                  <ellipsis :length="16" tooltip>{{ item.title }}</ellipsis>
                 </a>
               </a-list-item-meta>
             </a-list-item>
-          </a-list>
+            </a-list>
+            </a-tab-pane>
+          </a-tabs>
         </a-spin>
       </template>
       <span @click="fetchNotice" class="header-notice" ref="noticeRef">
-        <a-icon style="font-size: 20px;" type="bell" />
+        <a-badge :count="count">
+          <a-icon style="font-size: 20px;" type="bell" />
+        </a-badge>
       </span>
     </a-popover>
-    <notice-detail ref="noticeDetail" />
+    <notice-detail @ok="getUnReadCount" ref="noticeDetail" />
   </div>
 </template>
 
 <script>
-import { listUnRead } from '@/api/sys/message'
+import { listUnRead,unReadCount } from '@/api/sys/message'
 import Ellipsis from '@/components/Ellipsis'
 import NoticeDetail from './NoticeDetail'
 import {socketApi} from '@/api/sys/socket'
@@ -54,6 +60,7 @@ export default {
   },
   data () {
     return {
+      count: 0,
       loading: false,
       loadingMore: false,
       showLoadingMore: true,
@@ -63,10 +70,11 @@ export default {
         pageSize: 5
       },
       list: [],
-      typeOptions: []
+      noticeType:"消息通知"
     }
   },
   mounted() {
+    this.getUnReadCount()
     this.connectWebsocket()
   },
   computed: {
@@ -92,9 +100,6 @@ export default {
     fetchNotice () {
       this.resetQuery()
       if (!this.visible) {
-        if (this.typeOptions.length === 0) {
-
-        }
         this.getList()
       }
       this.visible = !this.visible
@@ -102,9 +107,7 @@ export default {
     resetQuery () {
       this.queryParam = {
         pageNum: 1,
-        pageSize: 5,
-        status: 0,
-        noticeType: '1'
+        pageSize: 5
       }
       this.list = []
     },
@@ -118,6 +121,12 @@ export default {
       this.queryParam.pageNum++
       this.getList()
       this.loadingMore = false
+    },
+    getUnReadCount() {
+      unReadCount().then(response => {
+          this.count = response.data
+        }
+      )
     },
     connectWebsocket() {
       let websocket;
@@ -144,8 +153,8 @@ export default {
         };
         // 客户端接收服务端返回的数据
         websocket.onmessage = evt => {
-          console.log("websocket返回的数据：", evt);
-          this.msgRemind(evt.data);
+          //动态更新通知数
+          this.getUnReadCount();
         };
         // 发生错误时
         websocket.onerror = evt => {
@@ -156,12 +165,6 @@ export default {
           console.log("websocket关闭：", evt);
         };
       }
-    },
-    msgRemind(data) {
-      this.$notification.success({
-        message: '系统提醒',
-        description: data
-      })
     }
   }
 }

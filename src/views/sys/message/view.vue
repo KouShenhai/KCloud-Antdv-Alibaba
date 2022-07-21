@@ -2,7 +2,7 @@
   <page-header-wrapper>
     <a-card :bordered="false">
       <!-- 条件搜索 -->
-      <div class="table-page-search-wrapper">
+      <div class="table-page-search-wrapper" v-hasPermi="['sys:message:query']">
         <a-form layout="inline">
           <a-row :gutter="48">
             <a-col :md="8" :sm="24">
@@ -26,7 +26,7 @@
       </div>
       <!-- 操作 -->
       <div class="table-operations">
-        <a-button type="primary" @click="handleAdd()">
+        <a-button type="primary" @click="handleAdd()" v-hasPermi="['sys:message:insert']">
           <a-icon type="plus" />新增
         </a-button>
         <table-setting
@@ -45,13 +45,16 @@
         :data-source="list"
         :pagination="false"
         :bordered="tableBordered">
-        <span slot="createTime" slot-scope="text, record">
-          {{ parseTime(record.createTime) }}
-        </span>
         <span slot="operation" slot-scope="text, record">
-<!--          <a @click="handleUpdate(record, undefined)">-->
-<!--            <a-icon type="edit" />修改-->
-<!--          </a>-->
+          <a @click="handleAdd()" v-hasPermi="['sys:message:insert']">
+            <a-icon type="plus" />
+            新增
+          </a>
+          <a-divider type="vertical" v-hasPermi="['sys:message:detail']"/>
+          <a @click="getMessage(record)" v-hasPermi="['sys:message:detail']">
+            <a-icon type="eye" />
+            查看
+          </a>
         </span>
       </a-table>
       <!-- 分页 -->
@@ -67,14 +70,32 @@
         @change="changeSize"
       />
     </a-card>
+    <a-modal
+      ref="noticeDetail"
+      :width="900"
+      :visible="visible"
+      @cancel="close"
+      :footer="null">
+      <template slot="title" >
+        <center><a-tag color="blue">平台</a-tag>{{ form.title }}</center>
+      </template>
+      <mavon-editor
+        class="md"
+        :value="form.content"
+        :ishljs="true"
+        :subfield="prop.subfield"
+        :defaultOpen="prop.defaultOpen"
+        :toolbarsFlag="prop.toolbarsFlag"
+        :editable="prop.editable"
+        :scrollStyle="prop.scrollStyle"/>
+    </a-modal>
   </page-header-wrapper>
 </template>
 
 <script>
 
-import { listMessage } from '@/api/sys/message'
+import { listMessage,getMessageById } from '@/api/sys/message'
 import { tableMixin } from '@/store/table-mixin'
-
 export default {
   name: 'Notice',
   components: {
@@ -82,17 +103,17 @@ export default {
   mixins: [tableMixin],
   data () {
     return {
+      visible: false,
       list: [],
-      // 非单个禁用
-      single: true,
-      // 非多个禁用
-      multiple: true,
-      ids: [],
       loading: false,
       total: 0,
       // 状态数据字典
       statusOptions: [],
       typeOptions: [],
+      form: {
+        title: '',
+        content: ''
+      },
       queryParam: {
         pageNum: 1,
         pageSize: 10,
@@ -133,10 +154,32 @@ export default {
     this.getList()
   },
   computed: {
+    prop() {
+      return {
+        subfield: false, // 单双栏模式
+        defaultOpen: "preview", //edit： 默认展示编辑区域 ， preview： 默认展示预览区域
+        editable: false,
+        toolbarsFlag: false,
+        scrollStyle: true,
+      }
+    }
   },
   watch: {
   },
   methods: {
+    getMessage(row) {
+      getMessageById(row.id).then(response => {
+        this.form.content = response.data.content
+        this.form.title = response.data.title
+        this.visible = true
+      })
+    },
+    // 关闭模态框
+    close () {
+      this.visible = false
+      this.form.title = ''
+      this.form.content = ''
+    },
     /** 查询公告列表 */
     getList () {
       this.loading = true
