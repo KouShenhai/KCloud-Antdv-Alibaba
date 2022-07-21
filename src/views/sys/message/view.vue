@@ -3,11 +3,16 @@
     <a-card :bordered="false">
       <!-- 条件搜索 -->
       <div class="table-page-search-wrapper">
-        <a-form layout="inline" v-hasPermi="['sys:role:query']">
+        <a-form layout="inline">
           <a-row :gutter="48">
             <a-col :md="8" :sm="24">
-              <a-form-item label="角色名称">
-                <a-input v-model="queryParam.name" placeholder="请输入" allow-clear/>
+              <a-form-item label="公告标题">
+                <a-input v-model="queryParam.noticeTitle" placeholder="请输入" allow-clear/>
+              </a-form-item>
+            </a-col>
+            <a-col :md="8" :sm="24">
+              <a-form-item label="操作人员">
+                <a-input v-model="queryParam.createBy" placeholder="请输入" allow-clear/>
               </a-form-item>
             </a-col>
             <a-col :md="8" :sm="24">
@@ -19,16 +24,18 @@
           </a-row>
         </a-form>
       </div>
+      <!-- 操作 -->
       <div class="table-operations">
-        <a-button type="primary" @click="$refs.createForm.handleAdd()" v-hasPermi="['sys:role:insert']">
+        <a-button type="primary" @click="handleAdd()">
           <a-icon type="plus" />新增
         </a-button>
+        <table-setting
+          :style="{float: 'right'}"
+          :table-size.sync="tableSize"
+          v-model="columns"
+          :refresh-loading="loading"
+          @refresh="getList" />
       </div>
-      <!-- 增加修改 -->
-      <create-form
-        ref="createForm"
-        @ok="getList"
-      />
       <!-- 数据展示 -->
       <a-table
         :loading="loading"
@@ -38,21 +45,13 @@
         :data-source="list"
         :pagination="false"
         :bordered="tableBordered">
+        <span slot="createTime" slot-scope="text, record">
+          {{ parseTime(record.createTime) }}
+        </span>
         <span slot="operation" slot-scope="text, record">
-          <a @click="$refs.createForm.handleUpdate(record, undefined)" v-hasPermi="['sys:role:update']">
-            <a-icon type="edit" />
-            修改
-          </a>
-          <a-divider type="vertical" v-hasPermi="['sys:role:insert']" />
-          <a @click="$refs.createForm.handleAdd()" v-hasPermi="['sys:role:insert']">
-            <a-icon type="plus" />
-            新增
-          </a>
-          <a-divider type="vertical" v-hasPermi="['sys:role:delete']" />
-          <a @click="handleDelete(record)" v-hasPermi="['sys:role:delete']">
-            <a-icon type="delete" />
-            删除
-          </a>
+<!--          <a @click="handleUpdate(record, undefined)">-->
+<!--            <a-icon type="edit" />修改-->
+<!--          </a>-->
         </span>
       </a-table>
       <!-- 分页 -->
@@ -73,47 +72,55 @@
 
 <script>
 
-import { pageRole, delRole } from '@/api/sys/role'
-import CreateForm from './modules/CreateForm'
+import { listMessage } from '@/api/sys/message'
 import { tableMixin } from '@/store/table-mixin'
 
 export default {
-  name: 'Role',
+  name: 'Notice',
   components: {
-    CreateForm
   },
   mixins: [tableMixin],
   data () {
     return {
       list: [],
-      // 高级搜索 展开/关闭
+      // 非单个禁用
       single: true,
       // 非多个禁用
       multiple: true,
       ids: [],
       loading: false,
       total: 0,
+      // 状态数据字典
+      statusOptions: [],
+      typeOptions: [],
       queryParam: {
         pageNum: 1,
         pageSize: 10,
-        name: ''
+        title: undefined,
+        username: undefined
       },
       columns: [
         {
-          title: '角色名称',
-          dataIndex: 'name',
+          title: '标题',
+          dataIndex: 'title',
           ellipsis: true,
           align: 'center'
         },
         {
-          title: '角色顺序',
-          dataIndex: 'sort',
+          title: '创建者',
+          dataIndex: 'username',
+          ellipsis: true,
+          align: 'center'
+        },
+        {
+          title: '创建时间',
+          dataIndex: 'createDate',
           align: 'center'
         },
         {
           title: '操作',
           dataIndex: 'operation',
-          width: '20%',
+          width: '15%',
           scopedSlots: { customRender: 'operation' },
           align: 'center'
         }
@@ -130,10 +137,10 @@ export default {
   watch: {
   },
   methods: {
-    /** 查询角色列表 */
+    /** 查询公告列表 */
     getList () {
       this.loading = true
-      pageRole(this.queryParam).then(response => {
+      listMessage(this.queryParam).then(response => {
           this.list = response.data.records
           this.total = response.data.total - 0
           this.loading = false
@@ -147,11 +154,11 @@ export default {
     },
     /** 重置按钮操作 */
     resetQuery () {
-      this.dateRange = []
       this.queryParam = {
         pageNum: 1,
         pageSize: 10,
-        name: ''
+        title: undefined,
+        username: undefined
       }
       this.handleQuery()
     },
@@ -164,26 +171,15 @@ export default {
       this.queryParam.pageSize = pageSize
       this.getList()
     },
-    cancelHandleStatus (row) {
-    },
-    /** 删除按钮操作 */
-    handleDelete (row) {
-      const that = this
-      const roleIds = row.id
-      this.$confirm({
-        title: '确认删除所选中数据?',
-        content: '当前选中编号为' + roleIds + '的数据',
-        onOk () {
-          return delRole(roleIds)
-            .then(() => {
-              that.getList()
-              that.$message.success(
-                '删除成功',
-                3
-              )
-          })
-        },
-        onCancel () {}
+     /** 新增按钮操作 */
+    handleAdd () {
+      this.$router.push({
+        name: 'NoticeForm',
+        params:
+        {
+          id: undefined,
+          formTitle: '新增消息'
+        }
       })
     }
   }

@@ -72,7 +72,6 @@ export default {
       list: [],
       selectedRows: [],
       // 高级搜索 展开/关闭
-      advanced: false,
       loading: false,
       // 非多个禁用
       multiple: true,
@@ -196,10 +195,7 @@ export default {
       this.queryParam.pageNum = current
       this.queryParam.pageSize = pageSize
       this.getList()
-    },
-    toggleAdvanced () {
-      this.advanced = !this.advanced
-    },
+    }
   }
 }
 </script>

@@ -33,6 +33,14 @@ export const indexRouterMap = [
     icon: 'user',
     hidden: true
   },
+  {
+    path: '/sys/message/create',
+    name: '新增消息',
+    permissions: '',
+    component: 'NoticeForm',
+    icon: '',
+    hidden: true
+  },
 ]
 
 /**

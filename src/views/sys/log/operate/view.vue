@@ -227,9 +227,6 @@ export default {
       this.queryParam.pageNum = current
       this.queryParam.pageSize = pageSize
       this.getList()
-    },
-    toggleAdvanced () {
-      this.advanced = !this.advanced
     }
   }
 }

@@ -46,7 +46,7 @@
 </template>
 
 <script>
-import { listNotice } from '@/api/sys/message'
+import { listMessage } from '@/api/sys/message'
 import Ellipsis from '@/components/Ellipsis'
 import NoticeDetail from './NoticeDetail'
 
@@ -75,9 +75,9 @@ export default {
   methods: {
     getList () {
       this.loading = true
-      listNotice(this.queryParam).then(response => {
-          this.list = this.list.concat(response.rows)
-          this.total = response.total
+      listMessage(this.queryParam).then(response => {
+          this.list = this.list.concat(response.data.records)
+          this.total = response.data.total - 0
           if (this.total <= this.queryParam.pageNum * this.queryParam.pageSize) {
             this.showLoadingMore = false
           } else {

@@ -1,11 +1,11 @@
 import request from '@/utils/request'
 
 // 查询公告列表
-export function listNotice (query) {
+export function listMessage (query) {
   return request({
-    url: '/system/notice/list',
-    method: 'get',
-    params: query
+    url: '/admin/sys/message/api/query',
+    method: 'post',
+    data: query
   })
 }
 
