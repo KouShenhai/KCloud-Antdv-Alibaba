@@ -13,7 +13,7 @@
     <template v-slot:extra>
       <a-space>
         <a-button type="primary" :loading="submitLoading" @click="submitForm">
-          确认
+          确定
         </a-button>
         <a-button type="dashed" :loading="submitLoading" @click="back">
           取消
