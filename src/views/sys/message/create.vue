@@ -32,7 +32,9 @@
                 placeholder="请输入内容"
                 v-model="form.content"
                 :toolbars="toolbars"
+                ref="content"
                 :ishljs="true"
+                @imgAdd="imgAdd"
                 :subfield="prop.subfield"
                 :defaultOpen="prop.defaultOpen"
                 :editable="prop.editable"
@@ -66,6 +68,7 @@
 import { saveMessage } from '@/api/sys/message'
 import Editor from '@/components/Editor'
 import { userOption } from '@/api/sys/user'
+import { uploadFile } from "@/api/sys/oss"
 export default {
   name: 'NoticeForm',
   components: {
@@ -159,6 +162,13 @@ export default {
     })
   },
   methods: {
+    imgAdd(pos,file) {
+      let imgData = new FormData();
+      imgData.append('file',file);
+      uploadFile(imgData).then(res=>{
+        this.$refs.content.$img2Url(pos,res.data.url)
+      });
+    },
     // 表单重置
     reset () {
       this.form = {
