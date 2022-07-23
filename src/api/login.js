@@ -21,18 +21,6 @@ export function login (parameter) {
   })
 }
 
-// 注册方法
-export function register (data) {
-  return request({
-    url: userApi.Register,
-    headers: {
-      isToken: false
-    },
-    method: 'post',
-    data: data
-  })
-}
-
 export function getInfo () {
   return request({
     url: userApi.UserInfo,

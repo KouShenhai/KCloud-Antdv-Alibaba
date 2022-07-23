@@ -35,10 +35,18 @@ const user = {
   },
 
   actions: {
-    // 登录
-    Login ({ commit }, userInfo) {
+
+    ZFBLogin({ commit },token) {
       return new Promise((resolve, reject) => {
-        login(userInfo).then(res => {
+        commit('SET_TOKEN', token)
+        resolve()
+      })
+    },
+
+    // 登录
+    Login ({ commit }, loginParam) {
+      return new Promise((resolve, reject) => {
+        login(loginParam).then(res => {
           storage.set(ACCESS_TOKEN, res.data.token, 7 * 24 * 60 * 60 * 1000)
           commit('SET_TOKEN', res.data.token)
           resolve()
@@ -50,9 +58,9 @@ const user = {
     },
 
     // 获取用户信息
-    GetInfo ({ commit, state }) {
+    GetInfo ({ commit }) {
       return new Promise((resolve, reject) => {
-        getInfo(state.token).then(res => {
+        getInfo().then(res => {
           const user = res.data
           const id = user.userId;
           const name = user.username
@@ -74,9 +82,9 @@ const user = {
     },
 
     // 登出
-    Logout ({ commit, state }) {
+    Logout ({ commit }) {
       return new Promise((resolve, reject) => {
-        logout(state.token).then(() => {
+        logout().then(() => {
           resolve()
         }).catch(error => {
           reject(error)

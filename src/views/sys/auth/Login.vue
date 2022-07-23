@@ -34,6 +34,9 @@
           @click="handleSubmit"
         >确定</a-button>
       </a-form-item>
+      <div class="user-login-other">
+        <a href="https://openauth.alipay.com/oauth2/publicAppAuthorize.htm?app_id=2019121269782969&scope=auth_user&redirect_uri=http%3A%2F%2F192.168.62.1%3A5555%2Fauth%2Fsys%2Fauth%2Fapi%2FzfbLogin" class="zfb">支付宝登录</a>
+      </div>
     </a-form-model>
   </div>
 </template>
@@ -65,9 +68,31 @@ export default {
     }
   },
   created () {
-    this.getCode()
+
+  },
+  mounted() {
+    this.checkLogin()
   },
   methods: {
+    checkLogin() {
+      let queryAttr = window.location.search
+      let notLogin = true
+      if (queryAttr.length > 0) {
+        queryAttr = queryAttr.substring(1)
+        let data = queryAttr.split("&")
+        for (let i = 0; i < data.length; i++) {
+          let queryData = data[i].split("=")
+          if (queryData[0] == "Authorization") {
+            notLogin = false
+            this.ZFBLogin(queryData[1])
+            this.loginSuccess()
+          }
+        }
+      }
+      if (notLogin) {
+        this.requestFailed()
+      }
+    },
     getUuid() {
       return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g,'x' ? (Math.random() * 16 | 0) : ('r&0x3' | '0x8')).toString(16);
     },
@@ -75,7 +100,7 @@ export default {
       this.form.uuid = this.getUuid();
       this.codeUrl = process.env.VUE_APP_BASE_API + userApi.Captcha + '?uuid=' + this.form.uuid;
     },
-    ...mapActions(['Login', 'Logout']),
+    ...mapActions(['Login', 'Logout', 'ZFBLogin']),
     handleSubmit () {
       this.logining = true
       this.$refs.form.validate(valid => {
@@ -88,8 +113,8 @@ export default {
           const captcha = this.form.captcha
           const params = {username:username,password:password,captcha:captcha,uuid:uuid}
           this.Login(params)
-            .then((res) => this.loginSuccess(res))
-            .catch(err => this.requestFailed(err))
+            .then((res) => this.loginSuccess())
+            .catch(err => this.requestFailed())
             .finally(() => {
               this.logining = false
             })
@@ -100,7 +125,7 @@ export default {
         }
       })
     },
-    loginSuccess (res) {
+    loginSuccess () {
       this.$router.push({ path: '/' })
       // 延迟 1 秒显示欢迎信息
       setTimeout(() => {
@@ -109,11 +134,10 @@ export default {
           description: `${timeFix()}，欢迎回来`
         })
       }, 1000)
-
     },
-    requestFailed (err) {
+    requestFailed () {
       this.form.captcha = ''
-      this.getCode();
+      this.getCode()
     }
   }
 }
@@ -141,7 +165,7 @@ export default {
     text-align: left;
     margin-top: 24px;
     line-height: 22px;
-    .register {
+    .zfb {
       float: right;
     }
   }
