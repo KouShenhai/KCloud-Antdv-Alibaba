@@ -17,9 +17,6 @@
         <a-checkbox @change="handleCheckedTreeNodeAll($event)">
           全选/全不选
         </a-checkbox>
-        <a-checkbox @change="handleCheckedTreeConnect($event)" :checked="form.menuCheckStrictly">
-          父子联动
-        </a-checkbox>
         <a-tree
           v-model="menuCheckedKeys"
           checkable
@@ -169,10 +166,6 @@ export default {
         this.menuExpandedKeys = []
       }
     },
-    // 树权限（父子联动）
-    handleCheckedTreeConnect (value) {
-      this.form.menuCheckStrictly = !this.form.menuCheckStrictly
-    },
     /** 根据角色ID查询菜单树结构 */
     getRoleMenuTreeSelect (roleId) {
       return roleMenuTreeSelect(roleId).then(response => {
@@ -231,7 +224,7 @@ export default {
       this.formTitle = '角色新增'
     },
     /** 修改按钮操作 */
-    handleUpdate (row, ids) {
+    handleUpdate (row) {
       this.reset()
       const roleId = row.id
       const roleMenu = this.getRoleMenuTreeSelect(roleId)
