@@ -21,7 +21,7 @@
       </div>
       <!-- 操作 -->
       <div class="table-operations">
-        <a-button type="primary" @click="$refs.createForm.handleAdd()" v-hasPermi="['system:dept:add']">
+        <a-button type="primary" @click="$refs.createForm.handleAdd()">
           <a-icon type="plus" />新增
         </a-button>
         <table-setting
@@ -37,13 +37,13 @@
         :deptOptions="deptOptions"
         :statusOptions="statusOptions"
         @ok="getList"
-        @select-tree="getTreeselect"
+        @select-tree="getTreeSelect"
       />
       <!-- 数据展示 -->
       <a-table
         :loading="loading"
         :size="tableSize"
-        rowKey="deptId"
+        rowKey="id"
         :columns="columns"
         :data-source="list"
         :pagination="false"
@@ -51,19 +51,16 @@
         <span slot="status" slot-scope="text, record">
           {{ statusFormat(record) }}
         </span>
-        <span slot="createTime" slot-scope="text, record">
-          {{ parseTime(record.createTime) }}
-        </span>
         <span slot="operation" slot-scope="text, record">
-          <a @click="$refs.createForm.handleUpdate(record)" v-hasPermi="['system:dept:edit']">
+          <a @click="$refs.createForm.handleUpdate(record)">
             <a-icon type="edit" />修改
           </a>
-          <a-divider type="vertical" v-hasPermi="['system:dept:add']" />
-          <a @click="$refs.createForm.handleAdd(record)" v-hasPermi="['system:dept:add']">
+          <a-divider type="vertical" />
+          <a @click="$refs.createForm.handleAdd(record)">
             <a-icon type="plus" />新增
           </a>
-          <a-divider type="vertical" v-if="record.parentId != 0" v-hasPermi="['system:dept:remove']" />
-          <a @click="handleDelete(record)" v-if="record.parentId != 0" v-hasPermi="['system:dept:remove']">
+          <a-divider type="vertical" v-if="record.id != 0" />
+          <a @click="handleDelete(record)" v-if="record.id != 0">
             <a-icon type="delete" />删除
           </a>
         </span>
@@ -74,7 +71,7 @@
 
 <script>
 
-import { listDept, delDept, listDeptExcludeChild } from '@/api/sys/dept'
+import { queryDept } from '@/api/sys/dept'
 import CreateForm from './modules/CreateForm'
 import { tableMixin } from '@/store/table-mixin'
 
@@ -91,20 +88,23 @@ export default {
       deptOptions: [],
       loading: false,
       // 状态数据字典
-      statusOptions: [],
+      statusOptions: [
+        {
+          label: "正常",
+          value: 0
+        },
+        {
+          label: "停用",
+          value: 1
+        }
+      ],
       queryParam: {
-        deptName: undefined,
-        status: undefined
+        name: undefined
       },
       columns: [
         {
           title: '部门名称',
-          dataIndex: 'deptName'
-        },
-        {
-          title: '排序',
-          dataIndex: 'orderNum',
-          align: 'center'
+          dataIndex: 'name'
         },
         {
           title: '状态',
@@ -113,10 +113,8 @@ export default {
           align: 'center'
         },
         {
-          title: '创建时间',
-          dataIndex: 'createTime',
-          ellipsis: true,
-          scopedSlots: { customRender: 'createTime' },
+          title: '排序',
+          dataIndex: 'sort',
           align: 'center'
         },
         {
@@ -133,9 +131,6 @@ export default {
   },
   created () {
     this.getList()
-    this.getDicts('sys_normal_disable').then(response => {
-      this.statusOptions = response.data
-    })
   },
   computed: {
   },
@@ -145,27 +140,28 @@ export default {
     /** 查询部门列表 */
     getList () {
       this.loading = true
-      listDept(this.queryParam).then(response => {
-          this.list = this.handleTree(response.data, 'deptId')
+      queryDept(this.queryParam).then(response => {
+          this.list = this.handleTree(response.data, 'id')
           this.loading = false
         }
       )
     },
     /** 查询菜单下拉树结构 */
-    getTreeselect (row) {
-      if (!row) {
-        listDept().then(response => {
-          this.deptOptions = this.handleTree(response.data, 'deptId')
-        })
-      } else {
-        listDeptExcludeChild(row.deptId).then(response => {
-          this.deptOptions = this.handleTree(response.data, 'deptId')
-        })
-      }
+    getTreeSelect (row) {
+      const query = { name: '' }
+      queryDept(query).then(response => {
+        this.deptOptions = []
+        const dept = { id: 0, name: '主目录', children: [] }
+        dept.children = this.handleTree(response.data, 'id')
+        this.deptOptions.push(dept)
+      })
     },
     // 字典状态字典翻译
     statusFormat (row) {
-      return this.selectDictLabel(this.statusOptions, row.status)
+      if (row.status == 0) {
+        return '正常'
+      }
+      return '停用'
     },
     /** 搜索按钮操作 */
     handleQuery () {
@@ -174,14 +170,13 @@ export default {
     /** 重置按钮操作 */
     resetQuery () {
       this.queryParam = {
-        deptName: undefined,
-        status: undefined
+        name: undefined
       }
       this.handleQuery()
     },
     /** 删除按钮操作 */
     handleDelete (row) {
-      var that = this
+      let that = this
       const deptId = row.deptId
       this.$confirm({
         title: '确认删除所选中数据?',

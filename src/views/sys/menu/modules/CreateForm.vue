@@ -57,7 +57,7 @@
         <a-input v-model="form.name" placeholder="请输入" />
       </a-form-model-item>
       <a-form-model-item label="菜单排序" prop="sort">
-        <a-input-number v-model="form.sort" :min="0" :max="9999" style="width: 100%" />
+        <a-input-number v-model="form.sort" :min="1" :max="9999" style="width: 100%" />
       </a-form-model-item>
       <a-form-model-item prop="url">
         <span slot="label">

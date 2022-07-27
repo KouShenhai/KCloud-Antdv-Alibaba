@@ -208,7 +208,8 @@ export default {
     },
     /** 查询菜单下拉树结构 */
     getTreeSelect () {
-      listMenu(this.queryParam).then(response => {
+      const query = { name: '' }
+      listMenu(query).then(response => {
         this.menuOptions = []
         const menu = { id: 0, name: '主目录', children: [] }
         menu.children = this.handleTree(response.data, 'id')

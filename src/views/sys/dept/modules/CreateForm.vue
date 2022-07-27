@@ -4,36 +4,27 @@
       <b>{{ formTitle }}</b>
     </a-divider>
     <a-form-model ref="form" :model="form" :rules="rules">
-      <a-form-model-item label="上级部门" prop="parentId">
+      <a-form-model-item label="上级部门" prop="pid">
         <a-tree-select
-          v-model="form.parentId"
+          v-model="form.pid"
           style="width: 100%"
           :dropdown-style="{ maxHeight: '400px', overflow: 'auto' }"
           :tree-data="deptOptions"
           placeholder="请选择"
-          :replaceFields="{children:'children', title:'deptName', key:'deptId', value: 'deptId' }"
+          :replaceFields="{children:'children', title:'name', key:'id', value: 'id' }"
           tree-default-expand-all
         >
         </a-tree-select>
       </a-form-model-item>
-      <a-form-model-item label="部门名称" prop="deptName">
-        <a-input v-model="form.deptName" placeholder="请输入" />
+      <a-form-model-item label="部门名称" prop="name">
+        <a-input v-model="form.name" placeholder="请输入" />
       </a-form-model-item>
-      <a-form-model-item label="排序" prop="orderNum">
-        <a-input-number v-model="form.orderNum" :min="0" style="width: 100%"/>
-      </a-form-model-item>
-      <a-form-model-item label="负责人" prop="leader">
-        <a-input v-model="form.leader" placeholder="请输入" />
-      </a-form-model-item>
-      <a-form-model-item label="联系电话" prop="phone">
-        <a-input v-model="form.phone" placeholder="请输入" />
-      </a-form-model-item>
-      <a-form-model-item label="邮箱" prop="email">
-        <a-input v-model="form.email" placeholder="请输入" />
+      <a-form-model-item label="排序" prop="sort">
+        <a-input-number v-model="form.sort" :min="1" :max="9999" style="width: 100%"/>
       </a-form-model-item>
       <a-form-model-item label="状态" prop="status">
         <a-radio-group v-model="form.status" button-style="solid">
-          <a-radio-button v-for="(d, index) in statusOptions" :key="index" :value="d.dictValue">{{ d.dictLabel }}</a-radio-button>
+          <a-radio-button v-for="(d, index) in statusOptions" :key="index" :value="d.value">{{ d.label }}</a-radio-button>
         </a-radio-group>
       </a-form-model-item>
       <div class="bottom-control">
@@ -72,34 +63,18 @@ export default {
       formTitle: '',
       // 表单参数
       form: {
-        deptId: undefined,
-        parentId: undefined,
-        deptName: undefined,
-        orderNum: 0,
-        leader: undefined,
-        phone: undefined,
-        email: undefined,
-        status: '0'
+        id: undefined,
+        pid: undefined,
+        name: undefined,
+        sort: 0,
+        status: '1'
       },
       open: false,
       rules: {
-        parentId: [{ required: true, message: '上级部门不能为空', trigger: 'blur' }],
-        deptName: [{ required: true, message: '部门名称不能为空', trigger: 'blur' }],
-        orderNum: [{ required: true, message: '排序不能为空', trigger: 'blur' }],
-        email: [
-          {
-            type: 'email',
-            message: '请输入正确的邮箱地址',
-            trigger: ['blur', 'change']
-          }
-        ],
-        phone: [
-          {
-            pattern: /^1[3|4|5|6|7|8|9][0-9]\d{8}$/,
-            message: '请输入正确的手机号码',
-            trigger: 'blur'
-          }
-        ]
+        pid: [{ required: true, message: '上级部门不能为空', trigger: 'blur' }],
+        name: [{ required: true, message: '部门名称不能为空', trigger: 'blur' }],
+        sort: [{ required: true, message: '排序不能为空', trigger: 'blur' }],
+        status: [{ required: true, message: '状态不能为空', trigger: 'blur' }]
       }
     }
   },
@@ -123,14 +98,11 @@ export default {
     // 表单重置
     reset () {
       this.form = {
-        deptId: undefined,
-        parentId: undefined,
-        deptName: undefined,
-        orderNum: 0,
-        leader: undefined,
-        phone: undefined,
-        email: undefined,
-        status: '0'
+        id: undefined,
+        pid: undefined,
+        name: undefined,
+        sort: 0,
+        status: '1'
       }
     },
      /** 新增按钮操作 */

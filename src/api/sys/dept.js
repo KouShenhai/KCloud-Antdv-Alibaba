@@ -1,11 +1,18 @@
 import request from '@/utils/request'
 
 // 查询部门列表
-export function listDept (query) {
+export function queryDept (query) {
   return request({
-    url: '/system/dept/list',
+    url: '/admin/sys/dept/api/query',
+    method: 'post',
+    data: query
+  })
+}
+
+export function listDept () {
+  return request({
+    url: '/admin/sys/dept/api/list',
     method: 'get',
-    params: query
   })
 }
 
