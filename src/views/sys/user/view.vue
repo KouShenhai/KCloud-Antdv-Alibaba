@@ -30,6 +30,8 @@
           <create-form
             ref="createForm"
             @ok="getList"
+            :deptOptions="deptOptions"
+            @select-tree="getTreeSelect"
           />
           <!-- 修改密码抽屉 -->
           <reset-password
@@ -102,6 +104,7 @@
 <script>
 
 import { listUser, delUser, changeUserStatus } from '@/api/sys/user'
+import { treeSelect } from "@/api/sys/dept"
 import ResetPassword from './modules/ResetPassword'
 import CreateForm from '@/views/sys/user/modules/CreateForm'
 import { tableMixin } from '@/store/table-mixin'
@@ -124,6 +127,12 @@ export default {
       ids: [],
       loading: false,
       total: 0,
+      // 部门树选项
+      deptOptions: [{
+        id: 0,
+        name: '',
+        children: []
+      }],
       statusOptions: [
         {
           label: "正常",
@@ -188,6 +197,12 @@ export default {
   watch: {
   },
   methods: {
+    /** 查询部门下拉树结构 */
+    getTreeSelect () {
+      treeSelect().then(response => {
+        this.deptOptions = response.data.children
+      })
+    },
     superAdminFormat(row) {
       if (row.superAdmin == '1') {
         return '超级管理员'

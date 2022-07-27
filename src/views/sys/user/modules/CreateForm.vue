@@ -8,6 +8,18 @@
       <a-form-model-item label="用户名" prop="userName" v-if="form.id == undefined">
         <a-input v-model="form.username" placeholder="请输入" />
       </a-form-model-item>
+      <a-form-model-item label="部门" prop="deptId">
+        <a-tree-select
+          v-model="form.deptId"
+          style="width: 100%"
+          :dropdown-style="{ maxHeight: '400px', overflow: 'auto' }"
+          :tree-data="deptOptions"
+          placeholder="请选择"
+          :replaceFields="replaceFields"
+          tree-default-expand-all
+        >
+        </a-tree-select>
+      </a-form-model-item>
       <a-form-model-item label="密码" prop="password" v-if="form.id == undefined">
         <a-input-password v-model="form.password" placeholder="请输入" :maxLength="20" />
       </a-form-model-item>
@@ -48,6 +60,10 @@
   export default {
     name: 'CreateForm',
     props: {
+      deptOptions: {
+        type: Array,
+        required: true
+      }
     },
     components: {
 
@@ -55,6 +71,7 @@
     data () {
       return {
         submitLoading: false,
+        replaceFields: { children: 'children', title: 'name', key: 'id', value: 'id' },
         // 角色选项
         roleOptions: [],
         statusOptions: [
@@ -73,6 +90,7 @@
         // 表单参数
         form: {
           id: undefined,
+          deptId:"",
           username: undefined,
           password: undefined,
           status: '0',
@@ -86,7 +104,10 @@
           password: [
             { required: true, message: '密码不能为空', trigger: 'blur' },
             { min: 5, max: 20, message: '用户密码长度必须介于 5 和 20 之间', trigger: 'blur' }
-          ]
+          ],
+          deptId: [
+            { required: true, message: '部门不为空', trigger: 'blur' }
+          ],
         }
       }
     },
@@ -112,6 +133,7 @@
       reset () {
         this.form = {
           id: undefined,
+          deptId:"",
           username: undefined,
           password: undefined,
           status: 0,
@@ -121,6 +143,7 @@
       /** 新增按钮操作 */
       handleAdd () {
         this.reset()
+        this.$emit('select-tree')
         listRole({}).then(response => {
           const roles = []
           response.data.forEach(item => {
@@ -138,6 +161,7 @@
       /** 修改按钮操作 */
       handleUpdate (row) {
         this.reset()
+        this.$emit('select-tree')
         // eslint-disable-next-line no-unused-vars
         const userId = row.id
         listRole({}).then(response => {

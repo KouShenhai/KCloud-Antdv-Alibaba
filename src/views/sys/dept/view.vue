@@ -3,7 +3,7 @@
     <a-card :bordered="false">
       <!-- 条件搜索 -->
       <div class="table-page-search-wrapper">
-        <a-form layout="inline">
+        <a-form layout="inline" v-hasPermi="['sys:dept:query']">
           <a-row :gutter="48">
             <a-col :md="8" :sm="24">
               <a-form-item label="部门名称">
@@ -21,7 +21,7 @@
       </div>
       <!-- 操作 -->
       <div class="table-operations">
-        <a-button type="primary" @click="$refs.createForm.handleAdd()">
+        <a-button type="primary" @click="$refs.createForm.handleAdd()" v-hasPermi="['sys:dept:insert']">
           <a-icon type="plus" />新增
         </a-button>
         <table-setting
@@ -48,19 +48,16 @@
         :data-source="list"
         :pagination="false"
         :bordered="tableBordered">
-        <span slot="status" slot-scope="text, record">
-          {{ statusFormat(record) }}
-        </span>
         <span slot="operation" slot-scope="text, record">
-          <a @click="$refs.createForm.handleUpdate(record)">
+          <a @click="$refs.createForm.handleUpdate(record)" v-hasPermi="['sys:dept:update']">
             <a-icon type="edit" />修改
           </a>
-          <a-divider type="vertical" />
-          <a @click="$refs.createForm.handleAdd(record)">
+          <a-divider type="vertical" v-hasPermi="['sys:dept:insert']"/>
+          <a @click="$refs.createForm.handleAdd(record)" v-hasPermi="['sys:dept:insert']">
             <a-icon type="plus" />新增
           </a>
-          <a-divider type="vertical" v-if="record.id != 0" />
-          <a @click="handleDelete(record)" v-if="record.id != 0">
+          <a-divider type="vertical" v-if="record.id != 0" v-hasPermi="['sys:dept:delete']"/>
+          <a @click="handleDelete(record)" v-if="record.id != 0" v-hasPermi="['sys:dept:delete']">
             <a-icon type="delete" />删除
           </a>
         </span>
@@ -71,7 +68,7 @@
 
 <script>
 
-import { queryDept } from '@/api/sys/dept'
+import { queryDept,delDept } from '@/api/sys/dept'
 import CreateForm from './modules/CreateForm'
 import { tableMixin } from '@/store/table-mixin'
 
@@ -105,12 +102,6 @@ export default {
         {
           title: '部门名称',
           dataIndex: 'name'
-        },
-        {
-          title: '状态',
-          dataIndex: 'status',
-          scopedSlots: { customRender: 'status' },
-          align: 'center'
         },
         {
           title: '排序',
@@ -156,13 +147,6 @@ export default {
         this.deptOptions.push(dept)
       })
     },
-    // 字典状态字典翻译
-    statusFormat (row) {
-      if (row.status == 0) {
-        return '正常'
-      }
-      return '停用'
-    },
     /** 搜索按钮操作 */
     handleQuery () {
       this.getList()
@@ -177,7 +161,7 @@ export default {
     /** 删除按钮操作 */
     handleDelete (row) {
       let that = this
-      const deptId = row.deptId
+      const deptId = row.id
       this.$confirm({
         title: '确认删除所选中数据?',
         content: '当前选中编号为' + deptId + '的数据',

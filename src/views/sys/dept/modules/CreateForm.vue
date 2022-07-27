@@ -22,11 +22,6 @@
       <a-form-model-item label="排序" prop="sort">
         <a-input-number v-model="form.sort" :min="1" :max="9999" style="width: 100%"/>
       </a-form-model-item>
-      <a-form-model-item label="状态" prop="status">
-        <a-radio-group v-model="form.status" button-style="solid">
-          <a-radio-button v-for="(d, index) in statusOptions" :key="index" :value="d.value">{{ d.label }}</a-radio-button>
-        </a-radio-group>
-      </a-form-model-item>
       <div class="bottom-control">
         <a-space>
           <a-button type="primary" :loading="submitLoading" @click="submitForm">
@@ -66,15 +61,13 @@ export default {
         id: undefined,
         pid: undefined,
         name: undefined,
-        sort: 0,
-        status: '1'
+        sort: 0
       },
       open: false,
       rules: {
         pid: [{ required: true, message: '上级部门不能为空', trigger: 'blur' }],
         name: [{ required: true, message: '部门名称不能为空', trigger: 'blur' }],
-        sort: [{ required: true, message: '排序不能为空', trigger: 'blur' }],
-        status: [{ required: true, message: '状态不能为空', trigger: 'blur' }]
+        sort: [{ required: true, message: '排序不能为空', trigger: 'blur' }]
       }
     }
   },
@@ -101,37 +94,38 @@ export default {
         id: undefined,
         pid: undefined,
         name: undefined,
-        sort: 0,
-        status: '1'
+        sort: 0
       }
     },
      /** 新增按钮操作 */
     handleAdd (row) {
       this.reset()
-      if (row !== undefined) {
-        this.form.parentId = row.deptId
-      }
+      this.$emit('select-tree')
+       if (row != null && row.id) {
+         this.form.pid = row.id
+       } else {
+         this.form.pid = 0
+       }
       this.open = true
       this.formTitle = '添加部门'
-      this.$emit('select-tree')
     },
     /** 修改按钮操作 */
     handleUpdate (row) {
       this.reset()
-      const deptId = row.deptId
+      this.$emit('select-tree', row)
+      const deptId = row.id
       getDept(deptId).then(response => {
         this.form = response.data
         this.open = true
         this.formTitle = '修改部门'
       })
-      this.$emit('select-tree', row)
     },
     /** 提交按钮 */
     submitForm: function () {
       this.$refs.form.validate(valid => {
         if (valid) {
           this.submitLoading = true
-          if (this.form.deptId !== undefined) {
+          if (this.form.id !== undefined) {
             updateDept(this.form).then(response => {
               this.$message.success(
                 '修改成功',
