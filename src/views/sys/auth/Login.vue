@@ -35,7 +35,7 @@
         >确定</a-button>
       </a-form-item>
       <div class="user-login-other">
-        <a href="https://openauth.alipay.com/oauth2/publicAppAuthorize.htm?app_id=2019121269782969&scope=auth_user&redirect_uri=http%3A%2F%2F192.168.62.1%3A5555%2Fauth%2Fsys%2Fauth%2Fapi%2FzfbLogin" class="zfb">支付宝登录</a>
+        <a href="https://openauth.alipay.com/oauth2/publicAppAuthorize.htm?app_id=2019121269782969&scope=auth_user&redirect_uri=http://192.168.62.1:5555/auth/sys/auth/api/zfbLogin" class="zfb">支付宝登录</a>
       </div>
     </a-form-model>
   </div>
@@ -82,7 +82,7 @@ export default {
         let data = queryAttr.split("&")
         for (let i = 0; i < data.length; i++) {
           let queryData = data[i].split("=")
-          if (queryData[0] == "Authorization") {
+          if (queryData[0] == "access_token") {
             notLogin = false
             this.ZFBLogin(queryData[1])
             this.loginSuccess()

@@ -38,6 +38,7 @@ const user = {
 
     ZFBLogin({ commit },token) {
       return new Promise((resolve, reject) => {
+        storage.set(ACCESS_TOKEN, token, 7 * 24 * 60 * 60 * 1000)
         commit('SET_TOKEN', token)
         resolve()
       })
