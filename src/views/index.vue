@@ -66,9 +66,21 @@ export default {
     return {
       roleNames:[],
       timeFix: timeFix(),
-      content2: '### 2022.07.20 更新日志\n' +
+      content2: '### 2022.07.28 更新日志\n' +
+        '###### 1.更新组件\n' +
+        '* 数据权限 => 拦截角色下的部门\n' +
+        '\n' +
+        '### 2022.07.27 更新日志\n' +
+        '###### 1.新增功能\n' +
+        '* 部门管理\n' +
+        '\n' +
+        '### 2022.07.25 更新日志\n' +
+        '###### 1.动态路由\n' +
+        'gateway + apollo\n' +
+        '\n' +
+        '### 2022.07.20 更新日志\n' +
         '###### 1.新增模块\n' +
-        '* laokou-generator => 代码生成\n' +
+        '* laokou-generator => 数据生成模块\n' +
         '\n' +
         '### 2022.07.19 更新日志\n' +
         '###### 1.打包插件\n' +
@@ -79,7 +91,7 @@ export default {
         '* laokou-security => 服务认证模块\n' +
         '\n' +
         '###### 2.其他组件\n' +
-        '* Websocket + Stomp\n' +
+        '* Websocket\n' +
         '\n' +
         '### 2022.07.17 更新日志\n' +
         '###### 1.增加模板\n' +
@@ -87,7 +99,7 @@ export default {
         '\n' +
         '### 2022.07.16 更新日志\n' +
         '###### 1.增加组件\n' +
-        '* 数据权限\n' +
+        '* 数据权限 => 拦截角色下的用户\n' +
         '\n' +
         '### 2022.07.14 更新日志\n' +
         '###### 1.增加组件\n' +
@@ -124,7 +136,7 @@ export default {
         '* MVC <=> 三层架构 => 四层架构 <=> DDD\n' +
         '* 集中式架构 => 分布式微服务架构\n',
       content1: '### 项目备注\n' +
-        '* 项目：KCloud\n' +
+        '* 项目：KCloud-Platform\n' +
         '* 作者：老寇\n' +
         '* 语言：Java\n' +
         '* 职位：Java工程师\n' +
@@ -145,13 +157,19 @@ export default {
         '* 用户管理\n' +
         '* 角色管理\n' +
         '* 菜单管理\n' +
+        '* 部门管理\n' +
         '* 日志管理\n' +
         '* 字典管理\n' +
+        '* 消息管理\n' +
         '* 流程定义\n' +
         '* 流程任务\n' +
         '* 接口文档\n' +
         '* 数据监控\n' +
         '* 服务监控\n' +
+        '* 主机监控\n' +
+        '\n' +
+        '### 系统架构\n' +
+        '![](http://assets.processon.com/chart_image/62e2406b1e0853070694817f.png)\n' +
         '\n' +
         '### 技术体系\n' +
         '\n' +
@@ -159,7 +177,7 @@ export default {
         '* application <=> 应用层\n' +
         '* domain <=> 领域层\n' +
         '* infrastructure <=> 基础层\n' +
-        '* interfaces <=> 用户接口层\n' +
+        '* interfaces <=> 表现层\n' +
         '\n' +
         '#### 基础框架\n' +
         '* Shiro\n' +
@@ -180,19 +198,21 @@ export default {
         '\n' +
         '#### 项目结构\n' +
         '~~~\n' +
-        '|-- laokou-base\n' +
-        '   |-- laokou-common -- 公共组件\n' +
-        '   |-- laokou-dynamic-datasource 多数据源组件\n' +
-        '   |-- laokou-log -- 日志组件\n' +
-        '|-- laokou-cloud\n' +
-        '   |-- laokou-gateway -- API网关\n' +
-        '   |-- laokou-monitor -- 服务监控\n' +
-        '   |-- laokou-register -- 服务治理\n' +
-        '|-- laokou-parent -- 版本依赖\n' +
-        '|-- laokou-service\n' +
-        '   |-- laokou-admin -- 后台管理模块\n' +
-        '   |-- laokou-auth -- 认证模块\n' +
-        '   |-- laokou-redis -- 缓存模块\n' +
+        '├── laokou-base\n' +
+        '        └── laokou-common -- 公共组件\n' +
+        '        └── laokou-dynamic-datasource 多数据源组件\n' +
+        '        └── laokou-log -- 日志组件\n' +
+        '        └── laokou-security -- 认证组件\n' +
+        '├── laokou-cloud\n' +
+        '        └── laokou-gateway -- API网关\n' +
+        '        └── laokou-monitor -- 服务监控\n' +
+        '        └── laokou-register -- 服务治理\n' +
+        '├── laokou-parent -- 版本依赖\n' +
+        '├── laokou-service\n' +
+        '        └── laokou-admin -- 后台管理模块\n' +
+        '        └── laokou-auth -- 认证模块\n' +
+        '        └── laokou-generator -- 数据生成模块\n' +
+        '        └── laokou-redis -- 缓存模块\n' +
         '~~~\n' +
         '\n' +
         '### 项目配置\n' +
@@ -274,7 +294,7 @@ export default {
         '##### 配置文件\n' +
         '```xml\n' +
         '<if test="qo.sqlFilter != null and qo.sqlFilter != \'\'">\n' +
-        '    and ${qo.sqlFilter}\n' +
+        '    and ( ${qo.sqlFilter} )\n' +
         '</if>\n' +
         '```\n' +
         '\n' +
@@ -298,6 +318,32 @@ export default {
         '    }\n' +
         '}\n' +
         '```\n' +
+        '\n' +
+        '### 演示地址\n' +
+        '[http://175.178.69.253](http://175.178.69.253)\n' +
+        '* admin/admin123\n' +
+        '* test/test123\n' +
+        '* laok5/test123\n' +
+        '\n' +
+        '### 项目说明\n' +
+        '* 代码不可商用及二次开源，仅供学习使用\n' +
+        '* 代码不可商用及二次开源，仅供学习使用\n' +
+        '* 代码不可商用及二次开源，仅供学习使用\n' +
+        '\n' +
+        '### 参与贡献\n' +
+        '欢迎各路英雄好汉参与KCloud-Platform代码贡献，期待您的加入！Fork本仓库 新建Feat_xxx分支提交代码，新建Pull Request\n' +
+        '\n' +
+        '### 加入仓库\n' +
+        '[https://gitee.com/laokou-yun?invite=af23e9108ac2450f324a37ebfde7364432d403c8ff96ab388e7cde0b62298f89d0f128ae41c0fbdba3913bda53efc7e3e6616f3d00909d16](https://gitee.com/laokou-yun?invite=af23e9108ac2450f324a37ebfde7364432d403c8ff96ab388e7cde0b62298f89d0f128ae41c0fbdba3913bda53efc7e3e6616f3d00909d16)\n' +
+        '\n' +
+        '### 开源协议\n' +
+        'KCloud-Platform 开源软件遵循 [Apache 2.0 协议](https://www.apache.org/licenses/LICENSE-2.0.html)\n' +
+        '务必保留作者、Copyright信息\n' +
+        '![](https://minio.pigx.vip/oss/1655474288.jpg)\n' +
+        '\n' +
+        '### 致谢\n' +
+        '* [人人社区](https://www.renren.io)\n' +
+        '* [若依社区](http://www.ruoyi.vip)\n' +
         '\n' +
         '### 联系\n' +
         '后端技术交流群 [![加入QQ群](https://img.shields.io/badge/Q群-218686225-blue.svg)](https://qm.qq.com/cgi-bin/qm/qr?k=WFANTXDEjrDw6UxsrRFCv_rQsEu6LTxH&jump_from=webapi)\n'

@@ -35,7 +35,7 @@
         >确定</a-button>
       </a-form-item>
       <div class="user-login-other">
-        <a href="https://openauth.alipay.com/oauth2/publicAppAuthorize.htm?app_id=2019121269782969&scope=auth_user&redirect_uri=http://192.168.62.1:5555/auth/sys/auth/api/zfbLogin" class="zfb">支付宝登录</a>
+        <a href="https://openauth.alipay.com/oauth2/publicAppAuthorize.htm?app_id=2019121269782969&scope=auth_user&redirect_uri=http://175.178.69.253:5555/auth/sys/auth/api/zfbLogin" class="zfb">支付宝登录</a>
       </div>
     </a-form-model>
   </div>

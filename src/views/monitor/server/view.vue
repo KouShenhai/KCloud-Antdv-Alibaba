@@ -133,9 +133,6 @@
               <a-descriptions-item label="项目路径">
                 {{ server.sys.userDir }}
               </a-descriptions-item>
-              <a-descriptions-item label="运行参数">
-                {{ server.jvm.inputArgs }}
-              </a-descriptions-item>
             </a-descriptions>
           </a-card>
         </a-col>
