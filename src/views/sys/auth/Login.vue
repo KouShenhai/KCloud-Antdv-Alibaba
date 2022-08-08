@@ -84,7 +84,7 @@ export default {
           let queryData = data[i].split("=")
           if (queryData[0] == "access_token") {
             notLogin = false
-            this.ZFBLogin(queryData[1])
+            this.SSOLogin(queryData[1])
             this.loginSuccess()
           }
         }
@@ -100,7 +100,7 @@ export default {
       this.form.uuid = this.getUuid();
       this.codeUrl = process.env.VUE_APP_BASE_API + userApi.Captcha + '?uuid=' + this.form.uuid;
     },
-    ...mapActions(['Login', 'Logout', 'ZFBLogin']),
+    ...mapActions(['Login', 'Logout', 'SSOLogin']),
     handleSubmit () {
       this.logining = true
       this.$refs.form.validate(valid => {
