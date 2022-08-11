@@ -6,13 +6,13 @@
         <a-form layout="inline" v-hasPermi="['sys:dict:query']">
           <a-row :gutter="48">
             <a-col :md="8" :sm="24">
-              <a-form-item label="字典名称">
-                <a-input v-model="queryParam.dictLabel" placeholder="请输入字典名称" allow-clear/>
+              <a-form-item label="应用id">
+                <a-input v-model="queryParam.clientId" placeholder="请输入应用id" allow-clear/>
               </a-form-item>
             </a-col>
             <a-col :md="8" :sm="24">
-              <a-form-item label="字典类型">
-                <a-input v-model="queryParam.type" placeholder="请输入字典类型" allow-clear/>
+              <a-form-item label="应用密钥">
+                <a-input v-model="queryParam.clientSecret" placeholder="请输入应用密钥" allow-clear/>
               </a-form-item>
             </a-col>
             <a-col :md="8" :sm="24">
@@ -44,8 +44,8 @@
         :data-source="list"
         :pagination="false"
         :bordered="tableBordered">
-        <span slot="status" slot-scope="text, record">
-          {{ statusFormat(record) }}
+        <span slot="authorizedGrantTypes" slot-scope="text, record">
+          {{ typeFormat(record) }}
         </span>
         <span slot="operation" slot-scope="text, record">
           <a @click="$refs.createForm.handleUpdate(record, undefined)" v-hasPermi="['sys:dict:update']">
@@ -79,12 +79,12 @@
 
 <script>
 
-import { listDict, delDict } from '@/api/sys/dict'
+import { listOauth, delOauth } from '@/api/sys/oauth'
 import CreateForm from './modules/CreateForm'
 import { tableMixin } from '@/store/table-mixin'
 
 export default {
-  name: 'Dict',
+  name: 'Oauth',
   components: {
     CreateForm
   },
@@ -111,47 +111,51 @@ export default {
       queryParam: {
         pageNum: 1,
         pageSize: 10,
-        dictLabel: undefined,
-        type: undefined,
+        clientId: undefined,
+        clientSecret: undefined,
       },
       columns: [
         {
-          title: '字典名称',
-          dataIndex: 'dictLabel',
+          title: '应用id',
+          dataIndex: 'clientId',
           ellipsis: true,
           align: 'center'
         },
         {
-          title: '字典值',
-          dataIndex: 'dictValue',
+          title: '应用密钥',
+          dataIndex: 'clientSecret',
           ellipsis: true,
           align: 'center'
         },
         {
-          title: '字典类型',
-          dataIndex: 'type',
+          title: '授权范围',
+          dataIndex: 'scope',
           ellipsis: true,
           align: 'center'
         },
         {
-          title: '状态',
-          dataIndex: 'status',
-          scopedSlots: { customRender: 'status' },
+          title: '授权类型',
+          dataIndex: 'authorizedGrantTypes',
+          scopedSlots: { customRender: 'authorizedGrantTypes' },
+          ellipsis: true,
+          align: 'center'
+        },
+        {
+          title: '令牌秒数',
+          dataIndex: 'accessTokenValidity',
+          align: 'center'
+        },
+        {
+          title: '回调地址',
+          dataIndex: 'webServerRedirectUri',
+          ellipsis: true,
           align: 'center'
         },
         {
           title: '排序',
           dataIndex: 'sort',
-          ellipsis: true,
           align: 'center'
         },
-        {
-          title: '备注',
-          dataIndex: 'remark',
-          ellipsis: true,
-          align: 'center'
-        },
-
         {
           title: '操作',
           dataIndex: 'operation',
@@ -175,7 +179,7 @@ export default {
     /** 查询字典列表 */
     getList () {
       this.loading = true
-      listDict(this.queryParam).then(response => {
+      listOauth(this.queryParam).then(response => {
           this.list = response.data.records
           this.total = response.data.total - 0
           this.loading = false
@@ -183,11 +187,8 @@ export default {
       )
     },
     // 参数系统内置字典翻译
-    statusFormat (row) {
-      if (row.status == 0) {
-        return '正常'
-      }
-      return '停用'
+    typeFormat (row) {
+      return row.authorizedGrantTypes.replaceAll(',', " | ")
     },
     /** 搜索按钮操作 */
     handleQuery () {
@@ -200,8 +201,8 @@ export default {
       this.queryParam = {
         pageNum: 1,
         pageSize: 10,
-        dictLabel: undefined,
-        type: undefined,
+        clientId: undefined,
+        clientSecret: undefined,
       }
       this.handleQuery()
     },
@@ -220,12 +221,12 @@ export default {
     /** 删除按钮操作 */
     handleDelete (row) {
       const that = this
-      const dictIds = row.id
+      const id = row.id
       this.$confirm({
         title: '确认删除所选中数据?',
-        content: '当前选中字典编号为' + dictIds + '的数据',
+        content: '当前选中认证编号为' + id + '的数据',
         onOk () {
-          return delDict(dictIds)
+          return delOauth(id)
             .then(() => {
               that.getList()
               that.$message.success(
