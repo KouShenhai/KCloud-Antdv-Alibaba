@@ -19,7 +19,7 @@
           <a-card
             class="project-list"
             :bordered="true"
-            title="项目架构图"
+            title="系统架构图"
             :body-style="{ padding: 0 }">
             <img src="../../public/老寇云平台架构图.png" style="width: 100%;height: 100%;"/></a-card>
         </a-col>
