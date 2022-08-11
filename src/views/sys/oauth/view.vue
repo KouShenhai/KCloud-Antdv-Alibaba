@@ -3,7 +3,7 @@
     <a-card :bordered="false">
       <!-- 条件搜索 -->
       <div class="table-page-search-wrapper">
-        <a-form layout="inline" v-hasPermi="['sys:dict:query']">
+        <a-form layout="inline" v-hasPermi="['sys:oauth:query']">
           <a-row :gutter="48">
             <a-col :md="8" :sm="24">
               <a-form-item label="应用id">
@@ -25,7 +25,7 @@
         </a-form>
       </div>
       <div class="table-operations">
-        <a-button type="primary" @click="$refs.createForm.handleAdd()" v-hasPermi="['sys:dict:insert']">
+        <a-button type="primary" @click="$refs.createForm.handleAdd()" v-hasPermi="['sys:oauth:insert']">
           <a-icon type="plus" />新增
         </a-button>
       </div>
@@ -48,15 +48,15 @@
           {{ typeFormat(record) }}
         </span>
         <span slot="operation" slot-scope="text, record">
-          <a @click="$refs.createForm.handleUpdate(record, undefined)" v-hasPermi="['sys:dict:update']">
+          <a @click="$refs.createForm.handleUpdate(record, undefined)" v-hasPermi="['sys:oauth:update']">
             <a-icon type="edit" />修改
           </a>
-          <a-divider type="vertical" v-hasPermi="['sys:dict:insert']"/>
-          <a @click="$refs.createForm.handleAdd()" v-hasPermi="['sys:dict:insert']">
+          <a-divider type="vertical" v-hasPermi="['sys:oauth:insert']"/>
+          <a @click="$refs.createForm.handleAdd()" v-hasPermi="['sys:oauth:insert']">
             <a-icon type="plus" />新增
           </a>
-          <a-divider type="vertical" v-hasPermi="['sys:dict:delete']"/>
-          <a @click="handleDelete(record)" v-hasPermi="['sys:dict:delete']">
+          <a-divider type="vertical" v-hasPermi="['sys:oauth:delete']"/>
+          <a @click="handleDelete(record)" v-hasPermi="['sys:oauth:delete']">
             <a-icon type="delete" />删除
           </a>
         </span>

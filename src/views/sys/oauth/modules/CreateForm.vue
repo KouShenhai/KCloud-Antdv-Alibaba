@@ -12,8 +12,14 @@
         <a-input v-model="form.clientSecret" placeholder="请输入应用密钥" />
       </a-form-model-item>
 
-      <a-form-model-item label="授权类型" prop="authorizedGrantTypes">
-        <a-checkbox-group v-model:value="form.authorizedGrantTypes" :options="typeOptions" />
+      <a-form-model-item label="授权类型" prop="types">
+        <a-checkbox-group v-model:value="form.types">
+          <a-checkbox value="authorization_code">authorization_code</a-checkbox>
+          <a-checkbox value="refresh_token">refresh_token</a-checkbox>
+          <a-checkbox value="password">password</a-checkbox><br/>
+          <a-checkbox value="implicit">implicit</a-checkbox>
+          <a-checkbox value="client_credentials">client_credentials</a-checkbox>
+        </a-checkbox-group>
       </a-form-model-item>
 
       <a-form-model-item label="授权范围" prop="scope">
@@ -75,35 +81,10 @@ import { getOauth, addOauth, updateOauth } from '@/api/sys/oauth'
 
 export default {
   name: 'CreateForm',
-  props: {
-
-  },
   components: {
   },
   data () {
     return {
-      typeOptions: [
-        {
-          label: 'authorization_code',
-          value: 'authorization_code'
-        },
-        {
-          label: 'refresh_token',
-          value: 'refresh_token'
-        },
-        {
-          label: 'password',
-          value: 'password'
-        },
-        {
-          label: 'implicit',
-          value: 'implicit'
-        },
-        {
-          label: 'client_credentials',
-          value: 'client_credentials'
-        }
-      ],
       submitLoading: false,
       formTitle: '',
       // 表单参数
@@ -113,7 +94,8 @@ export default {
         accessTokenValidity: "",
         additionalInformation: "",
         authorities: "",
-        authorizedGrantTypes: [],
+        authorizedGrantTypes: null,
+        types:[],
         autoapprove: "",
         clientId: "",
         clientSecret: "",
@@ -126,7 +108,7 @@ export default {
       rules: {
         clientId: [{ required: true, message: '应用id不能为空', trigger: 'blur' }],
         clientSecret: [{ required: true, message: '应用密钥不能为空', trigger: 'blur' }],
-        authorizedGrantTypes: [{ required: true, message: '授权类型不能为空', trigger: 'blur' }],
+        types: [{ required: true, message: '授权类型不能为空', trigger: 'blur' }],
         scope: [{ required: true, message: '授权范围不能为空', trigger: 'blur' }],
         accessTokenValidity: [{ required: true, message: '令牌秒数不能为空', trigger: 'blur' }],
         refreshTokenValidity: [{ required: true, message: '刷新秒数不能为空', trigger: 'blur' }],
@@ -161,7 +143,8 @@ export default {
         accessTokenValidity: "",
         additionalInformation: "",
         authorities: "",
-        authorizedGrantTypes: [],
+        authorizedGrantTypes: "",
+        types:[],
         autoapprove: "",
         clientId: "",
         clientSecret: "",
@@ -174,6 +157,7 @@ export default {
      /** 新增按钮操作 */
     handleAdd () {
       this.reset()
+      this.form.id = undefined
       this.open = true
       this.formTitle = '认证新增'
     },
@@ -182,8 +166,19 @@ export default {
       this.reset()
       const id = row ? row.id : ids
       getOauth(id).then(response => {
-        this.form = response.data
-        console.log(this.form)
+        this.form.id = response.data.id
+        this.form.sort = response.data.sort
+        this.form.accessTokenValidity = response.data.accessTokenValidity - 0
+        this.form.additionalInformation = response.data.additionalInformation
+        this.form.authorities =  response.data.authorities
+        this.form.types =  response.data.authorizedGrantTypes.split(",")
+        this.form.autoapprove = response.data.autoapprove
+        this.form.clientId = response.data.clientId
+        this.form.clientSecret = response.data.clientSecret
+        this.form.refreshTokenValidity = response.data.refreshTokenValidity - 0
+        this.form.resourceIds = response.data.resourceIds
+        this.form.scope =  response.data.scope
+        this.form.webServerRedirectUri =  response.data.webServerRedirectUri
         this.open = true
         this.formTitle = '认证修改'
       })
@@ -193,8 +188,9 @@ export default {
       this.$refs.form.validate(valid => {
         if (valid) {
           this.submitLoading = true
+          let types = this.form.types
+          this.form.authorizedGrantTypes = types.join(",")
           if (this.form.id !== undefined) {
-            this.form.authorizedGrantTypes = this.form.authorizedGrantTypes.join(",")
             updateOauth(this.form).then(response => {
               this.$message.success(
                 '修改成功',
@@ -206,7 +202,6 @@ export default {
               this.submitLoading = false
             })
           } else {
-            this.form.authorizedGrantTypes = this.form.authorizedGrantTypes.join(",")
             addOauth(this.form).then(response => {
               this.$message.success(
                 '新增成功',
