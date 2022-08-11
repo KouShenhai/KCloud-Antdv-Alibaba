@@ -44,9 +44,6 @@
         :data-source="list"
         :pagination="false"
         :bordered="tableBordered">
-        <span slot="authorizedGrantTypes" slot-scope="text, record">
-          {{ typeFormat(record) }}
-        </span>
         <span slot="operation" slot-scope="text, record">
           <a @click="$refs.createForm.handleUpdate(record, undefined)" v-hasPermi="['sys:oauth:update']">
             <a-icon type="edit" />修改
@@ -136,7 +133,6 @@ export default {
         {
           title: '授权类型',
           dataIndex: 'authorizedGrantTypes',
-          scopedSlots: { customRender: 'authorizedGrantTypes' },
           ellipsis: true,
           align: 'center'
         },
@@ -185,10 +181,6 @@ export default {
           this.loading = false
         }
       )
-    },
-    // 参数系统内置字典翻译
-    typeFormat (row) {
-      return row.authorizedGrantTypes.replaceAll(',', " | ")
     },
     /** 搜索按钮操作 */
     handleQuery () {
