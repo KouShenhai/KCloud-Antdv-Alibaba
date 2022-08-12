@@ -3,7 +3,6 @@ import request from '@/utils/request'
 export const userApi = {
   Login: '/auth/sys/auth/api/login',
   Logout: '/auth/sys/auth/api/logout',
-  Register: '/register',
   UserInfo: '/auth/sys/auth/api/userInfo',
   Captcha: '/auth/sys/auth/api/captcha'
 }

@@ -47,6 +47,7 @@ import { timeFix } from '@/utils/util'
 import { userApi } from '@/api/login'
 import { JSEncrypt } from 'jsencrypt'
 export default {
+  name: "Login",
   components: {
   },
   data () {
