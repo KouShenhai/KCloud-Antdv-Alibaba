@@ -35,6 +35,7 @@
         >确定</a-button>
       </a-form-item>
       <div class="user-login-other">
+        <a href="http://175.178.69.253/oauth2/loading.html" class="dd">单点登录</a>
         <a href="https://openauth.alipay.com/oauth2/publicAppAuthorize.htm?app_id=2019121269782969&scope=auth_user&redirect_uri=http://175.178.69.253/laokou/auth/sys/auth/api/zfbLogin" class="zfb">支付宝登录</a>
       </div>
     </a-form-model>
@@ -168,6 +169,9 @@ export default {
     line-height: 22px;
     .zfb {
       float: right;
+    }
+    .dd {
+      float: left;
     }
   }
 }
