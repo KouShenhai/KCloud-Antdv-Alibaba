@@ -126,7 +126,8 @@ export default {
         title: undefined,
         content: '',
         sendChannel:0,
-        receiver:[]
+        receiver:[],
+        type:'1'
       },
       baseRules: {
         title: [{ required: true, message: '标题不能为空', trigger: 'blur' }],
@@ -174,7 +175,8 @@ export default {
         title: undefined,
         content: '',
         sendChannel:0,
-        receiver:[]
+        receiver:[],
+        type:'1'
       }
     },
      /** 新增按钮操作 */
