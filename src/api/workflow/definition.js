@@ -10,9 +10,9 @@ export function pageDefinition (query) {
 }
 
 // 开始
-export function startProcess (definitionId) {
+export function startProcess (processKey) {
   return request({
-    url: '/admin/workflow/process/api/start?definitionId=' + definitionId,
+    url: '/admin/workflow/process/api/start?processKey=' + processKey,
     method: 'post'
   })
 }

@@ -3,11 +3,11 @@
     <a-card :bordered="false">
       <!-- 条件搜索 -->
       <div class="table-page-search-wrapper">
-        <a-form layout="inline" v-hasPermi="['workflow:definition:query']">
+        <a-form layout="inline">
           <a-row :gutter="48">
             <a-col :md="8" :sm="24">
-              <a-form-item label="流程名称">
-                <a-input v-model="queryParam.processName" placeholder="请输入流程名称" allow-clear/>
+              <a-form-item label="标题">
+                <a-input v-model="queryParam.title" placeholder="请输入标题" allow-clear/>
               </a-form-item>
             </a-col>
             <a-col :md="8" :sm="24">
@@ -20,56 +20,39 @@
         </a-form>
       </div>
       <div class="table-operations">
-        <a-button type="primary" @click="$refs.createForm.handleAdd()" v-hasPermi="['workflow:definition:insert']">
+        <a-button type="primary" @click="$refs.createForm.handleAdd()">
           <a-icon type="plus" />新增
         </a-button>
       </div>
       <!-- 增加修改 -->
       <create-form
         ref="createForm"
+        :statusOptions="statusOptions"
         @ok="getList"
       />
       <!-- 数据展示 -->
       <a-table
         :loading="loading"
         :size="tableSize"
-        rowKey="definitionId"
+        rowKey="id"
         :columns="columns"
         :data-source="list"
         :pagination="false"
         :bordered="tableBordered">
-        <span slot="suspended" slot-scope="text, record">
+        <span slot="status" slot-scope="text, record">
           {{ statusFormat(record) }}
         </span>
         <span slot="operation" slot-scope="text, record">
-          <a @click="$refs.createForm.handleAdd()" v-hasPermi="['workflow:definition:insert']">
-            <a-icon type="plus" />
-            新增
+          <a @click="$refs.createForm.handleUpdate(record, undefined)">
+            <a-icon type="edit" />修改
           </a>
-          <a-divider type="vertical"  v-hasPermi="['workflow:definition:suspend']"/>
-          <a @click="suspendFlow(record)"  v-hasPermi="['workflow:definition:suspend']">
-            <a-icon type="pause-circle" />
-            挂起
+          <a-divider type="vertical" />
+          <a @click="$refs.createForm.handleAdd()" >
+            <a-icon type="plus" />新增
           </a>
-          <a-divider type="vertical"  v-hasPermi="['workflow:definition:activate']"/>
-          <a @click="activateFlow(record)"  v-hasPermi="['workflow:definition:activate']">
-            <a-icon type="play-circle" />
-            激活
-          </a>
-          <a-divider type="vertical"  v-hasPermi="['workflow:process:start']"/>
-          <a @click="startFlow(record)"  v-hasPermi="['workflow:process:start']">
-            <a-icon type="cluster" />
-            发起
-          </a>
-          <a-divider type="vertical"  v-hasPermi="['workflow:definition:delete']"/>
-          <a @click="handleDelete(record)"  v-hasPermi="['workflow:definition:delete']">
-            <a-icon type="delete" />
-            删除
-          </a>
-          <a-divider type="vertical"  v-hasPermi="['workflow:definition:image']"/>
-          <a @click="getDefinition(record)"  v-hasPermi="['workflow:definition:image']">
-            <a-icon type="eye" />
-            查看
+          <a-divider type="vertical" />
+          <a @click="handleDelete(record)" >
+            <a-icon type="delete" />删除
           </a>
         </span>
       </a-table>
@@ -91,13 +74,12 @@
 
 <script>
 
-import { pageDefinition, delDefinition,suspendDefinition,activateDefinition,startProcess } from '@/api/workflow/definition'
+import { listImage, delImage } from '@/api/sys/image'
 import CreateForm from './modules/CreateForm'
 import { tableMixin } from '@/store/table-mixin'
-import { ACCESS_TOKEN } from '@/store/mutation-types'
-import storage from 'store'
+
 export default {
-  name: 'Definition',
+  name: 'Resource-Image',
   components: {
     CreateForm
   },
@@ -108,41 +90,63 @@ export default {
       selectedRowKeys: [],
       selectedRows: [],
       // 高级搜索 展开/关闭
+      advanced: false,
+      // 非单个禁用
       single: true,
       // 非多个禁用
       multiple: true,
       ids: [],
       loading: false,
+      refreshing: false,
       total: 0,
+      // 状态数据字典
+      statusOptions: [],
+      // 日期范围
+      dateRange: [],
       queryParam: {
         pageNum: 1,
         pageSize: 10,
-        processName: ''
+        title: undefined,
+        code: 'image'
       },
       columns: [
         {
-          title: '流程标识',
-          dataIndex: 'processKey',
+          title: '标题',
+          dataIndex: 'title',
           ellipsis: true,
           align: 'center'
         },
         {
-          title: '流程名称',
-          dataIndex: 'processName',
+          title: '作者',
+          dataIndex: 'author',
+          ellipsis: true,
           align: 'center'
         },
         {
           title: '状态',
-          dataIndex: 'suspended',
-          scopedSlots: { customRender: 'suspended' },
+          dataIndex: 'status',
+          ellipsis: true,
+          scopedSlots: { customRender: 'status' },
+          align: 'center'
+        },
+        {
+          title: '标签',
+          dataIndex: 'tags',
+          ellipsis: true,
+          align: 'center'
+        },
+        {
+          title: '备注',
+          dataIndex: 'remark',
+          ellipsis: true,
           align: 'center'
         },
         {
           title: '操作',
           dataIndex: 'operation',
+          width: '15%',
           scopedSlots: { customRender: 'operation' },
-          align: 'center',
-          width: '40%',
+          align: 'center'
         }
       ]
     }
@@ -157,39 +161,28 @@ export default {
   watch: {
   },
   methods: {
-    statusFormat(row) {
-      if (row.suspended) {
-        return '挂起'
-      }
-      return '激活'
-    },
-    startFlow(row) {
-      const that = this
-      startProcess(row.processKey).then(response => {
-        that.getList()
-        this.$message.success(
-          '发起成功',
-          3
-        )
-      })
-    },
-    /** 查询流程定义列表 */
+    /** 查询字典列表 */
     getList () {
       this.loading = true
-      pageDefinition(this.queryParam).then(response => {
+      listImage(this.queryParam).then(response => {
           this.list = response.data.records
           this.total = response.data.total - 0
           this.loading = false
         }
       )
     },
-    getDefinition(row) {
-      window.open(process.env.VUE_APP_BASE_API + "/admin/workflow/definition/api/image?definitionId=" + row.definitionId + "&Authorization=" + storage.get(ACCESS_TOKEN))
-    },
     /** 搜索按钮操作 */
     handleQuery () {
       this.queryParam.pageNum = 1
       this.getList()
+    },
+    statusFormat(res) {
+      if (res.status == 0) {
+        return "待审批"
+      } else if (res.status == 1) {
+        return "审批中"
+      }
+      return "审批结束"
     },
     /** 重置按钮操作 */
     resetQuery () {
@@ -197,29 +190,10 @@ export default {
       this.queryParam = {
         pageNum: 1,
         pageSize: 10,
-        processName: ''
+        title: undefined,
+        code: 'image'
       }
       this.handleQuery()
-    },
-    suspendFlow(row) {
-      const that = this
-      suspendDefinition(row.definitionId).then(response => {
-        that.getList()
-        this.$message.success(
-          '挂起成功',
-          3
-        )
-      })
-    },
-    activateFlow(row) {
-      const that = this
-      activateDefinition(row.definitionId).then(response => {
-        that.getList()
-        this.$message.success(
-          '激活成功',
-          3
-        )
-      })
     },
     onShowSizeChange (current, pageSize) {
       this.queryParam.pageSize = pageSize
@@ -230,15 +204,18 @@ export default {
       this.queryParam.pageSize = pageSize
       this.getList()
     },
+    toggleAdvanced () {
+      this.advanced = !this.advanced
+    },
     /** 删除按钮操作 */
     handleDelete (row) {
       const that = this
-      const deploymentId = row.deploymentId
+      const id = row.id
       this.$confirm({
         title: '确认删除所选中数据?',
-        content: '当前选中编号为' + deploymentId + '的数据',
+        content: '当前选中认证编号为' + id + '的数据',
         onOk () {
-          return delDefinition(deploymentId)
+          return delImage(id)
             .then(() => {
               that.getList()
               that.$message.success(

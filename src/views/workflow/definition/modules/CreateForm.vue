@@ -8,11 +8,11 @@
         <a-input v-model="form.name" placeholder="请输入流程名称" />
       </a-form-model-item>
       <a-form-model-item label="流程图" prop="file">
-      <a-upload-dragger name="file" :max-count="1" :disabled="false" @change="uploadFile" accept=".xml" :before-upload="beforeUpload" :showUploadList="false">
-        <div class="ant-upload-preview">
-          <a-icon type="cloud-upload-o" class="upload-icon"/>
-        </div>
-      </a-upload-dragger>
+      <a-upload name="file"  @change="uploadFile" accept=".xml" :before-upload="beforeUpload">
+        <a-button :disabled="disabled">
+          上传流程图
+        </a-button>
+      </a-upload>
       </a-form-model-item>
       <div class="bottom-control">
         <a-space>
@@ -50,7 +50,8 @@ export default {
       open: false,
       rules: {
         name: [{ required: true, message: '流程名称不为空', trigger: 'blur' }],
-      }
+      },
+      disabled:false
     }
   },
   filters: {
@@ -88,7 +89,12 @@ export default {
       return false
     },
     uploadFile(data) {
-      this.fileData = data.file;
+      if (data.fileList.length > 0) {
+        this.disabled = true
+      } else {
+        this.disabled = false
+      }
+      this.fileData = data.file
     },
     /** 提交按钮 */
     submitForm: function () {
