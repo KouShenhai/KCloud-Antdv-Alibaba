@@ -190,6 +190,9 @@ export default {
     // 关闭模态框
     close () {
       this.visible = false
+      this.diagramUri = ""
+      this.audioUri = ""
+      this.audioTitle = ""
     },
     /** 查询字典列表 */
     getList () {
@@ -215,6 +218,7 @@ export default {
       this.visible = true
       this.visible2 = true
       this.visible1 = false
+      this.audioTitle = "流程图"
       this.diagramUri = process.env.VUE_APP_BASE_API + "/admin/sys/resource/audio/api/diagram?processInstanceId=" + row.processInstanceId + "&Authorization=" + storage.get(ACCESS_TOKEN)
     },
     /** 搜索按钮操作 */
