@@ -80,7 +80,8 @@ export default {
         md5: undefined,
         tags: undefined,
         code:"audio",
-        remark:undefined
+        remark:undefined,
+        processInstanceId:undefined
       },
       disabled:false,
       open: false,
@@ -146,7 +147,8 @@ export default {
         md5: undefined,
         tags: undefined,
         code:"audio",
-        remark: undefined
+        remark: undefined,
+        processInstanceId:undefined
       }
     },
     uploadFile(data) {
@@ -195,6 +197,7 @@ export default {
         this.form.title = response.data.title
         this.form.code = "audio"
         this.display = true
+        this.form.processInstanceId = response.data.processInstanceId
         this.form.remark = response.data.remark
         this.open = true
         this.formTitle = '音频修改'

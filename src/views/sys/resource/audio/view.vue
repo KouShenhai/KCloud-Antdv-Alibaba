@@ -55,11 +55,11 @@
             <a-icon type="delete" />删除
           </a>
           <a-divider type="vertical" v-if="record.status == 2"/>
-          <a v-if="record.status == 2">
+          <a @click="handleQuery1(record)" v-if="record.status == 2">
             <a-icon type="eye" />查看
           </a>
           <a-divider type="vertical" v-if="record.status != 2"/>
-          <a v-if="record.status != 2">
+          <a @click="handleQuery2(record)" v-if="record.status != 2">
             <a-icon type="eye" />查看
           </a>
         </span>
@@ -77,15 +77,27 @@
         @change="changeSize"
       />
     </a-card>
+    <a-modal
+      ref="noticeDetail"
+      :width="900"
+      :visible="visible"
+      @cancel="close"
+      :footer="null">
+      <template slot="title" >
+        <center><a-tag color="blue">音频</a-tag>{{ audioTitle }}</center>
+      </template>
+      <img v-show="visible2" :src="diagramUri" style="width: 100%;height: 100%">
+      <audio v-show="visible1" loop='loop' :src="audioUri" controls='controls'><object :data="audioUri" ><embed :src="audioUri" /></object></audio>
+    </a-modal>
   </page-header-wrapper>
 </template>
 
 <script>
-
-import { listAudio, delAudio } from '@/api/sys/audio'
+  import { ACCESS_TOKEN } from '@/store/mutation-types'
+  import storage from 'store'
+import { listAudio, delAudio,getAudio } from '@/api/sys/audio'
 import CreateForm from './modules/CreateForm'
 import { tableMixin } from '@/store/table-mixin'
-
 export default {
   name: 'Resource-Audio',
   components: {
@@ -94,11 +106,16 @@ export default {
   mixins: [tableMixin],
   data () {
     return {
+      diagramUri: "",
+      audioTitle: "",
+      audioUri: "",
       list: [],
       selectedRowKeys: [],
       selectedRows: [],
       // 高级搜索 展开/关闭
       advanced: false,
+      visible1 : false,
+      visible2 : false,
       // 非单个禁用
       single: true,
       // 非多个禁用
@@ -107,6 +124,7 @@ export default {
       loading: false,
       refreshing: false,
       total: 0,
+      visible:false,
       // 状态数据字典
       statusOptions: [],
       // 日期范围
@@ -169,6 +187,10 @@ export default {
   watch: {
   },
   methods: {
+    // 关闭模态框
+    close () {
+      this.visible = false
+    },
     /** 查询字典列表 */
     getList () {
       this.loading = true
@@ -178,6 +200,22 @@ export default {
           this.loading = false
         }
       )
+    },
+    handleQuery1(row) {
+      this.visible = true
+      this.visible1 = true
+      this.visible2 = false
+      const id = row.id
+      getAudio(id).then(response => {
+        this.audioUri = response.data.uri
+        this.audioTitle = response.data.title
+      })
+    },
+    handleQuery2(row) {
+      this.visible = true
+      this.visible2 = true
+      this.visible1 = false
+      this.diagramUri = process.env.VUE_APP_BASE_API + "/admin/sys/resource/audio/api/diagram?processInstanceId=" + row.processInstanceId + "&Authorization=" + storage.get(ACCESS_TOKEN)
     },
     /** 搜索按钮操作 */
     handleQuery () {

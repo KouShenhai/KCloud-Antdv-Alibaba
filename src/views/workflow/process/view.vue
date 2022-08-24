@@ -38,11 +38,6 @@
             <a-icon type="audit" v-hasPermi="['workflow:task:audit']"/>
             审批
           </a>
-          <a-divider type="vertical" v-hasPermi="['workflow:task:diagram']"/>
-          <a @click="getDiagram(record)" v-hasPermi="['workflow:task:diagram']">
-            <a-icon type="eye" />
-            查看
-          </a>
         </span>
       </a-table>
       <!-- 分页 -->
@@ -62,8 +57,6 @@
 </template>
 
 <script>
-import { ACCESS_TOKEN } from '@/store/mutation-types'
-import storage from 'store'
 import { pageProcess } from '@/api/workflow/process'
 import { tableMixin } from '@/store/table-mixin'
 import CreateForm from './modules/CreateForm'
@@ -147,9 +140,6 @@ export default {
   watch: {
   },
   methods: {
-    getDiagram(row) {
-      window.open(process.env.VUE_APP_BASE_API + "/admin/workflow/task/api/diagram?processInstanceId=" + row.processInstanceId + "&Authorization=" + storage.get(ACCESS_TOKEN))
-    },
     /** 查询流程定义列表 */
     getList () {
       this.loading = true
