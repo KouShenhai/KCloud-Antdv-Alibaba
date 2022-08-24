@@ -94,30 +94,42 @@ export default {
         {
           title: '任务编号',
           dataIndex: 'taskId',
-          align: 'center'
+          align: 'center',
+          ellipsis: true
         },
         {
           title: '流程名称',
           dataIndex: 'processName',
-          align: 'center'
+          align: 'center',
+          ellipsis: true
         },
         {
           title: '任务名称',
           dataIndex: 'taskName',
-          align: 'center'
+          align: 'center',
+          ellipsis: true
+        },
+        {
+          title: '实例名称',
+          dataIndex: 'processInstanceName',
+          align: 'center',
+          ellipsis: true
         },
         {
           title: '任务执行人',
           dataIndex: 'assigneeName',
-          align: 'center'
+          align: 'center',
+          ellipsis: true
         },
         {
           title: '创建时间',
           dataIndex: 'createTime',
-          align: 'center'
+          align: 'center',
+          width: '14%',
         },
         {
           title: '操作',
+          width: '15%',
           dataIndex: 'operation',
           scopedSlots: { customRender: 'operation' },
           align: 'center'

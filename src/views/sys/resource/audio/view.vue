@@ -54,6 +54,14 @@
           <a @click="handleDelete(record)" >
             <a-icon type="delete" />删除
           </a>
+          <a-divider type="vertical" v-if="record.status == 2"/>
+          <a v-if="record.status == 2">
+            <a-icon type="eye" />查看
+          </a>
+          <a-divider type="vertical" v-if="record.status != 2"/>
+          <a v-if="record.status != 2">
+            <a-icon type="eye" />查看
+          </a>
         </span>
       </a-table>
       <!-- 分页 -->
@@ -144,7 +152,7 @@ export default {
         {
           title: '操作',
           dataIndex: 'operation',
-          width: '15%',
+          width: '20%',
           scopedSlots: { customRender: 'operation' },
           align: 'center'
         }

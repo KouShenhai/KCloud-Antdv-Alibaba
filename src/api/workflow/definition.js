@@ -9,14 +9,6 @@ export function pageDefinition (query) {
   })
 }
 
-// 开始
-export function startProcess (processKey) {
-  return request({
-    url: '/admin/workflow/process/api/start?processKey=' + processKey,
-    method: 'post'
-  })
-}
-
 //新增
 export function insertDefinition (data) {
   return request({

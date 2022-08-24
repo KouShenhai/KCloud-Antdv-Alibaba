@@ -7,11 +7,42 @@
       <a-form-model-item label="标题" prop="title">
         <a-input v-model="form.title" placeholder="请输入标题" />
       </a-form-model-item>
-
-      <a-form-model-item label="资源" prop="uri">
-        <a-input  v-model="form.uri" placeholder="请上传资源" />
+      <a-form-model-item label="资源">
+        <a-input v-model="form.uri" placeholder="请上传资源" style="display: none" />
+        <a-upload name="file"  @change="uploadFile" accept=".cda,.wav,.mp3,.aif,.aiff,.mid,.wma,.ra,.vqf,.ape,.CDA,.WAV,.MP3,.AIF,.AIFF,.MID,.WMA,.RA,.VQF,.APE" :before-upload="beforeUpload">
+          <a-button :disabled="disabled">
+            上传音频
+          </a-button>
+        </a-upload>
+        <audio v-show="display" loop='loop' :src="form.uri" controls='controls'><object :data="form.uri" ><embed :src="form.uri" /></object></audio>
       </a-form-model-item>
-
+      <a-form-model-item label="标签" prop="tags">
+        <template v-for="(tag, index) in tags">
+          <a-tag
+            color="#f50"
+            :key="tag"
+            closable
+            :close="() => handleTagClose(tag)"
+          >{{ tag }}</a-tag>
+        </template>
+        <a-input
+          v-if="tagInputVisible"
+          ref="tagInput"
+          type="text"
+          size="small"
+          :style="{ width: '78px' }"
+          :value="tagInputValue"
+          @change="handleInputChange"
+          @blur="handleTagInputConfirm"
+          @keyup.enter="handleTagInputConfirm"
+        />
+        <a-tag v-else @click="showTagInput" style="background: #fff; borderStyle: dashed;">
+          <a-icon type="plus"/>新增标签
+        </a-tag>
+      </a-form-model-item>
+      <a-form-model-item label="备注" prop="remark">
+        <a-input v-model="form.remark" placeholder="请输入备注" type="textarea" allow-clear />
+      </a-form-model-item>
       <div class="bottom-control">
         <a-space>
           <a-button type="primary" :loading="submitLoading" @click="submitForm">
@@ -28,7 +59,7 @@
 
 <script>
 
-import { getOauth, addOauth, updateOauth } from '@/api/sys/oauth'
+import { getAudio, addAudio, updateAudio,uploadAudio,uploadFile } from '@/api/sys/audio'
 
 export default {
   name: 'CreateForm',
@@ -38,22 +69,25 @@ export default {
     return {
       submitLoading: false,
       formTitle: '',
+      tagInputVisible: false,
+      tagInputValue: '',
+      tags: [],
       // 表单参数
       form: {
         id: undefined,
-        title: undefined
+        title: undefined,
+        uri: undefined,
+        md5: undefined,
+        tags: undefined,
+        code:"audio",
+        remark:undefined
       },
+      disabled:false,
       open: false,
+      display: false,
       rules: {
-        clientId: [{ required: true, message: '应用id不能为空', trigger: 'blur' }],
-        clientSecret: [{ required: true, message: '应用密钥不能为空', trigger: 'blur' }],
-        types: [{ required: true, message: '授权类型不能为空', trigger: 'blur' }],
-        scope: [{ required: true, message: '授权范围不能为空', trigger: 'blur' }],
-        accessTokenValidity: [{ required: true, message: '令牌秒数不能为空', trigger: 'blur' }],
-        refreshTokenValidity: [{ required: true, message: '刷新秒数不能为空', trigger: 'blur' }],
-        webServerRedirectUri: [{ required: true, message: '回调地址不能为空', trigger: 'blur' }],
-        autoapprove: [{ required: true, message: '自动授权不能为空', trigger: 'blur' }],
-        sort: [{ required: true, message: '排序不能为空', trigger: 'blur' }]
+        title: [{ required: true, message: '标题不能为空', trigger: 'blur' }],
+        remark: [{ required: true, message: '备注不能为空', trigger: 'blur' }],
       }
     }
   },
@@ -66,6 +100,34 @@ export default {
   watch: {
   },
   methods: {
+    handleTagClose (removeTag) {
+      const tags = this.tags.filter(tag => tag !== removeTag)
+      this.tags = tags
+    },
+
+    showTagInput () {
+      this.tagInputVisible = true
+      this.$nextTick(() => {
+        this.$refs.tagInput.focus()
+      })
+    },
+
+    handleInputChange (e) {
+      this.tagInputValue = e.target.value
+    },
+
+    handleTagInputConfirm () {
+      const inputValue = this.tagInputValue
+      let tags = this.tags
+      if (inputValue && !tags.includes(inputValue)) {
+        tags = [...tags, inputValue]
+      }
+      Object.assign(this, {
+        tags,
+        tagInputVisible: false,
+        tagInputValue: ''
+      })
+    },
     onClose () {
       this.open = false
     },
@@ -76,38 +138,66 @@ export default {
     },
     // 表单重置
     reset () {
+      this.tags = []
       this.form = {
         id: undefined,
-        title: undefined
+        title: undefined,
+        uri: undefined,
+        md5: undefined,
+        tags: undefined,
+        code:"audio",
+        remark: undefined
       }
+    },
+    uploadFile(data) {
+      if (data.fileList.length > 0) {
+        this.disabled = true
+        const formData = new FormData()
+        formData.append('file', data.file)
+        uploadAudio(formData).then(response => {
+          this.form.uri = response.data.url
+          this.form.md5 = response.data.md5
+          if (this.form.uri == null) {
+            uploadFile(formData).then(response => {
+              this.form.uri = response.data.url
+              this.display = true
+            })
+          } else {
+            this.display = true
+          }
+        })
+      } else {
+        this.display = false
+        this.disabled = false
+        this.form.uri = undefined
+        this.form.md5 = undefined
+      }
+    },
+    beforeUpload() {
+      return false
     },
      /** 新增按钮操作 */
     handleAdd () {
       this.reset()
       this.form.id = undefined
       this.open = true
-      this.formTitle = '认证新增'
+      this.formTitle = '音频新增'
     },
     /** 修改按钮操作 */
     handleUpdate (row, ids) {
       this.reset()
       const id = row ? row.id : ids
-      getOauth(id).then(response => {
+      getAudio(id).then(response => {
         this.form.id = response.data.id
-        this.form.sort = response.data.sort
-        this.form.accessTokenValidity = response.data.accessTokenValidity - 0
-        this.form.additionalInformation = response.data.additionalInformation
-        this.form.authorities =  response.data.authorities
-        this.form.types =  response.data.authorizedGrantTypes.split(",")
-        this.form.autoapprove = response.data.autoapprove
-        this.form.clientId = response.data.clientId
-        this.form.clientSecret = response.data.clientSecret
-        this.form.refreshTokenValidity = response.data.refreshTokenValidity - 0
-        this.form.resourceIds = response.data.resourceIds
-        this.form.scope =  response.data.scope
-        this.form.webServerRedirectUri =  response.data.webServerRedirectUri
+        this.tags = response.data.tags.split(",")
+        this.form.uri = response.data.uri
+        this.form.md5 = response.data.md5
+        this.form.title = response.data.title
+        this.form.code = "audio"
+        this.display = true
+        this.form.remark = response.data.remark
         this.open = true
-        this.formTitle = '认证修改'
+        this.formTitle = '音频修改'
       })
     },
     /** 提交按钮 */
@@ -115,10 +205,9 @@ export default {
       this.$refs.form.validate(valid => {
         if (valid) {
           this.submitLoading = true
-          let types = this.form.types
-          this.form.authorizedGrantTypes = types.join(",")
+          this.form.tags = this.tags.join(",")
           if (this.form.id !== undefined) {
-            updateOauth(this.form).then(response => {
+            updateAudio(this.form).then(response => {
               this.$message.success(
                 '修改成功',
                 3
@@ -129,7 +218,7 @@ export default {
               this.submitLoading = false
             })
           } else {
-            addOauth(this.form).then(response => {
+            addAudio(this.form).then(response => {
               this.$message.success(
                 '新增成功',
                 3

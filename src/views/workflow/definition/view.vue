@@ -56,11 +56,6 @@
             <a-icon type="play-circle" />
             激活
           </a>
-          <a-divider type="vertical"  v-hasPermi="['workflow:process:start']"/>
-          <a @click="startFlow(record)"  v-hasPermi="['workflow:process:start']">
-            <a-icon type="cluster" />
-            发起
-          </a>
           <a-divider type="vertical"  v-hasPermi="['workflow:definition:delete']"/>
           <a @click="handleDelete(record)"  v-hasPermi="['workflow:definition:delete']">
             <a-icon type="delete" />
@@ -162,16 +157,6 @@ export default {
         return '挂起'
       }
       return '激活'
-    },
-    startFlow(row) {
-      const that = this
-      startProcess(row.processKey).then(response => {
-        that.getList()
-        this.$message.success(
-          '发起成功',
-          3
-        )
-      })
     },
     /** 查询流程定义列表 */
     getList () {

@@ -17,7 +17,7 @@ let isReloginShow
 const request = axios.create({
   // API 请求的默认前缀
   baseURL: process.env.VUE_APP_BASE_API,
-  timeout: 60000 // 请求超时时间
+  timeout: 18000000 // 请求超时时间
 })
 
 // 异常拦截处理器
