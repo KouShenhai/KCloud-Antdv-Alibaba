@@ -41,6 +41,9 @@ export default {
         taskId:'',
         taskName:'',
         instanceId:'',
+        businessKey:"",
+        instanceName:"",
+        definitionId: "",
         values: {
           auditStatus: ''
         }
@@ -76,6 +79,9 @@ export default {
         taskId:'',
         taskName:'',
         instanceId:'',
+        businessKey:"",
+        instanceName:"",
+        definitionId: "",
         values: {
           auditStatus: ''
         }
@@ -86,6 +92,9 @@ export default {
       this.form.taskId = row.taskId
       this.form.instanceId = row.processInstanceId
       this.form.taskName = row.taskName
+      this.form.businessKey = row.businessKey
+      this.form.instanceName = row.instanceName
+      this.form.definitionId = row.definitionId
       this.open = true
       this.formTitle = '审批'
     },

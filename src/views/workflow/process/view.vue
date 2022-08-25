@@ -3,7 +3,7 @@
     <a-card :bordered="false">
       <!-- 条件搜索 -->
       <div class="table-page-search-wrapper">
-        <a-form layout="inline" v-hasPermi="['workflow:process:query']">
+        <a-form layout="inline" v-hasPermi="['workflow:process:resource:query']">
           <a-row :gutter="48">
             <a-col :md="8" :sm="24">
               <a-form-item label="流程名称">
@@ -35,7 +35,7 @@
         :bordered="tableBordered">
         <span slot="operation" slot-scope="text, record">
           <a @click="$refs.createForm.handleAudit(record)" >
-            <a-icon type="audit" v-hasPermi="['workflow:task:audit']"/>
+            <a-icon type="audit" v-hasPermi="['workflow:process:resource:audit']"/>
             审批
           </a>
         </span>

@@ -81,6 +81,17 @@
         @change="changeSize"
       />
     </a-card>
+    <a-modal
+      ref="noticeDetail"
+      :width="900"
+      :visible="visible"
+      @cancel="close"
+      :footer="null">
+      <template slot="title" >
+        <center><a-tag color="blue">流程图</a-tag></center>
+      </template>
+      <img :src="flowUri" style="width: 100%;height: 100%">
+    </a-modal>
   </page-header-wrapper>
 </template>
 
@@ -100,6 +111,8 @@ export default {
   data () {
     return {
       list: [],
+      flowUri: "",
+      visible:false,
       selectedRowKeys: [],
       selectedRows: [],
       // 高级搜索 展开/关闭
@@ -158,6 +171,10 @@ export default {
       }
       return '激活'
     },
+    close () {
+      this.visible = false
+      this.flowUri = ""
+    },
     /** 查询流程定义列表 */
     getList () {
       this.loading = true
@@ -169,7 +186,8 @@ export default {
       )
     },
     getDefinition(row) {
-      window.open(process.env.VUE_APP_BASE_API + "/admin/workflow/definition/api/image?definitionId=" + row.definitionId + "&Authorization=" + storage.get(ACCESS_TOKEN))
+      this.visible = true
+      this.flowUri = process.env.VUE_APP_BASE_API + "/admin/workflow/definition/api/image?definitionId=" + row.definitionId + "&Authorization=" + storage.get(ACCESS_TOKEN)
     },
     /** 搜索按钮操作 */
     handleQuery () {

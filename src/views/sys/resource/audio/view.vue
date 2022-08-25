@@ -231,8 +231,10 @@ export default {
         return "待审批"
       } else if (res.status == 1) {
         return "审批中"
+      } else if (res.status == 2) {
+        return "审批拒绝"
       }
-      return "审批结束"
+      return "审批通过"
     },
     /** 重置按钮操作 */
     resetQuery () {
