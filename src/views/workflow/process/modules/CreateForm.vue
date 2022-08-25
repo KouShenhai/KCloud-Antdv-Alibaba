@@ -93,7 +93,7 @@ export default {
       this.form.instanceId = row.processInstanceId
       this.form.taskName = row.taskName
       this.form.businessKey = row.businessKey
-      this.form.instanceName = row.instanceName
+      this.form.instanceName = row.processInstanceName
       this.form.definitionId = row.definitionId
       this.open = true
       this.formTitle = '审批'
