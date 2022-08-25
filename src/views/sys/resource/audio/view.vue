@@ -42,24 +42,24 @@
         <span slot="status" slot-scope="text, record">
           {{ statusFormat(record) }}
         </span>
-        <span slot="operation" slot-scope="text, record">
-          <a @click="$refs.createForm.handleUpdate(record, undefined)">
+        <span slot="operation" slot-scope="text, record" >
+          <a @click="$refs.createForm.handleUpdate(record, undefined)" v-if="record.status == 3 || record.status == 2">
             <a-icon type="edit" />修改
           </a>
           <a-divider type="vertical" />
           <a @click="$refs.createForm.handleAdd()" >
             <a-icon type="plus" />新增
           </a>
-          <a-divider type="vertical" />
-          <a @click="handleDelete(record)" >
+          <a-divider type="vertical" v-if="record.status == 3 || record.status == 2"/>
+          <a @click="handleDelete(record)" v-if="record.status == 3 || record.status == 2">
             <a-icon type="delete" />删除
           </a>
-          <a-divider type="vertical" v-if="record.status == 2"/>
-          <a @click="handleQuery1(record)" v-if="record.status == 2">
+          <a-divider type="vertical" v-if="record.status == 3"/>
+          <a @click="handleQuery1(record)" v-if="record.status == 3">
             <a-icon type="eye" />查看
           </a>
-          <a-divider type="vertical" v-if="record.status != 2"/>
-          <a @click="handleQuery2(record)" v-if="record.status != 2">
+          <a-divider type="vertical" v-if="record.status != 3"/>
+          <a @click="handleQuery2(record)" v-if="record.status != 3">
             <a-icon type="eye" />查看
           </a>
         </span>
