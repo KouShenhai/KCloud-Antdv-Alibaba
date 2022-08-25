@@ -4,63 +4,45 @@
       <b>{{ formTitle }}</b>
     </a-divider>
     <a-form-model ref="form" :model="form" :rules="rules">
-      <a-form-model-item label="应用id" prop="clientId">
-        <a-input v-model="form.clientId" placeholder="请输入应用id" />
+      <a-form-model-item label="标题" prop="title">
+        <a-input v-model="form.title" placeholder="请输入标题" />
       </a-form-model-item>
-
-      <a-form-model-item label="应用密钥" prop="clientSecret">
-        <a-input v-model="form.clientSecret" placeholder="请输入应用密钥" />
+      <a-form-model-item label="资源">
+        <a-input v-model="form.uri" placeholder="请上传资源" style="display: none" />
+        <a-upload name="file"  @change="uploadFile" accept=".gif,.GIF,.jpg,.JPG,.jpeg,.JPEG,.png,.PNG,.bmp,.BMP,.webp,.WEBP" :before-upload="beforeUpload">
+          <a-button :disabled="disabled">
+            上传图片
+          </a-button>
+        </a-upload>
+        <img :src="form.uri" width="100" height="100"/>
       </a-form-model-item>
-
-      <a-form-model-item label="授权类型" prop="types">
-        <a-checkbox-group v-model:value="form.types">
-          <a-checkbox value="authorization_code">authorization_code</a-checkbox>
-          <a-checkbox value="refresh_token">refresh_token</a-checkbox>
-          <a-checkbox value="password">password</a-checkbox><br/>
-          <a-checkbox value="implicit">implicit</a-checkbox>
-          <a-checkbox value="client_credentials">client_credentials</a-checkbox>
-        </a-checkbox-group>
+      <a-form-model-item label="标签" prop="tags">
+        <template v-for="(tag, index) in tags">
+          <a-tag
+            color="#f50"
+            :key="tag"
+            closable
+            :close="() => handleTagClose(tag)"
+          >{{ tag }}</a-tag>
+        </template>
+        <a-input
+          v-if="tagInputVisible"
+          ref="tagInput"
+          type="text"
+          size="small"
+          :style="{ width: '78px' }"
+          :value="tagInputValue"
+          @change="handleInputChange"
+          @blur="handleTagInputConfirm"
+          @keyup.enter="handleTagInputConfirm"
+        />
+        <a-tag v-else @click="showTagInput" style="background: #fff; borderStyle: dashed;">
+          <a-icon type="plus"/>新增标签
+        </a-tag>
       </a-form-model-item>
-
-      <a-form-model-item label="授权范围" prop="scope">
-        <a-input v-model="form.scope" placeholder="请输入授权范围" />
+      <a-form-model-item label="备注" prop="remark">
+        <a-input v-model="form.remark" placeholder="请输入备注" type="textarea" allow-clear />
       </a-form-model-item>
-
-      <a-form-model-item label="令牌秒数" prop="accessTokenValidity">
-        <a-input-number :min="3600" v-model="form.accessTokenValidity" placeholder="请输入令牌秒数" style="width: 100%"/>
-      </a-form-model-item>
-
-      <a-form-model-item label="刷新秒数" prop="refreshTokenValidity">
-        <a-input-number :min="7200" v-model="form.refreshTokenValidity" placeholder="请输入刷新秒数" style="width: 100%"/>
-      </a-form-model-item>
-
-      <a-form-model-item label="回调地址" prop="webServerRedirectUri">
-        <a-input v-model="form.webServerRedirectUri" placeholder="请输入回调地址" type="textarea" allow-clear />
-      </a-form-model-item>
-
-      <a-form-model-item label="自动授权" prop="autoapprove">
-        <a-radio-group v-model="form.autoapprove" button-style="solid">
-          <a-radio-button value="true">是</a-radio-button>
-          <a-radio-button value="false">否</a-radio-button>
-        </a-radio-group>
-      </a-form-model-item>
-
-      <a-form-model-item label="排序" prop="sort">
-        <a-input-number placeholder="请输入排序" v-model="form.sort" :min="0" style="width: 100%"/>
-      </a-form-model-item>
-
-      <a-form-model-item label="资源集合" prop="resourceIds">
-        <a-input v-model="form.resourceIds" placeholder="请输入资源集合" />
-      </a-form-model-item>
-
-      <a-form-model-item label="权限" prop="authorities">
-        <a-input v-model="form.authorities" placeholder="请输入权限" />
-      </a-form-model-item>
-
-      <a-form-model-item label="附加说明" prop="additionalInformation">
-        <a-input v-model="form.additionalInformation" placeholder="请输入附加说明" />
-      </a-form-model-item>
-
       <div class="bottom-control">
         <a-space>
           <a-button type="primary" :loading="submitLoading" @click="submitForm">
@@ -77,147 +59,184 @@
 
 <script>
 
-import { getOauth, addOauth, updateOauth } from '@/api/sys/oauth'
+  import { getImage, addImage, updateImage,uploadImage,uploadFile } from '@/api/sys/image'
 
-export default {
-  name: 'CreateForm',
-  components: {
-  },
-  data () {
-    return {
-      submitLoading: false,
-      formTitle: '',
-      // 表单参数
-      form: {
-        id: undefined,
-        sort: 1,
-        accessTokenValidity: "",
-        additionalInformation: "",
-        authorities: "",
-        authorizedGrantTypes: null,
-        types:[],
-        autoapprove: "",
-        clientId: "",
-        clientSecret: "",
-        refreshTokenValidity: "",
-        resourceIds: "",
-        scope: "",
-        webServerRedirectUri: ""
-      },
-      open: false,
-      rules: {
-        clientId: [{ required: true, message: '应用id不能为空', trigger: 'blur' }],
-        clientSecret: [{ required: true, message: '应用密钥不能为空', trigger: 'blur' }],
-        types: [{ required: true, message: '授权类型不能为空', trigger: 'blur' }],
-        scope: [{ required: true, message: '授权范围不能为空', trigger: 'blur' }],
-        accessTokenValidity: [{ required: true, message: '令牌秒数不能为空', trigger: 'blur' }],
-        refreshTokenValidity: [{ required: true, message: '刷新秒数不能为空', trigger: 'blur' }],
-        webServerRedirectUri: [{ required: true, message: '回调地址不能为空', trigger: 'blur' }],
-        autoapprove: [{ required: true, message: '自动授权不能为空', trigger: 'blur' }],
-        sort: [{ required: true, message: '排序不能为空', trigger: 'blur' }]
-      }
-    }
-  },
-  filters: {
-  },
-  created () {
-  },
-  computed: {
-  },
-  watch: {
-  },
-  methods: {
-    onClose () {
-      this.open = false
+  export default {
+    name: 'CreateForm',
+    components: {
     },
-    // 取消按钮
-    cancel () {
-      this.open = false
-      this.reset()
-    },
-    // 表单重置
-    reset () {
-      this.form = {
-        id: undefined,
-        sort: 1,
-        accessTokenValidity: "",
-        additionalInformation: "",
-        authorities: "",
-        authorizedGrantTypes: "",
-        types:[],
-        autoapprove: "",
-        clientId: "",
-        clientSecret: "",
-        refreshTokenValidity: "",
-        resourceIds: "",
-        scope: "",
-        webServerRedirectUri: ""
-      }
-    },
-     /** 新增按钮操作 */
-    handleAdd () {
-      this.reset()
-      this.form.id = undefined
-      this.open = true
-      this.formTitle = '认证新增'
-    },
-    /** 修改按钮操作 */
-    handleUpdate (row, ids) {
-      this.reset()
-      const id = row ? row.id : ids
-      getOauth(id).then(response => {
-        this.form.id = response.data.id
-        this.form.sort = response.data.sort
-        this.form.accessTokenValidity = response.data.accessTokenValidity - 0
-        this.form.additionalInformation = response.data.additionalInformation
-        this.form.authorities =  response.data.authorities
-        this.form.types =  response.data.authorizedGrantTypes.split(",")
-        this.form.autoapprove = response.data.autoapprove
-        this.form.clientId = response.data.clientId
-        this.form.clientSecret = response.data.clientSecret
-        this.form.refreshTokenValidity = response.data.refreshTokenValidity - 0
-        this.form.resourceIds = response.data.resourceIds
-        this.form.scope =  response.data.scope
-        this.form.webServerRedirectUri =  response.data.webServerRedirectUri
-        this.open = true
-        this.formTitle = '认证修改'
-      })
-    },
-    /** 提交按钮 */
-    submitForm: function () {
-      this.$refs.form.validate(valid => {
-        if (valid) {
-          this.submitLoading = true
-          let types = this.form.types
-          this.form.authorizedGrantTypes = types.join(",")
-          if (this.form.id !== undefined) {
-            updateOauth(this.form).then(response => {
-              this.$message.success(
-                '修改成功',
-                3
-              )
-              this.open = false
-              this.$emit('ok')
-            }).finally(() => {
-              this.submitLoading = false
-            })
-          } else {
-            addOauth(this.form).then(response => {
-              this.$message.success(
-                '新增成功',
-                3
-              )
-              this.open = false
-              this.$emit('ok')
-            }).finally(() => {
-              this.submitLoading = false
-            })
-          }
-        } else {
-          return false
+    data () {
+      return {
+        submitLoading: false,
+        formTitle: '',
+        tagInputVisible: false,
+        tagInputValue: '',
+        tags: [],
+        // 表单参数
+        form: {
+          id: undefined,
+          title: undefined,
+          uri: undefined,
+          md5: undefined,
+          tags: undefined,
+          code:"image",
+          remark:undefined,
+          processInstanceId:undefined
+        },
+        disabled:false,
+        open: false,
+        display: false,
+        rules: {
+          title: [{ required: true, message: '标题不能为空', trigger: 'blur' }],
+          remark: [{ required: true, message: '备注不能为空', trigger: 'blur' }],
         }
-      })
+      }
+    },
+    filters: {
+    },
+    created () {
+    },
+    computed: {
+    },
+    watch: {
+    },
+    methods: {
+      handleTagClose (removeTag) {
+        const tags = this.tags.filter(tag => tag !== removeTag)
+        this.tags = tags
+      },
+
+      showTagInput () {
+        this.tagInputVisible = true
+        this.$nextTick(() => {
+          this.$refs.tagInput.focus()
+        })
+      },
+
+      handleInputChange (e) {
+        this.tagInputValue = e.target.value
+      },
+
+      handleTagInputConfirm () {
+        const inputValue = this.tagInputValue
+        let tags = this.tags
+        if (inputValue && !tags.includes(inputValue)) {
+          tags = [...tags, inputValue]
+        }
+        Object.assign(this, {
+          tags,
+          tagInputVisible: false,
+          tagInputValue: ''
+        })
+      },
+      onClose () {
+        this.open = false
+      },
+      // 取消按钮
+      cancel () {
+        this.open = false
+        this.reset()
+      },
+      // 表单重置
+      reset () {
+        this.tags = []
+        this.form = {
+          id: undefined,
+          title: undefined,
+          uri: undefined,
+          md5: undefined,
+          tags: undefined,
+          code:"image",
+          remark: undefined,
+          processInstanceId:undefined
+        }
+      },
+      uploadFile(data) {
+        if (data.fileList.length > 0) {
+          this.disabled = true
+          const formData = new FormData()
+          formData.append('file', data.file)
+          uploadImage(formData).then(response => {
+            this.form.uri = response.data.url
+            this.form.md5 = response.data.md5
+            if (this.form.uri == null) {
+              uploadFile(formData).then(response => {
+                this.form.uri = response.data.url
+                this.display = true
+              })
+            } else {
+              this.display = true
+            }
+          })
+        } else {
+          this.display = false
+          this.disabled = false
+          this.form.uri = undefined
+          this.form.md5 = undefined
+        }
+      },
+      beforeUpload() {
+        return false
+      },
+      /** 新增按钮操作 */
+      handleAdd () {
+        this.reset()
+        this.form.id = undefined
+        this.open = true
+        this.formTitle = '图片新增'
+      },
+      /** 修改按钮操作 */
+      handleUpdate (row, ids) {
+        this.reset()
+        const id = row ? row.id : ids
+        getImage(id).then(response => {
+          this.form.id = response.data.id
+          this.tags = response.data.tags.split(",")
+          this.form.uri = response.data.uri
+          this.form.md5 = response.data.md5
+          this.form.title = response.data.title
+          this.form.code = "image"
+          this.display = true
+          this.form.processInstanceId = response.data.processInstanceId
+          this.form.remark = response.data.remark
+          this.open = true
+          this.formTitle = '图片修改'
+        })
+      },
+      /** 提交按钮 */
+      submitForm: function () {
+        this.$refs.form.validate(valid => {
+          if (valid) {
+            this.submitLoading = true
+            this.form.tags = this.tags.join(",")
+            if (this.form.id !== undefined) {
+              updateImage(this.form).then(response => {
+                this.$message.success(
+                  '修改成功',
+                  3
+                )
+                this.open = false
+                this.$emit('ok')
+              }).finally(() => {
+                this.submitLoading = false
+              })
+            } else {
+              addImage(this.form).then(response => {
+                this.$message.success(
+                  '新增成功',
+                  3
+                )
+                this.open = false
+                this.$emit('ok')
+              }).finally(() => {
+                this.submitLoading = false
+              })
+            }
+          } else {
+            return false
+          }
+        })
+      }
     }
   }
-}
 </script>

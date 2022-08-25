@@ -42,3 +42,19 @@ export function delVideo (id) {
     method: 'delete'
   })
 }
+
+export function uploadVideo (data) {
+  return request({
+    url: '/admin/sys/resource/video/api/upload',
+    method: 'post',
+    data: data
+  })
+}
+
+export function uploadFile (data) {
+  return request({
+    url: '/admin/oss/api/upload',
+    method: 'post',
+    data: data
+  })
+}

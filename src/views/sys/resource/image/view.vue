@@ -42,17 +42,25 @@
         <span slot="status" slot-scope="text, record">
           {{ statusFormat(record) }}
         </span>
-        <span slot="operation" slot-scope="text, record">
-          <a @click="$refs.createForm.handleUpdate(record, undefined)">
+        <span slot="operation" slot-scope="text, record" >
+          <a @click="$refs.createForm.handleUpdate(record, undefined)" v-if="record.status == 3 || record.status == 2">
             <a-icon type="edit" />修改
           </a>
           <a-divider type="vertical" />
           <a @click="$refs.createForm.handleAdd()" >
             <a-icon type="plus" />新增
           </a>
-          <a-divider type="vertical" />
-          <a @click="handleDelete(record)" >
+          <a-divider type="vertical" v-if="record.status == 3 || record.status == 2"/>
+          <a @click="handleDelete(record)" v-if="record.status == 3 || record.status == 2">
             <a-icon type="delete" />删除
+          </a>
+          <a-divider type="vertical" v-if="record.status == 3"/>
+          <a @click="handleQuery1(record)" v-if="record.status == 3">
+            <a-icon type="eye" />查看
+          </a>
+          <a-divider type="vertical" v-if="record.status != 3"/>
+          <a @click="handleQuery2(record)" v-if="record.status != 3">
+            <a-icon type="eye" />查看
           </a>
         </span>
       </a-table>
@@ -69,164 +77,208 @@
         @change="changeSize"
       />
     </a-card>
+    <a-modal
+      ref="noticeDetail"
+      :width="900"
+      :visible="visible"
+      @cancel="close"
+      :footer="null">
+      <template slot="title" >
+        <center><a-tag color="blue">图片</a-tag>{{ imageTitle }}</center>
+      </template>
+      <img v-show="visible2" :src="diagramUri" style="width: 100%;height: 100%">
+      <img v-show="visible1" :src="imageUri" style="width: 100%;height: 100%">
+    </a-modal>
   </page-header-wrapper>
 </template>
 
 <script>
-
-import { listImage, delImage } from '@/api/sys/image'
-import CreateForm from './modules/CreateForm'
-import { tableMixin } from '@/store/table-mixin'
-
-export default {
-  name: 'Resource-Image',
-  components: {
-    CreateForm
-  },
-  mixins: [tableMixin],
-  data () {
-    return {
-      list: [],
-      selectedRowKeys: [],
-      selectedRows: [],
-      // 高级搜索 展开/关闭
-      advanced: false,
-      // 非单个禁用
-      single: true,
-      // 非多个禁用
-      multiple: true,
-      ids: [],
-      loading: false,
-      refreshing: false,
-      total: 0,
-      // 状态数据字典
-      statusOptions: [],
-      // 日期范围
-      dateRange: [],
-      queryParam: {
-        pageNum: 1,
-        pageSize: 10,
-        title: undefined,
-        code: 'image'
+  import { ACCESS_TOKEN } from '@/store/mutation-types'
+  import storage from 'store'
+  import { listImage, delImage,getImage } from '@/api/sys/image'
+  import CreateForm from './modules/CreateForm'
+  import { tableMixin } from '@/store/table-mixin'
+  export default {
+    name: 'Resource-Image',
+    components: {
+      CreateForm
+    },
+    mixins: [tableMixin],
+    data () {
+      return {
+        diagramUri: "",
+        imageTitle: "",
+        imageUri: "",
+        list: [],
+        selectedRowKeys: [],
+        selectedRows: [],
+        // 高级搜索 展开/关闭
+        advanced: false,
+        visible1 : false,
+        visible2 : false,
+        // 非单个禁用
+        single: true,
+        // 非多个禁用
+        multiple: true,
+        ids: [],
+        loading: false,
+        refreshing: false,
+        total: 0,
+        visible:false,
+        // 状态数据字典
+        statusOptions: [],
+        // 日期范围
+        dateRange: [],
+        queryParam: {
+          pageNum: 1,
+          pageSize: 10,
+          title: undefined,
+          code: 'image'
+        },
+        columns: [
+          {
+            title: '标题',
+            dataIndex: 'title',
+            ellipsis: true,
+            align: 'center'
+          },
+          {
+            title: '作者',
+            dataIndex: 'author',
+            ellipsis: true,
+            align: 'center'
+          },
+          {
+            title: '状态',
+            dataIndex: 'status',
+            ellipsis: true,
+            scopedSlots: { customRender: 'status' },
+            align: 'center'
+          },
+          {
+            title: '标签',
+            dataIndex: 'tags',
+            ellipsis: true,
+            align: 'center'
+          },
+          {
+            title: '备注',
+            dataIndex: 'remark',
+            ellipsis: true,
+            align: 'center'
+          },
+          {
+            title: '操作',
+            dataIndex: 'operation',
+            width: '20%',
+            scopedSlots: { customRender: 'operation' },
+            align: 'center'
+          }
+        ]
+      }
+    },
+    filters: {
+    },
+    created () {
+      this.getList()
+    },
+    computed: {
+    },
+    watch: {
+    },
+    methods: {
+      // 关闭模态框
+      close () {
+        this.visible = false
+        this.diagramUri = ""
+        this.imageUri = ""
+        this.imageTitle = ""
       },
-      columns: [
-        {
-          title: '标题',
-          dataIndex: 'title',
-          ellipsis: true,
-          align: 'center'
-        },
-        {
-          title: '作者',
-          dataIndex: 'author',
-          ellipsis: true,
-          align: 'center'
-        },
-        {
-          title: '状态',
-          dataIndex: 'status',
-          ellipsis: true,
-          scopedSlots: { customRender: 'status' },
-          align: 'center'
-        },
-        {
-          title: '标签',
-          dataIndex: 'tags',
-          ellipsis: true,
-          align: 'center'
-        },
-        {
-          title: '备注',
-          dataIndex: 'remark',
-          ellipsis: true,
-          align: 'center'
-        },
-        {
-          title: '操作',
-          dataIndex: 'operation',
-          width: '15%',
-          scopedSlots: { customRender: 'operation' },
-          align: 'center'
+      /** 查询字典列表 */
+      getList () {
+        this.loading = true
+        listImage(this.queryParam).then(response => {
+            this.list = response.data.records
+            this.total = response.data.total - 0
+            this.loading = false
+          }
+        )
+      },
+      handleQuery1(row) {
+        this.visible = true
+        this.visible1 = true
+        this.visible2 = false
+        const id = row.id
+        getImage(id).then(response => {
+          this.imageUri = response.data.uri
+          this.iamgeTitle = response.data.title
+        })
+      },
+      handleQuery2(row) {
+        this.visible = true
+        this.visible2 = true
+        this.visible1 = false
+        this.imageTitle = "流程图"
+        this.diagramUri = process.env.VUE_APP_BASE_API + "/admin/sys/resource/image/api/diagram?processInstanceId=" + row.processInstanceId + "&Authorization=" + storage.get(ACCESS_TOKEN)
+      },
+      /** 搜索按钮操作 */
+      handleQuery () {
+        this.queryParam.pageNum = 1
+        this.getList()
+      },
+      statusFormat(res) {
+        if (res.status == 0) {
+          return "待审批"
+        } else if (res.status == 1) {
+          return "审批中"
+        } else if (res.status == 2) {
+          return "审批拒绝"
         }
-      ]
-    }
-  },
-  filters: {
-  },
-  created () {
-    this.getList()
-  },
-  computed: {
-  },
-  watch: {
-  },
-  methods: {
-    /** 查询字典列表 */
-    getList () {
-      this.loading = true
-      listImage(this.queryParam).then(response => {
-          this.list = response.data.records
-          this.total = response.data.total - 0
-          this.loading = false
+        return "审批通过"
+      },
+      /** 重置按钮操作 */
+      resetQuery () {
+        this.dateRange = []
+        this.queryParam = {
+          pageNum: 1,
+          pageSize: 10,
+          title: undefined,
+          code: 'image'
         }
-      )
-    },
-    /** 搜索按钮操作 */
-    handleQuery () {
-      this.queryParam.pageNum = 1
-      this.getList()
-    },
-    statusFormat(res) {
-      if (res.status == 0) {
-        return "待审批"
-      } else if (res.status == 1) {
-        return "审批中"
+        this.handleQuery()
+      },
+      onShowSizeChange (current, pageSize) {
+        this.queryParam.pageSize = pageSize
+        this.getList()
+      },
+      changeSize (current, pageSize) {
+        this.queryParam.pageNum = current
+        this.queryParam.pageSize = pageSize
+        this.getList()
+      },
+      toggleAdvanced () {
+        this.advanced = !this.advanced
+      },
+      /** 删除按钮操作 */
+      handleDelete (row) {
+        const that = this
+        const id = row.id
+        this.$confirm({
+          title: '确认删除所选中数据?',
+          content: '当前选中图片编号为' + id + '的数据',
+          onOk () {
+            return delImage(id)
+              .then(() => {
+                that.getList()
+                that.$message.success(
+                  '删除成功',
+                  3
+                )
+              })
+          },
+          onCancel () {}
+        })
       }
-      return "审批结束"
-    },
-    /** 重置按钮操作 */
-    resetQuery () {
-      this.dateRange = []
-      this.queryParam = {
-        pageNum: 1,
-        pageSize: 10,
-        title: undefined,
-        code: 'image'
-      }
-      this.handleQuery()
-    },
-    onShowSizeChange (current, pageSize) {
-      this.queryParam.pageSize = pageSize
-      this.getList()
-    },
-    changeSize (current, pageSize) {
-      this.queryParam.pageNum = current
-      this.queryParam.pageSize = pageSize
-      this.getList()
-    },
-    toggleAdvanced () {
-      this.advanced = !this.advanced
-    },
-    /** 删除按钮操作 */
-    handleDelete (row) {
-      const that = this
-      const id = row.id
-      this.$confirm({
-        title: '确认删除所选中数据?',
-        content: '当前选中认证编号为' + id + '的数据',
-        onOk () {
-          return delImage(id)
-            .then(() => {
-              that.getList()
-              that.$message.success(
-                '删除成功',
-                3
-              )
-          })
-        },
-        onCancel () {}
-      })
     }
   }
-}
 </script>

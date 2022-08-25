@@ -42,3 +42,19 @@ export function delImage (id) {
     method: 'delete'
   })
 }
+
+export function uploadImage (data) {
+  return request({
+    url: '/admin/sys/resource/image/api/upload',
+    method: 'post',
+    data: data
+  })
+}
+
+export function uploadFile (data) {
+  return request({
+    url: '/admin/oss/api/upload',
+    method: 'post',
+    data: data
+  })
+}

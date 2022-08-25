@@ -265,7 +265,7 @@ export default {
       const id = row.id
       this.$confirm({
         title: '确认删除所选中数据?',
-        content: '当前选中认证编号为' + id + '的数据',
+        content: '当前选中音频编号为' + id + '的数据',
         onOk () {
           return delAudio(id)
             .then(() => {
