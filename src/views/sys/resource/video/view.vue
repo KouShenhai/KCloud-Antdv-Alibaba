@@ -3,7 +3,7 @@
     <a-card :bordered="false">
       <!-- 条件搜索 -->
       <div class="table-page-search-wrapper">
-        <a-form layout="inline">
+        <a-form layout="inline" v-hasPermi="['sys:resource:video:query']">
           <a-row :gutter="48">
             <a-col :md="8" :sm="24">
               <a-form-item label="标题">
@@ -20,7 +20,7 @@
         </a-form>
       </div>
       <div class="table-operations">
-        <a-button type="primary" @click="$refs.createForm.handleAdd()">
+        <a-button type="primary" @click="$refs.createForm.handleAdd()" v-hasPermi="['sys:resource:video:insert']">
           <a-icon type="plus" />新增
         </a-button>
       </div>
@@ -43,23 +43,23 @@
           {{ statusFormat(record) }}
         </span>
         <span slot="operation" slot-scope="text, record" >
-          <a @click="$refs.createForm.handleUpdate(record, undefined)" v-if="record.status == 3 || record.status == 2">
+          <a v-hasPermi="['sys:resource:video:update']" @click="$refs.createForm.handleUpdate(record, undefined)" v-if="record.status == 3 || record.status == 2">
             <a-icon type="edit" />修改
           </a>
-          <a-divider type="vertical" />
-          <a @click="$refs.createForm.handleAdd()" >
+          <a-divider type="vertical" v-hasPermi="['sys:resource:video:insert']"/>
+          <a @click="$refs.createForm.handleAdd()" v-hasPermi="['sys:resource:video:insert']">
             <a-icon type="plus" />新增
           </a>
-          <a-divider type="vertical" v-if="record.status == 3 || record.status == 2"/>
-          <a @click="handleDelete(record)" v-if="record.status == 3 || record.status == 2">
+          <a-divider type="vertical" v-if="record.status == 3 || record.status == 2" v-hasPermi="['sys:resource:video:delete']"/>
+          <a @click="handleDelete(record)" v-if="record.status == 3 || record.status == 2" v-hasPermi="['sys:resource:video:delete']">
             <a-icon type="delete" />删除
           </a>
-          <a-divider type="vertical" v-if="record.status == 3"/>
-          <a @click="handleQuery1(record)" v-if="record.status == 3">
+          <a-divider type="vertical" v-if="record.status == 3" v-hasPermi="['sys:resource:video:diagram']"/>
+          <a @click="handleQuery1(record)" v-if="record.status == 3" v-hasPermi="['sys:resource:video:diagram']">
             <a-icon type="eye" />查看
           </a>
-          <a-divider type="vertical" v-if="record.status != 3"/>
-          <a @click="handleQuery2(record)" v-if="record.status != 3">
+          <a-divider type="vertical" v-if="record.status != 3" v-hasPermi="['sys:resource:video:diagram']"/>
+          <a @click="handleQuery2(record)" v-if="record.status != 3" v-hasPermi="['sys:resource:video:diagram']">
             <a-icon type="eye" />查看
           </a>
         </span>
