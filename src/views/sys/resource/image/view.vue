@@ -211,7 +211,7 @@
         const id = row.id
         getImage(id).then(response => {
           this.imageUri = response.data.uri
-          this.iamgeTitle = response.data.title
+          this.imageTitle = response.data.title
         })
       },
       handleQuery2(row) {
