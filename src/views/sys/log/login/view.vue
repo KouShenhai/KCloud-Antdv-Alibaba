@@ -98,12 +98,14 @@ export default {
         {
           title: '用户名称',
           dataIndex: 'loginName',
-          align: 'center'
+          align: 'center',
+          ellipsis: true
         },
         {
           title: '登录地址',
           dataIndex: 'requestIp',
-          align: 'center'
+          align: 'center',
+          ellipsis: true
         },
         {
           title: '登录地点',
@@ -113,12 +115,14 @@ export default {
         {
           title: '浏览器',
           dataIndex: 'browser',
-          align: 'center'
+          align: 'center',
+          ellipsis: true
         },
         {
           title: '操作系统',
           dataIndex: 'os',
-          align: 'center'
+          align: 'center',
+          ellipsis: true
         },
         {
           title: '登录状态',
