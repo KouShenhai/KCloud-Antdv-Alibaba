@@ -188,7 +188,7 @@ export default {
         {
           title: '操作',
           dataIndex: 'operation',
-          width: '25%',
+          width: '26%',
           scopedSlots: { customRender: 'operation' },
           align: 'center'
         }
