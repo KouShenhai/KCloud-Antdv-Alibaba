@@ -43,24 +43,28 @@
           {{ statusFormat(record) }}
         </span>
         <span slot="operation" slot-scope="text, record" >
-          <a v-hasPermi="['sys:resource:audio:update']" @click="$refs.createForm.handleUpdate(record, undefined)" v-if="record.status == 3 || record.status == 2">
-            <a-icon type="edit" />修改
-          </a>
-          <a-divider type="vertical" v-hasPermi="['sys:resource:audio:insert']"/>
           <a @click="$refs.createForm.handleAdd()" v-hasPermi="['sys:resource:audio:insert']">
             <a-icon type="plus" />新增
+          </a>
+          <a-divider type="vertical" v-hasPermi="['sys:resource:audio:update']" v-if="record.status == 3 || record.status == 2"/>
+          <a v-hasPermi="['sys:resource:audio:update']" @click="$refs.createForm.handleUpdate(record, undefined)" v-if="record.status == 3 || record.status == 2">
+            <a-icon type="edit" />修改
           </a>
           <a-divider type="vertical" v-if="record.status == 3 || record.status == 2" v-hasPermi="['sys:resource:audio:delete']"/>
           <a @click="handleDelete(record)" v-if="record.status == 3 || record.status == 2" v-hasPermi="['sys:resource:audio:delete']">
             <a-icon type="delete" />删除
           </a>
-          <a-divider type="vertical" v-if="record.status == 3" v-hasPermi="['sys:resource:audio:diagram']"/>
-          <a @click="handleQuery1(record)" v-if="record.status == 3" v-hasPermi="['sys:resource:audio:diagram']">
-            <a-icon type="eye" />查看
+          <a-divider type="vertical" v-if="record.status == 3" v-hasPermi="['sys:resource:audio:detail']"/>
+          <a @click="handleQuery1(record)" v-if="record.status == 3" v-hasPermi="['sys:resource:audio:detail']">
+            <a-icon type="eyeOpen" />查看
           </a>
           <a-divider type="vertical" v-if="record.status != 3" v-hasPermi="['sys:resource:audio:diagram']"/>
           <a @click="handleQuery2(record)" v-if="record.status != 3" v-hasPermi="['sys:resource:audio:diagram']">
-            <a-icon type="eye" />查看
+            <a-icon type="gold" />查看
+          </a>
+          <a-divider type="vertical" v-hasPermi="['sys:resource:audio:auditLog']"/>
+          <a @click="handleQuery3(record)" v-hasPermi="['sys:resource:audio:auditLog']">
+            <a-icon type="file" />审批日志
           </a>
         </span>
       </a-table>
@@ -86,6 +90,18 @@
       <template slot="title" >
         <center><a-tag color="blue">音频</a-tag>{{ audioTitle }}</center>
       </template>
+      <!-- 数据展示 -->
+      <a-table
+        v-show="visible3"
+        rowKey="id"
+        :columns="columns1"
+        :data-source="list1"
+        :pagination="false"
+        :bordered="tableBordered">
+        <span slot="auditStatus" slot-scope="text, record">
+          {{ auditStatusFormat(record) }}
+        </span>
+      </a-table>
       <img v-show="visible2" :src="diagramUri" style="width: 100%;height: 100%">
       <audio v-show="visible1" loop='loop' :src="audioUri" controls='controls'><object :data="audioUri" ><embed :src="audioUri" /></object></audio>
     </a-modal>
@@ -93,9 +109,9 @@
 </template>
 
 <script>
-  import { ACCESS_TOKEN } from '@/store/mutation-types'
-  import storage from 'store'
-import { listAudio, delAudio,getAudio } from '@/api/sys/audio'
+import { ACCESS_TOKEN } from '@/store/mutation-types'
+import storage from 'store'
+import { listAudio, delAudio,getAudio,getAuditLog } from '@/api/sys/audio'
 import CreateForm from './modules/CreateForm'
 import { tableMixin } from '@/store/table-mixin'
 export default {
@@ -110,12 +126,14 @@ export default {
       audioTitle: "",
       audioUri: "",
       list: [],
+      list1: [],
       selectedRowKeys: [],
       selectedRows: [],
       // 高级搜索 展开/关闭
       advanced: false,
       visible1 : false,
       visible2 : false,
+      visible3 : false,
       // 非单个禁用
       single: true,
       // 非多个禁用
@@ -170,8 +188,35 @@ export default {
         {
           title: '操作',
           dataIndex: 'operation',
-          width: '20%',
+          width: '25%',
           scopedSlots: { customRender: 'operation' },
+          align: 'center'
+        }
+      ],
+      columns1: [
+        {
+          title: '审核人',
+          dataIndex: 'auditName',
+          ellipsis: true,
+          align: 'center'
+        },
+        {
+          title: '审核时间',
+          dataIndex: 'auditDate',
+          ellipsis: true,
+          align: 'center'
+        },
+        {
+          title: '审核状态',
+          dataIndex: 'auditStatus',
+          ellipsis: true,
+          scopedSlots: { customRender: 'auditStatus' },
+          align: 'center'
+        },
+        {
+          title: '审核意见',
+          dataIndex: 'comment',
+          ellipsis: true,
           align: 'center'
         }
       ]
@@ -193,6 +238,10 @@ export default {
       this.diagramUri = ""
       this.audioUri = ""
       this.audioTitle = ""
+      this.list1 = []
+      this.visible3 = false
+      this.visible1 = false
+      this.visible2 = false
     },
     /** 查询字典列表 */
     getList () {
@@ -208,6 +257,7 @@ export default {
       this.visible = true
       this.visible1 = true
       this.visible2 = false
+      this.visible3 = false
       const id = row.id
       getAudio(id).then(response => {
         this.audioUri = response.data.uri
@@ -218,8 +268,20 @@ export default {
       this.visible = true
       this.visible2 = true
       this.visible1 = false
+      this.visible3 = false
       this.audioTitle = "流程图"
       this.diagramUri = process.env.VUE_APP_BASE_API + "/admin/sys/resource/audio/api/diagram?processInstanceId=" + row.processInstanceId + "&Authorization=" + storage.get(ACCESS_TOKEN)
+    },
+    handleQuery3(row) {
+      this.audioTitle = "审批日志"
+      this.visible = true
+      this.visible2 = false
+      this.visible1 = false
+      this.visible3 = true
+      const resourceId = row.id
+      getAuditLog(resourceId).then(response => {
+        this.list1 = response.data
+      })
     },
     /** 搜索按钮操作 */
     handleQuery () {
@@ -235,6 +297,13 @@ export default {
         return "审批拒绝"
       }
       return "审批通过"
+    },
+    auditStatusFormat(res) {
+      if (res.auditStatus == 0) {
+        return "审批驳回"
+      } else if (res.auditStatus == 1) {
+        return "审批通过"
+      }
     },
     /** 重置按钮操作 */
     resetQuery () {

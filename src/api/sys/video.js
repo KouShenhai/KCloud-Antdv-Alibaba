@@ -9,7 +9,6 @@ export function listVideo (query) {
   })
 }
 
-// 查询字典类型详细
 export function getVideo (id) {
   return request({
     url: '/admin/sys/resource/video/api/detail?id=' + id,
@@ -56,5 +55,12 @@ export function uploadFile (data) {
     url: '/admin/oss/api/upload',
     method: 'post',
     data: data
+  })
+}
+
+export function getAuditLog (resourceId) {
+  return request({
+    url: '/admin/sys/resource/video/api/auditLog?resourceId=' + resourceId,
+    method: 'get'
   })
 }

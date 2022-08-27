@@ -9,7 +9,6 @@ export function listDict (query) {
   })
 }
 
-// 查询字典类型详细
 export function getDict (dictId) {
   return request({
     url: '/admin/sys/dict/api/detail?id=' + dictId,

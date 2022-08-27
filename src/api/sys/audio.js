@@ -9,7 +9,6 @@ export function listAudio (query) {
   })
 }
 
-// 查询字典类型详细
 export function getAudio (id) {
   return request({
     url: '/admin/sys/resource/audio/api/detail?id=' + id,
@@ -56,5 +55,12 @@ export function uploadFile (data) {
     url: '/admin/oss/api/upload',
     method: 'post',
     data: data
+  })
+}
+
+export function getAuditLog (resourceId) {
+  return request({
+    url: '/admin/sys/resource/audio/api/auditLog?resourceId=' + resourceId,
+    method: 'get'
   })
 }

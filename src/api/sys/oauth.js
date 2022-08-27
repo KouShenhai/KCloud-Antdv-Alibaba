@@ -9,7 +9,6 @@ export function listOauth (query) {
   })
 }
 
-// 查询字典类型详细
 export function getOauth (id) {
   return request({
     url: '/admin/sys/oauth/api/detail?id=' + id,

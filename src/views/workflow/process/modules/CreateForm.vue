@@ -13,7 +13,7 @@
             同意
           </a-button>
           <a-button type="danger" :loading="submitLoading"  @click="submitForm('0')">
-            拒绝
+            驳回
           </a-button>
         </a-space>
       </div>

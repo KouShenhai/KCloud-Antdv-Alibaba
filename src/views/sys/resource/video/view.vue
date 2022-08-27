@@ -43,24 +43,28 @@
           {{ statusFormat(record) }}
         </span>
         <span slot="operation" slot-scope="text, record" >
-          <a v-hasPermi="['sys:resource:video:update']" @click="$refs.createForm.handleUpdate(record, undefined)" v-if="record.status == 3 || record.status == 2">
-            <a-icon type="edit" />修改
-          </a>
-          <a-divider type="vertical" v-hasPermi="['sys:resource:video:insert']"/>
           <a @click="$refs.createForm.handleAdd()" v-hasPermi="['sys:resource:video:insert']">
             <a-icon type="plus" />新增
+          </a>
+          <a-divider type="vertical" v-hasPermi="['sys:resource:video:update']" v-if="record.status == 3 || record.status == 2"/>
+          <a v-hasPermi="['sys:resource:video:update']" @click="$refs.createForm.handleUpdate(record, undefined)" v-if="record.status == 3 || record.status == 2">
+            <a-icon type="edit" />修改
           </a>
           <a-divider type="vertical" v-if="record.status == 3 || record.status == 2" v-hasPermi="['sys:resource:video:delete']"/>
           <a @click="handleDelete(record)" v-if="record.status == 3 || record.status == 2" v-hasPermi="['sys:resource:video:delete']">
             <a-icon type="delete" />删除
           </a>
-          <a-divider type="vertical" v-if="record.status == 3" v-hasPermi="['sys:resource:video:diagram']"/>
-          <a @click="handleQuery1(record)" v-if="record.status == 3" v-hasPermi="['sys:resource:video:diagram']">
-            <a-icon type="eye" />查看
+          <a-divider type="vertical" v-if="record.status == 3" v-hasPermi="['sys:resource:video:detail']"/>
+          <a @click="handleQuery1(record)" v-if="record.status == 3" v-hasPermi="['sys:resource:video:detail']">
+            <a-icon type="eyeOpen" />查看
           </a>
           <a-divider type="vertical" v-if="record.status != 3" v-hasPermi="['sys:resource:video:diagram']"/>
           <a @click="handleQuery2(record)" v-if="record.status != 3" v-hasPermi="['sys:resource:video:diagram']">
-            <a-icon type="eye" />查看
+            <a-icon type="gold" />查看
+          </a>
+          <a-divider type="vertical" v-hasPermi="['sys:resource:audio:auditLog']"/>
+          <a @click="handleQuery3(record)" v-hasPermi="['sys:resource:audio:auditLog']">
+            <a-icon type="file" />审批日志
           </a>
         </span>
       </a-table>
@@ -86,7 +90,18 @@
       <template slot="title" >
         <center><a-tag color="blue">视频</a-tag>{{ videoTitle }}</center>
       </template>
-      <img v-show="visible2" :src="diagramUri" style="width: 100%;height: 100%">\
+      <a-table
+        v-show="visible3"
+        rowKey="id"
+        :columns="columns1"
+        :data-source="list1"
+        :pagination="false"
+        :bordered="tableBordered">
+        <span slot="auditStatus" slot-scope="text, record">
+          {{ auditStatusFormat(record) }}
+        </span>
+      </a-table>
+      <img v-show="visible2" :src="diagramUri" style="width: 100%;height: 100%">
       <video v-show="visible1" :src='videoUri' loop='loop' width='200' height='100' controls='controls'><source :src='videoUri' type='video/mp4'><object :data='videoUri' width='200' height='100'><embed :src='videoUri' width='200' height='100' /></object></video>
     </a-modal>
   </page-header-wrapper>
@@ -95,7 +110,7 @@
 <script>
   import { ACCESS_TOKEN } from '@/store/mutation-types'
   import storage from 'store'
-  import { listVideo, delVideo,getVideo } from '@/api/sys/video'
+  import { listVideo, delVideo,getVideo,getAuditLog } from '@/api/sys/video'
   import CreateForm from './modules/CreateForm'
   import { tableMixin } from '@/store/table-mixin'
   export default {
@@ -116,6 +131,7 @@
         advanced: false,
         visible1 : false,
         visible2 : false,
+        visible3: false,
         // 非单个禁用
         single: true,
         // 非多个禁用
@@ -170,11 +186,39 @@
           {
             title: '操作',
             dataIndex: 'operation',
-            width: '20%',
+            width: '25%',
             scopedSlots: { customRender: 'operation' },
             align: 'center'
           }
-        ]
+        ],
+        columns1: [
+          {
+            title: '审核人',
+            dataIndex: 'auditName',
+            ellipsis: true,
+            align: 'center'
+          },
+          {
+            title: '审核时间',
+            dataIndex: 'auditDate',
+            ellipsis: true,
+            align: 'center'
+          },
+          {
+            title: '审核状态',
+            dataIndex: 'auditStatus',
+            ellipsis: true,
+            scopedSlots: { customRender: 'auditStatus' },
+            align: 'center'
+          },
+          {
+            title: '审核意见',
+            dataIndex: 'comment',
+            ellipsis: true,
+            align: 'center'
+          }
+        ],
+        list1: []
       }
     },
     filters: {
@@ -187,12 +231,34 @@
     watch: {
     },
     methods: {
+      auditStatusFormat(res) {
+        if (res.auditStatus == 0) {
+          return "审批驳回"
+        } else if (res.auditStatus == 1) {
+          return "审批通过"
+        }
+      },
       // 关闭模态框
       close () {
         this.visible = false
         this.diagramUri = ""
         this.videoUri = ""
         this.videoTitle = ""
+        this.visible3 = false
+        this.list1 = []
+        this.visible1 = false
+        this.visible2 = false
+      },
+      handleQuery3(row) {
+        this.videoTitle = "审批日志"
+        this.visible = true
+        this.visible2 = false
+        this.visible1 = false
+        this.visible3 = true
+        const resourceId = row.id
+        getAuditLog(resourceId).then(response => {
+          this.list1 = response.data
+        })
       },
       /** 查询字典列表 */
       getList () {
