@@ -56,7 +56,7 @@
           </a>
           <a-divider type="vertical" v-if="record.status == 3" v-hasPermi="['sys:resource:image:detail']"/>
           <a @click="handleQuery1(record)" v-if="record.status == 3" v-hasPermi="['sys:resource:image:detail']">
-            <a-icon type="eyeOpen" />查看
+            <a-icon type="eye" />查看
           </a>
           <a-divider type="vertical" v-if="record.status != 3" v-hasPermi="['sys:resource:image:diagram']"/>
           <a @click="handleQuery2(record)" v-if="record.status != 3" v-hasPermi="['sys:resource:image:diagram']">
