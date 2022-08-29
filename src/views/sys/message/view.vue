@@ -45,6 +45,9 @@
         :data-source="list"
         :pagination="false"
         :bordered="tableBordered">
+        <span slot="type" slot-scope="text, record">
+          {{ typeFormat(record) }}
+        </span>
         <span slot="operation" slot-scope="text, record">
           <a @click="handleAdd()" v-hasPermi="['sys:message:insert']">
             <a-icon type="plus" />
@@ -128,6 +131,12 @@ export default {
           align: 'center'
         },
         {
+          title: '类型',
+          dataIndex: 'type',
+          scopedSlots: { customRender: 'type' },
+          align: 'center'
+        },
+        {
           title: '创建者',
           dataIndex: 'username',
           ellipsis: true,
@@ -189,6 +198,12 @@ export default {
           this.loading = false
         }
       )
+    },
+    typeFormat(row) {
+      if (row.type == 1) {
+        return "提醒"
+      }
+      return "通知"
     },
     /** 搜索按钮操作 */
     handleQuery () {

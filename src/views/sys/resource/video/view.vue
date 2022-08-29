@@ -23,6 +23,9 @@
         <a-button type="primary" @click="$refs.createForm.handleAdd()" v-hasPermi="['sys:resource:video:insert']">
           <a-icon type="plus" />新增
         </a-button>
+        <a-button type="danger" @click="syncVideo()" v-hasPermi="['sys:resource:video:sync']">
+          <a-icon type="reload" />同步
+        </a-button>
       </div>
       <!-- 增加修改 -->
       <create-form
@@ -110,9 +113,10 @@
 <script>
   import { ACCESS_TOKEN } from '@/store/mutation-types'
   import storage from 'store'
-  import { listVideo, delVideo,getVideo,getAuditLog } from '@/api/sys/video'
+  import { listVideo, delVideo,getVideo,getAuditLog,syncVideo } from '@/api/sys/video'
   import CreateForm from './modules/CreateForm'
   import { tableMixin } from '@/store/table-mixin'
+  import {syncImage} from "@/api/sys/image";
   export default {
     name: 'Resource-Video',
     components: {
@@ -186,7 +190,7 @@
           {
             title: '操作',
             dataIndex: 'operation',
-            width: '25%',
+            width: '26%',
             scopedSlots: { customRender: 'operation' },
             align: 'center'
           }
@@ -231,6 +235,17 @@
     watch: {
     },
     methods: {
+      syncVideo() {
+        const that = this
+        that.loading = true
+        syncVideo().then(response => {
+          that.loading = false
+          that.$message.success(
+            '同步成功',
+            3
+          )
+        })
+      },
       auditStatusFormat(res) {
         if (res.auditStatus == 0) {
           return "审批驳回"

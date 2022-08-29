@@ -64,3 +64,10 @@ export function getAuditLog (resourceId) {
     method: 'get'
   })
 }
+
+export function syncAudio () {
+  return request({
+    url: '/admin/sys/resource/audio/api/sync?code=audio',
+    method: 'post'
+  })
+}

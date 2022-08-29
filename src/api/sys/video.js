@@ -64,3 +64,10 @@ export function getAuditLog (resourceId) {
     method: 'get'
   })
 }
+
+export function syncVideo () {
+  return request({
+    url: '/admin/sys/resource/video/api/sync?code=video',
+    method: 'post'
+  })
+}

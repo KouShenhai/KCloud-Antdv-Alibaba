@@ -23,6 +23,9 @@
         <a-button type="primary" @click="$refs.createForm.handleAdd()" v-hasPermi="['sys:resource:image:insert']">
           <a-icon type="plus" />新增
         </a-button>
+        <a-button type="danger" @click="syncImage()" v-hasPermi="['sys:resource:image:sync']">
+          <a-icon type="reload" />同步
+        </a-button>
       </div>
       <!-- 增加修改 -->
       <create-form
@@ -110,9 +113,10 @@
 <script>
   import { ACCESS_TOKEN } from '@/store/mutation-types'
   import storage from 'store'
-  import { listImage, delImage,getImage,getAuditLog } from '@/api/sys/image'
+  import { listImage, delImage,getImage,getAuditLog,syncImage } from '@/api/sys/image'
   import CreateForm from './modules/CreateForm'
   import { tableMixin } from '@/store/table-mixin'
+  import {syncAudio} from "@/api/sys/audio";
   export default {
     name: 'Resource-Image',
     components: {
@@ -186,7 +190,7 @@
           {
             title: '操作',
             dataIndex: 'operation',
-            width: '25%',
+            width: '26%',
             scopedSlots: { customRender: 'operation' },
             align: 'center'
           }
@@ -230,6 +234,17 @@
     watch: {
     },
     methods: {
+      syncImage() {
+        const that = this
+        that.loading = true
+        syncImage().then(response => {
+          that.loading = false
+          that.$message.success(
+            '同步成功',
+            3
+          )
+        })
+      },
       handleQuery3(row) {
         this.imageTitle = "审批日志"
         this.visible = true

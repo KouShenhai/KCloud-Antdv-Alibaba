@@ -64,3 +64,10 @@ export function getAuditLog (resourceId) {
     method: 'get'
   })
 }
+
+export function syncImage () {
+  return request({
+    url: '/admin/sys/resource/image/api/sync?code=image',
+    method: 'post'
+  })
+}

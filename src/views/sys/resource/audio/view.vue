@@ -23,6 +23,9 @@
         <a-button type="primary" @click="$refs.createForm.handleAdd()" v-hasPermi="['sys:resource:audio:insert']">
           <a-icon type="plus" />新增
         </a-button>
+        <a-button type="danger" @click="syncAudio()" v-hasPermi="['sys:resource:audio:sync']">
+          <a-icon type="reload" />同步
+        </a-button>
       </div>
       <!-- 增加修改 -->
       <create-form
@@ -111,7 +114,7 @@
 <script>
 import { ACCESS_TOKEN } from '@/store/mutation-types'
 import storage from 'store'
-import { listAudio, delAudio,getAudio,getAuditLog } from '@/api/sys/audio'
+import { listAudio, delAudio,getAudio,getAuditLog,syncAudio } from '@/api/sys/audio'
 import CreateForm from './modules/CreateForm'
 import { tableMixin } from '@/store/table-mixin'
 export default {
@@ -232,6 +235,17 @@ export default {
   watch: {
   },
   methods: {
+    syncAudio() {
+      const that = this
+      that.loading = true
+      syncAudio().then(response => {
+        that.loading = false
+        that.$message.success(
+          '同步成功',
+          3
+        )
+      })
+    },
     // 关闭模态框
     close () {
       this.visible = false
