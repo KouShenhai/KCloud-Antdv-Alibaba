@@ -23,7 +23,7 @@
         <a-button type="primary" @click="$refs.createForm.handleAdd()" v-hasPermi="['sys:resource:audio:insert']">
           <a-icon type="plus" />新增
         </a-button>
-        <a-button type="danger" @click="syncAudio()" v-hasPermi="['sys:resource:audio:sync']">
+        <a-button :loading="syncLoading" type="danger" @click="syncAudio()" v-hasPermi="['sys:resource:audio:sync']">
           <a-icon type="reload" />同步
         </a-button>
       </div>
@@ -143,6 +143,7 @@ export default {
       multiple: true,
       ids: [],
       loading: false,
+      syncLoading: false,
       refreshing: false,
       total: 0,
       visible:false,
@@ -238,7 +239,9 @@ export default {
     syncAudio() {
       const that = this
       that.loading = true
+      that.syncLoading = true
       syncAudio().then(response => {
+        that.syncLoading = false
         that.loading = false
         that.$message.success(
           '同步成功',

@@ -23,7 +23,7 @@
         <a-button type="primary" @click="$refs.createForm.handleAdd()" v-hasPermi="['sys:resource:image:insert']">
           <a-icon type="plus" />新增
         </a-button>
-        <a-button type="danger" @click="syncImage()" v-hasPermi="['sys:resource:image:sync']">
+        <a-button :loading="syncLoading" type="danger" @click="syncImage()" v-hasPermi="['sys:resource:image:sync']">
           <a-icon type="reload" />同步
         </a-button>
       </div>
@@ -138,6 +138,7 @@
         visible3 : false,
         // 非单个禁用
         single: true,
+        syncLoading: false,
         // 非多个禁用
         multiple: true,
         ids: [],
@@ -237,8 +238,10 @@
       syncImage() {
         const that = this
         that.loading = true
+        that.syncLoading = true
         syncImage().then(response => {
           that.loading = false
+          that.syncLoading = false
           that.$message.success(
             '同步成功',
             3

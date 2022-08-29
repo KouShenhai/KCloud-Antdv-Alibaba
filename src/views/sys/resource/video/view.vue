@@ -23,7 +23,7 @@
         <a-button type="primary" @click="$refs.createForm.handleAdd()" v-hasPermi="['sys:resource:video:insert']">
           <a-icon type="plus" />新增
         </a-button>
-        <a-button type="danger" @click="syncVideo()" v-hasPermi="['sys:resource:video:sync']">
+        <a-button :loading="syncLoading" type="danger" @click="syncVideo()" v-hasPermi="['sys:resource:video:sync']">
           <a-icon type="reload" />同步
         </a-button>
       </div>
@@ -131,6 +131,7 @@
         list: [],
         selectedRowKeys: [],
         selectedRows: [],
+        syncLoading: false,
         // 高级搜索 展开/关闭
         advanced: false,
         visible1 : false,
@@ -238,8 +239,10 @@
       syncVideo() {
         const that = this
         that.loading = true
+        that.syncLoading = true
         syncVideo().then(response => {
           that.loading = false
+          that.syncLoading = false
           that.$message.success(
             '同步成功',
             3
