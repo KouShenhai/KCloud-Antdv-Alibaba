@@ -7,8 +7,8 @@
     </div>
     <br/>
     <div v-for="(item, i) in list" :key="i">
-      <div style="font-size: 14px;">{{item.title}}</div>
-      <div style="font-size: 14px;font-weight: bolder;">{{item.remark}}</div>
+      <div style="font-size: 14px;font-weight: bolder;" v-html="item.title"/>
+      <div style="font-size: 14px;" v-html="item.remark"/>
       <br/>
     </div>
   </div>
@@ -26,7 +26,6 @@
             needPage: false,
             orSearchList:[],
             highlightFieldList: ["title","remark"],
-            sortFieldList: [{field: "ym", value: "desc"}],
             queryStringList: [],
             indexNames: ["laokou_resource"]
           },
@@ -50,7 +49,7 @@
             this.form.queryStringList.push({field: "remark", value: this.keyword});
             this.form.queryStringList.push({field: "title", value: this.keyword});
             searchResource(this.form).then(response => {
-                this.list = response.data.records
+                this.list = response.data.records.length == 0 ? [] : response.data.records
               }
             )
           }
@@ -58,6 +57,6 @@
     }
 </script>
 
-<style scoped>
+<style lang="less" scoped>
 
 </style>
