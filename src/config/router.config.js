@@ -41,6 +41,30 @@ export const indexRouterMap = [
     icon: '',
     hidden: true
   },
+  {
+    path: '/sys/resource/audio/view',
+    name: '音频管理',
+    permissions: '',
+    component: 'Resource-Audio',
+    icon: '',
+    hidden: true
+  },
+  {
+    path: '/sys/resource/image/view',
+    name: '图片管理',
+    permissions: '',
+    component: 'Resource-Image',
+    icon: '',
+    hidden: true
+  },
+  {
+    path: '/sys/resource/video/view',
+    name: '视频管理',
+    permissions: '',
+    component: 'Resource-Video',
+    icon: '',
+    hidden: true
+  },
 ]
 
 /**

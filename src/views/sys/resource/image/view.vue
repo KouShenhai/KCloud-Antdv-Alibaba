@@ -6,8 +6,13 @@
         <a-form layout="inline" v-hasPermi="['sys:resource:image:query']">
           <a-row :gutter="48">
             <a-col :md="8" :sm="24">
-              <a-form-item label="标题">
-                <a-input v-model="queryParam.title" placeholder="请输入标题" allow-clear/>
+              <a-form-item label="图片编号">
+                <a-input v-model="queryParam.id" placeholder="请输入图片编号" allow-clear/>
+              </a-form-item>
+            </a-col>
+            <a-col :md="8" :sm="24">
+              <a-form-item label="图片名称">
+                <a-input v-model="queryParam.title" placeholder="请输入图片名称" allow-clear/>
               </a-form-item>
             </a-col>
             <a-col :md="8" :sm="24">
@@ -154,7 +159,8 @@
           pageNum: 1,
           pageSize: 10,
           title: undefined,
-          code: 'image'
+          code: 'image',
+          id: ""
         },
         columns: [
           {
@@ -228,13 +234,23 @@
     filters: {
     },
     created () {
-      this.getList()
+      this.linkQuery()
     },
     computed: {
     },
     watch: {
+      $route: function (to, from) {
+        this.linkQuery()
+      }
     },
     methods: {
+      linkQuery() {
+        const query = this.$route.query
+        if (JSON.stringify(query) != "{}") {
+          this.queryParam.id = query.id
+        }
+        this.getList()
+      },
       syncImage() {
         const that = this
         that.loading = true
@@ -326,7 +342,8 @@
           pageNum: 1,
           pageSize: 10,
           title: undefined,
-          code: 'image'
+          code: 'image',
+          id: ""
         }
         this.handleQuery()
       },
