@@ -6,7 +6,7 @@
       </a-input>
     </div>
     <br/>
-    <div v-if="list.length > 0">
+    <div v-if="searchWord != ''">
       <span style="font-size: 14px;font-weight: bolder;">搜索 <span style='color:red;'>{{searchWord}}</span> 找到 <span style='color:red;'>{{total}}</span> 个相关内容</span>
     </div><br/>
     <div v-for="(item, i) in list" :key="i">
@@ -54,7 +54,15 @@
       },
       methods: {
           searchResource() {
-            this.searchWord = this.keyword
+            let keyword = this.keyword;
+            if (keyword == null || keyword == '' || keyword == undefined) {
+              this.$message.error(
+                '请输入关键字',
+                3
+              )
+              return
+            }
+            this.searchWord = keyword
             this.form.queryStringList = []
             this.form.queryStringList.push({field: "remark", value: this.keyword});
             this.form.queryStringList.push({field: "title", value: this.keyword});
