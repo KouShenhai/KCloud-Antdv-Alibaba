@@ -27,7 +27,7 @@
       data () {
         return {
           keyword: "",
-          total: "",
+          total: 0,
           searchWord: "",
           form: {
             pageNum: 1,
@@ -62,11 +62,11 @@
               )
               return
             }
-            this.searchWord = keyword
             this.form.queryStringList = []
             this.form.queryStringList.push({field: "remark", value: this.keyword});
             this.form.queryStringList.push({field: "title", value: this.keyword});
             searchResource(this.form).then(response => {
+                this.searchWord = keyword
                 this.list = response.data == null ? [] : response.data.records
                 this.total = response.data == null ? 0 : response.data.total - 0
               }
