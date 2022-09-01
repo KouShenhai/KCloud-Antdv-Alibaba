@@ -9,9 +9,9 @@
     <div v-for="(item, i) in list" :key="i">
       <div style="font-size: 14px;font-weight: bolder;" v-html="item.title"/>
       <span style="font-size: 14px;" v-html="item.remark"/>
-      <router-link style="color: dodgerblue;" v-if="item.code == 'audio'" :to="{name: 'Resource-Audio', query: {id: item.id}}">查看详情</router-link>
-      <router-link style="color: dodgerblue" v-if="item.code == 'image'" :to="{name: 'Resource-Image', query: {id: item.id}}">查看详情</router-link>
-      <router-link style="color: dodgerblue" v-if="item.code == 'video'" :to="{name: 'Resource-Video', query: {id: item.id}}">查看详情</router-link>
+      <router-link style="color: dodgerblue;" v-if="item.code == 'audio'" :to="{name: 'sysresourceaudioview', query: {id: item.id}}">查看详情</router-link>
+      <router-link style="color: dodgerblue" v-if="item.code == 'image'" :to="{name: 'sysresourceimageview', query: {id: item.id}}">查看详情</router-link>
+      <router-link style="color: dodgerblue" v-if="item.code == 'video'" :to="{name: 'sysresourcevideoview', query: {id: item.id}}">查看详情</router-link>
       <br/>
       <br/>
     </div>
