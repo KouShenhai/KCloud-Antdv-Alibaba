@@ -32,7 +32,7 @@
           form: {
             pageNum: 1,
             pageSize: 10000,
-            needPage: false,
+            needPage: true,
             orSearchList:[],
             highlightFieldList: ["title","remark"],
             queryStringList: [],
