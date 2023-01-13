@@ -28,8 +28,14 @@
         <a-button type="primary" @click="$refs.createForm.handleAdd()" v-hasPermi="['sys:resource:image:insert']">
           <a-icon type="plus" />新增
         </a-button>
-        <a-button :loading="syncLoading" type="danger" @click="syncImage()" v-hasPermi="['sys:resource:image:sync']">
-          <a-icon type="reload" />同步
+        <a-button :loading="deleteLoading" type="dashed" @click="deleteIndex()" v-hasPermi="['sys:resource:image:deleteIndex']">
+          <a-icon type="delete" />删除
+        </a-button>
+        <a-button :loading="createLoading" @click="createIndex()" v-hasPermi="['sys:resource:image:createIndex']">
+          <a-icon type="diff" />创建
+        </a-button>
+        <a-button :loading="syncLoading" type="danger" @click="syncIndex()" v-hasPermi="['sys:resource:image:syncIndex']">
+          <a-icon type="snippets" />同步
         </a-button>
       </div>
       <!-- 增加修改 -->
@@ -109,8 +115,8 @@
           {{ auditStatusFormat(record) }}
         </span>
       </a-table>
-      <img v-show="visible2" :src="diagramUri" style="width: 100%;height: 100%">
-      <img v-show="visible1" :src="imageUri" style="width: 100%;height: 100%">
+      <img v-show="visible2" :src="diagramUrl" style="width: 100%;height: 100%">
+      <img v-show="visible1" :src="imageUrl" style="width: 100%;height: 100%">
     </a-modal>
   </page-header-wrapper>
 </template>
@@ -118,39 +124,40 @@
 <script>
   import { ACCESS_TOKEN } from '@/store/mutation-types'
   import storage from 'store'
-  import { listImage, delImage,getImage,getAuditLog,syncImage } from '@/api/sys/image'
+  import { listImage, delImage, getImage, getAuditLog, syncIndex, createIndex, deleteIndex } from '@/api/sys/image'
   import CreateForm from './modules/CreateForm'
   import { tableMixin } from '@/store/table-mixin'
-  import {syncAudio} from "@/api/sys/audio";
   export default {
-    name: 'Resource-Image',
+    name: 'ResourceImage',
     components: {
       CreateForm
     },
     mixins: [tableMixin],
     data () {
       return {
-        diagramUri: "",
-        imageTitle: "",
-        imageUri: "",
+        diagramUrl: '',
+        imageTitle: '',
+        imageUrl: '',
         list: [],
         selectedRowKeys: [],
         selectedRows: [],
         // 高级搜索 展开/关闭
         advanced: false,
-        visible1 : false,
-        visible2 : false,
-        visible3 : false,
+        visible1: false,
+        visible2: false,
+        visible3: false,
         // 非单个禁用
         single: true,
         syncLoading: false,
+        createLoading: false,
+        deleteLoading: false,
         // 非多个禁用
         multiple: true,
         ids: [],
         loading: false,
         refreshing: false,
         total: 0,
-        visible:false,
+        visible: false,
         // 状态数据字典
         statusOptions: [],
         // 日期范围
@@ -160,7 +167,7 @@
           pageSize: 10,
           title: undefined,
           code: 'image',
-          id: ""
+          id: ''
         },
         columns: [
           {
@@ -201,7 +208,8 @@
             scopedSlots: { customRender: 'operation' },
             align: 'center'
           }
-        ],columns1: [
+        ],
+          columns1: [
           {
             title: '审核人',
             dataIndex: 'auditName',
@@ -244,43 +252,63 @@
       }
     },
     methods: {
-      linkQuery() {
+      linkQuery () {
         const query = this.$route.query
-        if (JSON.stringify(query) != "{}") {
+        if (JSON.stringify(query) !== '{}') {
           this.queryParam.id = query.id
         }
         this.getList()
       },
-      syncImage() {
+      syncIndex () {
         const that = this
-        that.loading = true
         that.syncLoading = true
-        syncImage().then(response => {
-          that.loading = false
+        syncIndex().then(() => {
           that.syncLoading = false
           that.$message.success(
-            '同步成功',
+            '正在异步同步数据，详情请查看日志',
             3
           )
         })
       },
-      handleQuery3(row) {
-        this.imageTitle = "审批日志"
+      createIndex () {
+        const that = this
+        that.createLoading = true
+        createIndex().then(() => {
+          that.createLoading = false
+          that.$message.success(
+            '正在创建索引，详情请查看日志',
+            3
+          )
+        })
+      },
+      deleteIndex () {
+        const that = this
+        that.deleteLoading = true
+        deleteIndex().then(() => {
+          that.deleteLoading = false
+          that.$message.success(
+            '正在删除索引，详情请查看日志',
+            3
+          )
+        })
+      },
+      handleQuery3 (row) {
+        this.imageTitle = '审批日志'
         this.visible = true
         this.visible2 = false
         this.visible1 = false
         this.visible3 = true
-        const resourceId = row.id
-        getAuditLog(resourceId).then(response => {
+        const businessId = row.id
+        getAuditLog(businessId).then(response => {
           this.list1 = response.data
         })
       },
       // 关闭模态框
       close () {
         this.visible = false
-        this.diagramUri = ""
-        this.imageUri = ""
-        this.imageTitle = ""
+        this.diagramUrl = ''
+        this.imageUrl = ''
+        this.imageTitle = ''
         this.list1 = []
         this.visible3 = false
         this.visible1 = false
@@ -296,44 +324,44 @@
           }
         )
       },
-      handleQuery1(row) {
+      handleQuery1 (row) {
         this.visible = true
         this.visible1 = true
         this.visible2 = false
         const id = row.id
         getImage(id).then(response => {
-          this.imageUri = response.data.uri
+          this.imageUrl = response.data.url
           this.imageTitle = response.data.title
         })
       },
-      auditStatusFormat(res) {
-        if (res.auditStatus == 0) {
-          return "审批驳回"
-        } else if (res.auditStatus == 1) {
-          return "审批通过"
+      auditStatusFormat (res) {
+        if (res.auditStatus === 0) {
+          return '审批驳回'
+        } else if (res.auditStatus === 1) {
+          return '审批通过'
         }
       },
-      handleQuery2(row) {
+      handleQuery2 (row) {
         this.visible = true
         this.visible2 = true
         this.visible1 = false
-        this.imageTitle = "流程图"
-        this.diagramUri = process.env.VUE_APP_BASE_API + "/admin/sys/resource/image/api/diagram?processInstanceId=" + row.processInstanceId + "&Authorization=" + storage.get(ACCESS_TOKEN)
+        this.imageTitle = '流程图'
+        this.diagramUrl = process.env.VUE_APP_BASE_API + '/admin/sys/resource/image/api/diagram?processInstanceId=' + row.processInstanceId + '&Authorization=Bearer ' + storage.get(ACCESS_TOKEN)
       },
       /** 搜索按钮操作 */
       handleQuery () {
         this.queryParam.pageNum = 1
         this.getList()
       },
-      statusFormat(res) {
-        if (res.status == 0) {
-          return "待审批"
-        } else if (res.status == 1) {
-          return "审批中"
-        } else if (res.status == 2) {
-          return "审批拒绝"
+      statusFormat (res) {
+        if (res.status === 0) {
+          return '待审批'
+        } else if (res.status === 1) {
+          return '审批中'
+        } else if (res.status === 2) {
+          return '审批拒绝'
         }
-        return "审批通过"
+        return '审批通过'
       },
       /** 重置按钮操作 */
       resetQuery () {
@@ -343,7 +371,7 @@
           pageSize: 10,
           title: undefined,
           code: 'image',
-          id: ""
+          id: ''
         }
         this.handleQuery()
       },

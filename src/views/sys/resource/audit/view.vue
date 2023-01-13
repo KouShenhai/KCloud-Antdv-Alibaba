@@ -3,7 +3,7 @@
     <a-card :bordered="false">
       <!-- 条件搜索 -->
       <div class="table-page-search-wrapper">
-        <a-form layout="inline" v-hasPermi="['workflow:process:resource:query']">
+        <a-form layout="inline" v-hasPermi="['workflow:task:resource:query']">
           <a-row :gutter="48">
             <a-col :md="8" :sm="24">
               <a-form-item label="流程名称">
@@ -35,7 +35,7 @@
         :bordered="tableBordered">
         <span slot="operation" slot-scope="text, record">
           <a @click="$refs.createForm.handleAudit(record)" >
-            <a-icon type="audit" v-hasPermi="['workflow:process:resource:audit']"/>
+            <a-icon type="audit" v-hasPermi="['workflow:task:resource:audit']"/>
             审批
           </a>
         </span>
@@ -57,7 +57,7 @@
 </template>
 
 <script>
-import { pageProcess } from '@/api/workflow/process'
+import { pageTask } from '@/api/workflow/task'
 import { tableMixin } from '@/store/table-mixin'
 import CreateForm from './modules/CreateForm'
 export default {
@@ -143,7 +143,7 @@ export default {
     /** 查询流程定义列表 */
     getList () {
       this.loading = true
-      pageProcess(this.queryParam).then(response => {
+      pageTask(this.queryParam).then(response => {
           this.list = response.data.records
           this.total = response.data.total - 0
           this.loading = false

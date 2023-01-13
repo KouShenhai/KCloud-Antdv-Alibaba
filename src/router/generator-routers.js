@@ -50,17 +50,15 @@ const rootRouter = {
 
 /**
  * 动态生成菜单
- * @param token
  * @returns {Promise<Router>}
  */
-export const generatorDynamicRouter = (token) => {
+export const generatorDynamicRouter = () => {
   return new Promise((resolve, reject) => {
     // 向后端请求路由数据
     getRouters().then(res => {
       // 路由菜单分离，路由全部为二级，解决多级菜单缓存问题
       const routers = []
       const menuNav = []
-      const resp = []
       const routerData = buildRouters(res.data.children)
       const asyncRoutes = filterDynamicRoutes(indexRouterMap)
       rootMenu.children = asyncRoutes.concat(routerData)
@@ -75,16 +73,16 @@ export const generatorDynamicRouter = (token) => {
   })
 }
 
-export function buildRouters(routerData) {
+export function buildRouters (routerData) {
   routerData.forEach(route => {
-    route.component = route.url.replace("http://","").replaceAll(".","").replaceAll("https://","").replaceAll('/','')
+    route.component = route.url.replace('http://', '').replaceAll('.', '').replaceAll('https://', '').replaceAll('/', '')
     route.path = route.url
     route.hidden = false
     if (route.children && route.children.length > 0) {
       return buildRouters(route.children)
     }
   })
-  return routerData;
+  return routerData
 }
 
 // 动态路由遍历，验证是否具备权限

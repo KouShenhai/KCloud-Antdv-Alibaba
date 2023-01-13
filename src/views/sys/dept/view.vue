@@ -68,7 +68,7 @@
 
 <script>
 
-import { queryDept,delDept } from '@/api/sys/dept'
+import { queryDept, delDept } from '@/api/sys/dept'
 import CreateForm from './modules/CreateForm'
 import { tableMixin } from '@/store/table-mixin'
 
@@ -87,11 +87,11 @@ export default {
       // 状态数据字典
       statusOptions: [
         {
-          label: "正常",
+          label: '正常',
           value: 0
         },
         {
-          label: "停用",
+          label: '停用',
           value: 1
         }
       ],
@@ -138,7 +138,7 @@ export default {
       )
     },
     /** 查询菜单下拉树结构 */
-    getTreeSelect (row) {
+    getTreeSelect () {
       const query = { name: '' }
       queryDept(query).then(response => {
         this.deptOptions = []
@@ -160,7 +160,7 @@ export default {
     },
     /** 删除按钮操作 */
     handleDelete (row) {
-      let that = this
+      const that = this
       const deptId = row.id
       this.$confirm({
         title: '确认删除所选中数据?',

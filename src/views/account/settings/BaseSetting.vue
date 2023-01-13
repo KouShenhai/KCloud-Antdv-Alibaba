@@ -43,9 +43,8 @@
 </template>
 
 <script>
-import { getUserInfo, updateInfo,uploadAvatar } from '@/api/sys/user'
-import { mapGetters } from 'vuex'
-
+import { getUserInfo, updateInfo, uploadAvatar } from '@/api/sys/user'
+import { mapActions, mapGetters } from 'vuex'
 export default {
   name: 'BaseSettings',
   components: {
@@ -88,14 +87,18 @@ export default {
     this.getUser()
   },
   methods: {
-    uploadImg(data) {
-      const formData = new FormData()
-      formData.append('file', data.file)
-      uploadAvatar(formData).then(response => {
-        this.user.imgUrl = response.data.url
+    ...mapActions(['GetMD5']),
+    uploadImg (data) {
+      this.GetMD5(data.file).then(result => {
+        const formData = new FormData()
+        formData.append('file', data.file)
+        formData.append('md5', result)
+        uploadAvatar(formData).then(response => {
+          this.user.imgUrl = response.data.url
+        })
       })
     },
-    beforeUpload() {
+    beforeUpload () {
       return false
     },
     getUser () {

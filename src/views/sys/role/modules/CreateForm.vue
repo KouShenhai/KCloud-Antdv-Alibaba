@@ -66,7 +66,7 @@
 
 import { getRole, addRole, updateRole } from '@/api/sys/role'
 import { treeSelect as menuTreeSelect, roleMenuTreeSelect } from '@/api/sys/menu'
-import {treeSelect as deptTreeSelect,roleDeptTreeSelect} from '@/api/sys/dept'
+import { treeSelect as deptTreeSelect, roleDeptTreeSelect } from '@/api/sys/dept'
 export default {
   name: 'CreateForm',
   props: {
@@ -98,7 +98,7 @@ export default {
         sort: 0,
         menuIds: [],
         menuCheckStrictly: false,
-        deptCheckStrictly: true
+        deptCheckStrictly: false
       },
       open: false,
       rules: {
@@ -114,7 +114,7 @@ export default {
         children: 'children',
         title: 'name',
         key: 'id'
-      },
+      }
     }
   },
   filters: {
@@ -329,7 +329,7 @@ export default {
         sort: 1,
         menuIds: [],
         menuCheckStrictly: false,
-        deptCheckStrictly: true
+        deptCheckStrictly: false
       }
     },
      /** 新增按钮操作 */
@@ -354,7 +354,7 @@ export default {
       getRole(roleId).then(response => {
         this.form = response.data
         this.form.menuCheckStrictly = false
-        this.form.deptCheckStrictly = true
+        this.form.deptCheckStrictly = false
         this.open = true
         this.$nextTick(() => {
           roleMenu.then(res => {

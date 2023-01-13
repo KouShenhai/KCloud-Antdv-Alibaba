@@ -6,7 +6,7 @@
       <a href="#" target="_blank">条款</a>
     </template>
     <template v-slot:copyright>
-      Copyright &copy; 2022 <a href="#" target="_blank">LaoKou-Antdv</a><br/>
+      Copyright &copy; 2022 <a href="#" target="_blank">KCloud-Antdv-Alibaba</a><br/>
     </template>
   </global-footer>
 </template>

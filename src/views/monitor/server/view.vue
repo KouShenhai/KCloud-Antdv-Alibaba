@@ -277,7 +277,7 @@ export default {
               jvm: serverData.jvm.usage
             }
           ]
-          this.sysData = serverData.sysFiles
+          this.sysData = serverData.files
           setTimeout(() => {
             this.loading = false
           }, 500)

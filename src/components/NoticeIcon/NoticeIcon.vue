@@ -12,26 +12,26 @@
     >
       <template slot="content">
         <a-spin :spinning="loading">
-          <a-tabs v-model="noticeType" @change="changeType">
-            <a-tab-pane :key="noticeType" :tab="noticeType">
+          <a-tabs v-model="queryParam.type" @change="changeType">
+            <a-tab-pane v-for="d in typeOptions" :key="d.value" :tab="d.label">
               <a-list style="max-height: 200px; overflow:auto;">
-            <div
-              v-if="showLoadingMore"
-              slot="loadMore"
-              :style="{ textAlign: 'center', marginTop: '12px', height: '32px', lineHeight: '32px' }">
-              <a-spin v-if="loadingMore" />
-              <a-button v-else @click="onLoadMore">
-                查看更多
-              </a-button>
-            </div>
-            <a-list-item v-for="(item, index) in list" :key="index">
-              <a-list-item-meta :description="item.createDate">
-                <a slot="title" @click="$refs.noticeDetail.getNotice(item)">
-                  <ellipsis :length="16" tooltip>{{ item.title }}</ellipsis>
-                </a>
-              </a-list-item-meta>
-            </a-list-item>
-            </a-list>
+                <div
+                  v-if="showLoadingMore"
+                  slot="loadMore"
+                  :style="{ textAlign: 'center', marginTop: '12px', height: '32px', lineHeight: '32px' }">
+                  <a-spin v-if="loadingMore" />
+                  <a-button v-else @click="onLoadMore">
+                    查看更多
+                  </a-button>
+                </div>
+                <a-list-item v-for="(item, index) in list" :key="index">
+                  <a-list-item-meta :description="item.createDate">
+                    <a slot="title" @click="$refs.noticeDetail.getNotice(item)">
+                      <ellipsis :length="16" tooltip>{{ item.title }}</ellipsis>
+                    </a>
+                  </a-list-item-meta>
+                </a-list-item>
+              </a-list>
             </a-tab-pane>
           </a-tabs>
         </a-spin>
@@ -47,10 +47,10 @@
 </template>
 
 <script>
-import { listUnRead,unReadCount } from '@/api/sys/message'
+import { listUnRead, unReadCount } from '@/api/sys/message'
 import Ellipsis from '@/components/Ellipsis'
 import NoticeDetail from './NoticeDetail'
-import {socketApi} from '@/api/sys/socket'
+import { socketApi } from '@/api/sys/socket'
 import { mapGetters } from 'vuex'
 export default {
   name: 'HeaderNotice',
@@ -67,20 +67,29 @@ export default {
       visible: false,
       queryParam: {
         pageNum: 1,
-        pageSize: 5
+        pageSize: 5,
+        type: 0
       },
       list: [],
-      noticeType:"消息通知"
+      typeOptions: [
+        {
+          label: '通知',
+          value: 0
+        },
+        {
+          label: '提醒',
+          value: 1
+        }]
     }
   },
-  mounted() {
+  mounted () {
     this.getUnReadCount()
     this.connectWebsocket()
   },
   computed: {
   ...mapGetters([
       'id'
-    ]),
+    ])
   },
   methods: {
     getList () {
@@ -107,13 +116,14 @@ export default {
     resetQuery () {
       this.queryParam = {
         pageNum: 1,
-        pageSize: 5
+        pageSize: 5,
+        type: 0
       }
       this.list = []
     },
     changeType (key) {
       this.resetQuery()
-      this.queryParam.noticeType = key
+      this.queryParam.type = key
       this.getList()
     },
     onLoadMore () {
@@ -122,48 +132,47 @@ export default {
       this.getList()
       this.loadingMore = false
     },
-    getUnReadCount() {
+    getUnReadCount () {
       unReadCount().then(response => {
           this.count = response.data
         }
       )
     },
-    connectWebsocket() {
-      let websocket;
-      if (typeof WebSocket === "undefined") {
-        console.log("您的浏览器不支持WebSocket");
-        return;
+    connectWebsocket () {
+      let websocket
+      if (typeof WebSocket === 'undefined') {
+        console.log('您的浏览器不支持WebSocket')
       } else {
-        let gateway = "192.168.62.1:5555"
-        let protocol = "ws";
-        let url = "";
-        if (window.location.protocol === "https:") {
-          protocol = "wss";
+        let gateway = '192.168.62.1:5555'
+        let protocol = 'ws'
+        let url = ''
+        if (window.location.protocol === 'https:') {
+          protocol = 'wss'
         }
         if (process.env.NODE_ENV === 'production') {
           gateway = '175.178.69.253:5555'
         }
-        url = `${protocol}://` + gateway + socketApi.URI + this.id;
+        url = `${protocol}://` + gateway + socketApi.URI + this.id
         // 打开一个websocket
-        websocket = new WebSocket(url);
+        websocket = new WebSocket(url)
         // 建立连接
         websocket.onopen = () => {
           // 发送数据
-          console.log("websocket建立连接");
-        };
+          console.log('websocket建立连接')
+        }
         // 客户端接收服务端返回的数据
         websocket.onmessage = evt => {
-          //动态更新通知数
-          this.getUnReadCount();
-        };
+          // 动态更新通知数
+          this.getUnReadCount()
+        }
         // 发生错误时
         websocket.onerror = evt => {
-          console.log("websocket错误：", evt);
-        };
+          console.log('websocket错误：', evt)
+        }
         // 关闭连接
         websocket.onclose = evt => {
-          console.log("websocket关闭：", evt);
-        };
+          console.log('websocket关闭：', evt)
+        }
       }
     }
   }

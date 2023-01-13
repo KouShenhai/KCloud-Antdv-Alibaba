@@ -123,13 +123,11 @@ export function parseStrEmpty (str) {
  * @param {*} data 数据源
  * @param {*} id id字段 默认 'id'
  * @param {*} pid 父节点字段 默认 'pid'
- * @param {*} children 孩子节点字段 默认 'children'
  * @param {*} rootId 根Id 默认 0
  */
-export function handleTree (data, id, pid, children, rootId) {
+export function handleTree (data, id, pid, rootId) {
 	id = id || 'id'
 	pid = pid || 'pid'
-	children = children || 'children'
 	rootId = rootId || Math.min.apply(Math, data.map(item => { return item[pid] })) || '0'
 	// 对源数据深度克隆
 	const cloneData = JSON.parse(JSON.stringify(data))

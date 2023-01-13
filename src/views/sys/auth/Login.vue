@@ -14,13 +14,19 @@
       <a-row :gutter="16">
         <a-col class="gutter-row" :span="16">
           <a-form-model-item prop="code">
-            <a-input v-model="form.captcha" allow-clear size="large" type="text" autocomplete="off" placeholder="请输入验证码">
+            <a-input
+              v-model="form.captcha"
+              allow-clear
+              size="large"
+              type="text"
+              autocomplete="off"
+              placeholder="请输入验证码">
               <a-icon slot="prefix" type="security-scan" :style="{ color: 'rgba(0,0,0,.25)' }"/>
             </a-input>
           </a-form-model-item>
         </a-col>
         <a-col class="gutter-row" :span="8">
-          <img class="getCaptcha" :src="codeUrl" @click="getCode">
+          <img alt="验证码" class="getCaptcha" :src="codeUrl" @click="getCode">
         </a-col>
       </a-row>
       <a-form-item>
@@ -34,10 +40,6 @@
           @click="handleSubmit"
         >确定</a-button>
       </a-form-item>
-      <div class="user-login-other">
-        <a href="http://175.178.69.253/oauth2/loading.html" class="dd">单点登录</a>
-        <a href="https://openauth.alipay.com/oauth2/publicAppAuthorize.htm?app_id=2019121269782969&scope=auth_user&redirect_uri=http://175.178.69.253/laokou/auth/sys/auth/api/zfbLogin" class="zfb">支付宝登录</a>
-      </div>
     </a-form-model>
   </div>
 </template>
@@ -45,10 +47,10 @@
 <script>
 import { mapActions } from 'vuex'
 import { timeFix } from '@/utils/util'
-import { userApi } from '@/api/login'
+import { captcha } from '@/api/login'
 import { JSEncrypt } from 'jsencrypt'
 export default {
-  name: "Login",
+  name: 'Login',
   components: {
   },
   data () {
@@ -59,7 +61,7 @@ export default {
         username: '',
         password: '',
         captcha: '',
-        uuid: '',
+        uuid: ''
       },
       rules: {
         username: [{ required: true, message: '请输入账号', trigger: 'blur' }],
@@ -72,51 +74,35 @@ export default {
   created () {
 
   },
-  mounted() {
-    this.checkLogin()
+  mounted () {
+    this.requestFailed()
   },
   methods: {
-    checkLogin() {
-      let queryAttr = window.location.search
-      let notLogin = true
-      if (queryAttr.length > 0) {
-        queryAttr = queryAttr.substring(1)
-        let data = queryAttr.split("&")
-        for (let i = 0; i < data.length; i++) {
-          let queryData = data[i].split("=")
-          if (queryData[0] == "access_token") {
-            notLogin = false
-            this.SSOLogin(queryData[1])
-            this.loginSuccess()
-          }
-        }
-      }
-      if (notLogin) {
-        this.requestFailed()
-      }
-    },
-    getUuid() {
-      return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g,'x' ? (Math.random() * 16 | 0) : ('r&0x3' | '0x8')).toString(16);
+    getUuid () {
+      // eslint-disable-next-line no-constant-condition
+      return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, 'x' ? (Math.random() * 16 | 0) : ('r&0x3' | '0x8')).toString(16)
     },
     getCode () {
-      this.form.uuid = this.getUuid();
-      this.codeUrl = process.env.VUE_APP_BASE_API + userApi.Captcha + '?uuid=' + this.form.uuid;
+      this.form.uuid = this.getUuid()
+      captcha(this.form.uuid).then(res => {
+        this.codeUrl = res.data
+      })
     },
-    ...mapActions(['Login', 'Logout', 'SSOLogin']),
+    ...mapActions(['Login', 'Logout']),
     handleSubmit () {
       this.logining = true
       this.$refs.form.validate(valid => {
         if (valid) {
           const encrypt = new JSEncrypt()
           encrypt.setPublicKey(this.publicKey)
-          const username = encrypt.encrypt(this.form.username)
-          const password = encrypt.encrypt(this.form.password)
+          const username = encodeURIComponent(encrypt.encrypt(this.form.username))
+          const password = encodeURIComponent(encrypt.encrypt(this.form.password))
           const uuid = this.form.uuid
           const captcha = this.form.captcha
-          const params = {username:username,password:password,captcha:captcha,uuid:uuid}
+          const params = { username: username, password: password, captcha: captcha, uuid: uuid, grant_type: 'password' }
           this.Login(params)
-            .then((res) => this.loginSuccess())
-            .catch(err => this.requestFailed())
+            .then(() => this.loginSuccess())
+            .catch(() => this.requestFailed())
             .finally(() => {
               this.logining = false
             })

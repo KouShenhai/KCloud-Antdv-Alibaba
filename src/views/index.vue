@@ -9,7 +9,6 @@
           <div class="content-title">
             {{ timeFix }}，{{ nickname }}<span class="welcome-text"></span>
           </div>
-          <span v-for="(w, index) in roles" :key="index">{{ w.name }}<a-divider type="vertical" v-if="index != roles.length - 1"/></span>
         </div>
       </div>
     </template>
@@ -21,7 +20,7 @@
             :bordered="true"
             title="系统架构图"
             :body-style="{ padding: 0 }">
-            <img src="../../public/老寇云平台架构图.png" style="width: 100%;height: 100%;"/></a-card>
+            <img src="../../public/老寇云平台架构图-阿里巴巴.png" style="width: 100%;height: 100%;"/></a-card>
         </a-col>
       </a-row>
     </div>
@@ -38,7 +37,6 @@ export default {
   },
   data () {
     return {
-      roleNames:[],
       timeFix: timeFix()
     }
   },
@@ -46,15 +44,15 @@ export default {
     ...mapGetters([
       'avatar',
       'nickname',
-      'roles'
+      'deptIds'
     ]),
-    prop() {
+    prop () {
       return {
         subfield: false, // 单双栏模式
-        defaultOpen: "preview", //edit： 默认展示编辑区域 ， preview： 默认展示预览区域
+        defaultOpen: 'preview', // edit： 默认展示编辑区域 ， preview： 默认展示预览区域
         editable: false,
         toolbarsFlag: false,
-        scrollStyle: true,
+        scrollStyle: true
       }
     }
   },
@@ -66,7 +64,7 @@ export default {
   methods: {
     onSponsorTabChange (key, type) {
       this[type] = key
-    },
+    }
   }
 }
 </script>

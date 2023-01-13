@@ -8,13 +8,19 @@
         <a-input v-model="form.title" placeholder="请输入标题" />
       </a-form-model-item>
       <a-form-model-item label="资源">
-        <a-input v-model="form.uri" placeholder="请上传资源" style="display: none" />
-        <a-upload name="file"  @change="uploadFile" accept=".mp4,.MP4,.AVI,.mov,.rmvb,.rm,.FLV,.mp4,.3GP,.flv" :before-upload="beforeUpload">
+        <a-input v-model="form.url" placeholder="请上传资源" style="display: none" />
+        <a-upload name="file" @change="uploadFile" accept=".mp4,.MP4,.AVI,.mov,.rmvb,.rm,.FLV,.mp4,.3GP,.flv" :before-upload="beforeUpload">
           <a-button :disabled="disabled">
             上传视频
           </a-button>
         </a-upload>
-        <video v-show="display" :src='form.uri' loop='loop' width='200' height='100' controls='controls'><source :src='form.uri' type='video/mp4'><object :data='form.uri' width='200' height='100'><embed :src='form.uri' width='200' height='100' /></object></video>
+        <video
+          v-show="display"
+          :src="form.url"
+          loop="loop"
+          width="200"
+          height="100"
+          controls="controls"><source :src="form.url" type="video/mp4"><object :data="form.url" width="200" height="100"><embed :src="form.url" width="200" height="100" /></object></video>
       </a-form-model-item>
       <a-form-model-item label="标签" prop="tags">
         <template v-for="(tag, index) in tags">
@@ -59,7 +65,8 @@
 
 <script>
 
-  import { getVideo, addVideo, updateVideo,uploadVideo,uploadFile } from '@/api/sys/video'
+  import { getVideo, addVideo, updateVideo, uploadVideo } from '@/api/sys/video'
+  import { mapActions } from 'vuex'
 
   export default {
     name: 'CreateForm',
@@ -76,19 +83,18 @@
         form: {
           id: undefined,
           title: undefined,
-          uri: undefined,
-          md5: undefined,
+          url: undefined,
           tags: undefined,
-          code:"video",
-          remark:undefined,
-          processInstanceId:undefined
+          code: 'video',
+          remark: undefined,
+          processInstanceId: undefined
         },
-        disabled:false,
+        disabled: false,
         open: false,
         display: false,
         rules: {
           title: [{ required: true, message: '标题不能为空', trigger: 'blur' }],
-          remark: [{ required: true, message: '备注不能为空', trigger: 'blur' }],
+          remark: [{ required: true, message: '备注不能为空', trigger: 'blur' }]
         }
       }
     },
@@ -143,39 +149,33 @@
         this.form = {
           id: undefined,
           title: undefined,
-          uri: undefined,
-          md5: undefined,
+          url: undefined,
           tags: undefined,
-          code:"video",
+          code: 'video',
           remark: undefined,
-          processInstanceId:undefined
+          processInstanceId: undefined
         }
       },
-      uploadFile(data) {
+      ...mapActions(['GetMD5']),
+      uploadFile (data) {
         if (data.fileList.length > 0) {
           this.disabled = true
-          const formData = new FormData()
-          formData.append('file', data.file)
-          uploadVideo(formData).then(response => {
-            this.form.uri = response.data.url
-            this.form.md5 = response.data.md5
-            if (this.form.uri == null) {
-              uploadFile(formData).then(response => {
-                this.form.uri = response.data.url
-                this.display = true
-              })
-            } else {
+          this.GetMD5(data.file).then(result => {
+            const formData = new FormData()
+            formData.append('file', data.file)
+            formData.append('md5', result)
+            uploadVideo(formData).then(response => {
+              this.form.url = response.data.url
               this.display = true
-            }
+            })
           })
         } else {
           this.display = false
           this.disabled = false
-          this.form.uri = undefined
-          this.form.md5 = undefined
+          this.form.url = undefined
         }
       },
-      beforeUpload() {
+      beforeUpload () {
         return false
       },
       /** 新增按钮操作 */
@@ -191,11 +191,10 @@
         const id = row ? row.id : ids
         getVideo(id).then(response => {
           this.form.id = response.data.id
-          this.tags = response.data.tags.split(",")
-          this.form.uri = response.data.uri
-          this.form.md5 = response.data.md5
+          this.tags = response.data.tags.split(',')
+          this.form.url = response.data.url
           this.form.title = response.data.title
-          this.form.code = "video"
+          this.form.code = 'video'
           this.display = true
           this.form.processInstanceId = response.data.processInstanceId
           this.form.remark = response.data.remark
@@ -208,7 +207,7 @@
         this.$refs.form.validate(valid => {
           if (valid) {
             this.submitLoading = true
-            this.form.tags = this.tags.join(",")
+            this.form.tags = this.tags.join(',')
             if (this.form.id !== undefined) {
               updateVideo(this.form).then(response => {
                 this.$message.success(

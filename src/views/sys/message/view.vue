@@ -97,7 +97,7 @@
 
 <script>
 
-import { listMessage,getMessageById } from '@/api/sys/message'
+import { listMessage, getMessageById } from '@/api/sys/message'
 import { tableMixin } from '@/store/table-mixin'
 export default {
   name: 'Notice',
@@ -163,20 +163,20 @@ export default {
     this.getList()
   },
   computed: {
-    prop() {
+    prop () {
       return {
         subfield: false, // 单双栏模式
-        defaultOpen: "preview", //edit： 默认展示编辑区域 ， preview： 默认展示预览区域
+        defaultOpen: 'preview', // edit： 默认展示编辑区域 ， preview： 默认展示预览区域
         editable: false,
         toolbarsFlag: false,
-        scrollStyle: true,
+        scrollStyle: true
       }
     }
   },
   watch: {
   },
   methods: {
-    getMessage(row) {
+    getMessage (row) {
       getMessageById(row.id).then(response => {
         this.form.content = response.data.content
         this.form.title = response.data.title
@@ -199,11 +199,11 @@ export default {
         }
       )
     },
-    typeFormat(row) {
-      if (row.type == 1) {
-        return "提醒"
+    typeFormat (row) {
+      if (row.type === 1) {
+        return '提醒'
       }
-      return "通知"
+      return '通知'
     },
     /** 搜索按钮操作 */
     handleQuery () {

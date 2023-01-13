@@ -4,7 +4,7 @@ import storage from 'store'
 import notification from 'ant-design-vue/es/notification'
 import message from 'ant-design-vue/es/message'
 import { VueAxios } from './axios'
-import { ACCESS_TOKEN } from '@/store/mutation-types'
+import { ACCESS_TOKEN, USER_ID, USER_NAME } from '@/store/mutation-types'
 import errorCode from '@/utils/errorCode'
 import qs from 'qs'
 import { blobValidate } from '@/utils/laokou'
@@ -22,7 +22,6 @@ const request = axios.create({
 
 // 异常拦截处理器
 const errorHandler = (error) => {
-  console.log('err,' + error)
     let { message } = error
     if (message === 'Network Error') {
       message = '后端接口连接异常'
@@ -34,17 +33,22 @@ const errorHandler = (error) => {
     notification.error({
       message: message,
       description: ''
-    },5000)
+    }, 5000)
     return Promise.reject(error)
 }
 
 // request interceptor
 request.interceptors.request.use(config => {
   const token = storage.get(ACCESS_TOKEN)
+  const userId = storage.get(USER_ID)
+  const username = storage.get(USER_NAME)
   // 如果 token 存在
   // 让每个请求携带自定义 token 请根据实际情况自行修改
   if (token) {
-    config.headers['Authorization'] = token // 让每个请求携带自定义token 请根据实际情况自行修改
+    config.headers['Authorization'] = 'Bearer ' + token // 让每个请求携带自定义token 请根据实际情况自行修改
+    config.headers['gray'] = 'true'
+    config.headers['userId'] = userId
+    config.headers['username'] = username
     // config.headers['accessAccess-Token'] = token
   }
   // 处理params参数
@@ -68,7 +72,7 @@ request.interceptors.response.use((res) => {
   if (res.request.responseType === 'blob' || res.request.responseType === 'arraybuffer') {
     return res.data
   }
-  if (code === 401) {
+  if (code === 401 || code === 10021) {
     if (!isReloginShow) {
       isReloginShow = true
       notification.open({

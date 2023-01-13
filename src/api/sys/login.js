@@ -8,3 +8,12 @@ export function list (query) {
     data: query
   })
 }
+
+export function exportList (query) {
+  return request({
+    url: '/admin/sys/log/api/login/export',
+    method: 'post',
+    data: query,
+    responseType: 'blob'
+  })
+}

@@ -21,6 +21,7 @@
               <span class="table-page-search-submitButtons">
                 <a-button type="primary" @click="handleQuery"><a-icon type="search" />查询</a-button>
                 <a-button style="margin-left: 8px" @click="resetQuery"><a-icon type="redo" />重置</a-button>
+                <a-button :loading="exportLoading" type="danger" style="margin-left: 8px" @click="exportList"><a-icon type="export" />导出</a-button>
               </span>
             </a-col>
           </a-row>
@@ -59,8 +60,9 @@
 
 <script>
 
-import { list} from '@/api/sys/operate'
+import { list, exportList } from '@/api/sys/operate'
 import { tableMixin } from '@/store/table-mixin'
+import moment from 'moment'
 export default {
   name: 'Operate',
   components: {
@@ -76,13 +78,14 @@ export default {
       // 非多个禁用
       multiple: true,
       total: 0,
+      exportLoading: false,
       // 状态数据字典
       statusOptions: [
         {
-          label: '成功',value: 0
+          label: '成功', value: 0
         },
         {
-          label: '失败',value: 1
+          label: '失败', value: 1
         }
       ],
       typeOptions: [],
@@ -119,7 +122,7 @@ export default {
           title: '请求地址',
           dataIndex: 'requestUri',
           align: 'center',
-          ellipsis: true,
+          ellipsis: true
         },
         {
           title: '主机',
@@ -166,7 +169,7 @@ export default {
           title: '操作时间',
           dataIndex: 'createDate',
           align: 'center',
-          width: '12%',
+          width: '12%'
         }
       ]
     }
@@ -187,6 +190,26 @@ export default {
       this.queryParam.isAsc = sort.isAsc
       this.getList()
     },
+    exportList () {
+      this.exportLoading = true
+      exportList(this.queryParam).then(res => {
+        const filename = '操作日志_' + moment(new Date()).format('YYYYMMDDHHmmss') + '1.xlsx'
+        const url = window.URL.createObjectURL(res) // 创建下载链接
+        const link = document.createElement('a') // 赋值给a标签的href属性
+        link.style.display = 'none'
+        link.href = url
+        link.setAttribute('download', filename)
+        document.body.appendChild(link) // 将a标签挂载上去
+        link.click() // a标签click事件
+        document.body.removeChild(link) // 移除a标签
+        window.URL.revokeObjectURL(url) // 销毁下载链接
+        this.exportLoading = false
+        this.$message.success(
+          '导出成功',
+          3
+        )
+      })
+    },
     /** 查询登录日志列表 */
     getList () {
       this.loading = true
@@ -198,7 +221,7 @@ export default {
       )
     },
     statusFormat (row, column) {
-      if(row.requestStatus == 0) {
+      if (row.requestStatus === 0) {
         return '成功'
       }
       return '失败'

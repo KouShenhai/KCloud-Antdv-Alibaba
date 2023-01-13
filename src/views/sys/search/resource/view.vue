@@ -1,20 +1,20 @@
 <template>
   <div class="table-page-search-wrapper">
     <div v-hasPermi="['sys:search:resource:query']" >
-      <a-input v-model="keyword" v-on:keyup.enter="searchResource()" placeholder="请输入搜索内容" allow-clear >
+      <a-input v-model="keyword" @keyup.enter="searchResource()" placeholder="请输入搜索内容" allow-clear >
         <a-icon slot="prefix" type="search" :style="{ color: 'rgba(0,0,0,.25)' }"/>
       </a-input>
     </div>
     <br/>
     <div v-if="searchWord != ''">
-      <span style="font-size: 14px;font-weight: bolder;">搜索 <span style='color:red;'>{{searchWord}}</span> 找到 <span style='color:red;'>{{total}}</span> 个相关内容</span>
+      <span style="font-size: 14px;font-weight: bolder;">搜索 <span style="color:red;">{{ searchWord }}</span> 找到 <span style="color:red;">{{ total }}</span> 个相关内容</span>
     </div><br/>
     <div v-for="(item, i) in list" :key="i">
       <div style="font-size: 14px;font-weight: bolder;" v-html="item.title"/>
       <span style="font-size: 14px;" v-html="item.remark"/>
-      <router-link style="color: dodgerblue;" v-if="item.code == 'audio'" :to="{name: 'sysresourceaudioview', query: {id: item.id}}">查看详情</router-link>
-      <router-link style="color: dodgerblue" v-if="item.code == 'image'" :to="{name: 'sysresourceimageview', query: {id: item.id}}">查看详情</router-link>
-      <router-link style="color: dodgerblue" v-if="item.code == 'video'" :to="{name: 'sysresourcevideoview', query: {id: item.id}}">查看详情</router-link>
+      <router-link style="color: dodgerblue;" v-if="item.code == 'audio'" :to="{name: 'sysresourceaudioview', query: {id: item.id}}"> 查看详情</router-link>
+      <router-link style="color: dodgerblue" v-if="item.code == 'image'" :to="{name: 'sysresourceimageview', query: {id: item.id}}"> 查看详情</router-link>
+      <router-link style="color: dodgerblue" v-if="item.code == 'video'" :to="{name: 'sysresourcevideoview', query: {id: item.id}}"> 查看详情</router-link>
       <br/>
       <br/>
     </div>
@@ -23,20 +23,20 @@
 <script>
   import { searchResource } from '@/api/sys/search'
     export default {
-        name: "Search-Resource",
+        name: 'SearchResource',
       data () {
         return {
-          keyword: "",
+          keyword: '',
           total: 0,
-          searchWord: "",
+          searchWord: '',
           form: {
             pageNum: 1,
             pageSize: 10000,
             needPage: true,
-            orSearchList:[],
-            highlightFieldList: ["title","remark"],
+            orSearchList: [],
+            highlightFieldList: ['title', 'remark'],
             queryStringList: [],
-            indexNames: ["laokou_resource"]
+            indexNames: ['laokou_resource']
           },
           // 致谢项目
           list: []
@@ -53,9 +53,9 @@
       watch: {
       },
       methods: {
-          searchResource() {
-            let keyword = this.keyword;
-            if (keyword == null || keyword == '' || keyword == undefined) {
+          searchResource () {
+            const keyword = this.keyword
+            if (keyword == null || keyword === '' || keyword === undefined) {
               this.$message.error(
                 '请输入关键字',
                 3
@@ -63,8 +63,8 @@
               return
             }
             this.form.queryStringList = []
-            this.form.queryStringList.push({field: "remark", value: this.keyword});
-            this.form.queryStringList.push({field: "title", value: this.keyword});
+            this.form.queryStringList.push({ field: 'remark', value: this.keyword })
+            this.form.queryStringList.push({ field: 'title', value: this.keyword })
             searchResource(this.form).then(response => {
                 this.searchWord = keyword
                 this.list = response.data == null ? [] : response.data.records

@@ -61,8 +61,8 @@
             <a-icon type="delete" />
             删除
           </a>
-          <a-divider type="vertical"  v-hasPermi="['workflow:definition:image']"/>
-          <a @click="getDefinition(record)"  v-hasPermi="['workflow:definition:image']">
+          <a-divider type="vertical"  v-hasPermi="['workflow:definition:diagram']"/>
+          <a @click="getDefinition(record)"  v-hasPermi="['workflow:definition:diagram']">
             <a-icon type="eye" />
             查看
           </a>
@@ -97,7 +97,7 @@
 
 <script>
 
-import { pageDefinition, delDefinition,suspendDefinition,activateDefinition,startProcess } from '@/api/workflow/definition'
+import { pageDefinition, delDefinition, suspendDefinition, activateDefinition } from '@/api/workflow/definition'
 import CreateForm from './modules/CreateForm'
 import { tableMixin } from '@/store/table-mixin'
 import { ACCESS_TOKEN } from '@/store/mutation-types'
@@ -111,8 +111,8 @@ export default {
   data () {
     return {
       list: [],
-      flowUri: "",
-      visible:false,
+      flowUri: '',
+      visible: false,
       selectedRowKeys: [],
       selectedRows: [],
       // 高级搜索 展开/关闭
@@ -150,7 +150,7 @@ export default {
           dataIndex: 'operation',
           scopedSlots: { customRender: 'operation' },
           align: 'center',
-          width: '40%',
+          width: '40%'
         }
       ]
     }
@@ -165,7 +165,7 @@ export default {
   watch: {
   },
   methods: {
-    statusFormat(row) {
+    statusFormat (row) {
       if (row.suspended) {
         return '挂起'
       }
@@ -173,7 +173,7 @@ export default {
     },
     close () {
       this.visible = false
-      this.flowUri = ""
+      this.flowUri = ''
     },
     /** 查询流程定义列表 */
     getList () {
@@ -185,9 +185,9 @@ export default {
         }
       )
     },
-    getDefinition(row) {
+    getDefinition (row) {
       this.visible = true
-      this.flowUri = process.env.VUE_APP_BASE_API + "/admin/workflow/definition/api/image?definitionId=" + row.definitionId + "&Authorization=" + storage.get(ACCESS_TOKEN)
+      this.flowUri = process.env.VUE_APP_BASE_API + '/admin/workflow/definition/api/image?definitionId=' + row.definitionId + '&Authorization=Bearer ' + storage.get(ACCESS_TOKEN)
     },
     /** 搜索按钮操作 */
     handleQuery () {
@@ -204,7 +204,7 @@ export default {
       }
       this.handleQuery()
     },
-    suspendFlow(row) {
+    suspendFlow (row) {
       const that = this
       suspendDefinition(row.definitionId).then(response => {
         that.getList()
@@ -214,7 +214,7 @@ export default {
         )
       })
     },
-    activateFlow(row) {
+    activateFlow (row) {
       const that = this
       activateDefinition(row.definitionId).then(response => {
         that.getList()

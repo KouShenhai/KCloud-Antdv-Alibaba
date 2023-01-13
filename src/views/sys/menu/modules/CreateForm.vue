@@ -22,21 +22,6 @@
           <a-radio-button value="1">按钮</a-radio-button>
         </a-radio-group>
       </a-form-model-item>
-      <a-form-model-item label="请求方式" prop="method">
-        <a-radio-group v-model="form.method" button-style="solid">
-          <a-radio-button value="GET">GET</a-radio-button>
-          <a-radio-button value="POST">POST</a-radio-button>
-          <a-radio-button value="PUT">PUT</a-radio-button>
-          <a-radio-button value="DELETE">DELETE</a-radio-button>
-        </a-radio-group>
-      </a-form-model-item>
-      <a-form-model-item label="认证等级" prop="authLevel">
-        <a-radio-group v-model="form.authLevel" button-style="solid">
-          <a-radio-button value="0">权限认证</a-radio-button>
-          <a-radio-button value="1">登录认证</a-radio-button>
-          <a-radio-button value="2">无需认证</a-radio-button>
-        </a-radio-group>
-      </a-form-model-item>
       <a-form-model-item label="菜单图标" prop="icon">
         <a-space size="large">
           <a-icon :component="allIcon[form.icon + 'Icon']" v-if="form.icon && allIcon[form.icon + 'Icon']"/>
@@ -71,7 +56,7 @@
         </span>
         <a-input v-model="form.url" placeholder="请输入" />
       </a-form-model-item>
-      <a-form-model-item prop="permissions">
+      <a-form-model-item prop="permission">
         <span slot="label">
           权限标识
           <a-tooltip>
@@ -81,7 +66,7 @@
             <a-icon type="question-circle-o" />
           </a-tooltip>
         </span>
-        <a-input v-model="form.permissions" placeholder="请输入" :maxLength="100" />
+        <a-input v-model="form.permission" placeholder="请输入" :maxLength="100" />
       </a-form-model-item>
       <div class="bottom-control">
         <a-space>
@@ -129,13 +114,16 @@ export default {
         name: '',
         icon: '',
         type: 0,
-        sort: 1
+        sort: 1,
+        url: '',
+        permission: ''
       },
       open: false,
       rules: {
         name: [{ required: true, message: '菜单名称不能为空', trigger: 'blur' }],
         sort: [{ required: true, message: '菜单顺序不能为空', trigger: 'blur' }],
-        url: [{ required: true, message: '菜单路径不能为空', trigger: 'blur' }]
+        url: [{ required: true, message: '菜单路径不能为空', trigger: 'blur' }],
+        permission: [{ required: true, message: '权限标识不能为空', trigger: 'blur' }]
       }
     }
   },
@@ -148,12 +136,6 @@ export default {
   watch: {
   },
   methods: {
-    filterIcons () {
-      this.iconList = icons
-      if (this.name) {
-        this.iconList = this.iconList.filter(item => item.includes(this.name))
-      }
-    },
     onClose () {
       this.open = false
       this.iconVisible = false
@@ -176,7 +158,9 @@ export default {
         name: '',
         icon: '',
         type: 0,
-        sort: 1
+        sort: 1,
+        url: '',
+        permission: ''
       }
     },
      /** 新增按钮操作 */
@@ -197,8 +181,7 @@ export default {
       this.$emit('select-tree')
       getMenu(row.id).then(response => {
         this.form = response.data
-        this.form.type = "" + response.data.type
-        this.form.authLevel = "" + response.data.authLevel
+        this.form.type = '' + response.data.type
         this.open = true
         this.formTitle = '菜单修改'
       })

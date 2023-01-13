@@ -12,7 +12,7 @@ export function queryDept (query) {
 export function listDept () {
   return request({
     url: '/admin/sys/dept/api/list',
-    method: 'get',
+    method: 'get'
   })
 }
 

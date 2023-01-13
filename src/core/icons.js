@@ -63,7 +63,6 @@ import uploadIcon from '@/assets/icons/upload.svg?inline'
 import userIcon from '@/assets/icons/user.svg?inline'
 import validCodeIcon from '@/assets/icons/validCode.svg?inline'
 
-
 const allIcon = {
     bugIcon,
     buildIcon,

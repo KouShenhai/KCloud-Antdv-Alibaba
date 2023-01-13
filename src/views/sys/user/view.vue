@@ -104,7 +104,7 @@
 <script>
 
 import { listUser, delUser, changeUserStatus } from '@/api/sys/user'
-import { treeSelect } from "@/api/sys/dept"
+import { treeSelect } from '@/api/sys/dept'
 import ResetPassword from './modules/ResetPassword'
 import CreateForm from '@/views/sys/user/modules/CreateForm'
 import { tableMixin } from '@/store/table-mixin'
@@ -135,11 +135,11 @@ export default {
       }],
       statusOptions: [
         {
-          label: "正常",
+          label: '正常',
           value: 0
         },
         {
-          label: "停用",
+          label: '停用',
           value: 1
         }
       ],
@@ -203,8 +203,8 @@ export default {
         this.deptOptions = response.data.children
       })
     },
-    superAdminFormat(row) {
-      if (row.superAdmin == '1') {
+    superAdminFormat (row) {
+      if (row.superAdmin === '1') {
         return '超级管理员'
       }
       return ''
@@ -245,8 +245,8 @@ export default {
     },
     /* 用户状态修改 */
     confirmHandleStatus (row) {
-      const text = row.status == '0' ? '关闭' : '启用'
-      row.status = row.status == '0' ? '1' : '0'
+      const text = row.status === '0' ? '关闭' : '启用'
+      row.status = row.status === '0' ? '1' : '0'
       changeUserStatus(row)
       .then(() => {
         this.$message.success(

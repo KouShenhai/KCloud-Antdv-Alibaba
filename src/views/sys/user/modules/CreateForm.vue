@@ -28,17 +28,17 @@
           <a-radio-button v-for="(d, index) in statusOptions" :key="index" :value="d.value">{{ d.label }}</a-radio-button>
         </a-radio-group>
       </a-form-model-item>
-            <a-form-model-item label="角色" prop="roleIds">
-              <a-select
-                mode="multiple"
-                v-model="form.roleIds"
-                placeholder="请选择"
-              >
-                <a-select-option v-for="(d, index) in roleOptions" :key="index" :value="d.id">
-                  {{ d.name }}
-                </a-select-option>
-              </a-select>
-            </a-form-model-item>
+      <a-form-model-item label="角色" prop="roleIds">
+        <a-select
+          mode="multiple"
+          v-model="form.roleIds"
+          placeholder="请选择"
+        >
+          <a-select-option v-for="(d, index) in roleOptions" :key="index" :value="d.id">
+            {{ d.name }}
+          </a-select-option>
+        </a-select>
+      </a-form-model-item>
       <div class="bottom-control">
         <a-space>
           <a-button type="primary" :loading="submitLoading" @click="submitForm">
@@ -90,7 +90,7 @@
         // 表单参数
         form: {
           id: undefined,
-          deptId:"",
+          deptId: '',
           username: undefined,
           password: undefined,
           status: '0',
@@ -107,7 +107,7 @@
           ],
           deptId: [
             { required: true, message: '部门不为空', trigger: 'blur' }
-          ],
+          ]
         }
       }
     },
@@ -133,7 +133,7 @@
       reset () {
         this.form = {
           id: undefined,
-          deptId:"",
+          deptId: '',
           username: undefined,
           password: undefined,
           status: 0,
@@ -148,8 +148,8 @@
           const roles = []
           response.data.forEach(item => {
             roles.push({
-              id:item.id,
-              name:item.name
+              id: item.id,
+              name: item.name
             })
           })
           this.roleOptions = roles
@@ -168,8 +168,8 @@
           const roles = []
           response.data.forEach(item => {
             roles.push({
-              id:item.id,
-              name:item.name
+              id: item.id,
+              name: item.name
             })
           })
           this.roleOptions = roles

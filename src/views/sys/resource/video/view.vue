@@ -28,8 +28,14 @@
         <a-button type="primary" @click="$refs.createForm.handleAdd()" v-hasPermi="['sys:resource:video:insert']">
           <a-icon type="plus" />新增
         </a-button>
-        <a-button :loading="syncLoading" type="danger" @click="syncVideo()" v-hasPermi="['sys:resource:video:sync']">
-          <a-icon type="reload" />同步
+        <a-button :loading="deleteLoading" type="dashed" @click="deleteIndex()" v-hasPermi="['sys:resource:video:deleteIndex']">
+          <a-icon type="delete" />删除
+        </a-button>
+        <a-button :loading="createLoading" @click="createIndex()" v-hasPermi="['sys:resource:video:createIndex']">
+          <a-icon type="diff" />创建
+        </a-button>
+        <a-button :loading="syncLoading" type="danger" @click="syncIndex()" v-hasPermi="['sys:resource:video:syncIndex']">
+          <a-icon type="snippets" />同步
         </a-button>
       </div>
       <!-- 增加修改 -->
@@ -109,8 +115,14 @@
           {{ auditStatusFormat(record) }}
         </span>
       </a-table>
-      <img v-show="visible2" :src="diagramUri" style="width: 100%;height: 100%">
-      <video v-show="visible1" :src='videoUri' loop='loop' width='200' height='100' controls='controls'><source :src='videoUri' type='video/mp4'><object :data='videoUri' width='200' height='100'><embed :src='videoUri' width='200' height='100' /></object></video>
+      <img v-show="visible2" :src="diagramUrl" style="width: 100%;height: 100%">
+      <video
+        v-show="visible1"
+        :src="videoUrl"
+        loop="loop"
+        width="200"
+        height="100"
+        controls="controls"><source :src="videoUrl" type="video/mp4"><object :data="videoUrl" width="200" height="100"><embed :src="videoUrl" width="200" height="100" /></object></video>
     </a-modal>
   </page-header-wrapper>
 </template>
@@ -118,29 +130,31 @@
 <script>
   import { ACCESS_TOKEN } from '@/store/mutation-types'
   import storage from 'store'
-  import { listVideo, delVideo,getVideo,getAuditLog,syncVideo } from '@/api/sys/video'
+  import { listVideo, delVideo, getVideo, getAuditLog, syncIndex, createIndex, deleteIndex } from '@/api/sys/video'
   import CreateForm from './modules/CreateForm'
   import { tableMixin } from '@/store/table-mixin'
-  import {syncImage} from "@/api/sys/image";
+
   export default {
-    name: 'Resource-Video',
+    name: 'ResourceVideo',
     components: {
       CreateForm
     },
     mixins: [tableMixin],
     data () {
       return {
-        diagramUri: "",
-        videoTitle: "",
-        videoUri: "",
+        diagramUrl: '',
+        videoTitle: '',
+        videoUrl: '',
         list: [],
         selectedRowKeys: [],
         selectedRows: [],
         syncLoading: false,
+        deleteLoading: false,
+        createLoading: false,
         // 高级搜索 展开/关闭
         advanced: false,
-        visible1 : false,
-        visible2 : false,
+        visible1: false,
+        visible2: false,
         visible3: false,
         // 非单个禁用
         single: true,
@@ -150,7 +164,7 @@
         loading: false,
         refreshing: false,
         total: 0,
-        visible:false,
+        visible: false,
         // 状态数据字典
         statusOptions: [],
         // 日期范围
@@ -160,7 +174,7 @@
           pageSize: 10,
           title: undefined,
           code: 'video',
-          id: ""
+          id: ''
         },
         columns: [
           {
@@ -245,52 +259,72 @@
       }
     },
     methods: {
-      linkQuery() {
+      linkQuery () {
         const query = this.$route.query
-        if (JSON.stringify(query) != "{}") {
+        if (JSON.stringify(query) !== '{}') {
           this.queryParam.id = query.id
         }
         this.getList()
       },
-      syncVideo() {
+      syncIndex () {
         const that = this
-        that.loading = true
         that.syncLoading = true
-        syncVideo().then(response => {
-          that.loading = false
+        syncIndex().then(() => {
           that.syncLoading = false
           that.$message.success(
-            '同步成功',
+            '正在异步同步数据，详情请查看日志',
             3
           )
         })
       },
-      auditStatusFormat(res) {
-        if (res.auditStatus == 0) {
-          return "审批驳回"
-        } else if (res.auditStatus == 1) {
-          return "审批通过"
+      createIndex () {
+        const that = this
+        that.createLoading = true
+        createIndex().then(() => {
+          that.createLoading = false
+          that.$message.success(
+            '正在创建索引，详情请查看日志',
+            3
+          )
+        })
+      },
+      deleteIndex () {
+        const that = this
+        that.deleteLoading = true
+        deleteIndex().then(() => {
+          that.deleteLoading = false
+          that.$message.success(
+            '正在删除索引，详情请查看日志',
+            3
+          )
+        })
+      },
+      auditStatusFormat (res) {
+        if (res.auditStatus === 0) {
+          return '审批驳回'
+        } else if (res.auditStatus === 1) {
+          return '审批通过'
         }
       },
       // 关闭模态框
       close () {
         this.visible = false
-        this.diagramUri = ""
-        this.videoUri = ""
-        this.videoTitle = ""
+        this.diagramUrl = ''
+        this.videoUrl = ''
+        this.videoTitle = ''
         this.visible3 = false
         this.list1 = []
         this.visible1 = false
         this.visible2 = false
       },
-      handleQuery3(row) {
-        this.videoTitle = "审批日志"
+      handleQuery3 (row) {
+        this.videoTitle = '审批日志'
         this.visible = true
         this.visible2 = false
         this.visible1 = false
         this.visible3 = true
-        const resourceId = row.id
-        getAuditLog(resourceId).then(response => {
+        const businessId = row.id
+        getAuditLog(businessId).then(response => {
           this.list1 = response.data
         })
       },
@@ -304,37 +338,37 @@
           }
         )
       },
-      handleQuery1(row) {
+      handleQuery1 (row) {
         this.visible = true
         this.visible1 = true
         this.visible2 = false
         const id = row.id
         getVideo(id).then(response => {
-          this.videoUri = response.data.uri
+          this.videoUrl = response.data.url
           this.videoTitle = response.data.title
         })
       },
-      handleQuery2(row) {
+      handleQuery2 (row) {
         this.visible = true
         this.visible2 = true
         this.visible1 = false
-        this.videoTitle = "流程图"
-        this.diagramUri = process.env.VUE_APP_BASE_API + "/admin/sys/resource/video/api/diagram?processInstanceId=" + row.processInstanceId + "&Authorization=" + storage.get(ACCESS_TOKEN)
+        this.videoTitle = '流程图'
+        this.diagramUrl = process.env.VUE_APP_BASE_API + '/admin/sys/resource/video/api/diagram?processInstanceId=' + row.processInstanceId + '&Authorization=Bearer ' + storage.get(ACCESS_TOKEN)
       },
       /** 搜索按钮操作 */
       handleQuery () {
         this.queryParam.pageNum = 1
         this.getList()
       },
-      statusFormat(res) {
-        if (res.status == 0) {
-          return "待审批"
-        } else if (res.status == 1) {
-          return "审批中"
-        } else if (res.status == 2) {
-          return "审批拒绝"
+      statusFormat (res) {
+        if (res.status === 0) {
+          return '待审批'
+        } else if (res.status === 1) {
+          return '审批中'
+        } else if (res.status === 2) {
+          return '审批拒绝'
         }
-        return "审批通过"
+        return '审批通过'
       },
       /** 重置按钮操作 */
       resetQuery () {
@@ -344,7 +378,7 @@
           pageSize: 10,
           title: undefined,
           code: 'video',
-          id: ""
+          id: ''
         }
         this.handleQuery()
       },

@@ -9,7 +9,7 @@ export function pageDefinition (query) {
   })
 }
 
-//新增
+// 新增
 export function insertDefinition (data) {
   return request({
     url: '/admin/workflow/definition/api/insert',

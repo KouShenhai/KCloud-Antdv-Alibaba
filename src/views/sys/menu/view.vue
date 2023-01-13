@@ -44,9 +44,6 @@
           <a-icon :component="allIcon[text + 'Icon']" v-if="allIcon[text + 'Icon']"/>
           <a-icon :type="text" v-if="!allIcon[text + 'Icon']"/>
         </span>
-        <span slot="authLevel" slot-scope="text, record">
-          {{ authLevelFormat(record) }}
-        </span>
         <span slot="type" slot-scope="text, record">
           {{ typeFormat(record) }}
         </span>
@@ -90,7 +87,7 @@ export default {
       menuOptions: [],
       loading: false,
       queryParam: {
-        name: '',
+        name: ''
       },
       columns: [
         {
@@ -128,16 +125,10 @@ export default {
         },
         {
           title: '权限标识',
-          dataIndex: 'permissions',
+          dataIndex: 'permission',
           ellipsis: true,
           align: 'center',
           width: '20%'
-        },
-        {
-          title: '请求方式',
-          dataIndex: 'method',
-          align: 'center',
-          width: '10%'
         },
         {
           title: '菜单路径',
@@ -177,22 +168,12 @@ export default {
         }
       )
     },
-    authLevelFormat (row) {
-      //0：权限认证   1：登录认证    2：无需认证
-      if (row.authLevel == 0) {
-        return "权限认证"
-      } else if (row.authLevel == 1) {
-        return "登录认证"
-      } else {
-        return "无需认证"
-      }
-    },
     typeFormat (row) {
-      //0：菜单   1：按钮
-      if (row.type == 0) {
-        return "菜单"
+      // 0：菜单   1：按钮
+      if (row.type === 0) {
+        return '菜单'
       } else {
-        return "按钮"
+        return '按钮'
       }
     },
     /** 搜索按钮操作 */

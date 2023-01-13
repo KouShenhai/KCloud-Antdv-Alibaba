@@ -50,24 +50,30 @@ export function uploadVideo (data) {
   })
 }
 
-export function uploadFile (data) {
+export function getAuditLog (businessId) {
   return request({
-    url: '/admin/oss/api/upload',
-    method: 'post',
-    data: data
-  })
-}
-
-export function getAuditLog (resourceId) {
-  return request({
-    url: '/admin/sys/resource/video/api/auditLog?resourceId=' + resourceId,
+    url: '/admin/sys/resource/video/api/auditLog?businessId=' + businessId,
     method: 'get'
   })
 }
 
-export function syncVideo () {
+export function syncIndex () {
   return request({
-    url: '/admin/sys/resource/video/api/sync?code=video',
+    url: '/admin/sys/resource/video/api/syncIndex?code=video',
     method: 'post'
+  })
+}
+
+export function createIndex () {
+  return request({
+    url: '/admin/sys/resource/video/api/createIndex?code=video',
+    method: 'post'
+  })
+}
+
+export function deleteIndex () {
+  return request({
+    url: '/admin/sys/resource/video/api/deleteIndex?code=video',
+    method: 'delete'
   })
 }
