@@ -2,9 +2,9 @@
 
 ## 简介
 
-**KCloud-Antdv-Alibaba**，使用[KCloud-Platform-Tencent](https://gitee.com/laokouyun/KCloud-Platform-Tencent) 作为后端
+**KCloud-Antdv-Alibaba**，使用[KCloud-Platform-Alibaba](https://gitee.com/laokouyun/KCloud-Platform-Alibaba) 作为后端
 
-> KCloud-Platform-Tencent是基于SpringCloud，SpringSecurity，Mysql，Vue 的前后端分离权限管理系统。
+> KCloud-Platform-Alibaba是基于SpringCloud，SpringSecurity，Mysql，Vue 的前后端分离权限管理系统。
 >
 > 拥有用户管理、菜单管理、角色管理、操作日志、登录日志、服务监控、连接池监视等功能。
 

@@ -9,7 +9,7 @@
           </a>
         </div>
         <div class="desc">
-          KCloud-Platform-Tencent是基于SpringCloud，SpringSecurity，Mysql，Vue 的前后端分离权限管理系统
+          KCloud-Platform-Alibaba是基于SpringCloud，SpringSecurity，Mysql，Vue 的前后端分离权限管理系统
         </div>
       </div>
 
