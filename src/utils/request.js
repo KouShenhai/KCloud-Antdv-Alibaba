@@ -29,6 +29,8 @@ const errorHandler = (error) => {
       message = '系统接口请求超时'
     } else if (message.includes('Request failed with status code')) {
       message = '网络请求错误,请稍后再试'
+    } else if (message.includes('Request aborted')) {
+      message = '请求已中断，请刷新页面'
     }
     notification.error({
       message: message,
