@@ -57,23 +57,16 @@ export function getAuditLog (businessId) {
   })
 }
 
-export function syncIndex () {
+export function completeSyncIndex () {
   return request({
-    url: '/admin/sys/resource/video/api/syncIndex?code=video',
+    url: '/admin/sys/resource/video/api/complete/syncIndex',
     method: 'post'
   })
 }
 
-export function createIndex () {
+export function incrementSyncIndex () {
   return request({
-    url: '/admin/sys/resource/video/api/createIndex?code=video',
+    url: '/admin/sys/resource/video/api/increment/syncIndex',
     method: 'post'
-  })
-}
-
-export function deleteIndex () {
-  return request({
-    url: '/admin/sys/resource/video/api/deleteIndex?code=video',
-    method: 'delete'
   })
 }

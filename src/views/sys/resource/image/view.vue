@@ -28,14 +28,11 @@
         <a-button type="primary" @click="$refs.createForm.handleAdd()" v-hasPermi="['sys:resource:image:insert']">
           <a-icon type="plus" />新增
         </a-button>
-        <a-button :loading="deleteLoading" type="dashed" @click="deleteIndex()" v-hasPermi="['sys:resource:image:deleteIndex']">
-          <a-icon type="delete" />删除
+        <a-button :loading="incrementSyncLoading" @click="incrementSyncIndex()" v-hasPermi="['sys:resource:image:increment:syncIndex']">
+          <a-icon type="redo" />增量同步
         </a-button>
-        <a-button :loading="createLoading" @click="createIndex()" v-hasPermi="['sys:resource:image:createIndex']">
-          <a-icon type="diff" />创建
-        </a-button>
-        <a-button :loading="syncLoading" type="danger" @click="syncIndex()" v-hasPermi="['sys:resource:image:syncIndex']">
-          <a-icon type="snippets" />同步
+        <a-button :loading="completeSyncLoading" type="danger" @click="completeSyncIndex()" v-hasPermi="['sys:resource:image:complete:syncIndex']">
+          <a-icon type="undo" />全量同步
         </a-button>
       </div>
       <!-- 增加修改 -->
@@ -124,7 +121,7 @@
 <script>
   import { ACCESS_TOKEN } from '@/store/mutation-types'
   import storage from 'store'
-  import { listImage, delImage, getImage, getAuditLog, syncIndex, createIndex, deleteIndex } from '@/api/sys/image'
+  import { listImage, delImage, getImage, getAuditLog, completeSyncIndex, incrementSyncIndex } from '@/api/sys/image'
   import CreateForm from './modules/CreateForm'
   import { tableMixin } from '@/store/table-mixin'
   export default {
@@ -148,9 +145,8 @@
         visible3: false,
         // 非单个禁用
         single: true,
-        syncLoading: false,
-        createLoading: false,
-        deleteLoading: false,
+        completeSyncLoading: false,
+        incrementSyncLoading: false,
         // 非多个禁用
         multiple: true,
         ids: [],
@@ -259,35 +255,24 @@
         }
         this.getList()
       },
-      syncIndex () {
+      incrementSyncIndex () {
         const that = this
-        that.syncLoading = true
-        syncIndex().then(() => {
-          that.syncLoading = false
+        that.incrementSyncLoading = true
+        incrementSyncIndex().then(() => {
+          that.incrementSyncLoading = false
           that.$message.success(
-            '正在异步同步数据，详情请查看日志',
+            '正在增量同步图片',
             3
           )
         })
       },
-      createIndex () {
+      completeSyncIndex () {
         const that = this
-        that.createLoading = true
-        createIndex().then(() => {
-          that.createLoading = false
+        that.completeSyncLoading = true
+        completeSyncIndex().then(() => {
+          that.completeSyncLoading = false
           that.$message.success(
-            '正在创建索引，详情请查看日志',
-            3
-          )
-        })
-      },
-      deleteIndex () {
-        const that = this
-        that.deleteLoading = true
-        deleteIndex().then(() => {
-          that.deleteLoading = false
-          that.$message.success(
-            '正在删除索引，详情请查看日志',
+            '正在全量同步图片',
             3
           )
         })
