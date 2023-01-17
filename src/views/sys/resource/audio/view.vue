@@ -263,23 +263,27 @@ export default {
     incrementSyncIndex () {
       const that = this
       that.incrementSyncLoading = true
-      incrementSyncIndex().then(() => {
+      incrementSyncIndex().then(res => {
         that.incrementSyncLoading = false
-        that.$message.success(
-          '正在增量同步音频',
-          3
-        )
+        if (res.code !== 200) {
+          that.$message.error(
+            res.msg,
+            3
+          )
+        }
       })
     },
     completeSyncIndex () {
       const that = this
       that.completeSyncLoading = true
-      completeSyncIndex().then(() => {
+      completeSyncIndex().then(res => {
         that.completeSyncLoading = false
-        that.$message.success(
-          '正在全量同步音频',
-          3
-        )
+        if (res.code !== 200) {
+          that.$message.error(
+            res.msg,
+            3
+          )
+        }
       })
     },
     // 关闭模态框
