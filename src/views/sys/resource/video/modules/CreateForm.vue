@@ -18,7 +18,7 @@
           v-show="display"
           :src="form.url"
           loop="loop"
-          width="200"
+          width="250"
           height="100"
           controls="controls"><source :src="form.url" type="video/mp4"><object :data="form.url" width="200" height="100"><embed :src="form.url" width="200" height="100" /></object></video>
       </a-form-model-item>

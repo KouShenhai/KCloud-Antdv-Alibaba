@@ -22,7 +22,7 @@
 v-show="form2.code == 'video'"
 :src='form2.url'
 loop='loop'
-width='200'
+width='250'
 height='100'
 controls='controls'><source :src='form2.url' type='video/mp4'><object :data='form2.url' width='200' height='100'><embed :src='form2.url' width='200' height='100' /></object></video>
       </a-form-model-item>

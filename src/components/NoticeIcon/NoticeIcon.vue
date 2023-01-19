@@ -161,7 +161,7 @@ export default {
           console.log('websocket建立连接')
         }
         // 客户端接收服务端返回的数据
-        websocket.onmessage = evt => {
+        websocket.onmessage = () => {
           // 动态更新通知数
           this.getUnReadCount()
         }
