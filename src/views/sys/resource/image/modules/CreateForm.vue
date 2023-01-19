@@ -75,7 +75,7 @@
         tags: [],
         // 表单参数
         form: {
-          id: undefined,
+          resourceId: undefined,
           title: undefined,
           url: undefined,
           tags: undefined,
@@ -141,7 +141,7 @@
       reset () {
         this.tags = []
         this.form = {
-          id: undefined,
+          resourceId: undefined,
           title: undefined,
           url: undefined,
           tags: undefined,
@@ -175,7 +175,7 @@
       /** 新增按钮操作 */
       handleAdd () {
         this.reset()
-        this.form.id = undefined
+        this.form.resourceId = undefined
         this.open = true
         this.formTitle = '图片新增'
       },
@@ -184,7 +184,7 @@
         this.reset()
         const id = row ? row.id : ids
         getImage(id).then(response => {
-          this.form.id = response.data.id
+          this.form.resourceId = response.data.id
           this.tags = response.data.tags.split(',')
           this.form.url = response.data.url
           this.form.title = response.data.title
@@ -202,7 +202,7 @@
           if (valid) {
             this.submitLoading = true
             this.form.tags = this.tags.join(',')
-            if (this.form.id !== undefined) {
+            if (this.form.resourceId !== undefined) {
               updateImage(this.form).then(response => {
                 this.$message.success(
                   '修改成功',

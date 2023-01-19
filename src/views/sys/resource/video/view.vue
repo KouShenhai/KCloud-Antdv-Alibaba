@@ -180,12 +180,6 @@
             align: 'center'
           },
           {
-            title: '作者',
-            dataIndex: 'author',
-            ellipsis: true,
-            align: 'center'
-          },
-          {
             title: '状态',
             dataIndex: 'status',
             ellipsis: true,

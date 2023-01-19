@@ -15,16 +15,16 @@
       <a-form-model-item label="标题" prop="title">
         {{form2.title}}
       </a-form-model-item>
-      <a-form-model-item label="资源" prop="uri">
-        <audio v-show="form2.code == 'audio'" loop='loop' :src="form2.uri" controls='controls'><object :data="form2.uri" ><embed :src="form2.uri" /></object></audio>
-        <img v-show="form2.code == 'image'" :src="form2.uri" width="100" height="100"/>
+      <a-form-model-item label="资源" prop="url">
+        <audio v-show="form2.code == 'audio'" loop='loop' :src="form2.url" controls='controls'><object :data="form2.url" ><embed :src="form2.url" /></object></audio>
+        <img v-show="form2.code == 'image'" :src="form2.url" width="100" height="100"/>
         <video
 v-show="form2.code == 'video'"
-:src='form2.uri'
+:src='form2.url'
 loop='loop'
 width='200'
 height='100'
-controls='controls'><source :src='form2.uri' type='video/mp4'><object :data='form2.uri' width='200' height='100'><embed :src='form2.uri' width='200' height='100' /></object></video>
+controls='controls'><source :src='form2.url' type='video/mp4'><object :data='form2.url' width='200' height='100'><embed :src='form2.url' width='200' height='100' /></object></video>
       </a-form-model-item>
       <a-form-model-item label="标签" prop="tags">
         <template v-for="(tag) in form2.tags">
@@ -74,7 +74,7 @@ export default {
         id: '',
         code: '',
         title: '',
-        uri: '',
+        url: '',
         tags: [],
         remark: ''
       },
@@ -122,7 +122,7 @@ export default {
         this.form2.id = response.data.id
         this.form2.tags = response.data.tags.split(',')
         this.form2.remark = response.data.remark
-        this.form2.uri = response.data.uri
+        this.form2.url = response.data.url
       })
     },
     // 表单重置
@@ -131,7 +131,7 @@ export default {
         id: '',
         code: '',
         title: '',
-        uri: '',
+        url: '',
         tags: [],
         remark: ''
       }
