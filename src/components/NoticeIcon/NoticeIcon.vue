@@ -161,8 +161,12 @@ export default {
           console.log('websocket建立连接')
         }
         // 客户端接收服务端返回的数据
-        websocket.onmessage = () => {
+        websocket.onmessage = evt => {
           // 动态更新通知数
+          this.$notification.success({
+            message: '提示',
+            description: evt.data
+          })
           this.getUnReadCount()
         }
         // 发生错误时
