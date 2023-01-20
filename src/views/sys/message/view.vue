@@ -11,11 +11,6 @@
               </a-form-item>
             </a-col>
             <a-col :md="8" :sm="24">
-              <a-form-item label="创建者">
-                <a-input v-model="queryParam.username" placeholder="请输入" allow-clear/>
-              </a-form-item>
-            </a-col>
-            <a-col :md="8" :sm="24">
               <span class="table-page-search-submitButtons">
                 <a-button type="primary" @click="handleQuery"><a-icon type="search" />查询</a-button>
                 <a-button style="margin-left: 8px" @click="resetQuery"><a-icon type="redo" />重置</a-button>
@@ -120,8 +115,7 @@ export default {
       queryParam: {
         pageNum: 1,
         pageSize: 10,
-        title: undefined,
-        username: undefined
+        title: undefined
       },
       columns: [
         {
@@ -134,12 +128,6 @@ export default {
           title: '类型',
           dataIndex: 'type',
           scopedSlots: { customRender: 'type' },
-          align: 'center'
-        },
-        {
-          title: '创建者',
-          dataIndex: 'username',
-          ellipsis: true,
           align: 'center'
         },
         {
@@ -215,8 +203,7 @@ export default {
       this.queryParam = {
         pageNum: 1,
         pageSize: 10,
-        title: undefined,
-        username: undefined
+        title: undefined
       }
       this.handleQuery()
     },
