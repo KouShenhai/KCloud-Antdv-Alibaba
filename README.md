@@ -6,7 +6,7 @@
 
 > KCloud-Platform-Alibaba是基于SpringCloud，SpringSecurity，Mysql，Vue 的多租户SaaS系统。
 >
-> 拥有用户管理、菜单管理、角色管理、操作日志、登录日志、服务监控、连接池监视等功能。
+> 拥有用户管理、菜单管理、角色管理、操作日志、登录日志、服务监控等功能。
 
 * Ant Design Vue文档：[https://www.antdv.com/docs/vue/introduce-cn](https://www.antdv.com/docs/vue/introduce-cn)
 
