@@ -4,7 +4,7 @@
 
 **KCloud-Antdv-Alibaba**，使用[KCloud-Platform-Alibaba](https://gitee.com/laokouyun/KCloud-Platform-Alibaba) 作为后端
 
-> KCloud-Platform-Alibaba是基于SpringCloud，SpringSecurity，Mysql，Vue 的多租户Saas系统。
+> KCloud-Platform-Alibaba是基于SpringCloud，SpringSecurity，Mysql，Vue 的多租户SaaS系统。
 >
 > 拥有用户管理、菜单管理、角色管理、操作日志、登录日志、服务监控、连接池监视等功能。
 
