@@ -9,7 +9,7 @@
           </a>
         </div>
         <div class="desc">
-          KCloud-Platform-Alibaba是基于SpringCloud，SpringSecurity，Mysql，Vue 的前后端分离权限管理系统
+          KCloud-Platform-Alibaba是基于SpringCloud，SpringSecurity，Mysql，Vue 的多租户Saas系统
         </div>
       </div>
 
