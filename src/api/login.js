@@ -4,7 +4,7 @@ export const userApi = {
   Login: '/auth/oauth2/token',
   Logout: '/auth/oauth2/logout',
   UserInfo: '/admin/sys/user/api/userInfo',
-  Captcha: '/auth/oauth2/password/captcha'
+  Captcha: '/auth/oauth2/password/captcha',
 }
 
 /**
@@ -13,6 +13,20 @@ export const userApi = {
  * @returns {*}
  */
 export function login (parameter) {
+  return request({
+    url: userApi.Login,
+    method: 'post',
+    data: parameter,
+    // 设置序列化请求函数
+    transformRequest: (data = {}) => Object.entries(data).map(ent => ent.join('=')).join('&'),
+    headers: {
+      'Authorization': 'Basic YXV0aC1jbGllbnQ6c2VjcmV0',
+      'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+    }
+  })
+}
+
+export function sso (parameter) {
   return request({
     url: userApi.Login,
     method: 'post',
