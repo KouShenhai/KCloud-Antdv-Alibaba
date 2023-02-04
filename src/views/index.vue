@@ -43,8 +43,7 @@ export default {
   computed: {
     ...mapGetters([
       'avatar',
-      'nickname',
-      'deptIds'
+      'nickname'
     ]),
     prop () {
       return {

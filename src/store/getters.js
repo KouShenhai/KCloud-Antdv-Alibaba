@@ -8,7 +8,6 @@ const getters = {
   nickname: state => state.user.name,
   id: state => state.user.id,
   welcome: state => state.user.welcome,
-  deptIds: state => state.user.deptIds,
   permissions: state => state.user.permissions,
   menus: state => state.permission.menus,
   routers: state => state.permission.routers,

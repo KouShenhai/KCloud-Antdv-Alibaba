@@ -4,7 +4,7 @@ import storage from 'store'
 import notification from 'ant-design-vue/es/notification'
 import message from 'ant-design-vue/es/message'
 import { VueAxios } from './axios'
-import { ACCESS_TOKEN, USER_ID, USER_NAME } from '@/store/mutation-types'
+import {ACCESS_TOKEN, TENANT_ID, USER_ID, USER_NAME} from '@/store/mutation-types'
 import errorCode from '@/utils/errorCode'
 import qs from 'qs'
 import { blobValidate } from '@/utils/laokou'
@@ -44,6 +44,7 @@ request.interceptors.request.use(config => {
   const token = storage.get(ACCESS_TOKEN)
   const userId = storage.get(USER_ID)
   const username = storage.get(USER_NAME)
+  const tenantId = storage.get(TENANT_ID)
   // 如果 token 存在
   // 让每个请求携带自定义 token 请根据实际情况自行修改
   if (token) {
@@ -51,7 +52,7 @@ request.interceptors.request.use(config => {
     config.headers['gray'] = 'true'
     config.headers['userId'] = userId
     config.headers['username'] = username
-    // config.headers['accessAccess-Token'] = token
+    config.headers['tenantId'] = tenantId
   }
   // 处理params参数
   if (config.params) {

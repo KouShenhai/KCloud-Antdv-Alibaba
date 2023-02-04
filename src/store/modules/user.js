@@ -1,6 +1,6 @@
 import storage from 'store'
 import { login, getInfo, logout } from '@/api/login'
-import { ACCESS_TOKEN, USER_ID, USER_NAME } from '@/store/mutation-types'
+import { ACCESS_TOKEN, USER_ID, USER_NAME, TENANT_ID } from '@/store/mutation-types'
 import SparkMD5 from 'spark-md5'
 
 const user = {
@@ -11,7 +11,7 @@ const user = {
     welcome: '欢迎您，来到老寇云平台',
     avatar: '',
     permissions: [],
-    deptIds: []
+    tenantId: ''
   },
 
   mutations: {
@@ -30,8 +30,8 @@ const user = {
     SET_ID: (state, id) => {
       state.id = id
     },
-    SET_DEPT_IDS: (state, deptIds) => {
-       state.deptIds = deptIds
+    SET_TENANT_ID: (state, tenantId) => {
+      state.tenantId = tenantId
     }
   },
 
@@ -69,18 +69,18 @@ const user = {
           const user = res.data
           const id = user.userId
           const name = user.username
+          const tenantId = user.tenantId
           const avatar = user.imgUrl === '' ? require('@/assets/images/profile.jpg') : user.imgUrl
           if (user.permissionList && user.permissionList.length > 0) {
             commit('SET_PERMISSIONS', user.permissionList)
           }
-          if (user.deptIds && user.deptIds.length > 0) {
-            commit('SET_DEPT_IDS', user.deptIds)
-          }
+          commit('SET_TENANT_ID', tenantId)
           commit('SET_NAME', name)
           commit('SET_AVATAR', avatar)
           commit('SET_ID', id)
           storage.set(USER_ID, id, 7 * 24 * 60 * 60 * 1000)
           storage.set(USER_NAME, name, 7 * 24 * 60 * 60 * 1000)
+          storage.set(TENANT_ID, tenantId, 7 * 24 * 60 * 60 * 1000)
           resolve(res)
         }).catch(error => {
           reject(error)

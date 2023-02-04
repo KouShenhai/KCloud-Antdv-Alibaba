@@ -99,7 +99,7 @@ export default {
           const password = encodeURIComponent(encrypt.encrypt(this.form.password))
           const uuid = this.form.uuid
           const captcha = this.form.captcha
-          const params = { username: username, password: password, captcha: captcha, uuid: uuid, grant_type: 'password' }
+          const params = { username: username, password: password, captcha: captcha, uuid: uuid, grant_type: 'password', tenantId: 0 }
           this.Login(params)
             .then(() => this.loginSuccess())
             .catch(() => this.requestFailed())
