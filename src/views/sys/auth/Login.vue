@@ -40,9 +40,6 @@
           @click="handleSubmit"
         >确定</a-button>
       </a-form-item>
-      <div class="user-login-other">
-        <a href="javascript:void(0);" @click="goToLink" class="tenant">多租户登录</a>
-      </div>
     </a-form-model>
   </div>
 </template>
@@ -79,39 +76,9 @@ export default {
 
   },
   mounted () {
-    this.checkLogin()
+    this.requestFailed()
   },
   methods: {
-    checkLogin () {
-      let queryAttr = window.location.search
-      let notLogin = true
-      const url = 'http://127.0.0.1' + ':' + window.location.port + '/user/login'
-      this.tenantLink = 'http://127.0.0.1:1111/oauth2/authorize?client_id=auth-client&client_secret=secret&response_type=code&scope=auth email phone&redirect_uri=' + url
-      if (queryAttr.length > 0) {
-        queryAttr = queryAttr.substring(1)
-        const data = queryAttr.split('&')
-        for (let i = 0; i < data.length; i++) {
-          const queryData = data[i].split('=')
-          if (queryData[0] === 'code') {
-            notLogin = false
-            const parameter = { code: queryData[1], grant_type: 'authorization_code', redirect_uri: url }
-            this.SSO(parameter).then(() => this.loginSuccess())
-              .finally(() => {
-                this.logining = false
-              })
-          }
-          if (queryData[0] === 'continue') {
-            this.goToLink()
-          }
-        }
-      }
-      if (notLogin) {
-        this.requestFailed()
-      }
-    },
-    goToLink () {
-      location.href = this.tenantLink
-    },
     getUUID () {
       // eslint-disable-next-line no-constant-condition
       return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, 'x' ? (Math.random() * 16 | 0) : ('r&0x3' | '0x8')).toString(16)
@@ -122,7 +89,7 @@ export default {
         this.codeUrl = res.data
       })
     },
-    ...mapActions(['Login', 'Logout', 'SSO']),
+    ...mapActions(['Login', 'Logout']),
     handleSubmit () {
       this.logining = true
       this.$refs.form.validate(valid => {
@@ -187,9 +154,6 @@ export default {
     text-align: left;
     margin-top: 24px;
     line-height: 22px;
-    .tenant {
-      float: right;
-    }
   }
 }
 </style>

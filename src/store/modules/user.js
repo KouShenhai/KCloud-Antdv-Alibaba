@@ -1,5 +1,5 @@
 import storage from 'store'
-import { login, getInfo, logout, sso } from '@/api/login'
+import { login, getInfo, logout } from '@/api/login'
 import { ACCESS_TOKEN, USER_ID, USER_NAME, TENANT_ID } from '@/store/mutation-types'
 import SparkMD5 from 'spark-md5'
 
@@ -36,20 +36,6 @@ const user = {
   },
 
   actions: {
-
-    SSO ({ commit }, parameter) {
-      return new Promise((resolve, reject) => {
-        sso(parameter).then(res => {
-          storage.set(ACCESS_TOKEN, res.access_token, 7 * 24 * 60 * 60 * 1000)
-          commit('SET_TOKEN', res.access_token)
-          resolve()
-        })
-          .catch(error => {
-            reject(error)
-          })
-      })
-    },
-
     // 登录
     Login ({ commit }, loginParam) {
       return new Promise((resolve, reject) => {

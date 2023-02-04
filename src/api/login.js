@@ -26,20 +26,6 @@ export function login (parameter) {
   })
 }
 
-export function sso (parameter) {
-  return request({
-    url: userApi.Login,
-    method: 'post',
-    data: parameter,
-    // 设置序列化请求函数
-    transformRequest: (data = {}) => Object.entries(data).map(ent => ent.join('=')).join('&'),
-    headers: {
-      'Authorization': 'Basic YXV0aC1jbGllbnQ6c2VjcmV0',
-      'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
-    }
-  })
-}
-
 export function captcha (uuid) {
   return request({
     url: userApi.Captcha + '?uuid=' + uuid,
