@@ -16,12 +16,6 @@
         <a-input v-model="form.type" placeholder="请输入字典类型" />
       </a-form-model-item>
 
-      <a-form-model-item label="状态" prop="status">
-        <a-select placeholder="请选择" v-model="form.status">
-          <a-select-option v-for="(d, index) in statusOptions" :key="index" :value="d.value" >{{ d.label }}</a-select-option>
-        </a-select>
-      </a-form-model-item>
-
       <a-form-model-item label="排序" prop="sort">
         <a-input-number placeholder="请输入排序" v-model="form.sort" :min="0" style="width: 100%"/>
       </a-form-model-item>
@@ -56,16 +50,6 @@ export default {
   },
   data () {
     return {
-      statusOptions: [
-        {
-          label: '正常',
-          value: 0
-        },
-        {
-          label: '停用',
-          value: 1
-        }
-      ],
       submitLoading: false,
       formTitle: '',
       // 表单参数
@@ -73,8 +57,7 @@ export default {
         id: undefined,
         dictLabel: undefined,
         type: undefined,
-        status: 0,
-        dictValue:'',
+        dictValue: '',
         sort: 1,
         remark: undefined
       },
@@ -109,8 +92,7 @@ export default {
         id: undefined,
         dictLabel: undefined,
         type: undefined,
-        status: 0,
-        dictValue:'',
+        dictValue: '',
         sort: 1,
         remark: undefined
       }

@@ -32,7 +32,6 @@
       <!-- 增加修改 -->
       <create-form
         ref="createForm"
-        :statusOptions="statusOptions"
         @ok="getList"
       />
       <!-- 数据展示 -->
@@ -44,9 +43,6 @@
         :data-source="list"
         :pagination="false"
         :bordered="tableBordered">
-        <span slot="status" slot-scope="text, record">
-          {{ statusFormat(record) }}
-        </span>
         <span slot="operation" slot-scope="text, record">
           <a @click="$refs.createForm.handleUpdate(record, undefined)" v-hasPermi="['sys:dict:update']">
             <a-icon type="edit" />修改
@@ -104,15 +100,13 @@ export default {
       loading: false,
       refreshing: false,
       total: 0,
-      // 状态数据字典
-      statusOptions: [],
       // 日期范围
       dateRange: [],
       queryParam: {
         pageNum: 1,
         pageSize: 10,
         dictLabel: undefined,
-        type: undefined,
+        type: undefined
       },
       columns: [
         {
@@ -131,12 +125,6 @@ export default {
           title: '字典类型',
           dataIndex: 'type',
           ellipsis: true,
-          align: 'center'
-        },
-        {
-          title: '状态',
-          dataIndex: 'status',
-          scopedSlots: { customRender: 'status' },
           align: 'center'
         },
         {
@@ -182,13 +170,6 @@ export default {
         }
       )
     },
-    // 参数系统内置字典翻译
-    statusFormat (row) {
-      if (row.status == 0) {
-        return '正常'
-      }
-      return '停用'
-    },
     /** 搜索按钮操作 */
     handleQuery () {
       this.queryParam.pageNum = 1
@@ -201,7 +182,7 @@ export default {
         pageNum: 1,
         pageSize: 10,
         dictLabel: undefined,
-        type: undefined,
+        type: undefined
       }
       this.handleQuery()
     },

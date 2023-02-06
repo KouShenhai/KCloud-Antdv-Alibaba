@@ -167,7 +167,6 @@ export default {
             message: '提示',
             description: evt.data
           })
-          this.getUnReadCount()
         }
         // 发生错误时
         websocket.onerror = evt => {
