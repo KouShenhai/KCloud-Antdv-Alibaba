@@ -5,6 +5,7 @@ export const userApi = {
   Logout: '/auth/oauth2/logout',
   UserInfo: '/admin/sys/user/api/userInfo',
   Captcha: '/auth/oauth2/password/captcha',
+  Tenant: '/auth/oauth2/tenant'
 }
 
 /**
@@ -22,6 +23,16 @@ export function login (parameter) {
     headers: {
       'Authorization': 'Basic YXV0aC1jbGllbnQ6c2VjcmV0',
       'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+    }
+  })
+}
+
+export function tenant () {
+  return request({
+    url: userApi.Tenant,
+    method: 'get',
+    headers: {
+      'gray': 'true'
     }
   })
 }

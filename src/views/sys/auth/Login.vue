@@ -1,6 +1,17 @@
 <template>
   <div class="main">
     <a-form-model id="formLogin" ref="form" class="user-layout-login" :model="form" :rules="rules">
+      <a-form-model-item prop="tenantId">
+        <a-select
+          size="large"
+          v-model="form.tenantId"
+          placeholder="请选择租户">
+          <a-select-option key="0" value="0">默认租户</a-select-option>
+          <a-select-option v-for="(d, index) in tenantOptions" :key="index + 1" :value="d.value">
+            {{ d.label }}
+          </a-select-option>
+        </a-select>
+      </a-form-model-item>
       <a-form-model-item prop="username">
         <a-input v-model="form.username" allow-clear size="large" placeholder="请输入账号" >
           <a-icon slot="prefix" type="user" :style="{ color: 'rgba(0,0,0,.25)' }"/>
@@ -47,7 +58,7 @@
 <script>
 import { mapActions } from 'vuex'
 import { timeFix } from '@/utils/util'
-import { captcha } from '@/api/login'
+import { captcha, tenant } from '@/api/login'
 import { JSEncrypt } from 'jsencrypt'
 export default {
   name: 'Login',
@@ -57,7 +68,9 @@ export default {
     return {
       publicKey: 'MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC6fp5DbG9HX6jat08UHudyTXfwt60XaDBt5fp+wo0xgOtMujvrLGf4+ZM8Ba1QWksCJKQSF9Y/zYTk39rPiLcI1NXZYiig+g2uJAQAWhiT8A0mGVaNOT5mssEW9dZJ4o4F3SKuHP2J+LSG2oKBOKRJAVnikXvhKVHnbK59ZlYf5QIDAQAB',
       codeUrl: '',
+      tenantOptions: [],
       form: {
+        tenantId: '0',
         username: '',
         password: '',
         captcha: '',
@@ -77,8 +90,14 @@ export default {
   },
   mounted () {
     this.requestFailed()
+    this.getTenant()
   },
   methods: {
+    getTenant () {
+      tenant().then(res => {
+        this.tenantOptions = res.data
+      })
+    },
     getUUID () {
       // eslint-disable-next-line no-constant-condition
       return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, 'x' ? (Math.random() * 16 | 0) : ('r&0x3' | '0x8')).toString(16)
@@ -100,7 +119,8 @@ export default {
           const password = encodeURIComponent(encrypt.encrypt(this.form.password))
           const uuid = this.form.uuid
           const captcha = this.form.captcha
-          const params = { username: username, password: password, captcha: captcha, uuid: uuid, grant_type: 'password', tenantId: 0 }
+          const tenantId = this.form.tenantId
+          const params = { username: username, password: password, captcha: captcha, uuid: uuid, grant_type: 'password', tenantId: tenantId }
           this.Login(params)
             .then(() => this.loginSuccess())
             .catch(() => this.requestFailed())
