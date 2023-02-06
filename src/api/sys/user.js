@@ -1,6 +1,4 @@
 import request from '@/utils/request'
-import { parseStrEmpty } from '@/utils/laokou'
-
 // 查询用户列表
 export function listUser (query) {
   return request({
@@ -13,7 +11,7 @@ export function listUser (query) {
 // 查询用户详细
 export function getUser (userId) {
   return request({
-    url: '/admin/sys/user/api/detail?id=' + parseStrEmpty(userId),
+    url: '/admin/sys/user/api/detail?id=' + userId,
     method: 'get'
   })
 }

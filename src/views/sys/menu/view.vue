@@ -55,8 +55,8 @@
           <a @click="$refs.createForm.handleAdd(record)" v-hasPermi="['sys:menu:insert']">
             <a-icon type="plus" />新增
           </a>
-          <a-divider type="vertical" v-if="record.id != 0" v-hasPermi="['sys:menu:delete']" />
-          <a @click="handleDelete(record)" v-if="record.id != 0" v-hasPermi="['sys:menu:delete']">
+          <a-divider type="vertical" v-hasPermi="['sys:menu:delete']" />
+          <a @click="handleDelete(record)" v-hasPermi="['sys:menu:delete']">
             <a-icon type="delete" />删除
           </a>
         </span>

@@ -5,11 +5,11 @@
         <a-col :span="20">
           <!-- 条件搜索 -->
           <div class="table-page-search-wrapper">
-            <a-form layout="inline" v-hasPermi="['sys:user:query']">
+            <a-form layout="inline" v-hasPermi="['sys:source:query']">
               <a-row :gutter="48">
                 <a-col :md="8" :sm="24">
-                  <a-form-item label="用户名">
-                    <a-input v-model="queryParam.username" placeholder="请输入" allow-clear />
+                  <a-form-item label="名称">
+                    <a-input v-model="queryParam.name" placeholder="请输入" allow-clear />
                   </a-form-item>
                 </a-col>
                 <a-col :md="8" :sm="24">
@@ -30,12 +30,6 @@
           <create-form
             ref="createForm"
             @ok="getList"
-            :deptOptions="deptOptions"
-            @select-tree="getTreeSelect"
-          />
-          <!-- 修改密码抽屉 -->
-          <reset-password
-            ref="resetPassword"
           />
           <!-- 数据展示 -->
           <a-table
@@ -49,7 +43,7 @@
             <span slot="imgUrl" slot-scope="text, record">
               <img style="width:50px;height:50px" :src="record.imgUrl" />
             </span>
-            <span slot="operation" slot-scope="text, record" v-if="record.id !== 1">
+            <span slot="operation" slot-scope="text, record" >
               <a @click="$refs.createForm.handleUpdate(record)" v-hasPermi="['sys:user:update']">
                 <a-icon type="edit" />
                 修改
@@ -86,7 +80,6 @@
 <script>
 
 import { listSource } from '@/api/sys/source'
-import { treeSelect } from '@/api/sys/dept'
 import CreateForm from '@/views/sys/source/modules/CreateForm'
 import { tableMixin } from '@/store/table-mixin'
 export default {
@@ -107,27 +100,10 @@ export default {
       ids: [],
       loading: false,
       total: 0,
-      // 部门树选项
-      deptOptions: [{
-        id: 0,
-        name: '',
-        children: []
-      }],
-      statusOptions: [
-        {
-          label: '正常',
-          value: 0
-        },
-        {
-          label: '停用',
-          value: 1
-        }
-      ],
       queryParam: {
         pageNum: 1,
         pageSize: 10,
-        username: undefined,
-        status: undefined
+        name: ''
       },
       columns: [
         {
@@ -177,16 +153,10 @@ export default {
   watch: {
   },
   methods: {
-    /** 查询部门下拉树结构 */
-    getTreeSelect () {
-      treeSelect().then(response => {
-        this.deptOptions = response.data.children
-      })
-    },
     /** 查询用户列表 */
     getList () {
       this.loading = true
-      listUser(this.queryParam).then(response => {
+      listSource(this.queryParam).then(response => {
           this.list = response.data.records
           this.total = response.data.total - 0
           this.loading = false
@@ -202,9 +172,7 @@ export default {
     resetQuery () {
       this.queryParam = {
         pageNum: 1,
-        pageSize: 10,
-        username: undefined,
-        status: undefined
+        pageSize: 10
       }
       this.handleQuery()
     },
@@ -217,23 +185,6 @@ export default {
       this.queryParam.pageSize = pageSize
       this.getList()
     },
-    /* 用户状态修改 */
-    confirmHandleStatus (row) {
-      const text = row.status === '0' ? '关闭' : '启用'
-      row.status = row.status === '0' ? '1' : '0'
-      changeUserStatus(row)
-        .then(() => {
-          this.$message.success(
-            text + '成功',
-            3
-          )
-        }).catch(function () {
-        this.$message.error(
-          text + '异常',
-          3
-        )
-      })
-    },
     cancelHandleStatus (row) {
 
     },
@@ -241,21 +192,21 @@ export default {
     handleDelete (row) {
       const that = this
       const userIds = row.id
-      this.$confirm({
-        title: '确认删除所选中数据?',
-        content: '当前选中编号为' + userIds + '的数据',
-        onOk () {
-          return delUser(userIds)
-            .then(() => {
-              that.getList()
-              that.$message.success(
-                '删除成功',
-                3
-              )
-            })
-        },
-        onCancel () {}
-      })
+      // this.$confirm({
+      //   title: '确认删除所选中数据?',
+      //   content: '当前选中编号为' + userIds + '的数据',
+      //   onOk () {
+      //     return delUser(userIds)
+      //       .then(() => {
+      //         that.getList()
+      //         that.$message.success(
+      //           '删除成功',
+      //           3
+      //         )
+      //       })
+      //   },
+      //   onCancel () {}
+      // })
     }
   }
 }

@@ -60,7 +60,7 @@
             <span slot="imgUrl" slot-scope="text, record">
               <img style="width:50px;height:50px" :src="record.imgUrl" />
             </span>
-            <span slot="operation" slot-scope="text, record" v-if="record.id !== 1">
+            <span slot="operation" slot-scope="text, record">
               <a @click="$refs.createForm.handleUpdate(record)" v-hasPermi="['sys:user:update']">
                 <a-icon type="edit" />
                 修改

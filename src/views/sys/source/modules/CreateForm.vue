@@ -8,18 +8,6 @@
       <a-form-model-item label="用户名" prop="userName" v-if="form.id == undefined">
         <a-input v-model="form.username" placeholder="请输入" />
       </a-form-model-item>
-      <a-form-model-item label="部门" prop="deptId">
-        <a-tree-select
-          v-model="form.deptId"
-          style="width: 100%"
-          :dropdown-style="{ maxHeight: '400px', overflow: 'auto' }"
-          :tree-data="deptOptions"
-          placeholder="请选择"
-          :replaceFields="replaceFields"
-          tree-default-expand-all
-        >
-        </a-tree-select>
-      </a-form-model-item>
       <a-form-model-item label="密码" prop="password" v-if="form.id == undefined">
         <a-input-password v-model="form.password" placeholder="请输入" :maxLength="20" />
       </a-form-model-item>
@@ -59,33 +47,13 @@
   import { listRole } from '@/api/sys/role'
   export default {
     name: 'CreateForm',
-    props: {
-      deptOptions: {
-        type: Array,
-        required: true
-      }
-    },
     components: {
 
     },
     data () {
       return {
         submitLoading: false,
-        replaceFields: { children: 'children', title: 'name', key: 'id', value: 'id' },
-        // 角色选项
-        roleOptions: [],
-        statusOptions: [
-          {
-            label: '正常',
-            value: 0
-          },
-          {
-            label: '停用',
-            value: 1
-          }
-        ],
         // 默认密码
-        initPassword: 'test123',
         formTitle: '',
         // 表单参数
         form: {
