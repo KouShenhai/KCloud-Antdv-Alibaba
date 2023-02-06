@@ -22,7 +22,7 @@ export const indexRouterMap = [
     name: '首页',
     component: 'index',
     permissions: '',
-    icon:'dashboard',
+    icon: 'home',
     hidden: false
   },
   {

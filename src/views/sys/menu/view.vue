@@ -110,13 +110,6 @@ export default {
           width: '10%'
         },
         {
-          title: '认证等级',
-          dataIndex: 'authLevel',
-          scopedSlots: { customRender: 'authLevel' },
-          align: 'center',
-          width: '10%'
-        },
-        {
           title: '菜单类型',
           dataIndex: 'type',
           scopedSlots: { customRender: 'type' },

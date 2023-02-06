@@ -57,6 +57,9 @@
                 <a-switch checked-children="开" un-checked-children="关" :checked="record.status == '0'" />
               </a-popconfirm>
             </span>
+            <span slot="superAdmin" slot-scope="text, record">
+              {{ superAdminFormat(record) }}
+            </span>
             <span slot="imgUrl" slot-scope="text, record">
               <img style="width:50px;height:50px" :src="record.imgUrl" />
             </span>
@@ -170,6 +173,12 @@ export default {
           align: 'center'
         },
         {
+          title: '备注',
+          dataIndex: 'superAdmin',
+          scopedSlots: { customRender: 'superAdmin' },
+          align: 'center'
+        },
+        {
           title: '操作',
           dataIndex: 'operation',
           scopedSlots: { customRender: 'operation' },
@@ -193,6 +202,12 @@ export default {
       treeSelect().then(response => {
         this.deptOptions = response.data.children
       })
+    },
+    superAdminFormat (row) {
+      if (row.superAdmin === '1') {
+        return '超级管理员'
+      }
+      return ''
     },
     /** 查询用户列表 */
     getList () {
@@ -233,12 +248,12 @@ export default {
       const text = row.status === '0' ? '关闭' : '启用'
       row.status = row.status === '0' ? '1' : '0'
       changeUserStatus(row)
-      .then(() => {
-        this.$message.success(
-          text + '成功',
-          3
-        )
-      }).catch(function () {
+        .then(() => {
+          this.$message.success(
+            text + '成功',
+            3
+          )
+        }).catch(function () {
         this.$message.error(
           text + '异常',
           3
@@ -263,7 +278,7 @@ export default {
                 '删除成功',
                 3
               )
-          })
+            })
         },
         onCancel () {}
       })

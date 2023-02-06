@@ -46,17 +46,6 @@
             :data-source="list"
             :pagination="false"
             :bordered="tableBordered">
-            <span slot="status" slot-scope="text, record">
-              <a-popconfirm
-                ok-text="是"
-                cancel-text="否"
-                @confirm="confirmHandleStatus(record)"
-                @cancel="cancelHandleStatus(record)"
-              >
-                <span slot="title">确认<b>{{ record.status == '0' ? '停用' : '启用' }}</b>{{ record.username }}的用户吗?</span>
-                <a-switch checked-children="开" un-checked-children="关" :checked="record.status == '0'" />
-              </a-popconfirm>
-            </span>
             <span slot="imgUrl" slot-scope="text, record">
               <img style="width:50px;height:50px" :src="record.imgUrl" />
             </span>
@@ -75,10 +64,6 @@
                 删除
               </a>
               <a-divider type="vertical" v-hasPermi="['sys:user:password']"/>
-              <a @click="$refs.resetPassword.handleResetPwd(record)" v-hasPermi="['sys:user:password']">
-                <a-icon type="key" />
-                重置密码
-              </a>
             </span>
           </a-table>
           <!-- 分页 -->
@@ -89,7 +74,7 @@
             :current="queryParam.pageNum"
             :total="total"
             :page-size="queryParam.pageSize"
-            :showTotal="total => `共 ${total} 条`"
+            :showTotal="() => `共 ${total} 条`"
             @showSizeChange="onShowSizeChange"
             @change="changeSize"
           />
@@ -100,15 +85,13 @@
 </template>
 <script>
 
-import { listUser, delUser, changeUserStatus } from '@/api/sys/user'
+import { listSource } from '@/api/sys/source'
 import { treeSelect } from '@/api/sys/dept'
-import ResetPassword from './modules/ResetPassword'
-import CreateForm from '@/views/sys/user/modules/CreateForm'
+import CreateForm from '@/views/sys/source/modules/CreateForm'
 import { tableMixin } from '@/store/table-mixin'
 export default {
-  name: 'User',
+  name: 'Source',
   components: {
-    ResetPassword,
     CreateForm
   },
   mixins: [tableMixin],
@@ -167,6 +150,12 @@ export default {
         {
           title: '创建时间',
           dataIndex: 'createDate',
+          align: 'center'
+        },
+        {
+          title: '备注',
+          dataIndex: 'superAdmin',
+          scopedSlots: { customRender: 'superAdmin' },
           align: 'center'
         },
         {
@@ -233,12 +222,12 @@ export default {
       const text = row.status === '0' ? '关闭' : '启用'
       row.status = row.status === '0' ? '1' : '0'
       changeUserStatus(row)
-      .then(() => {
-        this.$message.success(
-          text + '成功',
-          3
-        )
-      }).catch(function () {
+        .then(() => {
+          this.$message.success(
+            text + '成功',
+            3
+          )
+        }).catch(function () {
         this.$message.error(
           text + '异常',
           3
@@ -263,7 +252,7 @@ export default {
                 '删除成功',
                 3
               )
-          })
+            })
         },
         onCancel () {}
       })
