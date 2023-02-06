@@ -85,7 +85,7 @@
           }
         ],
         // 默认密码
-        initPassword: 'admin123',
+        initPassword: 'test123',
         formTitle: '',
         // 表单参数
         form: {
