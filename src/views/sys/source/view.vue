@@ -22,7 +22,7 @@
             </a-form>
           </div>
           <div class="table-operations">
-            <a-button type="primary" @click="$refs.createForm.handleAdd()" v-hasPermi="['sys:user:insert']">
+            <a-button type="primary" @click="$refs.createForm.handleAdd()" v-hasPermi="['sys:source:insert']">
               <a-icon type="plus" />新增
             </a-button>
           </div>
@@ -40,24 +40,20 @@
             :data-source="list"
             :pagination="false"
             :bordered="tableBordered">
-            <span slot="imgUrl" slot-scope="text, record">
-              <img style="width:50px;height:50px" :src="record.imgUrl" />
-            </span>
             <span slot="operation" slot-scope="text, record" >
-              <a @click="$refs.createForm.handleUpdate(record)" v-hasPermi="['sys:user:update']">
+              <a @click="$refs.createForm.handleUpdate(record)" v-hasPermi="['sys:source:update']">
                 <a-icon type="edit" />
                 修改
               </a>
-              <a-divider type="vertical" v-hasPermi="['sys:user:insert']"/>
-              <a @click="$refs.createForm.handleAdd()" v-hasPermi="['sys:user:insert']">
+              <a-divider type="vertical" v-hasPermi="['sys:source:insert']"/>
+              <a @click="$refs.createForm.handleAdd()" v-hasPermi="['sys:source:insert']">
                 <a-icon type="plus" />新增
               </a>
-              <a-divider type="vertical" v-hasPermi="['sys:user:delete']"/>
-              <a @click="handleDelete(record)" v-hasPermi="['sys:user:delete']">
+              <a-divider type="vertical" v-hasPermi="['sys:source:delete']"/>
+              <a @click="handleDelete(record)" v-hasPermi="['sys:source:delete']">
                 <a-icon type="delete" />
                 删除
               </a>
-              <a-divider type="vertical" v-hasPermi="['sys:user:password']"/>
             </span>
           </a-table>
           <!-- 分页 -->
@@ -79,7 +75,7 @@
 </template>
 <script>
 
-import { listSource } from '@/api/sys/source'
+import { listSource, delSource } from '@/api/sys/source'
 import CreateForm from '@/views/sys/source/modules/CreateForm'
 import { tableMixin } from '@/store/table-mixin'
 export default {
@@ -107,32 +103,20 @@ export default {
       },
       columns: [
         {
-          title: '用户名称',
-          dataIndex: 'username',
+          title: '数据源名称',
+          dataIndex: 'name',
           align: 'center'
         },
         {
-          title: '用户头像',
-          dataIndex: 'imgUrl',
-          scopedSlots: { customRender: 'imgUrl' },
+          title: '数据源驱动',
+          dataIndex: 'driverClassName',
           align: 'center'
         },
         {
-          title: '用户状态',
-          dataIndex: 'status',
-          scopedSlots: { customRender: 'status' },
-          align: 'center'
-        },
-        {
-          title: '创建时间',
-          dataIndex: 'createDate',
-          align: 'center'
-        },
-        {
-          title: '备注',
-          dataIndex: 'superAdmin',
-          scopedSlots: { customRender: 'superAdmin' },
-          align: 'center'
+          title: '数据源连接',
+          dataIndex: 'url',
+          align: 'center',
+          ellipsis: true
         },
         {
           title: '操作',
@@ -191,22 +175,22 @@ export default {
     /** 删除按钮操作 */
     handleDelete (row) {
       const that = this
-      const userIds = row.id
-      // this.$confirm({
-      //   title: '确认删除所选中数据?',
-      //   content: '当前选中编号为' + userIds + '的数据',
-      //   onOk () {
-      //     return delUser(userIds)
-      //       .then(() => {
-      //         that.getList()
-      //         that.$message.success(
-      //           '删除成功',
-      //           3
-      //         )
-      //       })
-      //   },
-      //   onCancel () {}
-      // })
+      const sourceId = row.id
+      this.$confirm({
+        title: '确认删除所选中数据?',
+        content: '当前选中编号为' + sourceId + '的数据',
+        onOk () {
+          return delSource(sourceId)
+            .then(() => {
+              that.getList()
+              that.$message.success(
+                '删除成功',
+                3
+              )
+            })
+        },
+        onCancel () {}
+      })
     }
   }
 }

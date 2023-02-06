@@ -11,22 +11,6 @@
       <a-form-model-item label="密码" prop="password" v-if="form.id == undefined">
         <a-input-password v-model="form.password" placeholder="请输入" :maxLength="20" />
       </a-form-model-item>
-      <a-form-model-item label="状态" prop="status">
-        <a-radio-group v-model="form.status" button-style="solid">
-          <a-radio-button v-for="(d, index) in statusOptions" :key="index" :value="d.value">{{ d.label }}</a-radio-button>
-        </a-radio-group>
-      </a-form-model-item>
-      <a-form-model-item label="角色" prop="roleIds">
-        <a-select
-          mode="multiple"
-          v-model="form.roleIds"
-          placeholder="请选择"
-        >
-          <a-select-option v-for="(d, index) in roleOptions" :key="index" :value="d.id">
-            {{ d.name }}
-          </a-select-option>
-        </a-select>
-      </a-form-model-item>
       <div class="bottom-control">
         <a-space>
           <a-button type="primary" :loading="submitLoading" @click="submitForm">
@@ -43,8 +27,7 @@
 
 <script>
 
-  import { getUser, addUser, updateUser } from '@/api/sys/user'
-  import { listRole } from '@/api/sys/role'
+  import { addUser, updateUser } from '@/api/sys/user'
   export default {
     name: 'CreateForm',
     components: {
@@ -58,11 +41,11 @@
         // 表单参数
         form: {
           id: undefined,
-          deptId: '',
           username: undefined,
           password: undefined,
-          status: '0',
-          roleIds: []
+          driverClassName: undefined,
+          name: undefined,
+          url: undefined
         },
         open: false,
         rules: {
@@ -72,9 +55,6 @@
           password: [
             { required: true, message: '密码不能为空', trigger: 'blur' },
             { min: 5, max: 20, message: '用户密码长度必须介于 5 和 20 之间', trigger: 'blur' }
-          ],
-          deptId: [
-            { required: true, message: '部门不为空', trigger: 'blur' }
           ]
         }
       }
@@ -101,54 +81,24 @@
       reset () {
         this.form = {
           id: undefined,
-          deptId: '',
           username: undefined,
           password: undefined,
-          status: 0,
-          roleIds: []
+          driverClassName: undefined,
+          name: undefined,
+          url: undefined
         }
       },
       /** 新增按钮操作 */
       handleAdd () {
         this.reset()
-        this.$emit('select-tree')
-        listRole({}).then(response => {
-          const roles = []
-          response.data.forEach(item => {
-            roles.push({
-              id: item.id,
-              name: item.name
-            })
-          })
-          this.roleOptions = roles
-          this.open = true
-          this.formTitle = '用户新增'
-          this.form.password = this.initPassword
-        })
+        this.open = true
+        this.formTitle = '数据源新增'
       },
       /** 修改按钮操作 */
       handleUpdate (row) {
         this.reset()
-        this.$emit('select-tree')
-        // eslint-disable-next-line no-unused-vars
-        const userId = row.id
-        listRole({}).then(response => {
-          const roles = []
-          response.data.forEach(item => {
-            roles.push({
-              id: item.id,
-              name: item.name
-            })
-          })
-          this.roleOptions = roles
-        })
-        getUser(userId).then(response => {
-          this.form = response.data
-          this.form.roleIds = this.form.roleIds
-          this.open = true
-          this.formTitle = '用户修改'
-          this.form.password = ''
-        })
+        this.open = true
+        this.formTitle = '数据源修改'
       },
       /** 提交按钮 */
       submitForm: function () {
@@ -156,7 +106,7 @@
           if (valid) {
             this.submitLoading = true
             if (this.form.id !== undefined) {
-              updateUser(this.form).then(response => {
+              updateUser(this.form).then(() => {
                 this.$message.success(
                   '修改成功',
                   3
@@ -167,7 +117,7 @@
                 this.submitLoading = false
               })
             } else {
-              addUser(this.form).then(response => {
+              addUser(this.form).then(() => {
                 this.$message.success(
                   '新增成功',
                   3
