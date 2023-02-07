@@ -119,6 +119,11 @@ export default {
           ellipsis: true
         },
         {
+          title: '数据源用户名',
+          dataIndex: 'username',
+          align: 'center'
+        },
+        {
           title: '操作',
           dataIndex: 'operation',
           scopedSlots: { customRender: 'operation' },

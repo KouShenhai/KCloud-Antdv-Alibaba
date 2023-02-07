@@ -9,6 +9,14 @@ export function listDict (query) {
   })
 }
 
+// 通过类型查询字典
+export function listDictByType (type) {
+  return request({
+    url: '/admin/sys/dict/api/option/list?type=' + type,
+    method: 'get'
+  })
+}
+
 export function getDict (dictId) {
   return request({
     url: '/admin/sys/dict/api/detail?id=' + dictId,

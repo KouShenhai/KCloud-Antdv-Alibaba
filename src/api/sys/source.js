@@ -9,13 +9,13 @@ export function listSource (query) {
   })
 }
 
-// // 查询数据源
-// export function getSource (userId) {
-//   return request({
-//     url: '/admin/sys/user/api/detail?id=' + parseStrEmpty(userId),
-//     method: 'get'
-//   })
-// }
+// 查询数据源
+export function getSource (id) {
+  return request({
+    url: '/admin/sys/source/api/detail?id=' + id,
+    method: 'get'
+  })
+}
 
 // 新增数据源
 export function addSource (data) {
@@ -25,16 +25,16 @@ export function addSource (data) {
     data: data
   })
 }
-//
-// // 修改数据源
-// export function updateUser (data) {
-//   return request({
-//     url: '/admin/sys/user/api/update',
-//     method: 'put',
-//     data: data
-//   })
-// }
-//
+
+// 修改数据源
+export function updateSource (data) {
+  return request({
+    url: '/admin/sys/source/api/update',
+    method: 'put',
+    data: data
+  })
+}
+
 // 删除数据源
 export function delSource (userId) {
   return request({

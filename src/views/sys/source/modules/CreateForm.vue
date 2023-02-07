@@ -5,11 +5,26 @@
       <b>{{ formTitle }}</b>
     </a-divider>
     <a-form-model ref="form" :model="form" :rules="rules">
-      <a-form-model-item label="用户名" prop="userName" v-if="form.id == undefined">
-        <a-input v-model="form.username" placeholder="请输入" />
+      <a-form-model-item label="数据源名称" prop="name">
+        <a-input v-model="form.name" placeholder="请输入" />
       </a-form-model-item>
-      <a-form-model-item label="密码" prop="password" v-if="form.id == undefined">
-        <a-input-password v-model="form.password" placeholder="请输入" :maxLength="20" />
+      <a-form-model-item label="数据源驱动" prop="driverClassName">
+        <a-select
+          v-model="form.driverClassName"
+          placeholder="请选择">
+          <a-select-option v-for="(d, index) in dictOption" :key="index" :value="d.value">
+            {{ d.label }}
+          </a-select-option>
+        </a-select>
+      </a-form-model-item>
+      <a-form-model-item label="数据源连接" prop="url">
+        <a-input v-model="form.url" placeholder="请输入" type="textarea" allow-clear />
+      </a-form-model-item>
+      <a-form-model-item label="数据源用户名" prop="username">
+        <a-input v-model="form.username" autocomplete="off" placeholder="请输入" />
+      </a-form-model-item>
+      <a-form-model-item label="数据源密码" prop="password">
+        <a-input-password v-model="form.password" autocomplete="off" placeholder="请输入" :maxLength="20" />
       </a-form-model-item>
       <div class="bottom-control">
         <a-space>
@@ -27,7 +42,8 @@
 
 <script>
 
-  import { addUser, updateUser } from '@/api/sys/user'
+import { addSource, updateSource, getSource } from '@/api/sys/source'
+  import { listDictByType } from '@/api/sys/dict'
   export default {
     name: 'CreateForm',
     components: {
@@ -38,23 +54,32 @@
         submitLoading: false,
         // 默认密码
         formTitle: '',
+        dictOption: [],
         // 表单参数
         form: {
-          id: undefined,
-          username: undefined,
-          password: undefined,
-          driverClassName: undefined,
-          name: undefined,
-          url: undefined
+          id: '',
+          username: '',
+          password: '',
+          driverClassName: '',
+          name: '',
+          url: ''
         },
         open: false,
         rules: {
           username: [
-            { required: true, message: '用户名不能为空', trigger: 'blur' }
+            { required: true, message: '数据源用户名不能为空', trigger: 'blur' }
           ],
           password: [
-            { required: true, message: '密码不能为空', trigger: 'blur' },
-            { min: 5, max: 20, message: '用户密码长度必须介于 5 和 20 之间', trigger: 'blur' }
+            { required: true, message: '数据源密码不能为空', trigger: 'blur' }
+          ],
+          name: [
+            { required: true, message: '数据源名称不能为空', trigger: 'blur' }
+          ],
+          driverClassName: [
+            { required: true, message: '数据源驱动不能为空', trigger: 'blur' }
+          ],
+          url: [
+            { required: true, message: '数据源连接不能为空', trigger: 'blur' }
           ]
         }
       }
@@ -68,7 +93,15 @@
     },
     watch: {
     },
+    mounted () {
+      this.getDict()
+    },
     methods: {
+      getDict () {
+        listDictByType('DRIVER_CLASS').then(res => {
+          this.dictOption = res.data
+        })
+      },
       onClose () {
         this.open = false
       },
@@ -80,12 +113,12 @@
       // 表单重置
       reset () {
         this.form = {
-          id: undefined,
-          username: undefined,
-          password: undefined,
-          driverClassName: undefined,
-          name: undefined,
-          url: undefined
+          id: '',
+          username: '',
+          password: '',
+          driverClassName: '',
+          name: '',
+          url: ''
         }
       },
       /** 新增按钮操作 */
@@ -98,6 +131,15 @@
       handleUpdate (row) {
         this.reset()
         this.open = true
+        const id = row.id
+        getSource(id).then(res => {
+          this.form.id = res.data.id
+          this.form.name = res.data.name
+          this.form.driverClassName = res.data.driverClassName
+          this.form.password = res.data.password
+          this.form.username = res.data.username
+          this.form.url = res.data.url
+        })
         this.formTitle = '数据源修改'
       },
       /** 提交按钮 */
@@ -106,7 +148,7 @@
           if (valid) {
             this.submitLoading = true
             if (this.form.id !== undefined) {
-              updateUser(this.form).then(() => {
+              updateSource(this.form).then(() => {
                 this.$message.success(
                   '修改成功',
                   3
@@ -117,7 +159,7 @@
                 this.submitLoading = false
               })
             } else {
-              addUser(this.form).then(() => {
+              addSource(this.form).then(() => {
                 this.$message.success(
                   '新增成功',
                   3

@@ -5,7 +5,7 @@
       <b>{{ formTitle }}</b>
     </a-divider>
     <a-form-model ref="form" :model="form" :rules="rules">
-      <a-form-model-item label="用户名" prop="userName" v-if="form.id == undefined">
+      <a-form-model-item label="用户名" prop="username" v-if="form.id == undefined">
         <a-input v-model="form.username" placeholder="请输入" />
       </a-form-model-item>
       <a-form-model-item label="部门" prop="deptId">

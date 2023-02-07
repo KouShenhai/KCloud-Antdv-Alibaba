@@ -13,12 +13,12 @@
         </a-select>
       </a-form-model-item>
       <a-form-model-item prop="username">
-        <a-input v-model="form.username" allow-clear size="large" placeholder="请输入账号" >
+        <a-input v-model="form.username" autocomplete="off" allow-clear size="large" placeholder="请输入账号" >
           <a-icon slot="prefix" type="user" :style="{ color: 'rgba(0,0,0,.25)' }"/>
         </a-input>
       </a-form-model-item>
       <a-form-model-item prop="password">
-        <a-input-password v-model="form.password" allow-clear size="large" placeholder="请输入密码">
+        <a-input-password v-model="form.password" autocomplete="off" allow-clear size="large" placeholder="请输入密码">
           <a-icon slot="prefix" type="lock" :style="{ color: 'rgba(0,0,0,.25)' }"/>
         </a-input-password>
       </a-form-model-item>
