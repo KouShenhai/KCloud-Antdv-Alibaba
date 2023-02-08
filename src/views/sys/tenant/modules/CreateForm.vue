@@ -8,36 +8,8 @@
       <a-form-model-item label="用户名" prop="userName" v-if="form.id == undefined">
         <a-input v-model="form.username" placeholder="请输入" />
       </a-form-model-item>
-      <a-form-model-item label="部门" prop="deptId">
-        <a-tree-select
-          v-model="form.deptId"
-          style="width: 100%"
-          :dropdown-style="{ maxHeight: '400px', overflow: 'auto' }"
-          :tree-data="deptOptions"
-          placeholder="请选择"
-          :replaceFields="replaceFields"
-          tree-default-expand-all
-        >
-        </a-tree-select>
-      </a-form-model-item>
       <a-form-model-item label="密码" prop="password" v-if="form.id == undefined">
         <a-input-password v-model="form.password" placeholder="请输入" :maxLength="20" />
-      </a-form-model-item>
-      <a-form-model-item label="状态" prop="status">
-        <a-radio-group v-model="form.status" button-style="solid">
-          <a-radio-button v-for="(d, index) in statusOptions" :key="index" :value="d.value">{{ d.label }}</a-radio-button>
-        </a-radio-group>
-      </a-form-model-item>
-      <a-form-model-item label="角色" prop="roleIds">
-        <a-select
-          mode="multiple"
-          v-model="form.roleIds"
-          placeholder="请选择"
-        >
-          <a-select-option v-for="(d, index) in roleOptions" :key="index" :value="d.id">
-            {{ d.name }}
-          </a-select-option>
-        </a-select>
       </a-form-model-item>
       <div class="bottom-control">
         <a-space>
@@ -59,42 +31,19 @@
   import { listRole } from '@/api/sys/role'
   export default {
     name: 'CreateForm',
-    props: {
-      deptOptions: {
-        type: Array,
-        required: true
-      }
-    },
     components: {
 
     },
     data () {
       return {
         submitLoading: false,
-        replaceFields: { children: 'children', title: 'name', key: 'id', value: 'id' },
-        // 角色选项
-        roleOptions: [],
-        statusOptions: [
-          {
-            label: '正常',
-            value: 0
-          },
-          {
-            label: '停用',
-            value: 1
-          }
-        ],
-        // 默认密码
-        initPassword: 'test123',
         formTitle: '',
         // 表单参数
         form: {
           id: undefined,
-          deptId: '',
           username: undefined,
           password: undefined,
-          status: '0',
-          roleIds: []
+          status: '0'
         },
         open: false,
         rules: {
@@ -104,9 +53,6 @@
           password: [
             { required: true, message: '密码不能为空', trigger: 'blur' },
             { min: 5, max: 20, message: '用户密码长度必须介于 5 和 20 之间', trigger: 'blur' }
-          ],
-          deptId: [
-            { required: true, message: '部门不为空', trigger: 'blur' }
           ]
         }
       }
@@ -133,11 +79,9 @@
       reset () {
         this.form = {
           id: undefined,
-          deptId: '',
           username: undefined,
           password: undefined,
-          status: 0,
-          roleIds: []
+          status: 0
         }
       },
       /** 新增按钮操作 */
@@ -155,7 +99,6 @@
           this.roleOptions = roles
           this.open = true
           this.formTitle = '用户新增'
-          this.form.password = this.initPassword
         })
       },
       /** 修改按钮操作 */
@@ -176,7 +119,6 @@
         })
         getUser(userId).then(response => {
           this.form = response.data
-          this.form.roleIds = this.form.roleIds
           this.open = true
           this.formTitle = '用户修改'
           this.form.password = ''

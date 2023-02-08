@@ -87,13 +87,6 @@ export default {
   data () {
     return {
       list: [],
-      selectedRowKeys: [],
-      selectedRows: [],
-      // 非单个禁用
-      single: true,
-      // 非多个禁用
-      multiple: true,
-      ids: [],
       loading: false,
       total: 0,
       queryParam: {

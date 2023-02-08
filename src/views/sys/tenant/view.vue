@@ -5,7 +5,7 @@
         <a-col :span="20">
           <!-- 条件搜索 -->
           <div class="table-page-search-wrapper">
-            <a-form layout="inline" v-hasPermi="['sys:user:query']">
+            <a-form layout="inline" v-hasPermi="['sys:tenant:query']">
               <a-row :gutter="48">
                 <a-col :md="8" :sm="24">
                   <a-form-item label="用户名">
@@ -22,7 +22,7 @@
             </a-form>
           </div>
           <div class="table-operations">
-            <a-button type="primary" @click="$refs.createForm.handleAdd()" v-hasPermi="['sys:user:insert']">
+            <a-button type="primary" @click="$refs.createForm.handleAdd()" v-hasPermi="['sys:tenant:insert']">
               <a-icon type="plus" />新增
             </a-button>
           </div>
@@ -30,12 +30,6 @@
           <create-form
             ref="createForm"
             @ok="getList"
-            :deptOptions="deptOptions"
-            @select-tree="getTreeSelect"
-          />
-          <!-- 修改密码抽屉 -->
-          <reset-password
-            ref="resetPassword"
           />
           <!-- 数据展示 -->
           <a-table
@@ -46,41 +40,19 @@
             :data-source="list"
             :pagination="false"
             :bordered="tableBordered">
-            <span slot="status" slot-scope="text, record">
-              <a-popconfirm
-                ok-text="是"
-                cancel-text="否"
-                @confirm="confirmHandleStatus(record)"
-                @cancel="cancelHandleStatus(record)"
-              >
-                <span slot="title">确认<b>{{ record.status == '0' ? '停用' : '启用' }}</b>{{ record.username }}的用户吗?</span>
-                <a-switch checked-children="开" un-checked-children="关" :checked="record.status == '0'" />
-              </a-popconfirm>
-            </span>
-            <span slot="superAdmin" slot-scope="text, record">
-              {{ superAdminFormat(record) }}
-            </span>
-            <span slot="imgUrl" slot-scope="text, record">
-              <img style="width:50px;height:50px" :src="record.imgUrl" />
-            </span>
             <span slot="operation" slot-scope="text, record">
-              <a @click="$refs.createForm.handleUpdate(record)" v-hasPermi="['sys:user:update']">
+              <a @click="$refs.createForm.handleUpdate(record)" v-hasPermi="['sys:tenant:update']">
                 <a-icon type="edit" />
                 修改
               </a>
-              <a-divider type="vertical" v-hasPermi="['sys:user:insert']"/>
-              <a @click="$refs.createForm.handleAdd()" v-hasPermi="['sys:user:insert']">
+              <a-divider type="vertical" v-hasPermi="['sys:tenant:insert']"/>
+              <a @click="$refs.createForm.handleAdd()" v-hasPermi="['sys:tenant:insert']">
                 <a-icon type="plus" />新增
               </a>
-              <a-divider type="vertical" v-hasPermi="['sys:user:delete']"/>
-              <a @click="handleDelete(record)" v-hasPermi="['sys:user:delete']">
+              <a-divider type="vertical" v-hasPermi="['sys:tenant:delete']"/>
+              <a @click="handleDelete(record)" v-hasPermi="['sys:tenant:delete']">
                 <a-icon type="delete" />
                 删除
-              </a>
-              <a-divider type="vertical" v-hasPermi="['sys:user:password']"/>
-              <a @click="$refs.resetPassword.handleResetPwd(record)" v-hasPermi="['sys:user:password']">
-                <a-icon type="key" />
-                重置密码
               </a>
             </span>
           </a-table>
@@ -103,79 +75,29 @@
 </template>
 <script>
 
-import { listUser, delUser, changeUserStatus } from '@/api/sys/user'
-import { treeSelect } from '@/api/sys/dept'
-import ResetPassword from './modules/ResetPassword'
-import CreateForm from '@/views/sys/user/modules/CreateForm'
+import { listTenant, delTenant } from '@/api/sys/tenant'
+import CreateForm from '@/views/sys/tenant/modules/CreateForm'
 import { tableMixin } from '@/store/table-mixin'
 export default {
-  name: 'User',
+  name: 'Tenant',
   components: {
-    ResetPassword,
     CreateForm
   },
   mixins: [tableMixin],
   data () {
     return {
       list: [],
-      selectedRowKeys: [],
-      selectedRows: [],
-      // 非单个禁用
-      single: true,
-      // 非多个禁用
-      multiple: true,
-      ids: [],
       loading: false,
       total: 0,
-      // 部门树选项
-      deptOptions: [{
-        id: 0,
-        name: '',
-        children: []
-      }],
-      statusOptions: [
-        {
-          label: '正常',
-          value: 0
-        },
-        {
-          label: '停用',
-          value: 1
-        }
-      ],
       queryParam: {
         pageNum: 1,
         pageSize: 10,
-        username: undefined,
-        status: undefined
+        name: undefined
       },
       columns: [
         {
-          title: '用户名称',
-          dataIndex: 'username',
-          align: 'center'
-        },
-        {
-          title: '用户头像',
-          dataIndex: 'imgUrl',
-          scopedSlots: { customRender: 'imgUrl' },
-          align: 'center'
-        },
-        {
-          title: '用户状态',
-          dataIndex: 'status',
-          scopedSlots: { customRender: 'status' },
-          align: 'center'
-        },
-        {
-          title: '创建时间',
-          dataIndex: 'createDate',
-          align: 'center'
-        },
-        {
-          title: '备注',
-          dataIndex: 'superAdmin',
-          scopedSlots: { customRender: 'superAdmin' },
+          title: '租户名称',
+          dataIndex: 'name',
           align: 'center'
         },
         {
@@ -197,22 +119,10 @@ export default {
   watch: {
   },
   methods: {
-    /** 查询部门下拉树结构 */
-    getTreeSelect () {
-      treeSelect().then(response => {
-        this.deptOptions = response.data.children
-      })
-    },
-    superAdminFormat (row) {
-      if (row.superAdmin === '1') {
-        return '超级管理员'
-      }
-      return ''
-    },
     /** 查询用户列表 */
     getList () {
       this.loading = true
-      listUser(this.queryParam).then(response => {
+      listTenant(this.queryParam).then(response => {
           this.list = response.data.records
           this.total = response.data.total - 0
           this.loading = false
@@ -229,8 +139,7 @@ export default {
       this.queryParam = {
         pageNum: 1,
         pageSize: 10,
-        username: undefined,
-        status: undefined
+        name: undefined
       }
       this.handleQuery()
     },
@@ -243,35 +152,18 @@ export default {
       this.queryParam.pageSize = pageSize
       this.getList()
     },
-    /* 用户状态修改 */
-    confirmHandleStatus (row) {
-      const text = row.status === '0' ? '关闭' : '启用'
-      row.status = row.status === '0' ? '1' : '0'
-      changeUserStatus(row)
-        .then(() => {
-          this.$message.success(
-            text + '成功',
-            3
-          )
-        }).catch(function () {
-        this.$message.error(
-          text + '异常',
-          3
-        )
-      })
-    },
     cancelHandleStatus (row) {
 
     },
     /** 删除按钮操作 */
     handleDelete (row) {
       const that = this
-      const userIds = row.id
+      const tenantId = row.id
       this.$confirm({
         title: '确认删除所选中数据?',
-        content: '当前选中编号为' + userIds + '的数据',
+        content: '当前选中编号为' + tenantId + '的数据',
         onOk () {
-          return delUser(userIds)
+          return delTenant(tenantId)
             .then(() => {
               that.getList()
               that.$message.success(

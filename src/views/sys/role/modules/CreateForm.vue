@@ -103,7 +103,7 @@ export default {
       open: false,
       rules: {
         name: [{ required: true, message: '角色名称不能为空', trigger: 'blur' }],
-        sort: [{ required: true, message: '显示顺序不能为空', trigger: 'blur' }]
+        sort: [{ required: true, message: '角色排序不能为空', trigger: 'blur' }]
       },
       defaultProps: {
         children: 'children',
