@@ -6,7 +6,7 @@
           size="large"
           v-model="form.tenantId"
           placeholder="请选择租户">
-          <a-select-option key="0" value="0">老寇云平台</a-select-option>
+          <a-select-option key="0" value="0">老寇云集团</a-select-option>
           <a-select-option v-for="(d, index) in tenantOptions" :key="index + 1" :value="d.value">
             {{ d.label }}
           </a-select-option>
