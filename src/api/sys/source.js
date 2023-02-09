@@ -42,3 +42,11 @@ export function delSource (userId) {
     method: 'delete'
   })
 }
+
+// 数据源下拉列表
+export function sourceOption () {
+  return request({
+    url: '/admin/sys/source/api/option/list',
+    method: 'get'
+  })
+}

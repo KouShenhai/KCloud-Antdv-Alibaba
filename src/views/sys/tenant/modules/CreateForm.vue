@@ -5,11 +5,26 @@
       <b>{{ formTitle }}</b>
     </a-divider>
     <a-form-model ref="form" :model="form" :rules="rules">
-      <a-form-model-item label="用户名" prop="userName" v-if="form.id == undefined">
-        <a-input v-model="form.username" placeholder="请输入" />
+      <a-form-model-item label="租户名称" prop="name">
+        <a-input v-model="form.name" placeholder="请输入" />
       </a-form-model-item>
-      <a-form-model-item label="密码" prop="password" v-if="form.id == undefined">
-        <a-input-password v-model="form.password" placeholder="请输入" :maxLength="20" />
+      <a-form-model-item label="租户套餐" prop="packageId">
+        <a-select
+          v-model="form.packageId"
+          placeholder="请选择">
+          <a-select-option v-for="(d, index) in packageOption" :key="index" :value="d.value">
+            {{ d.label }}
+          </a-select-option>
+        </a-select>
+      </a-form-model-item>
+      <a-form-model-item label="租户数据源" prop="sourceId">
+        <a-select
+          v-model="form.sourceId"
+          placeholder="请选择">
+          <a-select-option v-for="(d, index) in sourceOption" :key="index" :value="d.value">
+            {{ d.label }}
+          </a-select-option>
+        </a-select>
       </a-form-model-item>
       <div class="bottom-control">
         <a-space>
@@ -27,8 +42,10 @@
 
 <script>
 
-  import { getUser, addUser, updateUser } from '@/api/sys/user'
-  import { listRole } from '@/api/sys/role'
+  import { getTenant, addTenant, updateTenant } from '@/api/sys/tenant'
+  import { sourceOption } from '@/api/sys/source'
+  import { packageOption } from '@/api/sys/package'
+
   export default {
     name: 'CreateForm',
     components: {
@@ -41,18 +58,16 @@
         // 表单参数
         form: {
           id: undefined,
-          username: undefined,
-          password: undefined,
-          status: '0'
+          name: undefined,
+          packageId: undefined,
+          sourceId: ''
         },
+        packageOption: [],
+        sourceOption: [],
         open: false,
         rules: {
           username: [
-            { required: true, message: '用户名不能为空', trigger: 'blur' }
-          ],
-          password: [
-            { required: true, message: '密码不能为空', trigger: 'blur' },
-            { min: 5, max: 20, message: '用户密码长度必须介于 5 和 20 之间', trigger: 'blur' }
+            { required: true, message: '租户名称不能为空', trigger: 'blur' }
           ]
         }
       }
@@ -60,13 +75,24 @@
     filters: {
     },
     created () {
-
+      this.getPackageOption()
+      this.getSourceOption()
     },
     computed: {
     },
     watch: {
     },
     methods: {
+      getSourceOption () {
+        sourceOption().then(res => {
+          this.sourceOption = res.data
+        })
+      },
+      getPackageOption () {
+        packageOption().then(res => {
+          this.packageOption = res.data
+        })
+      },
       onClose () {
         this.open = false
       },
@@ -79,48 +105,25 @@
       reset () {
         this.form = {
           id: undefined,
-          username: undefined,
-          password: undefined,
-          status: 0
+          name: undefined,
+          packageId: undefined,
+          sourceId: ''
         }
       },
       /** 新增按钮操作 */
       handleAdd () {
         this.reset()
-        this.$emit('select-tree')
-        listRole({}).then(response => {
-          const roles = []
-          response.data.forEach(item => {
-            roles.push({
-              id: item.id,
-              name: item.name
-            })
-          })
-          this.roleOptions = roles
-          this.open = true
-          this.formTitle = '用户新增'
-        })
+        this.open = true
+        this.formTitle = '租户新增'
       },
       /** 修改按钮操作 */
       handleUpdate (row) {
         this.reset()
-        this.$emit('select-tree')
-        // eslint-disable-next-line no-unused-vars
-        const userId = row.id
-        listRole({}).then(response => {
-          const roles = []
-          response.data.forEach(item => {
-            roles.push({
-              id: item.id,
-              name: item.name
-            })
-          })
-          this.roleOptions = roles
-        })
-        getUser(userId).then(response => {
+        const id = row.id
+        getTenant(id).then(response => {
           this.form = response.data
           this.open = true
-          this.formTitle = '用户修改'
+          this.formTitle = '租户修改'
           this.form.password = ''
         })
       },
@@ -130,7 +133,7 @@
           if (valid) {
             this.submitLoading = true
             if (this.form.id !== undefined) {
-              updateUser(this.form).then(response => {
+              updateTenant(this.form).then(() => {
                 this.$message.success(
                   '修改成功',
                   3
@@ -141,7 +144,7 @@
                 this.submitLoading = false
               })
             } else {
-              addUser(this.form).then(response => {
+              addTenant(this.form).then(() => {
                 this.$message.success(
                   '新增成功',
                   3

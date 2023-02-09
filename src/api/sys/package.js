@@ -42,3 +42,11 @@ export function delPackage (id) {
     method: 'delete'
   })
 }
+
+// 套餐下拉列表
+export function packageOption () {
+  return request({
+    url: '/admin/sys/package/api/option/list',
+    method: 'get'
+  })
+}

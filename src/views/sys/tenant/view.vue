@@ -158,12 +158,12 @@ export default {
     /** 删除按钮操作 */
     handleDelete (row) {
       const that = this
-      const tenantId = row.id
+      const id = row.id
       this.$confirm({
         title: '确认删除所选中数据?',
-        content: '当前选中编号为' + tenantId + '的数据',
+        content: '当前选中编号为' + id + '的数据',
         onOk () {
-          return delTenant(tenantId)
+          return delTenant(id)
             .then(() => {
               that.getList()
               that.$message.success(
