@@ -69,13 +69,6 @@ export default {
   data () {
     return {
       list: [],
-      selectedRowKeys: [],
-      selectedRows: [],
-      // 高级搜索 展开/关闭
-      single: true,
-      // 非多个禁用
-      multiple: true,
-      ids: [],
       loading: false,
       total: 0,
       queryParam: {

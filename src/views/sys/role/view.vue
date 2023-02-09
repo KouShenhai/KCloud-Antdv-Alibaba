@@ -86,8 +86,6 @@ export default {
   data () {
     return {
       list: [],
-      // 高级搜索 展开/关闭
-      single: true,
       // 非多个禁用
       multiple: true,
       ids: [],

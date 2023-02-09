@@ -88,20 +88,8 @@ export default {
   data () {
     return {
       list: [],
-      selectedRowKeys: [],
-      selectedRows: [],
-      // 高级搜索 展开/关闭
-      advanced: false,
-      // 非单个禁用
-      single: true,
-      // 非多个禁用
-      multiple: true,
-      ids: [],
       loading: false,
-      refreshing: false,
       total: 0,
-      // 日期范围
-      dateRange: [],
       queryParam: {
         pageNum: 1,
         pageSize: 10,
@@ -177,7 +165,6 @@ export default {
     },
     /** 重置按钮操作 */
     resetQuery () {
-      this.dateRange = []
       this.queryParam = {
         pageNum: 1,
         pageSize: 10,
@@ -194,9 +181,6 @@ export default {
       this.queryParam.pageNum = current
       this.queryParam.pageSize = pageSize
       this.getList()
-    },
-    toggleAdvanced () {
-      this.advanced = !this.advanced
     },
     /** 删除按钮操作 */
     handleDelete (row) {

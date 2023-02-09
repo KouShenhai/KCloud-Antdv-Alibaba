@@ -78,7 +78,7 @@ import CreateForm from './modules/CreateForm'
 import { tableMixin } from '@/store/table-mixin'
 
 export default {
-  name: 'Role',
+  name: 'Package',
   components: {
     CreateForm
   },
@@ -86,8 +86,6 @@ export default {
   data () {
     return {
       list: [],
-      // 高级搜索 展开/关闭
-      single: true,
       // 非多个禁用
       multiple: true,
       ids: [],

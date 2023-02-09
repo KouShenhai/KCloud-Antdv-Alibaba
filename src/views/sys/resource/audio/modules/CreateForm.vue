@@ -17,7 +17,7 @@
         <audio v-show="display" loop="loop" :src="form.url" controls="controls"><object :data="form.url" ><embed :src="form.url" /></object></audio>
       </a-form-model-item>
       <a-form-model-item label="标签" prop="tags">
-        <template v-for="(tag, index) in tags">
+        <template v-for="(tag) in tags">
           <a-tag
             color="#f50"
             :key="tag"

@@ -83,7 +83,6 @@ export default {
       allIcon,
       iconVisible: false,
       list: [],
-      // 部门树选项
       menuOptions: [],
       loading: false,
       queryParam: {

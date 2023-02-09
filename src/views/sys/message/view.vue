@@ -105,9 +105,6 @@ export default {
       list: [],
       loading: false,
       total: 0,
-      // 状态数据字典
-      statusOptions: [],
-      typeOptions: [],
       form: {
         title: '',
         content: ''

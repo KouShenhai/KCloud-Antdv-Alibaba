@@ -38,7 +38,6 @@
       <!-- 增加修改 -->
       <create-form
         ref="createForm"
-        :statusOptions="statusOptions"
         @ok="getList"
       />
       <!-- 数据展示 -->
@@ -138,28 +137,14 @@ export default {
       audioUrl: '',
       list: [],
       list1: [],
-      selectedRowKeys: [],
-      selectedRows: [],
-      // 高级搜索 展开/关闭
-      advanced: false,
       visible1: false,
       visible2: false,
       visible3: false,
-      // 非单个禁用
-      single: true,
-      // 非多个禁用
-      multiple: true,
-      ids: [],
       loading: false,
       completeSyncLoading: false,
       incrementSyncLoading: false,
-      refreshing: false,
       total: 0,
       visible: false,
-      // 状态数据字典
-      statusOptions: [],
-      // 日期范围
-      dateRange: [],
       queryParam: {
         pageNum: 1,
         pageSize: 10,
@@ -355,7 +340,6 @@ export default {
     },
     /** 重置按钮操作 */
     resetQuery () {
-      this.dateRange = []
       this.queryParam = {
         pageNum: 1,
         pageSize: 10,
@@ -373,9 +357,6 @@ export default {
       this.queryParam.pageNum = current
       this.queryParam.pageSize = pageSize
       this.getList()
-    },
-    toggleAdvanced () {
-      this.advanced = !this.advanced
     },
     /** 删除按钮操作 */
     handleDelete (row) {
