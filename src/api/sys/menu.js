@@ -33,6 +33,14 @@ export function roleMenuTreeSelect (roleId) {
   })
 }
 
+// 租户菜单
+export function tenantTreeSelect () {
+  return request({
+    url: '/admin/sys/menu/api/tenant',
+    method: 'get'
+  })
+}
+
 // 新增菜单
 export function addMenu (data) {
   return request({

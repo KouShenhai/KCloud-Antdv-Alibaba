@@ -11,10 +11,10 @@
         <a-input-number placeholder="请输入" v-model="form.sort" :min="0" style="width: 100%"/>
       </a-form-model-item>
       <a-form-model-item label="数据权限">
-        <a-checkbox @change="handleCheckedTreeExpand2($event)">
+        <a-checkbox :checked="check1" @change="handleCheckedTreeExpand2($event)">
           展开/折叠
         </a-checkbox>
-        <a-checkbox @change="handleCheckedTreeNodeAll2($event)">
+        <a-checkbox :checked="check2" @change="handleCheckedTreeNodeAll2($event)">
           全选/全不选
         </a-checkbox>
         <a-tree
@@ -30,10 +30,10 @@
         />
       </a-form-model-item>
       <a-form-model-item label="菜单列表">
-        <a-checkbox @change="handleCheckedTreeExpand($event)">
+        <a-checkbox :checked="check3" @change="handleCheckedTreeExpand($event)">
           展开/折叠
         </a-checkbox>
-        <a-checkbox @change="handleCheckedTreeNodeAll($event)">
+        <a-checkbox :checked="check4" @change="handleCheckedTreeNodeAll($event)">
           全选/全不选
         </a-checkbox>
         <a-tree
@@ -76,6 +76,10 @@ export default {
   },
   data () {
     return {
+      check1: false,
+      check2: false,
+      check3: false,
+      check4: false,
       deptCheckedKeys: [],
       deptExpandedKeys: [],
       submitLoading: false,
@@ -133,6 +137,7 @@ export default {
       this.autoExpandParent2 = false
     },
     handleCheckedTreeNodeAll2 (value) {
+      this.check2 = !this.check2
       if (value.target.checked) {
         this.getAllDeptNode(this.deptOptions)
       } else {
@@ -161,6 +166,7 @@ export default {
       })
     },
     handleCheckedTreeExpand2 (value) {
+      this.check1 = !this.check1
       if (value.target.checked) {
         const treeList = this.deptOptions
         for (let i = 0; i < treeList.length; i++) {
@@ -242,6 +248,7 @@ export default {
       return this.deptCheckedKeys
     },
     handleCheckedTreeNodeAll (value) {
+      this.check4 = !this.check4
       if (value.target.checked) {
         this.getAllMenuNode(this.menuOptions)
       } else {
@@ -250,6 +257,7 @@ export default {
       }
     },
     handleCheckedTreeExpand (value) {
+      this.check3 = !this.check3
       if (value.target.checked) {
         const treeList = this.menuOptions
         for (let i = 0; i < treeList.length; i++) {
@@ -315,6 +323,10 @@ export default {
     },
     // 表单重置
     reset () {
+      this.check2 = false
+      this.check1 = false
+      this.check3 = false
+      this.check4 = false
       this.deptExpandedKeys = []
       this.menuExpandedKeys = []
       this.autoExpandParent = false
