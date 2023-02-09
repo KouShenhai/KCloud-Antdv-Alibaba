@@ -4,19 +4,10 @@
       <b>{{ formTitle }}</b>
     </a-divider>
     <a-form-model ref="form" :model="form" :rules="rules">
-      <a-form-model-item label="角色名称" prop="name">
+      <a-form-model-item label="套餐名称" prop="name">
         <a-input v-model="form.name" placeholder="请输入" />
       </a-form-model-item>
-      <a-form-model-item label="角色排序" prop="sort">
-        <a-input-number placeholder="请输入" v-model="form.sort" :min="0" style="width: 100%"/>
-      </a-form-model-item>
       <a-form-model-item label="菜单列表">
-        <a-checkbox @change="handleCheckedTreeExpand($event)">
-          展开/折叠
-        </a-checkbox>
-        <a-checkbox @change="handleCheckedTreeNodeAll($event)">
-          全选/全不选
-        </a-checkbox>
         <a-tree
           v-model="menuCheckedKeys"
           checkable
@@ -69,14 +60,12 @@ export default {
       form: {
         id: undefined,
         name: undefined,
-        sort: 0,
         menuIds: [],
         menuCheckStrictly: false
       },
       open: false,
       rules: {
-        name: [{ required: true, message: '角色名称不能为空', trigger: 'blur' }],
-        sort: [{ required: true, message: '角色排序不能为空', trigger: 'blur' }]
+        name: [{ required: true, message: '套餐名称不能为空', trigger: 'blur' }]
       },
       defaultProps: {
         children: 'children',
@@ -146,24 +135,6 @@ export default {
         return this.selectNodeFilter(node.children, parentIds)
       })
     },
-    handleCheckedTreeNodeAll (value) {
-      if (value.target.checked) {
-        this.getAllMenuNode(this.menuOptions)
-      } else {
-        this.menuCheckedKeys = []
-        this.halfCheckedKeys = []
-      }
-    },
-    handleCheckedTreeExpand (value) {
-      if (value.target.checked) {
-        const treeList = this.menuOptions
-        for (let i = 0; i < treeList.length; i++) {
-          this.menuExpandedKeys.push(treeList[i].id)
-        }
-      } else {
-        this.menuExpandedKeys = []
-      }
-    },
     onCheck (checkedKeys, info) {
       if (!this.form.menuCheckStrictly) {
         let currentCheckedKeys = []
@@ -198,7 +169,6 @@ export default {
       this.form = {
         id: undefined,
         name: '',
-        sort: 1,
         menuIds: [],
         menuCheckStrictly: false
       }
@@ -212,20 +182,17 @@ export default {
     /** 修改按钮操作 */
     handleUpdate (row) {
       this.reset()
-      const roleId = row.id
-      const roleMenu = this.getRoleMenuTreeSelect(roleId)
-      getRole(roleId).then(response => {
+      const id = row.id
+      getPackage(id).then(response => {
         this.form = response.data
         this.form.menuCheckStrictly = false
         this.open = true
         this.$nextTick(() => {
-          roleMenu.then(res => {
-            this.menuCheckedKeys = res.data
-            // 过滤回显时的半选中node(父)
-            if (this.form.menuCheckStrictly) {
-              this.selectNodeFilter(this.menuOptions, [])
-            }
-          })
+          this.menuCheckedKeys = response.data.menuIds
+          // 过滤回显时的半选中node(父)
+          if (this.form.menuCheckStrictly) {
+            this.selectNodeFilter(this.menuOptions, [])
+          }
         })
         this.formTitle = '角色修改'
       })
@@ -237,7 +204,7 @@ export default {
           this.submitLoading = true
           if (this.form.id !== undefined) {
             this.form.menuIds = this.getMenuAllCheckedKeys()
-            updateRole(this.form).then(() => {
+            updatePackage(this.form).then(() => {
               this.$message.success(
                 '修改成功',
                 3
@@ -249,7 +216,7 @@ export default {
             })
           } else {
             this.form.menuIds = this.getMenuAllCheckedKeys()
-            addRole(this.form).then(() => {
+            addPackage(this.form).then(() => {
               this.$message.success(
                 '新增成功',
                 3
