@@ -63,7 +63,7 @@
         :current="queryParam.pageNum"
         :total="total"
         :page-size="queryParam.pageSize"
-        :showTotal="total => `共 ${total} 条`"
+        :showTotal="() => `共 ${total} 条`"
         @showSizeChange="onShowSizeChange"
         @change="changeSize"
       />
@@ -73,7 +73,7 @@
 
 <script>
 
-import { pageRole, delRole } from '@/api/sys/role'
+import { pagePackage, delPackage } from '@/api/sys/package'
 import CreateForm from './modules/CreateForm'
 import { tableMixin } from '@/store/table-mixin'
 
@@ -86,9 +86,6 @@ export default {
   data () {
     return {
       list: [],
-      // 非多个禁用
-      multiple: true,
-      ids: [],
       loading: false,
       total: 0,
       queryParam: {
@@ -98,14 +95,9 @@ export default {
       },
       columns: [
         {
-          title: '角色名称',
+          title: '套餐名称',
           dataIndex: 'name',
           ellipsis: true,
-          align: 'center'
-        },
-        {
-          title: '角色顺序',
-          dataIndex: 'sort',
           align: 'center'
         },
         {
@@ -131,7 +123,7 @@ export default {
     /** 查询角色列表 */
     getList () {
       this.loading = true
-      pageRole(this.queryParam).then(response => {
+      pagePackage(this.queryParam).then(response => {
           this.list = response.data.records
           this.total = response.data.total - 0
           this.loading = false
@@ -162,17 +154,15 @@ export default {
       this.queryParam.pageSize = pageSize
       this.getList()
     },
-    cancelHandleStatus (row) {
-    },
     /** 删除按钮操作 */
     handleDelete (row) {
       const that = this
-      const roleIds = row.id
+      const id = row.id
       this.$confirm({
         title: '确认删除所选中数据?',
-        content: '当前选中编号为' + roleIds + '的数据',
+        content: '当前选中编号为' + id + '的数据',
         onOk () {
-          return delRole(roleIds)
+          return delPackage(id)
             .then(() => {
               that.getList()
               that.$message.success(

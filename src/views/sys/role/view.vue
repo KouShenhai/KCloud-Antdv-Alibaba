@@ -63,7 +63,7 @@
         :current="queryParam.pageNum"
         :total="total"
         :page-size="queryParam.pageSize"
-        :showTotal="total => `共 ${total} 条`"
+        :showTotal="() => `共 ${total} 条`"
         @showSizeChange="onShowSizeChange"
         @change="changeSize"
       />
@@ -161,8 +161,6 @@ export default {
       this.queryParam.pageNum = current
       this.queryParam.pageSize = pageSize
       this.getList()
-    },
-    cancelHandleStatus (row) {
     },
     /** 删除按钮操作 */
     handleDelete (row) {

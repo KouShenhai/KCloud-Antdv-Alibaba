@@ -89,7 +89,7 @@
             :current="queryParam.pageNum"
             :total="total"
             :page-size="queryParam.pageSize"
-            :showTotal="total => `共 ${total} 条`"
+            :showTotal="() => `共 ${total} 条`"
             @showSizeChange="onShowSizeChange"
             @change="changeSize"
           />
@@ -231,7 +231,7 @@ export default {
     /* 用户状态修改 */
     confirmHandleStatus (row) {
       const text = row.status === '0' ? '关闭' : '启用'
-      row.status = row.status === '0' ? '1' : '0'
+      row.status = (row.status + 1) % 2
       changeUserStatus(row)
       .then(() => {
         this.$message.success(

@@ -64,7 +64,7 @@
             :current="queryParam.pageNum"
             :total="total"
             :page-size="queryParam.pageSize"
-            :showTotal="total => `共 ${total} 条`"
+            :showTotal="() => `共 ${total} 条`"
             @showSizeChange="onShowSizeChange"
             @change="changeSize"
           />
