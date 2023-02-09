@@ -3,10 +3,10 @@
     <a-card :bordered="false">
       <!-- 条件搜索 -->
       <div class="table-page-search-wrapper">
-        <a-form layout="inline" v-hasPermi="['sys:role:query']">
+        <a-form layout="inline" v-hasPermi="['sys:package:query']">
           <a-row :gutter="48">
             <a-col :md="8" :sm="24">
-              <a-form-item label="角色名称">
+              <a-form-item label="套餐名称">
                 <a-input v-model="queryParam.name" placeholder="请输入" allow-clear/>
               </a-form-item>
             </a-col>
@@ -20,7 +20,7 @@
         </a-form>
       </div>
       <div class="table-operations">
-        <a-button type="primary" @click="$refs.createForm.handleAdd()" v-hasPermi="['sys:role:insert']">
+        <a-button type="primary" @click="$refs.createForm.handleAdd()" v-hasPermi="['sys:package:insert']">
           <a-icon type="plus" />新增
         </a-button>
       </div>
@@ -39,17 +39,17 @@
         :pagination="false"
         :bordered="tableBordered">
         <span slot="operation" slot-scope="text, record">
-          <a @click="$refs.createForm.handleUpdate(record, undefined)" v-hasPermi="['sys:role:update']">
+          <a @click="$refs.createForm.handleUpdate(record, undefined)" v-hasPermi="['sys:package:update']">
             <a-icon type="edit" />
             修改
           </a>
-          <a-divider type="vertical" v-hasPermi="['sys:role:insert']" />
-          <a @click="$refs.createForm.handleAdd()" v-hasPermi="['sys:role:insert']">
+          <a-divider type="vertical" v-hasPermi="['sys:package:insert']" />
+          <a @click="$refs.createForm.handleAdd()" v-hasPermi="['sys:package:insert']">
             <a-icon type="plus" />
             新增
           </a>
-          <a-divider type="vertical" v-hasPermi="['sys:role:delete']" />
-          <a @click="handleDelete(record)" v-hasPermi="['sys:role:delete']">
+          <a-divider type="vertical" v-hasPermi="['sys:package:delete']" />
+          <a @click="handleDelete(record)" v-hasPermi="['sys:package:delete']">
             <a-icon type="delete" />
             删除
           </a>

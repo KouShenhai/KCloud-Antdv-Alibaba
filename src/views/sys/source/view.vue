@@ -8,7 +8,7 @@
             <a-form layout="inline" v-hasPermi="['sys:source:query']">
               <a-row :gutter="48">
                 <a-col :md="8" :sm="24">
-                  <a-form-item label="名称">
+                  <a-form-item label="数据源名称">
                     <a-input v-model="queryParam.name" placeholder="请输入" allow-clear />
                   </a-form-item>
                 </a-col>

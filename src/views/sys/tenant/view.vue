@@ -8,7 +8,7 @@
             <a-form layout="inline" v-hasPermi="['sys:tenant:query']">
               <a-row :gutter="48">
                 <a-col :md="8" :sm="24">
-                  <a-form-item label="用户名">
+                  <a-form-item label="租户名称">
                     <a-input v-model="queryParam.username" placeholder="请输入" allow-clear />
                   </a-form-item>
                 </a-col>
