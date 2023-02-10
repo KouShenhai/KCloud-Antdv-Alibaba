@@ -9,6 +9,15 @@
           <div class="content-title">
             {{ timeFix }}，{{ nickname }}<span class="welcome-text"></span>
           </div>
+          <div style="margin: 0;padding: 0;">
+            <iframe
+              scrolling="no"
+              src="https://tianqiapi.com/api.php?style=tq&skin=baidu&align=left"
+              frameborder="0"
+              width="100%"
+              height="20"
+              allowtransparency="true"></iframe>
+          </div>
         </div>
       </div>
     </template>
