@@ -80,7 +80,7 @@ request.interceptors.response.use((res) => {
       isReloginShow = true
       notification.open({
         message: '系统提示',
-        description: '登录状态已过期，请重新登录',
+        description: msg,
         btn: h => {
           return h(
             'a-button',
