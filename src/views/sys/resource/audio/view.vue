@@ -163,12 +163,6 @@ export default {
           align: 'center'
         },
         {
-          title: '标签',
-          dataIndex: 'tags',
-          ellipsis: true,
-          align: 'center'
-        },
-        {
           title: '备注',
           dataIndex: 'remark',
           ellipsis: true,

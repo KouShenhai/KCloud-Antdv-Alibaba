@@ -16,30 +16,6 @@
         </a-upload>
         <img :src="form.url" v-show="display" width="100" height="100"/>
       </a-form-model-item>
-      <a-form-model-item label="标签" prop="tags">
-        <template v-for="(tag) in tags">
-          <a-tag
-            color="#f50"
-            :key="tag"
-            closable
-            :close="() => handleTagClose(tag)"
-          >{{ tag }}</a-tag>
-        </template>
-        <a-input
-          v-if="tagInputVisible"
-          ref="tagInput"
-          type="text"
-          size="small"
-          :style="{ width: '78px' }"
-          :value="tagInputValue"
-          @change="handleInputChange"
-          @blur="handleTagInputConfirm"
-          @keyup.enter="handleTagInputConfirm"
-        />
-        <a-tag v-else @click="showTagInput" style="background: #fff; borderStyle: dashed;">
-          <a-icon type="plus"/>新增标签
-        </a-tag>
-      </a-form-model-item>
       <a-form-model-item label="备注" prop="remark">
         <a-input v-model="form.remark" placeholder="请输入备注" type="textarea" allow-clear />
       </a-form-model-item>
@@ -72,13 +48,11 @@
         formTitle: '',
         tagInputVisible: false,
         tagInputValue: '',
-        tags: [],
         // 表单参数
         form: {
           resourceId: undefined,
           title: undefined,
           url: undefined,
-          tags: undefined,
           code: 'image',
           remark: undefined,
           processInstanceId: undefined
@@ -101,34 +75,6 @@
     watch: {
     },
     methods: {
-      handleTagClose (removeTag) {
-        const tags = this.tags.filter(tag => tag !== removeTag)
-        this.tags = tags
-      },
-
-      showTagInput () {
-        this.tagInputVisible = true
-        this.$nextTick(() => {
-          this.$refs.tagInput.focus()
-        })
-      },
-
-      handleInputChange (e) {
-        this.tagInputValue = e.target.value
-      },
-
-      handleTagInputConfirm () {
-        const inputValue = this.tagInputValue
-        let tags = this.tags
-        if (inputValue && !tags.includes(inputValue)) {
-          tags = [...tags, inputValue]
-        }
-        Object.assign(this, {
-          tags,
-          tagInputVisible: false,
-          tagInputValue: ''
-        })
-      },
       onClose () {
         this.open = false
       },
@@ -140,12 +86,10 @@
       // 表单重置
       reset () {
         this.disabled = false
-        this.tags = []
         this.form = {
           resourceId: undefined,
           title: undefined,
           url: undefined,
-          tags: undefined,
           code: 'image',
           remark: undefined,
           processInstanceId: undefined
@@ -185,7 +129,6 @@
         const id = row ? row.id : ids
         getImage(id).then(response => {
           this.form.resourceId = response.data.id
-          this.tags = response.data.tags.split(',')
           this.form.url = response.data.url
           this.form.title = response.data.title
           this.form.code = 'image'
@@ -201,7 +144,6 @@
         this.$refs.form.validate(valid => {
           if (valid) {
             this.submitLoading = true
-            this.form.tags = this.tags.join(',')
             if (this.form.resourceId !== undefined) {
               updateImage(this.form).then(response => {
                 this.$message.success(

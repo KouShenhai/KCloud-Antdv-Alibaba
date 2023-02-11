@@ -19,23 +19,12 @@
         <audio v-show="form2.code == 'audio'" loop='loop' :src="form2.url" controls='controls'><object :data="form2.url" ><embed :src="form2.url" /></object></audio>
         <img v-show="form2.code == 'image'" :src="form2.url" width="100" height="100"/>
         <video
-v-show="form2.code == 'video'"
-:src='form2.url'
-loop='loop'
-width='250'
-height='100'
-controls='controls'><source :src='form2.url' type='video/mp4'><object :data='form2.url' width='200' height='100'><embed :src='form2.url' width='200' height='100' /></object></video>
-      </a-form-model-item>
-      <a-form-model-item label="标签" prop="tags">
-        <template v-for="(tag) in form2.tags">
-          <a-tag
-            color="#f50"
-            :key="tag"
-          >{{ tag }}</a-tag>
-        </template>
-      </a-form-model-item>
-      <a-form-model-item label="备注" prop="remark">
-        {{form2.remark}}
+             v-show="form2.code == 'video'"
+             :src='form2.url'
+             loop='loop'
+             width='250'
+             height='100'
+             controls='controls'><source :src='form2.url' type='video/mp4'><object :data='form2.url' width='200' height='100'><embed :src='form2.url' width='200' height='100' /></object></video>
       </a-form-model-item>
     </a-form-model>
     <a-form-model ref="form" :model="form" :rules="rules">
@@ -75,7 +64,6 @@ export default {
         code: '',
         title: '',
         url: '',
-        tags: [],
         remark: ''
       },
       // 表单参数
@@ -120,7 +108,6 @@ export default {
         this.form2.title = response.data.title
         this.form2.code = response.data.code
         this.form2.id = response.data.id
-        this.form2.tags = response.data.tags.split(',')
         this.form2.remark = response.data.remark
         this.form2.url = response.data.url
       })
@@ -132,7 +119,6 @@ export default {
         code: '',
         title: '',
         url: '',
-        tags: [],
         remark: ''
       }
       this.form = {
