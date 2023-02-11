@@ -5,26 +5,8 @@
       <b>{{ formTitle }}</b>
     </a-divider>
     <a-form-model ref="form" :model="form" :rules="rules">
-      <a-form-model-item label="租户名称" prop="name">
+      <a-form-model-item label="存储名称" prop="name">
         <a-input v-model="form.name" placeholder="请输入" />
-      </a-form-model-item>
-      <a-form-model-item label="租户套餐" prop="packageId">
-        <a-select
-          v-model="form.packageId"
-          placeholder="请选择">
-          <a-select-option v-for="(d, index) in packageOption" :key="index" :value="d.value">
-            {{ d.label }}
-          </a-select-option>
-        </a-select>
-      </a-form-model-item>
-      <a-form-model-item label="租户数据源" prop="sourceId">
-        <a-select
-          v-model="form.sourceId"
-          placeholder="请选择">
-          <a-select-option v-for="(d, index) in sourceOption" :key="index" :value="d.value">
-            {{ d.label }}
-          </a-select-option>
-        </a-select>
       </a-form-model-item>
       <div class="bottom-control">
         <a-space>
@@ -42,10 +24,7 @@
 
 <script>
 
-  import { getTenant, addTenant, updateTenant } from '@/api/sys/tenant'
-  import { sourceOption } from '@/api/sys/source'
-  import { packageOption } from '@/api/sys/package'
-
+  import { getOss, addOss, updateOss } from '@/api/sys/oss'
   export default {
     name: 'CreateForm',
     components: {
@@ -66,7 +45,7 @@
         sourceOption: [],
         open: false,
         rules: {
-          username: [
+          name : [
             { required: true, message: '租户名称不能为空', trigger: 'blur' }
           ]
         }
@@ -75,24 +54,13 @@
     filters: {
     },
     created () {
-      this.getPackageOption()
-      this.getSourceOption()
+
     },
     computed: {
     },
     watch: {
     },
     methods: {
-      getSourceOption () {
-        sourceOption().then(res => {
-          this.sourceOption = res.data
-        })
-      },
-      getPackageOption () {
-        packageOption().then(res => {
-          this.packageOption = res.data
-        })
-      },
       onClose () {
         this.open = false
       },
@@ -114,17 +82,16 @@
       handleAdd () {
         this.reset()
         this.open = true
-        this.formTitle = '租户新增'
+        this.formTitle = '存储新增'
       },
       /** 修改按钮操作 */
       handleUpdate (row) {
         this.reset()
         const id = row.id
-        getTenant(id).then(response => {
+        getOss(id).then(response => {
           this.form = response.data
           this.open = true
-          this.formTitle = '租户修改'
-          this.form.password = ''
+          this.formTitle = '存储修改'
         })
       },
       /** 提交按钮 */
@@ -133,7 +100,7 @@
           if (valid) {
             this.submitLoading = true
             if (this.form.id !== undefined) {
-              updateTenant(this.form).then(() => {
+              updateOss(this.form).then(() => {
                 this.$message.success(
                   '修改成功',
                   3
@@ -144,7 +111,7 @@
                 this.submitLoading = false
               })
             } else {
-              addTenant(this.form).then(() => {
+              addOss(this.form).then(() => {
                 this.$message.success(
                   '新增成功',
                   3

@@ -51,7 +51,7 @@ export default {
       rules: {
         name: [{ required: true, message: '流程名称不为空', trigger: 'blur' }],
       },
-      disabled:false
+      disabled: false
     }
   },
   filters: {
@@ -85,10 +85,10 @@ export default {
       this.open = true
       this.formTitle = '流程新增'
     },
-    beforeUpload() {
+    beforeUpload () {
       return false
     },
-    uploadFile(data) {
+    uploadFile (data) {
       if (data.fileList.length > 0) {
         this.disabled = true
       } else {

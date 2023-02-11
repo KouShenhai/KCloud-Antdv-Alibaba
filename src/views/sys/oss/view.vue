@@ -8,8 +8,8 @@
             <a-form layout="inline" v-hasPermi="['sys:oss:query']">
               <a-row :gutter="48">
                 <a-col :md="8" :sm="24">
-                  <a-form-item label="租户名称">
-                    <a-input v-model="queryParam.username" placeholder="请输入" allow-clear />
+                  <a-form-item label="存储名称">
+                    <a-input v-model="queryParam.name" placeholder="请输入" allow-clear />
                   </a-form-item>
                 </a-col>
                 <a-col :md="8" :sm="24">
@@ -40,6 +40,12 @@
             :data-source="list"
             :pagination="false"
             :bordered="tableBordered">
+            <span slot="status" slot-scope="text, record">
+              {{ statusFormat(record) }}
+            </span>
+            <span slot="enabled" slot-scope="text, record">
+              {{ enabledFormat(record) }}
+            </span>
             <span slot="operation" slot-scope="text, record">
               <a @click="$refs.createForm.handleUpdate(record)" v-hasPermi="['sys:oss:update']">
                 <a-icon type="edit" />
@@ -96,9 +102,55 @@ export default {
       },
       columns: [
         {
-          title: '租户名称',
+          title: '存储名称',
           dataIndex: 'name',
-          align: 'center'
+          align: 'center',
+          ellipsis: true,
+          width: '10%'
+        },
+        {
+          title: '终端地址',
+          dataIndex: 'endpoint',
+          align: 'center',
+          ellipsis: true,
+          width: '10%'
+        },
+        {
+          title: '访问密钥',
+          dataIndex: 'accessKey',
+          align: 'center',
+          ellipsis: true,
+          width: '10%'
+        },
+        {
+          title: '用户密钥',
+          dataIndex: 'secretKey',
+          align: 'center',
+          ellipsis: true,
+          width: '10%'
+        },
+        {
+          title: '桶名',
+          dataIndex: 'bucketName',
+          align: 'center',
+          ellipsis: true,
+          width: '10%'
+        },
+        {
+          scopedSlots: { customRender: 'status' },
+          title: '状态',
+          dataIndex: 'status',
+          align: 'center',
+          ellipsis: true,
+          width: '10%'
+        },
+        {
+          scopedSlots: { customRender: 'enabled' },
+          title: '路径样式访问',
+          dataIndex: 'pathStyleAccessEnabled',
+          align: 'center',
+          ellipsis: true,
+          width: '10%'
         },
         {
           title: '操作',
@@ -119,6 +171,22 @@ export default {
   watch: {
   },
   methods: {
+    statusFormat (row) {
+      // 0：未启用   1：已启用
+      if (row.status === 1) {
+        return '已启用'
+      } else {
+        return '未启用'
+      }
+    },
+    enabledFormat (row) {
+      // 1已开启 0未启用
+      if (row.pathStyleAccessEnabled === 1) {
+        return '已启用'
+      } else {
+        return '未启用'
+      }
+    },
     /** 查询存储列表 */
     getList () {
       this.loading = true

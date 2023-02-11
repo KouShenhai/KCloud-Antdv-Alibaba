@@ -63,7 +63,7 @@
 import { saveMessage } from '@/api/sys/message'
 import Editor from '@/components/Editor'
 import { userOption } from '@/api/sys/user'
-import { uploadFile } from '@/api/sys/oss'
+import { uploadOss } from '@/api/sys/oss'
 import { mapActions } from 'vuex'
 export default {
   name: 'NoticeForm',
@@ -163,7 +163,7 @@ export default {
         const imgData = new FormData()
         imgData.append('file', file)
         imgData.append('md5', result)
-        uploadFile(imgData).then(res => {
+        uploadOss(imgData).then(res => {
           this.$refs.content.$img2Url(pos, res.data.url)
         })
       })

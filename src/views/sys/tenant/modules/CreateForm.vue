@@ -66,7 +66,7 @@
         sourceOption: [],
         open: false,
         rules: {
-          username: [
+          name: [
             { required: true, message: '租户名称不能为空', trigger: 'blur' }
           ]
         }
@@ -124,7 +124,6 @@
           this.form = response.data
           this.open = true
           this.formTitle = '租户修改'
-          this.form.password = ''
         })
       },
       /** 提交按钮 */
