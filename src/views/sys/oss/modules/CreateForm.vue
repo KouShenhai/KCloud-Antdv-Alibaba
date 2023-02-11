@@ -8,6 +8,33 @@
       <a-form-model-item label="存储名称" prop="name">
         <a-input v-model="form.name" placeholder="请输入" />
       </a-form-model-item>
+      <a-form-model-item label="终端地址" prop="endpoint">
+        <a-input v-model="form.endpoint" placeholder="请输入" type="textarea" allow-clear />
+      </a-form-model-item>
+      <a-form-model-item label="地域" prop="region">
+        <a-input v-model="form.region" placeholder="请输入" />
+      </a-form-model-item>
+      <a-form-model-item label="访问密钥" prop="accessKey">
+        <a-input v-model="form.accessKey" placeholder="请输入" />
+      </a-form-model-item>
+      <a-form-model-item label="用户密钥" prop="secretKey">
+        <a-input-password v-model="form.secretKey" autocomplete="off" placeholder="请输入" :maxLength="20" />
+      </a-form-model-item>
+      <a-form-model-item label="桶名" prop="bucketName">
+        <a-input v-model="form.bucketName" placeholder="请输入" />
+      </a-form-model-item>
+      <a-form-model-item label="状态" prop="status">
+        <a-radio-group v-model="form.status" button-style="solid">
+          <a-radio-button value="1">已启动</a-radio-button>
+          <a-radio-button value="0">未启用</a-radio-button>
+        </a-radio-group>
+      </a-form-model-item>
+      <a-form-model-item label="路径样式访问" prop="pathStyleAccessEnabled">
+        <a-radio-group v-model="form.pathStyleAccessEnabled" button-style="solid">
+          <a-radio-button value="1">已启动</a-radio-button>
+          <a-radio-button value="0">未启用</a-radio-button>
+        </a-radio-group>
+      </a-form-model-item>
       <div class="bottom-control">
         <a-space>
           <a-button type="primary" :loading="submitLoading" @click="submitForm">
@@ -38,15 +65,32 @@
         form: {
           id: undefined,
           name: undefined,
-          packageId: undefined,
-          sourceId: ''
+          endpoint: undefined,
+          region: undefined,
+          accessKey: undefined,
+          secretKey: undefined,
+          bucketName: undefined,
+          status: '1',
+          pathStyleAccessEnabled: '1'
         },
         packageOption: [],
         sourceOption: [],
         open: false,
         rules: {
-          name : [
+          name: [
             { required: true, message: '租户名称不能为空', trigger: 'blur' }
+          ],
+          endpoint: [
+            { required: true, message: '终端地址不能为空', trigger: 'blur' }
+          ],
+          accessKey: [
+            { required: true, message: '访问密钥不能为空', trigger: 'blur' }
+          ],
+          secretKey: [
+            { required: true, message: '用户密钥不能为空', trigger: 'blur' }
+          ],
+          bucketName: [
+            { required: true, message: '桶名不能为空', trigger: 'blur' }
           ]
         }
       }
@@ -74,8 +118,13 @@
         this.form = {
           id: undefined,
           name: undefined,
-          packageId: undefined,
-          sourceId: ''
+          endpoint: undefined,
+          region: undefined,
+          accessKey: undefined,
+          secretKey: undefined,
+          bucketName: undefined,
+          status: '1',
+          pathStyleAccessEnabled: '1'
         }
       },
       /** 新增按钮操作 */
@@ -90,6 +139,8 @@
         const id = row.id
         getOss(id).then(response => {
           this.form = response.data
+          this.form.status = '' + response.data.status
+          this.form.pathStyleAccessEnabled = '' + response.data.pathStyleAccessEnabled
           this.open = true
           this.formTitle = '存储修改'
         })

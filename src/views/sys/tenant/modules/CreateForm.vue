@@ -68,6 +68,12 @@
         rules: {
           name: [
             { required: true, message: '租户名称不能为空', trigger: 'blur' }
+          ],
+          packageId: [
+            { required: true, message: '请选择套餐', trigger: 'blur' }
+          ],
+          sourceId: [
+            { required: true, message: '请选择数据源', trigger: 'blur' }
           ]
         }
       }

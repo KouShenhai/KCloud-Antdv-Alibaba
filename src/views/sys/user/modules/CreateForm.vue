@@ -106,7 +106,10 @@
             { min: 5, max: 20, message: '用户密码长度必须介于 5 和 20 之间', trigger: 'blur' }
           ],
           deptId: [
-            { required: true, message: '部门不为空', trigger: 'blur' }
+            { required: true, message: '请选择部门', trigger: 'blur' }
+          ],
+          roleIds: [
+            { required: true, message: '请选择角色', trigger: 'blur' }
           ]
         }
       }

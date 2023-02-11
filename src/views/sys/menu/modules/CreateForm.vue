@@ -128,9 +128,9 @@ export default {
         pid: 0,
         name: '',
         icon: '',
-        type: 0,
+        type: '0',
         sort: 1,
-        visible: 0,
+        visible: '0',
         url: '',
         permission: ''
       },
@@ -174,10 +174,10 @@ export default {
         pid: 0,
         name: '',
         icon: '',
-        type: 0,
+        type: '0',
         sort: 1,
         url: '',
-        visible: 0,
+        visible: '0',
         permission: ''
       }
     },

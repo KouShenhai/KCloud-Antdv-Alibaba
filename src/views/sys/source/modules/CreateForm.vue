@@ -76,7 +76,7 @@ import { addSource, updateSource, getSource } from '@/api/sys/source'
             { required: true, message: '数据源名称不能为空', trigger: 'blur' }
           ],
           driverClassName: [
-            { required: true, message: '数据源驱动不能为空', trigger: 'blur' }
+            { required: true, message: '请选择数据源驱动', trigger: 'blur' }
           ],
           url: [
             { required: true, message: '数据源连接不能为空', trigger: 'blur' }

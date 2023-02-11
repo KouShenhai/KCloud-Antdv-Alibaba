@@ -109,6 +109,13 @@ export default {
           width: '10%'
         },
         {
+          title: '地域',
+          dataIndex: 'region',
+          align: 'center',
+          ellipsis: true,
+          width: '10%'
+        },
+        {
           title: '终端地址',
           dataIndex: 'endpoint',
           align: 'center',

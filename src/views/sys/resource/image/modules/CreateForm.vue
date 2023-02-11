@@ -139,6 +139,7 @@
       },
       // 表单重置
       reset () {
+        this.disabled = false
         this.tags = []
         this.form = {
           resourceId: undefined,
@@ -175,7 +176,6 @@
       /** 新增按钮操作 */
       handleAdd () {
         this.reset()
-        this.form.resourceId = undefined
         this.open = true
         this.formTitle = '图片新增'
       },
