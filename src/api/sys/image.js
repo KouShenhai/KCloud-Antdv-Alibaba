@@ -57,16 +57,9 @@ export function getAuditLog (businessId) {
   })
 }
 
-export function completeSyncIndex () {
+export function syncIndex () {
   return request({
-    url: '/admin/sys/resource/image/api/complete/syncIndex',
-    method: 'post'
-  })
-}
-
-export function incrementSyncIndex () {
-  return request({
-    url: '/admin/sys/resource/image/api/increment/syncIndex',
+    url: '/admin/sys/resource/image/api/syncIndex',
     method: 'post'
   })
 }

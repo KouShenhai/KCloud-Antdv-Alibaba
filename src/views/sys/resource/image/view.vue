@@ -28,11 +28,8 @@
         <a-button type="primary" @click="$refs.createForm.handleAdd()" v-hasPermi="['sys:resource:image:insert']">
           <a-icon type="plus" />新增
         </a-button>
-        <a-button :loading="incrementSyncLoading" @click="incrementSyncIndex()" v-hasPermi="['sys:resource:image:increment:syncIndex']">
-          <a-icon type="redo" />增量同步
-        </a-button>
-        <a-button :loading="completeSyncLoading" type="danger" @click="completeSyncIndex()" v-hasPermi="['sys:resource:image:complete:syncIndex']">
-          <a-icon type="undo" />全量同步
+        <a-button :loading="syncLoading" type="danger" @click="syncIndex()" v-hasPermi="['sys:resource:image:syncIndex']">
+          <a-icon type="sync" /> 同步
         </a-button>
       </div>
       <!-- 增加修改 -->
@@ -120,7 +117,7 @@
 <script>
   import { ACCESS_TOKEN } from '@/store/mutation-types'
   import storage from 'store'
-  import { listImage, delImage, getImage, getAuditLog, completeSyncIndex, incrementSyncIndex } from '@/api/sys/image'
+  import { listImage, delImage, getImage, getAuditLog, syncIndex } from '@/api/sys/image'
   import CreateForm from './modules/CreateForm'
   import { tableMixin } from '@/store/table-mixin'
   export default {
@@ -138,8 +135,7 @@
         visible1: false,
         visible2: false,
         visible3: false,
-        completeSyncLoading: false,
-        incrementSyncLoading: false,
+        syncLoading: false,
         loading: false,
         total: 0,
         visible: false,
@@ -234,30 +230,15 @@
         }
         this.getList()
       },
-      incrementSyncIndex () {
+      syncIndex () {
         const that = this
-        that.incrementSyncLoading = true
-        incrementSyncIndex().then(res => {
-          that.incrementSyncLoading = false
-          if (res.code !== 200) {
-            that.$message.error(
-              res.msg,
-              3
-            )
-          }
-        })
-      },
-      completeSyncIndex () {
-        const that = this
-        that.completeSyncLoading = true
-        completeSyncIndex().then(res => {
-          that.completeSyncLoading = false
-          if (res.code !== 200) {
-            that.$message.error(
-              res.msg,
-              3
-            )
-          }
+        that.syncLoading = true
+        syncIndex().then(() => {
+          that.syncLoading = false
+          that.$message.success(
+            '索引同步成功',
+            3
+          )
         })
       },
       handleQuery3 (row) {

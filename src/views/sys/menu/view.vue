@@ -47,6 +47,9 @@
         <span slot="type" slot-scope="text, record">
           {{ typeFormat(record) }}
         </span>
+        <span slot="visible" slot-scope="text, record">
+          {{ visibleFormat(record) }}
+        </span>
         <span slot="operation" slot-scope="text, record">
           <a @click="$refs.createForm.handleUpdate(record)" v-hasPermi="['sys:menu:update']">
             <a-icon type="edit" />修改
@@ -130,6 +133,14 @@ export default {
           width: '20%'
         },
         {
+          title: '是否可见',
+          dataIndex: 'visible',
+          ellipsis: true,
+          align: 'center',
+          scopedSlots: { customRender: 'visible' },
+          width: '10%'
+        },
+        {
           title: '操作',
           dataIndex: 'operation',
           scopedSlots: { customRender: 'operation' },
@@ -166,6 +177,14 @@ export default {
         return '菜单'
       } else {
         return '按钮'
+      }
+    },
+    visibleFormat (row) {
+      // 0：显示   1：隐藏
+      if (row.visible === 0) {
+        return '显示'
+      } else {
+        return '隐藏'
       }
     },
     /** 搜索按钮操作 */

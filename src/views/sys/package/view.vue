@@ -120,7 +120,7 @@ export default {
   watch: {
   },
   methods: {
-    /** 查询角色列表 */
+    /** 查询套餐列表 */
     getList () {
       this.loading = true
       pagePackage(this.queryParam).then(response => {

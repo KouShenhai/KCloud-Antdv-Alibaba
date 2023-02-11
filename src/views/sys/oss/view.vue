@@ -5,7 +5,7 @@
         <a-col :span="20">
           <!-- 条件搜索 -->
           <div class="table-page-search-wrapper">
-            <a-form layout="inline" v-hasPermi="['sys:tenant:query']">
+            <a-form layout="inline" v-hasPermi="['sys:oss:query']">
               <a-row :gutter="48">
                 <a-col :md="8" :sm="24">
                   <a-form-item label="租户名称">
@@ -22,7 +22,7 @@
             </a-form>
           </div>
           <div class="table-operations">
-            <a-button type="primary" @click="$refs.createForm.handleAdd()" v-hasPermi="['sys:tenant:insert']">
+            <a-button type="primary" @click="$refs.createForm.handleAdd()" v-hasPermi="['sys:oss:insert']">
               <a-icon type="plus" />新增
             </a-button>
           </div>
@@ -41,16 +41,16 @@
             :pagination="false"
             :bordered="tableBordered">
             <span slot="operation" slot-scope="text, record">
-              <a @click="$refs.createForm.handleUpdate(record)" v-hasPermi="['sys:tenant:update']">
+              <a @click="$refs.createForm.handleUpdate(record)" v-hasPermi="['sys:oss:update']">
                 <a-icon type="edit" />
                 修改
               </a>
-              <a-divider type="vertical" v-hasPermi="['sys:tenant:insert']"/>
-              <a @click="$refs.createForm.handleAdd()" v-hasPermi="['sys:tenant:insert']">
+              <a-divider type="vertical" v-hasPermi="['sys:oss:insert']"/>
+              <a @click="$refs.createForm.handleAdd()" v-hasPermi="['sys:oss:insert']">
                 <a-icon type="plus" />新增
               </a>
-              <a-divider type="vertical" v-hasPermi="['sys:tenant:delete']"/>
-              <a @click="handleDelete(record)" v-hasPermi="['sys:tenant:delete']">
+              <a-divider type="vertical" v-hasPermi="['sys:oss:delete']"/>
+              <a @click="handleDelete(record)" v-hasPermi="['sys:oss:delete']">
                 <a-icon type="delete" />
                 删除
               </a>
@@ -75,11 +75,11 @@
 </template>
 <script>
 
-import { listTenant, delTenant } from '@/api/sys/tenant'
-import CreateForm from '@/views/sys/tenant/modules/CreateForm'
+import { listOss, delOss } from '@/api/sys/oss'
+import CreateForm from '@/views/sys/oss/modules/CreateForm'
 import { tableMixin } from '@/store/table-mixin'
 export default {
-  name: 'Tenant',
+  name: 'Oss',
   components: {
     CreateForm
   },
@@ -119,10 +119,10 @@ export default {
   watch: {
   },
   methods: {
-    /** 查询用户列表 */
+    /** 查询存储列表 */
     getList () {
       this.loading = true
-      listTenant(this.queryParam).then(response => {
+      listOss(this.queryParam).then(response => {
           this.list = response.data.records
           this.total = response.data.total - 0
           this.loading = false
@@ -163,7 +163,7 @@ export default {
         title: '确认删除所选中数据?',
         content: '当前选中编号为' + id + '的数据',
         onOk () {
-          return delTenant(id)
+          return delOss(id)
             .then(() => {
               that.getList()
               that.$message.success(

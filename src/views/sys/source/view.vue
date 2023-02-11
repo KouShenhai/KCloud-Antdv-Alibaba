@@ -135,7 +135,7 @@ export default {
   watch: {
   },
   methods: {
-    /** 查询用户列表 */
+    /** 查询数据源列表 */
     getList () {
       this.loading = true
       listSource(this.queryParam).then(response => {

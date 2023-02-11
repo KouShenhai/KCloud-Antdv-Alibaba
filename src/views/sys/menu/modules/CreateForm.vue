@@ -68,6 +68,21 @@
         </span>
         <a-input v-model="form.permission" placeholder="请输入" :maxLength="100" />
       </a-form-model-item>
+      <a-form-model-item prop="visible" v-if="form.type === '0'">
+        <span slot="label">
+          状态
+          <a-tooltip>
+            <template slot="title">
+              选择隐藏则路由将不会出现在侧边栏，也不能被访问
+            </template>
+            <a-icon type="question-circle-o" />
+          </a-tooltip>
+        </span>
+        <a-radio-group v-model="form.visible" button-style="solid">
+          <a-radio-button value="0" index='0'>显示</a-radio-button>
+          <a-radio-button value="1" index='1'>隐藏</a-radio-button>
+        </a-radio-group>
+      </a-form-model-item>
       <div class="bottom-control">
         <a-space>
           <a-button type="primary" :loading="submitLoading" @click="submitForm">
@@ -115,6 +130,7 @@ export default {
         icon: '',
         type: 0,
         sort: 1,
+        visible: 0,
         url: '',
         permission: ''
       },
@@ -123,7 +139,8 @@ export default {
         name: [{ required: true, message: '菜单名称不能为空', trigger: 'blur' }],
         sort: [{ required: true, message: '菜单顺序不能为空', trigger: 'blur' }],
         url: [{ required: true, message: '菜单路径不能为空', trigger: 'blur' }],
-        permission: [{ required: true, message: '权限标识不能为空', trigger: 'blur' }]
+        permission: [{ required: true, message: '权限标识不能为空', trigger: 'blur' }],
+        visible: [{ required: true, message: '状态不能为空', trigger: 'blur' }]
       }
     }
   },
@@ -160,6 +177,7 @@ export default {
         type: 0,
         sort: 1,
         url: '',
+        visible: 0,
         permission: ''
       }
     },
@@ -182,6 +200,7 @@ export default {
       getMenu(row.id).then(response => {
         this.form = response.data
         this.form.type = '' + response.data.type
+        this.form.visible = '' + response.data.visible
         this.open = true
         this.formTitle = '菜单修改'
       })
@@ -224,9 +243,6 @@ export default {
     handleIconChange (icon) {
       this.iconVisible = false
       this.form.icon = icon
-    },
-    changeIcon (type) {
-      this.currentSelectedIcon = type
     },
     selectIcon () {
       this.iconVisible = !this.iconVisible

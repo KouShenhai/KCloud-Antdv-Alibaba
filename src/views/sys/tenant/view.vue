@@ -119,7 +119,7 @@ export default {
   watch: {
   },
   methods: {
-    /** 查询用户列表 */
+    /** 查询租户列表 */
     getList () {
       this.loading = true
       listTenant(this.queryParam).then(response => {
