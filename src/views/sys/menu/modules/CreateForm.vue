@@ -140,7 +140,8 @@ export default {
         sort: [{ required: true, message: '菜单顺序不能为空', trigger: 'blur' }],
         url: [{ required: true, message: '菜单路径不能为空', trigger: 'blur' }],
         permission: [{ required: true, message: '权限标识不能为空', trigger: 'blur' }],
-        visible: [{ required: true, message: '状态不能为空', trigger: 'blur' }]
+        visible: [{ required: true, message: '状态不能为空', trigger: 'blur' }],
+        icon: [{ required: true, message: '请选择图标', trigger: 'blur' }]
       }
     }
   },
