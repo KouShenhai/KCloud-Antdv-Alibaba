@@ -3,7 +3,7 @@
     <a-divider orientation="left">
       <b>{{ formTitle }}</b>
     </a-divider>
-    <a-form-model ref="form2" v-hasPermi="['workflow:task:resource:detail']">
+    <a-form-model ref="form2">
       <a-form-model-item label="编号" prop="id">
         {{form2.id}}
       </a-form-model-item>
