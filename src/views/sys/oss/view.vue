@@ -55,6 +55,11 @@
               <a @click="$refs.createForm.handleAdd()" v-hasPermi="['sys:oss:insert']">
                 <a-icon type="plus" />新增
               </a>
+              <a-divider type="vertical" v-hasPermi="['sys:oss:use']"/>
+              <a @click="handleUse(record)" v-hasPermi="['sys:oss:use']">
+                <a-icon type="tool" />
+                启用
+              </a>
               <a-divider type="vertical" v-hasPermi="['sys:oss:delete']"/>
               <a @click="handleDelete(record)" v-hasPermi="['sys:oss:delete']">
                 <a-icon type="delete" />
@@ -81,7 +86,7 @@
 </template>
 <script>
 
-import { listOss, delOss } from '@/api/sys/oss'
+import { listOss, delOss, useOss } from '@/api/sys/oss'
 import CreateForm from '@/views/sys/oss/modules/CreateForm'
 import { tableMixin } from '@/store/table-mixin'
 export default {
@@ -163,7 +168,8 @@ export default {
           title: '操作',
           dataIndex: 'operation',
           scopedSlots: { customRender: 'operation' },
-          align: 'center'
+          align: 'center',
+          width: '30%'
         }
       ]
     }
@@ -178,6 +184,14 @@ export default {
   watch: {
   },
   methods: {
+    handleUse (row) {
+      useOss(row.id).then(() => {
+        this.$message.success(
+          '启用成功',
+          3
+        )
+      }).finally(() => this.getList())
+    },
     statusFormat (row) {
       // 0：未启用   1：已启用
       if (row.status === 1) {

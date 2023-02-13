@@ -51,3 +51,11 @@ export function delOss (id) {
     method: 'delete'
   })
 }
+
+// 启用存储
+export function useOss (id) {
+  return request({
+    url: '/admin/sys/oss/api/use?id=' + id,
+    method: 'get'
+  })
+}

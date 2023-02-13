@@ -23,12 +23,6 @@
       <a-form-model-item label="桶名" prop="bucketName">
         <a-input v-model="form.bucketName" placeholder="请输入" />
       </a-form-model-item>
-      <a-form-model-item label="状态" prop="status">
-        <a-radio-group v-model="form.status" button-style="solid">
-          <a-radio-button value="1">已启动</a-radio-button>
-          <a-radio-button value="0">未启用</a-radio-button>
-        </a-radio-group>
-      </a-form-model-item>
       <a-form-model-item label="路径样式访问" prop="pathStyleAccessEnabled">
         <a-radio-group v-model="form.pathStyleAccessEnabled" button-style="solid">
           <a-radio-button value="1">已启动</a-radio-button>
@@ -70,7 +64,6 @@
           accessKey: undefined,
           secretKey: undefined,
           bucketName: undefined,
-          status: '1',
           pathStyleAccessEnabled: '1'
         },
         packageOption: [],
@@ -123,7 +116,6 @@
           accessKey: undefined,
           secretKey: undefined,
           bucketName: undefined,
-          status: '1',
           pathStyleAccessEnabled: '1'
         }
       },
@@ -139,7 +131,6 @@
         const id = row.id
         getOss(id).then(response => {
           this.form = response.data
-          this.form.status = '' + response.data.status
           this.form.pathStyleAccessEnabled = '' + response.data.pathStyleAccessEnabled
           this.open = true
           this.formTitle = '存储修改'
