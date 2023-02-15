@@ -1,4 +1,4 @@
-<p align="center"><img src="public/logo.png" width="400" height="400"></p>
+<p align="center"><img src="public/logo.png" width="150" height="150"></p>
 
 ## 简介
 
