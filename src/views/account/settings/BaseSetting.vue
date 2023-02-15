@@ -17,9 +17,9 @@
           </a-form-model-item>
           <a-form-model-item
             label="电子邮箱"
-            prop="email"
+            prop="mail"
           >
-            <a-input v-model="user.email" placeholder="请填写电子邮箱"/>
+            <a-input v-model="user.mail" placeholder="请填写电子邮箱"/>
           </a-form-model-item>
           <a-form-model-item>
             <a-button type="primary" :loading="submitLoading" @click="submit">保存</a-button>
@@ -55,13 +55,15 @@ export default {
       submitLoading: false,
       user: {
         id: '',
-        email: '',
+        mail: '',
         mobile: '',
-        imgUrl: ''
+        imgUrl: '',
+        username: '',
+        status: 0
       },
       preview: {},
       rules: {
-        email: [
+        mail: [
           { required: true, message: '电子邮箱不能为空', trigger: 'blur' },
           {
             type: 'email',
@@ -103,10 +105,11 @@ export default {
     },
     getUser () {
       getUserInfo().then(response => {
-        this.user.email = response.data.email
+        this.user.mail = response.data.mail
         this.user.id = response.data.userId
         this.user.mobile = response.data.mobile
         this.user.imgUrl = response.data.imgUrl
+        this.user.username = response.data.username
       })
     },
     submit () {

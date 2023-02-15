@@ -57,7 +57,7 @@ import { addSource, updateSource, getSource } from '@/api/sys/source'
         dictOption: [],
         // 表单参数
         form: {
-          id: '',
+          id: undefined,
           username: '',
           password: '',
           driverClassName: '',
@@ -113,7 +113,7 @@ import { addSource, updateSource, getSource } from '@/api/sys/source'
       // 表单重置
       reset () {
         this.form = {
-          id: '',
+          id: undefined,
           username: '',
           password: '',
           driverClassName: '',

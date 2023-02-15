@@ -64,7 +64,8 @@
           accessKey: undefined,
           secretKey: undefined,
           bucketName: undefined,
-          pathStyleAccessEnabled: '1'
+          pathStyleAccessEnabled: '1',
+          status: 0
         },
         packageOption: [],
         sourceOption: [],
@@ -116,7 +117,8 @@
           accessKey: undefined,
           secretKey: undefined,
           bucketName: undefined,
-          pathStyleAccessEnabled: '1'
+          pathStyleAccessEnabled: '1',
+          status: 0
         }
       },
       /** 新增按钮操作 */
@@ -132,6 +134,7 @@
         getOss(id).then(response => {
           this.form = response.data
           this.form.pathStyleAccessEnabled = '' + response.data.pathStyleAccessEnabled
+          this.form.status = '' + response.data.status
           this.open = true
           this.formTitle = '存储修改'
         })
