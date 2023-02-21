@@ -16,6 +16,7 @@
 
 1. 环境准备
    * 安装 [node](http://nodejs.org) 和 [git](https://git-scm.com)
+   * 版本：16.18.1
 
 2. 安装
    
