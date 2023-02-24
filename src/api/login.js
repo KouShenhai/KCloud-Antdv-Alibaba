@@ -4,7 +4,7 @@ export const userApi = {
   Login: '/auth/oauth2/token',
   Logout: '/auth/oauth2/logout',
   UserInfo: '/admin/sys/user/api/userInfo',
-  Captcha: '/auth/oauth2/password/captcha',
+  Captcha: '/auth/oauth2/captcha',
   Tenant: '/auth/oauth2/tenant'
 }
 
