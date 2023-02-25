@@ -183,8 +183,9 @@ export default {
       const id = row.id
       const status = (row.status + 1) % 2
       updateStatus(id, status).then(() => {
+        const notice = status === 1 ? '停用' : '启用'
         this.$message.success(
-          '删除成功',
+           notice + '成功',
           3
         )
         this.getList()
