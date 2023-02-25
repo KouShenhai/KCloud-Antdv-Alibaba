@@ -47,15 +47,7 @@
             :pagination="false"
             :bordered="tableBordered">
             <span slot="status" slot-scope="text, record">
-              <a-popconfirm
-                ok-text="是"
-                cancel-text="否"
-                @confirm="confirmHandleStatus(record)"
-                @cancel="cancelHandleStatus(record)"
-              >
-                <span slot="title">确认<b>{{ record.status == '0' ? '停用' : '启用' }}</b>{{ record.username }}的用户吗?</span>
-                <a-switch checked-children="开" un-checked-children="关" :checked="record.status == '0'" />
-              </a-popconfirm>
+              {{ statusFormat(record) }}
             </span>
             <span slot="imgUrl" slot-scope="text, record">
               <img style="width:50px;height:50px" :src="record.imgUrl" />
@@ -68,6 +60,14 @@
               <a-divider type="vertical" v-hasPermi="['sys:user:insert']"/>
               <a @click="$refs.createForm.handleAdd()" v-hasPermi="['sys:user:insert']">
                 <a-icon type="plus" />新增
+              </a>
+              <a-divider type="vertical" v-hasPermi="['sys:user:status']" v-if="record.status == 1"/>
+              <a @click="changeStatus(record)" v-hasPermi="['sys:user:status']" v-if="record.status == 1">
+                <a-icon type="unlock" />启用
+              </a>
+              <a-divider type="vertical" v-hasPermi="['sys:user:status']" v-if="record.status == 0"/>
+              <a @click="changeStatus(record)" v-hasPermi="['sys:user:status']" v-if="record.status == 0">
+                <a-icon type="lock" />停用
               </a>
               <a-divider type="vertical" v-hasPermi="['sys:user:delete']"/>
               <a @click="handleDelete(record)" v-hasPermi="['sys:user:delete']">
@@ -100,7 +100,7 @@
 </template>
 <script>
 
-import { listUser, delUser, changeUserStatus } from '@/api/sys/user'
+import { listUser, delUser, updateStatus } from '@/api/sys/user'
 import { treeSelect } from '@/api/sys/dept'
 import ResetPassword from './modules/ResetPassword'
 import CreateForm from '@/views/sys/user/modules/CreateForm'
@@ -130,16 +130,6 @@ export default {
         name: '',
         children: []
       }],
-      statusOptions: [
-        {
-          label: '正常',
-          value: 0
-        },
-        {
-          label: '停用',
-          value: 1
-        }
-      ],
       queryParam: {
         pageNum: 1,
         pageSize: 10,
@@ -188,6 +178,27 @@ export default {
   watch: {
   },
   methods: {
+    changeStatus (row) {
+      this.loading = true
+      const id = row.id
+      const status = (row.status + 1) % 2
+      updateStatus(id, status).then(() => {
+        this.$message.success(
+          '删除成功',
+          3
+        )
+        this.getList()
+        this.loading = false
+      })
+    },
+    statusFormat (row) {
+      // 0：未启用   1：已启用
+      if (row.status === 1) {
+        return '停用'
+      } else {
+        return '正常'
+      }
+    },
     /** 查询部门下拉树结构 */
     getTreeSelect () {
       treeSelect().then(response => {
@@ -227,26 +238,6 @@ export default {
       this.queryParam.pageNum = current
       this.queryParam.pageSize = pageSize
       this.getList()
-    },
-    /* 用户状态修改 */
-    confirmHandleStatus (row) {
-      const text = row.status === '0' ? '关闭' : '启用'
-      row.status = (row.status + 1) % 2
-      changeUserStatus(row)
-      .then(() => {
-        this.$message.success(
-          text + '成功',
-          3
-        )
-      }).catch(function () {
-        this.$message.error(
-          text + '异常',
-          3
-        )
-      })
-    },
-    cancelHandleStatus (row) {
-
     },
     /** 删除按钮操作 */
     handleDelete (row) {

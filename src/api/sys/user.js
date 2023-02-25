@@ -44,18 +44,17 @@ export function delUser (userId) {
 // 用户密码重置
 export function resetUserPwd (data) {
   return request({
-    url: '/admin/sys/user/api/password',
+    url: '/admin/sys/user/api/password?id=' + data.id + '&newPassword=' + data.password,
     method: 'put',
     data: data
   })
 }
 
 // 用户状态修改
-export function changeUserStatus (data) {
+export function updateStatus (id, status) {
   return request({
-    url: '/admin/sys/user/api/update',
-    method: 'put',
-    data: data
+    url: '/admin/sys/user/api/status?id=' + id + '&status=' + status,
+    method: 'put'
   })
 }
 
@@ -70,7 +69,7 @@ export function getUserInfo () {
 // 修改用户个人信息
 export function updateInfo (data) {
   return request({
-    url: '/admin/sys/user/api/updateInfo',
+    url: '/admin/sys/user/api/info',
     method: 'put',
     data: data
   })
@@ -90,5 +89,12 @@ export function userOption () {
   return request({
     url: '/admin/sys/user/api/option/list',
     method: 'get'
+  })
+}
+
+export function updatePwd (id, pwd) {
+  return request({
+    url: '/admin/sys/user/api/pwd?id=' + id + '&newPassword=' + pwd,
+    method: 'put'
   })
 }

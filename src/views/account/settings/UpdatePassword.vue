@@ -17,7 +17,7 @@
   </a-modal>
 </template>
 <script>
-import { updateInfo } from '@/api/sys/user'
+import { updatePwd } from '@/api/sys/user'
 import { mapGetters } from 'vuex'
 export default {
   props: {
@@ -53,10 +53,6 @@ export default {
       form: {
         newPassword: undefined,
         confirmPassword: undefined
-      },
-      submitDataForm: {
-        id: undefined,
-        password: undefined
       },
       rules: {
         newPassword: [
@@ -95,10 +91,8 @@ export default {
     submitForm: function () {
       this.$refs.form.validate(valid => {
         if (valid) {
-          this.submitDataForm.id = this.id
-          this.submitDataForm.password = this.form.newPassword
           this.submitLoading = true
-          updateInfo(this.submitDataForm).then(response => {
+          updatePwd(this.id, this.form.newPassword).then(() => {
             this.$message.success(
               '修改成功',
               3
