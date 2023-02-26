@@ -75,7 +75,7 @@ export const generatorDynamicRouter = () => {
 
 export function buildRouters (routerData) {
   routerData.forEach(route => {
-    route.component = route.url.replace('http://', '').replaceAll('.', '').replaceAll('https://', '').replaceAll('/', '')
+    route.component = route.permission.replaceAll(':', '')
     route.path = route.url
     route.hidden = false
     if (route.children && route.children.length > 0) {
