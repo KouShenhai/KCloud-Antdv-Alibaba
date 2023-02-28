@@ -97,11 +97,9 @@
 
 <script>
 
-import { pageDefinition, delDefinition, suspendDefinition, activateDefinition } from '@/api/workflow/definition'
+import { pageDefinition, delDefinition, suspendDefinition, activateDefinition, getDefinition } from '@/api/workflow/definition'
 import CreateForm from './modules/CreateForm'
 import { tableMixin } from '@/store/table-mixin'
-import { ACCESS_TOKEN } from '@/store/mutation-types'
-import storage from 'store'
 export default {
   name: 'Definition',
   components: {
@@ -185,7 +183,9 @@ export default {
     },
     getDefinition (row) {
       this.visible = true
-      this.flowUri = process.env.VUE_APP_BASE_API + '/admin/workflow/definition/api/image?definitionId=' + row.definitionId + '&Authorization=Bearer ' + storage.get(ACCESS_TOKEN)
+      getDefinition(row.definitionId).then(res => {
+         this.flowUri = 'data:image/png;base64,' + res.data
+      })
     },
     /** 搜索按钮操作 */
     handleQuery () {

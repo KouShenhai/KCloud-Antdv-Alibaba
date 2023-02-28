@@ -115,9 +115,7 @@
 </template>
 
 <script>
-  import { ACCESS_TOKEN } from '@/store/mutation-types'
-  import storage from 'store'
-  import { listImage, delImage, getImage, getAuditLog, syncIndex } from '@/api/sys/image'
+  import { listImage, delImage, getImage, getAuditLog, syncIndex, getDiagram } from '@/api/sys/image'
   import CreateForm from './modules/CreateForm'
   import { tableMixin } from '@/store/table-mixin'
   export default {
@@ -289,7 +287,9 @@
         this.visible2 = true
         this.visible1 = false
         this.imageTitle = '流程图'
-        this.diagramUrl = process.env.VUE_APP_BASE_API + '/admin/sys/resource/image/api/diagram?processInstanceId=' + row.processInstanceId + '&Authorization=Bearer ' + storage.get(ACCESS_TOKEN)
+        getDiagram(row.processInstanceId).then(res => {
+          this.diagramUrl = 'data:image/png;base64,' + res.data
+        })
       },
       /** 搜索按钮操作 */
       handleQuery () {

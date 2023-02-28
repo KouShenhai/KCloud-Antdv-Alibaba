@@ -116,9 +116,7 @@
 </template>
 
 <script>
-import { ACCESS_TOKEN } from '@/store/mutation-types'
-import storage from 'store'
-import { listAudio, delAudio, getAudio, getAuditLog, syncIndex } from '@/api/sys/audio'
+import { listAudio, delAudio, getAudio, getAuditLog, syncIndex, getDiagram } from '@/api/sys/audio'
 import CreateForm from './modules/CreateForm'
 import { tableMixin } from '@/store/table-mixin'
 export default {
@@ -278,7 +276,9 @@ export default {
       this.visible1 = false
       this.visible3 = false
       this.audioTitle = '流程图'
-      this.diagramUrl = process.env.VUE_APP_BASE_API + '/admin/sys/resource/audio/api/diagram?processInstanceId=' + row.processInstanceId + '&Authorization=Bearer ' + storage.get(ACCESS_TOKEN)
+      getDiagram(row.processInstanceId).then(res => {
+        this.diagramUrl = 'data:image/png;base64,' + res.data
+      })
     },
     handleQuery3 (row) {
       this.audioTitle = '审批日志'

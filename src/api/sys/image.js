@@ -63,3 +63,10 @@ export function syncIndex () {
     method: 'post'
   })
 }
+
+export function getDiagram (id) {
+  return request({
+    url: '/admin/sys/resource/image/api/diagram?processInstanceId=' + id,
+    method: 'get'
+  })
+}

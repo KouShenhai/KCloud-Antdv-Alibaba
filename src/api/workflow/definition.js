@@ -41,3 +41,10 @@ export function delDefinition (deploymentId) {
     method: 'delete'
   })
 }
+
+export function getDefinition (id) {
+  return request({
+    url: '/admin/workflow/definition/api/image?definitionId=' + id,
+    method: 'get'
+  })
+}
