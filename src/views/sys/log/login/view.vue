@@ -159,7 +159,7 @@ export default {
     exportList () {
       this.exportLoading = true
       exportList(this.queryParam).then(res => {
-        const filename = '登录日志_' + moment(new Date()).format('YYYYMMDDHHmmss') + '1.xlsx'
+        const filename = '登录日志_' + moment(new Date()).format('YYYYMMDDHHmmss') + '.xlsx'
         const url = window.URL.createObjectURL(res) // 创建下载链接
         const link = document.createElement('a') // 赋值给a标签的href属性
         link.style.display = 'none'

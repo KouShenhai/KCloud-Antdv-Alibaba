@@ -70,3 +70,11 @@ export function getDiagram (id) {
     method: 'get'
   })
 }
+
+export function download (id) {
+  return request({
+    url: '/admin/sys/resource/audio/api/download?id=' + id,
+    method: 'get',
+    responseType: 'blob'
+  })
+}

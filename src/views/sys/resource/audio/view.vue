@@ -57,13 +57,13 @@
           <a v-hasPermi="['sys:resource:audio:update']" @click="$refs.createForm.handleUpdate(record, undefined)" v-if="record.status == 3 || record.status == 2">
             <a-icon type="edit" />修改
           </a>
-          <a-divider type="vertical" v-if="record.status == 3 || record.status == 2" v-hasPermi="['sys:resource:audio:delete']"/>
-          <a @click="handleDelete(record)" v-if="record.status == 3 || record.status == 2" v-hasPermi="['sys:resource:audio:delete']">
-            <a-icon type="delete" />删除
-          </a>
           <a-divider type="vertical" v-if="record.status == 3" v-hasPermi="['sys:resource:audio:detail']"/>
           <a @click="handleQuery1(record)" v-if="record.status == 3" v-hasPermi="['sys:resource:audio:detail']">
             <a-icon type="eye" />查看
+          </a>
+          <a-divider type="vertical" v-if="record.status == 3" v-hasPermi="['sys:resource:audio:download']"/>
+          <a @click="download(record)" v-if="record.status == 3" v-hasPermi="['sys:resource:audio:download']">
+            <a-icon type="download" />下载
           </a>
           <a-divider type="vertical" v-if="record.status != 3" v-hasPermi="['sys:resource:audio:diagram']"/>
           <a @click="handleQuery2(record)" v-if="record.status != 3" v-hasPermi="['sys:resource:audio:diagram']">
@@ -72,6 +72,10 @@
           <a-divider type="vertical" v-hasPermi="['sys:resource:audio:auditLog']"/>
           <a @click="handleQuery3(record)" v-hasPermi="['sys:resource:audio:auditLog']">
             <a-icon type="file" />审批日志
+          </a>
+          <a-divider type="vertical" v-if="record.status == 3 || record.status == 2" v-hasPermi="['sys:resource:audio:delete']"/>
+          <a @click="handleDelete(record)" v-if="record.status == 3 || record.status == 2" v-hasPermi="['sys:resource:audio:delete']">
+            <a-icon type="delete" />删除
           </a>
         </span>
       </a-table>
@@ -116,9 +120,10 @@
 </template>
 
 <script>
-import { listAudio, delAudio, getAudio, getAuditLog, syncIndex, getDiagram } from '@/api/sys/audio'
+import { listAudio, delAudio, getAudio, getAuditLog, syncIndex, getDiagram, download } from '@/api/sys/audio'
 import CreateForm from './modules/CreateForm'
 import { tableMixin } from '@/store/table-mixin'
+import moment from "moment/moment";
 export default {
   name: 'ResourceAudio',
   components: {
@@ -169,7 +174,7 @@ export default {
         {
           title: '操作',
           dataIndex: 'operation',
-          width: '26%',
+          width: '30%',
           scopedSlots: { customRender: 'operation' },
           align: 'center'
         }
@@ -220,6 +225,23 @@ export default {
 
   },
   methods: {
+    download (row) {
+      download(row.id).then(res => {
+        const url = window.URL.createObjectURL(res) // 创建下载链接
+        const link = document.createElement('a') // 赋值给a标签的href属性
+        link.style.display = 'none'
+        link.download = moment(new Date()).format('YYYYMMDDHHmmss') + '.mp3'
+        link.href = url
+        document.body.appendChild(link) // 将a标签挂载上去
+        link.click() // a标签click事件
+        document.body.removeChild(link) // 移除a标签
+        window.URL.revokeObjectURL(url) // 销毁下载链接
+        this.$message.success(
+          '下载成功',
+          3
+        )
+      })
+    },
     linkQuery () {
       const query = this.$route.query
       if (JSON.stringify(query) !== '{}') {
