@@ -123,7 +123,7 @@
 import { listAudio, delAudio, getAudio, getAuditLog, syncIndex, getDiagram, download } from '@/api/sys/audio'
 import CreateForm from './modules/CreateForm'
 import { tableMixin } from '@/store/table-mixin'
-import moment from "moment/moment";
+import moment from 'moment/moment'
 export default {
   name: 'ResourceAudio',
   components: {

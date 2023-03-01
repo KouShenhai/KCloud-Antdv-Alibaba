@@ -128,7 +128,7 @@
   import { listVideo, delVideo, getVideo, getAuditLog, syncIndex, getDiagram, download } from '@/api/sys/video'
   import CreateForm from './modules/CreateForm'
   import { tableMixin } from '@/store/table-mixin'
-  import moment from "moment";
+  import moment from 'moment'
 
   export default {
     name: 'ResourceVideo',
