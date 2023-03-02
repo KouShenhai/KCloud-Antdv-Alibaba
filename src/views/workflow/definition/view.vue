@@ -23,6 +23,9 @@
         <a-button type="primary" @click="$refs.createForm.handleAdd()" v-hasPermi="['workflow:definition:insert']">
           <a-icon type="plus" />新增
         </a-button>
+        <a-button @click="downloadTemplate" v-hasPermi="['workflow:definition:template']">
+          <a-icon type="download" />模板
+        </a-button>
       </div>
       <!-- 增加修改 -->
       <create-form
@@ -97,9 +100,10 @@
 
 <script>
 
-import { pageDefinition, delDefinition, suspendDefinition, activateDefinition, getDefinition } from '@/api/workflow/definition'
+import { pageDefinition, delDefinition, suspendDefinition, activateDefinition, getDefinition, getTemplate } from '@/api/workflow/definition'
 import CreateForm from './modules/CreateForm'
 import { tableMixin } from '@/store/table-mixin'
+import moment from 'moment'
 export default {
   name: 'Definition',
   components: {
@@ -161,6 +165,23 @@ export default {
   watch: {
   },
   methods: {
+    downloadTemplate () {
+      getTemplate().then(res => {
+        const url = window.URL.createObjectURL(res) // 创建下载链接
+        const link = document.createElement('a') // 赋值给a标签的href属性
+        link.style.display = 'none'
+        link.download = moment(new Date()).format('YYYYMMDDHHmmss') + '.xml'
+        link.href = url
+        document.body.appendChild(link) // 将a标签挂载上去
+        link.click() // a标签click事件
+        document.body.removeChild(link) // 移除a标签
+        window.URL.revokeObjectURL(url) // 销毁下载链接
+        this.$message.success(
+          '下载成功',
+          3
+        )
+      })
+    },
     statusFormat (row) {
       if (row.suspended) {
         return '挂起'

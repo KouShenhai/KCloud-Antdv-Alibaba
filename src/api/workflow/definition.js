@@ -48,3 +48,11 @@ export function getDefinition (id) {
     method: 'get'
   })
 }
+
+export function getTemplate () {
+  return request({
+    url: '/admin/workflow/definition/api/template',
+    method: 'get',
+    responseType: 'blob'
+  })
+}
