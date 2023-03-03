@@ -58,7 +58,7 @@
 <script>
 import { mapActions } from 'vuex'
 import { timeFix } from '@/utils/util'
-import { captcha, tenant } from '@/api/login'
+import { captcha, tenant, publicKey } from '@/api/login'
 import { JSEncrypt } from 'jsencrypt'
 export default {
   name: 'Login',
@@ -66,7 +66,7 @@ export default {
   },
   data () {
     return {
-      publicKey: 'MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC6fp5DbG9HX6jat08UHudyTXfwt60XaDBt5fp+wo0xgOtMujvrLGf4+ZM8Ba1QWksCJKQSF9Y/zYTk39rPiLcI1NXZYiig+g2uJAQAWhiT8A0mGVaNOT5mssEW9dZJ4o4F3SKuHP2J+LSG2oKBOKRJAVnikXvhKVHnbK59ZlYf5QIDAQAB',
+      publicKey: '',
       codeUrl: '',
       tenantOptions: [],
       form: {
@@ -89,10 +89,16 @@ export default {
 
   },
   mounted () {
+    this.getPublicKey()
     this.requestFailed()
     this.getTenant()
   },
   methods: {
+    getPublicKey () {
+      publicKey().then(res => {
+        this.publicKey = res.data
+      })
+    },
     getTenant () {
       tenant().then(res => {
         this.tenantOptions = res.data

@@ -5,7 +5,8 @@ export const userApi = {
   Logout: '/auth/oauth2/logout',
   UserInfo: '/admin/sys/user/api/userInfo',
   Captcha: '/auth/oauth2/captcha',
-  Tenant: '/auth/oauth2/tenant'
+  Tenant: '/auth/oauth2/tenant',
+  PublicKey: '/auth/oauth2/public_key'
 }
 
 /**
@@ -65,6 +66,16 @@ export function logout (token) {
       'Content-Type': 'application/json;charset=UTF-8',
       'Authorization': 'Bearer ' + token,
       'gray': 'true'
+    }
+  })
+}
+
+export function publicKey () {
+  return request({
+    url: userApi.PublicKey,
+    method: 'get',
+    headers: {
+      'Content-Type': 'application/json;charset=UTF-8'
     }
   })
 }
