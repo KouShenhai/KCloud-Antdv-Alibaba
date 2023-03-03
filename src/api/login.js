@@ -22,7 +22,7 @@ export function login (parameter) {
     // 设置序列化请求函数
     transformRequest: (data = {}) => Object.entries(data).map(ent => ent.join('=')).join('&'),
     headers: {
-      'Authorization': 'Basic YXV0aC1jbGllbnQ6c2VjcmV0',
+      'Authorization': 'Basic OTVUeFNzVFBGQTN0RjEyVEJTTW1VVkswZGE6c2VjcmV0',
       'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
     }
   })
