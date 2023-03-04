@@ -226,6 +226,7 @@ export default {
   },
   methods: {
     download (row) {
+      this.loading = true
       download(row.id).then(res => {
         const url = window.URL.createObjectURL(res) // 创建下载链接
         const link = document.createElement('a') // 赋值给a标签的href属性
@@ -236,6 +237,7 @@ export default {
         link.click() // a标签click事件
         document.body.removeChild(link) // 移除a标签
         window.URL.revokeObjectURL(url) // 销毁下载链接
+        this.loading = false
         this.$message.success(
           '下载成功',
           3
