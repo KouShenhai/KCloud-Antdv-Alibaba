@@ -170,7 +170,7 @@ export default {
         const url = window.URL.createObjectURL(res) // 创建下载链接
         const link = document.createElement('a') // 赋值给a标签的href属性
         link.style.display = 'none'
-        link.download = moment(new Date()).format('YYYYMMDDHHmmss') + '.xml'
+        link.download = moment(new Date()).format('YYYYMMDDHHmmss') + '.bpmn20.xml'
         link.href = url
         document.body.appendChild(link) // 将a标签挂载上去
         link.click() // a标签click事件

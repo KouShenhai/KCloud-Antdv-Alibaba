@@ -3,12 +3,16 @@
     <a-divider orientation="left">
       <b>{{ formTitle }}</b>
     </a-divider>
-    <a-form-model ref="form" :model="form" :rules="rules">
-      <a-form-model-item label="流程名称" prop="name">
-        <a-input v-model="form.name" placeholder="请输入流程名称" />
-      </a-form-model-item>
+    <a-form-model ref="form" :model="form">
       <a-form-model-item label="流程图" prop="file">
-      <a-upload name="file"  @change="uploadFile" accept=".xml" :before-upload="beforeUpload">
+      <a-upload
+                name="file"
+                :remove="handleRemove"
+                :multiple="false"
+                :file-list="fileList"
+                @change="uploadFile"
+                accept=".xml"
+                :before-upload="beforeUpload">
         <a-button :disabled="disabled">
           上传流程图
         </a-button>
@@ -40,6 +44,7 @@ export default {
   },
   data () {
     return {
+      fileList: [],
       submitLoading: false,
       formTitle: '',
       fileData: {},
@@ -48,9 +53,6 @@ export default {
         name: undefined
       },
       open: false,
-      rules: {
-        name: [{ required: true, message: '流程名称不为空', trigger: 'blur' }],
-      },
       disabled: false
     }
   },
@@ -74,10 +76,8 @@ export default {
     },
     // 表单重置
     reset () {
-      this.fileData = {}
-      this.form = {
-        name: ''
-      }
+      this.fileList = []
+      this.disabled = false
     },
      /** 新增按钮操作 */
     handleAdd () {
@@ -85,8 +85,15 @@ export default {
       this.open = true
       this.formTitle = '流程新增'
     },
-    beforeUpload () {
+    beforeUpload (file) {
+      this.fileList = [...this.fileList, file]
       return false
+    },
+    handleRemove (file) {
+      const index = this.fileList.indexOf(file)
+      const newFileList = this.fileList.slice()
+      newFileList.splice(index, 1)
+      this.fileList = newFileList
     },
     uploadFile (data) {
       if (data.fileList.length > 0) {
@@ -100,12 +107,11 @@ export default {
     submitForm: function () {
       this.$refs.form.validate(valid => {
         if (valid) {
-          if (Object.keys(this.fileData).length != 0) {
+          if (Object.keys(this.fileData).length !== 0) {
             this.submitLoading = true
             const formData = new FormData()
             formData.append('file', this.fileData)
-            formData.append("name", this.form.name)
-            insertDefinition(formData).then(response => {
+            insertDefinition(formData).then(() => {
               this.$message.success(
                 '新增成功',
                 3
@@ -114,7 +120,7 @@ export default {
               this.$emit('ok')
             }).finally(() => {
               this.submitLoading = false
-              this.reset();
+              this.reset()
             })
           } else {
             this.$message.error(
