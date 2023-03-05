@@ -225,7 +225,7 @@ export default {
     },
     suspendFlow (row) {
       const that = this
-      suspendDefinition(row.definitionId).then(response => {
+      suspendDefinition(row.definitionId).then(() => {
         that.getList()
         this.$message.success(
           '挂起成功',
@@ -235,7 +235,7 @@ export default {
     },
     activateFlow (row) {
       const that = this
-      activateDefinition(row.definitionId).then(response => {
+      activateDefinition(row.definitionId).then(() => {
         that.getList()
         this.$message.success(
           '激活成功',
