@@ -8,7 +8,7 @@ export function listUser (query) {
   })
 }
 
-// 查询用户详细
+// 获取用户
 export function getUser (userId) {
   return request({
     url: '/admin/sys/user/api/detail?id=' + userId,
@@ -80,7 +80,10 @@ export function uploadAvatar (data) {
   return request({
     url: '/oss/api/upload',
     method: 'post',
-    data: data
+    data: data,
+    headers: {
+      'xss-ticket': 'xss-white'
+    }
   })
 }
 
@@ -92,6 +95,7 @@ export function userOption () {
   })
 }
 
+// 重置密码
 export function updatePwd (id, pwd) {
   return request({
     url: '/admin/sys/user/api/pwd?id=' + id + '&newPassword=' + pwd,

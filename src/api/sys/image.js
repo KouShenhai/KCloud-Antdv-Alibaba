@@ -1,6 +1,6 @@
 import request from '@/utils/request'
 
-// 查询字典类型列表
+// 查询图片列表
 export function listImage (query) {
   return request({
     url: '/admin/sys/resource/image/api/query',
@@ -9,6 +9,7 @@ export function listImage (query) {
   })
 }
 
+// 获取图片
 export function getImage (id) {
   return request({
     url: '/admin/sys/resource/image/api/detail?id=' + id,
@@ -16,7 +17,7 @@ export function getImage (id) {
   })
 }
 
-// 新增字典类型
+// 新增图片
 export function addImage (data) {
   return request({
     url: '/admin/sys/resource/image/api/insert',
@@ -25,7 +26,7 @@ export function addImage (data) {
   })
 }
 
-// 修改字典类型
+// 修改图片
 export function updateImage (data) {
   return request({
     url: '/admin/sys/resource/image/api/update',
@@ -34,7 +35,7 @@ export function updateImage (data) {
   })
 }
 
-// 删除字典类型
+// 删除图片
 export function delImage (id) {
   return request({
     url: '/admin/sys/resource/image/api/delete?id=' + id,
@@ -42,14 +43,19 @@ export function delImage (id) {
   })
 }
 
+// 上传图片
 export function uploadImage (data) {
   return request({
     url: '/admin/sys/resource/image/api/upload',
     method: 'post',
-    data: data
+    data: data,
+    headers: {
+      'xss-ticket': 'xss-white'
+    }
   })
 }
 
+// 获取审批记录
 export function getAuditLog (businessId) {
   return request({
     url: '/admin/sys/resource/image/api/auditLog?businessId=' + businessId,
@@ -57,6 +63,7 @@ export function getAuditLog (businessId) {
   })
 }
 
+// 同步图片数据
 export function syncIndex () {
   return request({
     url: '/admin/sys/resource/image/api/syncIndex',
@@ -64,6 +71,7 @@ export function syncIndex () {
   })
 }
 
+// 审批流程图
 export function getDiagram (id) {
   return request({
     url: '/admin/sys/resource/image/api/diagram?processInstanceId=' + id,
@@ -71,6 +79,7 @@ export function getDiagram (id) {
   })
 }
 
+// 下载图片
 export function download (id) {
   return request({
     url: '/admin/sys/resource/image/api/download?id=' + id,

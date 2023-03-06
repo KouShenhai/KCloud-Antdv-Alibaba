@@ -4,10 +4,10 @@ import storage from 'store'
 import notification from 'ant-design-vue/es/notification'
 import message from 'ant-design-vue/es/message'
 import { VueAxios } from './axios'
-import {ACCESS_TOKEN, TENANT_ID, USER_ID, USER_NAME} from '@/store/mutation-types'
+import { ACCESS_TOKEN, TENANT_ID, USER_ID, USER_NAME } from '@/store/mutation-types'
 import errorCode from '@/utils/errorCode'
 import qs from 'qs'
-import { blobValidate } from '@/utils/laokou'
+import { blobValidate } from '@/utils/ruoyi'
 import { saveAs } from 'file-saver'
 
 // 是否显示重新登录

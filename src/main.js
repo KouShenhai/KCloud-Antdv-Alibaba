@@ -21,7 +21,7 @@ import './core/lazy_use' // use lazy load components
 import './permission' // permission control
 import './utils/filter' // global filter
 import './global.less' // global style
-import { parseTime, resetForm, addDateRange, selectDictLabel, selectDictLabels, handleTree, tableSorter } from '@/utils/laokou'
+import { parseTime, resetForm, addDateRange, selectDictLabel, selectDictLabels, handleTree, tableSorter } from '@/utils/ruoyi'
 import { download } from '@/utils/request'
 import mavonEditor from 'mavon-editor'
 import 'mavon-editor/dist/css/index.css'

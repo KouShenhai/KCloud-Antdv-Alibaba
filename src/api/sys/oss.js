@@ -1,11 +1,14 @@
 import request from '@/utils/request'
 
-// 用户头像上传
+// oss上传
 export function uploadOss (data) {
   return request({
     url: '/oss/api/upload',
     method: 'post',
-    data: data
+    data: data,
+    headers: {
+      'xss-ticket': 'xss-white'
+    }
   })
 }
 

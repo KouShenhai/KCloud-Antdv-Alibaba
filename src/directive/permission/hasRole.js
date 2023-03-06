@@ -1,11 +1,11 @@
  /**
  * 角色权限处理
- * Copyright (c) 2022 laokou
+ * Copyright (c) 2022 ruoyi
  */
 import store from '@/store'
 
 export default {
-  inserted (el, binding, vnode) {
+  inserted (el, binding) {
     const { value } = binding
     const superAdmin = 'admin'
     const roles = store.getters && store.getters.roles

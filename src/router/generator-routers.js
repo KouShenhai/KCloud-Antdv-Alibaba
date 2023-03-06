@@ -111,7 +111,7 @@ export function filterDynamicRoutes (routes) {
 export const generator = (routerMap, parent, routers) => {
   const names = parent ? parent.meta.names : []
   return routerMap.map(item => {
-    // 适配laokou一级菜单
+    // 适配一级菜单
     if (item.path === '/' && item.children && item.children.length === 1) {
       item = item.children[0]
       item.children = undefined

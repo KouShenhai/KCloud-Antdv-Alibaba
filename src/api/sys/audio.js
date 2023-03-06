@@ -1,6 +1,6 @@
 import request from '@/utils/request'
 
-// 查询字典类型列表
+// 查询音频列表
 export function listAudio (query) {
   return request({
     url: '/admin/sys/resource/audio/api/query',
@@ -9,6 +9,7 @@ export function listAudio (query) {
   })
 }
 
+// 获取音频
 export function getAudio (id) {
   return request({
     url: '/admin/sys/resource/audio/api/detail?id=' + id,
@@ -16,7 +17,7 @@ export function getAudio (id) {
   })
 }
 
-// 新增字典类型
+// 新增音频
 export function addAudio (data) {
   return request({
     url: '/admin/sys/resource/audio/api/insert',
@@ -25,7 +26,7 @@ export function addAudio (data) {
   })
 }
 
-// 修改字典类型
+// 修改音频
 export function updateAudio (data) {
   return request({
     url: '/admin/sys/resource/audio/api/update',
@@ -34,22 +35,25 @@ export function updateAudio (data) {
   })
 }
 
-// 删除字典类型
+// 删除音频
 export function delAudio (id) {
   return request({
     url: '/admin/sys/resource/audio/api/delete?id=' + id,
     method: 'delete'
   })
 }
-
+// 上传音频
 export function uploadAudio (data) {
   return request({
     url: '/admin/sys/resource/audio/api/upload',
     method: 'post',
-    data: data
+    data: data,
+    headers: {
+      'xss-ticket': 'xss-white'
+    }
   })
 }
-
+// 获取审批记录
 export function getAuditLog (businessId) {
   return request({
     url: '/admin/sys/resource/audio/api/auditLog?businessId=' + businessId,
@@ -57,6 +61,7 @@ export function getAuditLog (businessId) {
   })
 }
 
+// 同步音频数据
 export function syncIndex () {
   return request({
     url: '/admin/sys/resource/audio/api/syncIndex',
@@ -64,6 +69,7 @@ export function syncIndex () {
   })
 }
 
+// 审批流程图
 export function getDiagram (id) {
   return request({
     url: '/admin/sys/resource/audio/api/diagram?processInstanceId=' + id,
@@ -71,6 +77,7 @@ export function getDiagram (id) {
   })
 }
 
+// 下载音频
 export function download (id) {
   return request({
     url: '/admin/sys/resource/audio/api/download?id=' + id,

@@ -1,6 +1,6 @@
 /**
  * 通用js方法封装处理
- * Copyright (c) 2022 laokou
+ * Copyright (c) 2022 ruoyi
  */
 
 // 日期格式化
