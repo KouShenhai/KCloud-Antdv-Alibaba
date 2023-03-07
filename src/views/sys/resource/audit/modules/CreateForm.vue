@@ -74,7 +74,6 @@ export default {
         instanceId: '',
         businessKey: '',
         instanceName: '',
-        definitionId: '',
         values: {
           auditStatus: ''
         }
@@ -128,7 +127,6 @@ export default {
         instanceId: '',
         businessKey: '',
         instanceName: '',
-        definitionId: '',
         values: {
           auditStatus: ''
         }
@@ -141,7 +139,6 @@ export default {
       this.form.taskName = row.taskName
       this.form.businessKey = row.businessKey
       this.form.instanceName = row.processInstanceName
-      this.form.definitionId = row.definitionId
       this.getDetail(this.form.businessKey)
       this.open = true
       this.formTitle = '审批'
@@ -152,15 +149,15 @@ export default {
         if (valid) {
           this.submitLoading = true
           this.form.values.auditStatus = auditStatus
-          auditTask(this.form).then(response => {
+          auditTask(this.form).then(() => {
             this.$message.success(
               '审批成功',
               3
             )
             this.open = false
             this.$emit('ok')
-          }).finally(() => {
             this.reset()
+          }).finally(() => {
             this.submitLoading = false
           })
         } else {
