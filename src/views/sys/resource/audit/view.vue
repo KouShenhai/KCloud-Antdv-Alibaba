@@ -24,6 +24,25 @@
         ref="createForm"
         @ok="getList"
       />
+      <a-modal
+        :title="title"
+        :visible="open"
+        :confirm-loading="submitLoading"
+        @ok="submitForm"
+        @cancel="cancel"
+      >
+        <a-form-model ref="form" :model="form" :rules="rules">
+          <a-form-model-item label="选择用户" prop="assignee">
+            <a-select
+              v-model="form.assignee"
+              placeholder="请选择">
+              <a-select-option v-for="(d, index) in userList" :key="index" :value="d.value">
+                {{ d.label }}
+              </a-select-option>
+            </a-select>
+          </a-form-model-item>
+        </a-form-model>
+      </a-modal>
       <!-- 数据展示 -->
       <a-table
         :loading="loading"
@@ -34,9 +53,24 @@
         :pagination="false"
         :bordered="tableBordered">
         <span slot="operation" slot-scope="text, record">
-          <a @click="$refs.createForm.handleAudit(record)" >
-            <a-icon type="audit" v-hasPermi="['workflow:task:resource:audit']"/>
+          <a @click="$refs.createForm.handleAudit(record)" v-hasPermi="['workflow:task:resource:audit']">
+            <a-icon type="audit"/>
             审批
+          </a>
+          <a-divider type="vertical" v-hasPermi="['workflow:task:resource:resolve']"/>
+          <a @click="resolveProcess(record)" v-hasPermi="['workflow:task:resource:resolve']">
+            <a-icon type="user-delete" />
+            处理
+          </a>
+          <a-divider type="vertical" v-hasPermi="['workflow:task:resource:transfer']"/>
+          <a @click="handleProcess(record,0)" v-hasPermi="['workflow:task:resource:transfer']">
+            <a-icon type="user" />
+            转办
+          </a>
+          <a-divider type="vertical" v-hasPermi="['workflow:task:resource:delegate']"/>
+          <a @click="handleProcess(record,1)" v-hasPermi="['workflow:task:resource:delegate']">
+            <a-icon type="user-add" />
+            委派
           </a>
         </span>
       </a-table>
@@ -57,9 +91,12 @@
 </template>
 
 <script>
-import { pageTask } from '@/api/workflow/task'
+import { pageTask, delegateTask, transferTask, resolveTask } from '@/api/workflow/task'
+import { userOption } from '@/api/sys/user'
 import { tableMixin } from '@/store/table-mixin'
+import { USER_ID } from '@/store/mutation-types'
 import CreateForm from './modules/CreateForm'
+import storage from 'store'
 export default {
   name: 'Process',
   components: {
@@ -71,6 +108,19 @@ export default {
       list: [],
       loading: false,
       total: 0,
+      userList: [],
+      title: '',
+      open: false,
+      form: {
+        userId: '',
+        assignee: '',
+        taskId: '',
+        instanceId: '',
+        businessKey: '',
+        instanceName: ''
+      },
+      type: 0,
+      submitLoading: false,
       queryParam: {
         pageNum: 1,
         pageSize: 10,
@@ -111,28 +161,51 @@ export default {
           title: '创建时间',
           dataIndex: 'createTime',
           align: 'center',
-          width: '14%',
+          width: '14%'
         },
         {
           title: '操作',
-          width: '15%',
+          width: '25%',
           dataIndex: 'operation',
           scopedSlots: { customRender: 'operation' },
           align: 'center'
         }
-      ]
+      ],
+      rules: {
+        assignee: [
+          { required: true, message: '请选择用户', trigger: 'blur' }
+        ]
+      }
     }
   },
   filters: {
   },
   created () {
     this.getList()
+    this.getUserList()
   },
   computed: {
   },
   watch: {
   },
   methods: {
+    resolveProcess (row) {
+      this.loading = true
+      this.reset()
+      this.form.businessKey = row.businessKey
+      this.form.instanceId = row.processInstanceId
+      this.form.instanceName = row.processInstanceName
+      this.form.taskId = row.taskId
+      resolveTask(this.form).then(() => {
+        this.$message.success(
+          '处理成功',
+          3
+        )
+        this.getList()
+      }).finally(() => {
+        this.loading = false
+      })
+    },
     /** 查询流程定义列表 */
     getList () {
       this.loading = true
@@ -142,6 +215,68 @@ export default {
           this.loading = false
         }
       )
+    },
+    getUserList () {
+      userOption().then(res => {
+        const userId = storage.get(USER_ID)
+        this.form.userId = userId
+        this.userList = res.data.filter(function (row) {
+          return row.value !== userId
+        })
+      })
+    },
+    submitForm () {
+      this.$refs.form.validate(valid => {
+        if (valid) {
+          // 0转办 1委派
+          const type = this.type
+          this.submitLoading = true
+          if (type === 0) {
+            transferTask(this.form).then(() => {
+              this.$message.success(
+                '转办成功',
+                3
+              )
+              this.getList()
+            })
+          } else {
+            delegateTask(this.form).then(() => {
+              this.$message.success(
+                '委派成功',
+                3
+              )
+              this.getList()
+            })
+          }
+          this.open = false
+          this.submitLoading = false
+        } else {
+          return false
+        }
+      })
+    },
+    handleProcess (row, type) {
+      this.reset()
+      this.type = type
+      this.form.businessKey = row.businessKey
+      this.form.instanceId = row.processInstanceId
+      this.form.instanceName = row.processInstanceName
+      this.form.taskId = row.taskId
+      this.title = type === 0 ? '转办' : '委派'
+      this.open = true
+    },
+    cancel () {
+      this.open = false
+    },
+    reset () {
+      this.form = {
+        userId: this.form.userId,
+        assignee: '',
+        taskId: '',
+        instanceId: '',
+        businessKey: '',
+        instanceName: ''
+      }
     },
     /** 搜索按钮操作 */
     handleQuery () {

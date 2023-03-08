@@ -136,7 +136,8 @@ export default {
         {
           title: '登录信息',
           dataIndex: 'msg',
-          align: 'center'
+          align: 'center',
+          width: '20%'
         },
         {
           title: '登录时间',

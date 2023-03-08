@@ -57,16 +57,16 @@
           <a v-hasPermi="['sys:resource:video:update']" @click="$refs.createForm.handleUpdate(record, undefined)" v-if="record.status == 3 || record.status == 2">
             <a-icon type="edit" />修改
           </a>
-          <a-divider type="vertical" v-if="record.status == 3" v-hasPermi="['sys:resource:video:detail']"/>
-          <a @click="handleQuery1(record)" v-if="record.status == 3" v-hasPermi="['sys:resource:video:detail']">
+          <a-divider type="vertical" v-if="record.status == 3 || record.status == 2" v-hasPermi="['sys:resource:video:detail']"/>
+          <a @click="handleQuery1(record)" v-if="record.status == 3 || record.status == 2" v-hasPermi="['sys:resource:video:detail']">
             <a-icon type="eye" />查看
           </a>
-          <a-divider type="vertical" v-if="record.status == 3" v-hasPermi="['sys:resource:video:download']"/>
-          <a @click="download(record)" v-if="record.status == 3" v-hasPermi="['sys:resource:video:download']">
+          <a-divider type="vertical" v-if="record.status == 3 || record.status == 2" v-hasPermi="['sys:resource:video:download']"/>
+          <a @click="download(record)" v-if="record.status == 3 || record.status == 2" v-hasPermi="['sys:resource:video:download']">
             <a-icon type="download" />下载
           </a>
-          <a-divider type="vertical" v-if="record.status != 3" v-hasPermi="['sys:resource:video:diagram']"/>
-          <a @click="handleQuery2(record)" v-if="record.status != 3" v-hasPermi="['sys:resource:video:diagram']">
+          <a-divider type="vertical" v-if="record.status != 3 && record.status != 2" v-hasPermi="['sys:resource:video:diagram']"/>
+          <a @click="handleQuery2(record)" v-if="record.status != 3 && record.status != 2" v-hasPermi="['sys:resource:video:diagram']">
             <a-icon type="gold" />查看
           </a>
           <a-divider type="vertical" v-hasPermi="['sys:resource:audio:auditLog']"/>
