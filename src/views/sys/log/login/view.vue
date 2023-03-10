@@ -113,7 +113,8 @@ export default {
         {
           title: '登录地点',
           dataIndex: 'requestAddress',
-          align: 'center'
+          align: 'center',
+          ellipsis: true
         },
         {
           title: '浏览器',
