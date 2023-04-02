@@ -52,6 +52,7 @@ import Ellipsis from '@/components/Ellipsis'
 import NoticeDetail from './NoticeDetail'
 import { socketApi } from '@/api/sys/socket'
 import { mapGetters } from 'vuex'
+import { notification } from 'ant-design-vue'
 export default {
   name: 'HeaderNotice',
   components: {
@@ -162,8 +163,11 @@ export default {
         }
         // 客户端接收服务端返回的数据
         websocket.onmessage = evt => {
-          // 动态更新通知数
-          this.getUnReadCount()
+          notification.success({
+            message: '消息提示',
+            description: evt.data,
+            duration: 0
+          })
           console.log(evt.data)
         }
         // 发生错误时

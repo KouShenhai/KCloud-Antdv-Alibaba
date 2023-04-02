@@ -116,7 +116,7 @@ export default {
       this.$refs.form.validate(valid => {
         if (valid) {
           this.submitLoading = true
-          updateInfo(this.user).then(response => {
+          updateInfo(this.user).then(() => {
             this.$notification.success({
               message: '提示',
               description: '修改成功'
