@@ -127,7 +127,7 @@ export default {
         {
           title: '主机',
           dataIndex: 'requestIp',
-          width: '12%',
+          width: '11%',
           align: 'center'
         },
         {
@@ -171,6 +171,13 @@ export default {
           dataIndex: 'createDate',
           align: 'center',
           width: '12%'
+        },
+        {
+          title: '耗时（毫秒）',
+          dataIndex: 'takeTime',
+          align: 'center',
+          width: '8%',
+          ellipsis: true
         }
       ]
     }
