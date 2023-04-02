@@ -51,6 +51,30 @@
           @click="handleSubmit"
         >确定</a-button>
       </a-form-item>
+      <a-form-item>
+        <table class="account-table">
+          <thead>
+          <tr>
+            <th class="account-table">账号（老寇云）</th>
+            <th class="account-table">账号（阿里）</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td class="account-table">admin/admin123</td>
+            <td class="account-table">tenant/tenant123</td>
+          </tr>
+          <tr>
+            <td class="account-table">test/test123</td>
+            <td class="account-table">-</td>
+          </tr>
+          <tr>
+            <td class="account-table">laok5/test123</td>
+            <td class="account-table">-</td>
+          </tr>
+          </tbody>
+        </table>
+      </a-form-item>
     </a-form-model>
   </div>
 </template>
@@ -180,6 +204,16 @@ export default {
     text-align: left;
     margin-top: 24px;
     line-height: 22px;
+  }
+
+  .account-table {
+    border: 1px solid black;
+    margin-left: auto;
+    margin-right: auto;
+    border-collapse: collapse;
+    width: 100%;
+    text-align: center;
+    font-size: 16px;
   }
 }
 </style>
