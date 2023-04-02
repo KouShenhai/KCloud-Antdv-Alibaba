@@ -7,7 +7,7 @@
         </div>
         <div class="content">
           <div class="content-title">
-            {{ timeFix }}，{{ nickname }}<span class="welcome-text"></span>
+            {{ timeFix }}，{{ name }}<span class="welcome-text"></span>
           </div>
           <div style="margin: 0;padding: 0;">
             <iframe
@@ -52,7 +52,7 @@ export default {
   computed: {
     ...mapGetters([
       'avatar',
-      'nickname'
+      'name'
     ]),
     prop () {
       return {

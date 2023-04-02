@@ -43,16 +43,16 @@ const errorHandler = (error) => {
 request.interceptors.request.use(config => {
   const token = storage.get(ACCESS_TOKEN)
   const userId = storage.get(USER_ID)
-  const username = storage.get(USER_NAME)
+  const userName = storage.get(USER_NAME)
   const tenantId = storage.get(TENANT_ID)
   // 如果 token 存在
   // 让每个请求携带自定义 token 请根据实际情况自行修改
   if (token) {
     config.headers['Authorization'] = 'Bearer ' + token // 让每个请求携带自定义token 请根据实际情况自行修改
-    config.headers['gray'] = 'true'
-    config.headers['userId'] = userId
-    config.headers['username'] = username
-    config.headers['tenantId'] = tenantId
+    config.headers['Gray'] = 'true'
+    config.headers['User-Id'] = userId
+    config.headers['User-Name'] = userName
+    config.headers['Tenant-Id'] = tenantId
   }
   // 处理params参数
   if (config.params) {

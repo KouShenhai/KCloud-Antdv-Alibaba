@@ -18,7 +18,7 @@ const user = {
     SET_TOKEN: (state, token) => {
       state.token = token
     },
-    SET_NAME: (state, name) => {
+    SET_USER_NAME: (state, name) => {
       state.name = name
     },
     SET_AVATAR: (state, avatar) => {
@@ -27,7 +27,7 @@ const user = {
     SET_PERMISSIONS: (state, permissions) => {
       state.permissions = permissions
     },
-    SET_ID: (state, id) => {
+    SET_USER_ID: (state, id) => {
       state.id = id
     },
     SET_TENANT_ID: (state, tenantId) => {
@@ -67,17 +67,17 @@ const user = {
       return new Promise((resolve, reject) => {
         getInfo().then(res => {
           const user = res.data
-          const id = user.userId
+          const id = user.id
           const name = user.username
           const tenantId = user.tenantId
-          const avatar = user.imgUrl === '' ? require('@/assets/images/profile.jpg') : user.imgUrl
+          const avatar = user.avatar === '' ? require('@/assets/images/profile.jpg') : user.avatar
           if (user.permissionList && user.permissionList.length > 0) {
             commit('SET_PERMISSIONS', user.permissionList)
           }
           commit('SET_TENANT_ID', tenantId)
-          commit('SET_NAME', name)
+          commit('SET_USER_NAME', name)
           commit('SET_AVATAR', avatar)
-          commit('SET_ID', id)
+          commit('SET_USER_ID', id)
           storage.set(USER_ID, id, 7 * 24 * 60 * 60 * 1000)
           storage.set(USER_NAME, name, 7 * 24 * 60 * 60 * 1000)
           storage.set(TENANT_ID, tenantId, 7 * 24 * 60 * 60 * 1000)

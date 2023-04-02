@@ -1,8 +1,8 @@
 <template>
-  <a-dropdown v-if="nickname" placement="bottomRight">
+  <a-dropdown v-if="name" placement="bottomRight">
     <span class="ant-pro-account-avatar">
       <a-avatar size="small" :src="avatar" class="antd-pro-global-header-index-avatar" />
-      <span>{{ nickname }}</span>
+      <span>{{ name }}</span>
     </span>
     <template v-slot:overlay>
       <a-menu class="ant-pro-drop-down menu" :selected-keys="[]">
@@ -38,7 +38,7 @@ export default {
   computed: {
     ...mapGetters([
       'avatar',
-      'nickname'
+      'name'
     ])
   },
   methods: {

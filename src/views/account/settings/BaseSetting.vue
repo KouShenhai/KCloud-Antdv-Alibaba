@@ -34,7 +34,7 @@
             <div class="mask">
               <a-icon type="plus" />
             </div>
-            <img :src="user.imgUrl"/>
+            <img :src="user.avatar"/>
           </div>
         </a-upload>
       </a-col>
@@ -57,7 +57,7 @@ export default {
         id: '',
         mail: '',
         mobile: '',
-        imgUrl: '',
+        avatar: '',
         username: '',
         status: 0
       },
@@ -83,7 +83,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['nickname'])
+    ...mapGetters(['name'])
   },
   mounted () {
     this.getUser()
@@ -96,7 +96,7 @@ export default {
         formData.append('file', data.file)
         formData.append('md5', result)
         uploadAvatar(formData).then(response => {
-          this.user.imgUrl = response.data.url
+          this.user.avatar = response.data.url
         })
       })
     },
@@ -106,9 +106,9 @@ export default {
     getUser () {
       getUserInfo().then(response => {
         this.user.mail = response.data.mail
-        this.user.id = response.data.userId
+        this.user.id = response.data.id
         this.user.mobile = response.data.mobile
-        this.user.imgUrl = response.data.imgUrl
+        this.user.avatar = response.data.avatar
         this.user.username = response.data.username
       })
     },

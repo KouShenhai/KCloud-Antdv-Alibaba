@@ -49,8 +49,8 @@
             <span slot="status" slot-scope="text, record">
               {{ statusFormat(record) }}
             </span>
-            <span slot="imgUrl" slot-scope="text, record">
-              <img style="width:50px;height:50px" :src="record.imgUrl" />
+            <span slot="avatar" slot-scope="text, record">
+              <img style="width:50px;height:50px" :src="record.avatar" />
             </span>
             <span slot="operation" slot-scope="text, record">
               <a @click="$refs.createForm.handleUpdate(record)" v-hasPermi="['sys:user:update']">
@@ -144,8 +144,8 @@ export default {
         },
         {
           title: '用户头像',
-          dataIndex: 'imgUrl',
-          scopedSlots: { customRender: 'imgUrl' },
+          dataIndex: 'avatar',
+          scopedSlots: { customRender: 'avatar' },
           align: 'center'
         },
         {

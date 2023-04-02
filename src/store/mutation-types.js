@@ -1,7 +1,7 @@
 export const ACCESS_TOKEN = 'access_token'
 export const USER_ID = 'user_id'
 export const USER_NAME = 'user_name'
-export const TENANT_ID = 'tenantId'
+export const TENANT_ID = 'tenant_id'
 export const SIDE_COLLAPSED = 'side_collapsed'
 export const TOGGLE_MOBILE_TYPE = 'is_mobile'
 export const TOGGLE_NAV_THEME = 'nav_theme'
