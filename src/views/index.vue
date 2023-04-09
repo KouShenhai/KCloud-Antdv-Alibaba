@@ -39,6 +39,7 @@
 import { timeFix } from '@/utils/util'
 import { mapGetters } from 'vuex'
 import { PageHeaderWrapper } from '@/components/ProLayout'
+import { check } from '@/api/login'
 export default {
   name: 'Index',
   components: {
@@ -46,7 +47,8 @@ export default {
   },
   data () {
     return {
-      timeFix: timeFix()
+      timeFix: timeFix(),
+      refreshTime: ''
     }
   },
   computed: {
@@ -65,7 +67,6 @@ export default {
     }
   },
   created () {
-
   },
   mounted () {
   },

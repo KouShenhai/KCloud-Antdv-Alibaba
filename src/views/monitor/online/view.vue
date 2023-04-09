@@ -3,7 +3,7 @@
     <a-card :bordered="false">
       <!-- 条件搜索 -->
       <div class="table-page-search-wrapper">
-        <a-form layout="inline">
+        <a-form layout="inline" v-hasPermi="['sys:user:online:query']">
           <a-row :gutter="48">
             <a-col :md="8" :sm="24">
               <a-form-item label="用户名">
@@ -38,18 +38,16 @@
         :pagination="false"
         :bordered="tableBordered"
       >
-        <span slot="loginTime" slot-scope="text, record">
-          {{ parseTime(record.loginTime) }}
-        </span>
         <span slot="operation" slot-scope="text, record">
           <a-popconfirm
+            v-hasPermi="['sys:user:online:kill']"
             ok-text="是"
             cancel-text="否"
             @confirm="confirmHandleForceLogout(record)"
             @cancel="cancelHandleForceLogout(record)"
           >
-            <span slot="title">确认强退<b>{{ record.userName }}</b>的用户吗?</span>
-            <a v-hasPermi="['monitor:online:forceLogout']"> 强退 </a>
+            <span slot="title">确认强制踢出 <b>{{ record.username }}</b> 吗?</span>
+            <a> 强退 </a>
           </a-popconfirm>
         </span>
       </a-table>
@@ -61,7 +59,7 @@
         :current="queryParam.pageNum"
         :total="total"
         :page-size="queryParam.pageSize"
-        :showTotal="total => `共 ${total} 条`"
+        :showTotal="() => `共 ${total} 条`"
         @showSizeChange="onShowSizeChange"
         @change="changeSize"
       />
@@ -87,52 +85,29 @@ export default {
       queryParam: {
         pageNum: 1,
         pageSize: 10,
-        ipaddr: undefined,
-        userName: undefined
+        username: ''
       },
       columns: [
         {
-          title: '会话编号',
-          dataIndex: 'tokenId',
+          title: '令牌',
+          dataIndex: 'token',
           ellipsis: true,
           align: 'center'
         },
         {
-          title: '登录名称',
-          dataIndex: 'userName',
+          title: '用户名',
+          dataIndex: 'username',
           align: 'center'
         },
         {
-          title: '部门名称',
-          dataIndex: 'deptName',
-          align: 'center'
-        },
-        {
-          title: '主机',
-          dataIndex: 'ipaddr',
+          title: '登录地址',
+          dataIndex: 'loginIp',
           ellipsis: true,
-          align: 'center'
-        },
-        {
-          title: '登录地点',
-          dataIndex: 'loginLocation',
-          align: 'center'
-        },
-        {
-          title: '浏览器',
-          dataIndex: 'browser',
-          align: 'center'
-        },
-        {
-          title: '操作系统',
-          dataIndex: 'os',
           align: 'center'
         },
         {
           title: '登录时间',
-          dataIndex: 'loginTime',
-          width: 180,
-          scopedSlots: { customRender: 'loginTime' },
+          dataIndex: 'loginDate',
           align: 'center'
         },
         {

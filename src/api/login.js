@@ -1,7 +1,7 @@
 import request from '@/utils/request'
 
 export const userApi = {
-  Login: '/auth/oauth2/token',
+  Token: '/auth/oauth2/token',
   Logout: '/auth/oauth2/logout',
   UserInfo: '/admin/sys/user/api/info',
   Captcha: '/auth/oauth2/captcha',
@@ -11,14 +11,14 @@ export const userApi = {
 
 /**
  * login func
- * @param parameter
+ * @param params
  * @returns {*}
  */
-export function login (parameter) {
+export function login (params) {
   return request({
-    url: userApi.Login,
+    url: userApi.Token,
     method: 'post',
-    data: parameter,
+    data: params,
     // 设置序列化请求函数
     transformRequest: (data = {}) => Object.entries(data).map(ent => ent.join('=')).join('&'),
     headers: {
@@ -28,23 +28,24 @@ export function login (parameter) {
   })
 }
 
+export function check () {
+  return request({
+    url: userApi.CheckToken,
+    method: 'get'
+  })
+}
+
 export function tenant () {
   return request({
     url: userApi.Tenant,
-    method: 'get',
-    headers: {
-      'gray': 'true'
-    }
+    method: 'get'
   })
 }
 
 export function captcha (uuid) {
   return request({
     url: userApi.Captcha + '?uuid=' + uuid,
-    method: 'get',
-    headers: {
-      'gray': 'true'
-    }
+    method: 'get'
   })
 }
 
@@ -64,8 +65,7 @@ export function logout (token) {
     method: 'get',
     headers: {
       'Content-Type': 'application/json;charset=UTF-8',
-      'Authorization': 'Bearer ' + token,
-      'gray': 'true'
+      'Authorization': 'Bearer ' + token
     }
   })
 }
