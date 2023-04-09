@@ -80,7 +80,7 @@
             value: 0
           },
           {
-            label: '停用',
+            label: '锁定',
             value: 1
           }
         ],

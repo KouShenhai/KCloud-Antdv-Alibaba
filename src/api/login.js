@@ -3,7 +3,7 @@ import request from '@/utils/request'
 export const userApi = {
   Login: '/auth/oauth2/token',
   Logout: '/auth/oauth2/logout',
-  UserInfo: '/admin/sys/user/api/userInfo',
+  UserInfo: '/admin/sys/user/api/info',
   Captcha: '/auth/oauth2/captcha',
   Tenant: '/auth/oauth2/tenant',
   PublicKey: '/auth/oauth2/public_key'

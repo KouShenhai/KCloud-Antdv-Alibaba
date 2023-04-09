@@ -43,8 +43,9 @@
 </template>
 
 <script>
-import { getUserInfo, updateInfo, uploadAvatar } from '@/api/sys/user'
+import { updateInfo, uploadAvatar } from '@/api/sys/user'
 import { mapActions, mapGetters } from 'vuex'
+import { getInfo } from '@/api/login'
 export default {
   name: 'BaseSettings',
   components: {
@@ -104,7 +105,7 @@ export default {
       return false
     },
     getUser () {
-      getUserInfo().then(response => {
+      getInfo().then(response => {
         this.user.mail = response.data.mail
         this.user.id = response.data.id
         this.user.mobile = response.data.mobile

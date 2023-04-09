@@ -35,7 +35,6 @@
       <create-form
         ref="createForm"
         :deptOptions="deptOptions"
-        :statusOptions="statusOptions"
         @ok="getList"
         @select-tree="getTreeSelect"
       />
@@ -84,17 +83,6 @@ export default {
       // 部门树选项
       deptOptions: [],
       loading: false,
-      // 状态数据字典
-      statusOptions: [
-        {
-          label: '正常',
-          value: 0
-        },
-        {
-          label: '停用',
-          value: 1
-        }
-      ],
       queryParam: {
         name: undefined
       },

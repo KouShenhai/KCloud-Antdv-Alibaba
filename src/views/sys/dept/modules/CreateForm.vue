@@ -43,10 +43,6 @@ import { getDept, addDept, updateDept } from '@/api/sys/dept'
 export default {
   name: 'CreateForm',
   props: {
-    statusOptions: {
-      type: Array,
-      required: true
-    },
     deptOptions: {
       type: Array,
       required: true

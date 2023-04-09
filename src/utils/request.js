@@ -75,7 +75,7 @@ request.interceptors.response.use((res) => {
   if (res.request.responseType === 'blob' || res.request.responseType === 'arraybuffer') {
     return res.data
   }
-  if (code === 401 || code === 10021) {
+  if (code === 401) {
     if (!isReloginShow) {
       isReloginShow = true
       notification.open({

@@ -9,7 +9,7 @@
               <a-row :gutter="48">
                 <a-col :md="8" :sm="24">
                   <a-form-item label="用户名">
-                    <a-input v-model="queryParam.username" placeholder="请输入" allow-clear />
+                    <a-input v-model="queryParam.username" placeholder="请输入用户名" allow-clear />
                   </a-form-item>
                 </a-col>
                 <a-col :md="8" :sm="24">
@@ -67,7 +67,7 @@
               </a>
               <a-divider type="vertical" v-hasPermi="['sys:user:status']" v-if="record.status == 0"/>
               <a @click="changeStatus(record)" v-hasPermi="['sys:user:status']" v-if="record.status == 0">
-                <a-icon type="lock" />停用
+                <a-icon type="lock" />锁定
               </a>
               <a-divider type="vertical" v-hasPermi="['sys:user:delete']"/>
               <a @click="handleDelete(record)" v-hasPermi="['sys:user:delete']">
@@ -183,7 +183,7 @@ export default {
       const id = row.id
       const status = (row.status + 1) % 2
       updateStatus(id, status).then(() => {
-        const notice = status === 1 ? '停用' : '启用'
+        const notice = status === 1 ? '锁定' : '启用'
         this.$message.success(
            notice + '成功',
           3
@@ -193,9 +193,9 @@ export default {
       })
     },
     statusFormat (row) {
-      // 0：未启用   1：已启用
+      // 0：正常   1：锁定
       if (row.status === 1) {
-        return '停用'
+        return '锁定'
       } else {
         return '正常'
       }

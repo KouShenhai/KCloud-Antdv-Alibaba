@@ -58,14 +58,6 @@ export function updateStatus (id, status) {
   })
 }
 
-// 查询用户个人信息
-export function getUserInfo () {
-  return request({
-    url: '/admin/sys/user/api/userInfo',
-    method: 'get'
-  })
-}
-
 // 修改用户个人信息
 export function updateInfo (data) {
   return request({

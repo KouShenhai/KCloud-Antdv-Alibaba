@@ -70,9 +70,6 @@ export default {
   mounted () {
   },
   methods: {
-    onSponsorTabChange (key, type) {
-      this[type] = key
-    }
   }
 }
 </script>
