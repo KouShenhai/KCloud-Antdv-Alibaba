@@ -39,7 +39,6 @@
 import { timeFix } from '@/utils/util'
 import { mapGetters } from 'vuex'
 import { PageHeaderWrapper } from '@/components/ProLayout'
-import { check } from '@/api/login'
 export default {
   name: 'Index',
   components: {
