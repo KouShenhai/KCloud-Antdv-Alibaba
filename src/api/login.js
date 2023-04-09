@@ -28,13 +28,6 @@ export function login (params) {
   })
 }
 
-export function check () {
-  return request({
-    url: userApi.CheckToken,
-    method: 'get'
-  })
-}
-
 export function tenant () {
   return request({
     url: userApi.Tenant,
