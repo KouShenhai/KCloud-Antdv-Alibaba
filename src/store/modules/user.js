@@ -1,6 +1,6 @@
 import storage from 'store'
 import { login, getInfo, logout } from '@/api/login'
-import { ACCESS_TOKEN, USER_ID, USER_NAME, TENANT_ID } from '@/store/mutation-types'
+import {ACCESS_TOKEN, USER_ID, USER_NAME, TENANT_ID, AUTH_TYPE } from '@/store/mutation-types'
 import SparkMD5 from 'spark-md5'
 
 const user = {
@@ -11,7 +11,8 @@ const user = {
     welcome: '欢迎您，来到老寇云平台',
     avatar: '',
     permissions: [],
-    tenantId: ''
+    tenantId: '',
+    authType: ''
   },
 
   mutations: {
@@ -32,6 +33,9 @@ const user = {
     },
     SET_TENANT_ID: (state, tenantId) => {
       state.tenantId = tenantId
+    },
+    SET_AUTH_TYPE: (state, authType) => {
+      state.authType = authType
     }
   },
 
@@ -41,7 +45,9 @@ const user = {
       return new Promise((resolve, reject) => {
         login(loginParam).then(res => {
           storage.set(ACCESS_TOKEN, res.access_token, 7 * 24 * 60 * 60 * 1000)
+          storage.set(AUTH_TYPE, loginParam.auth_type, 7 * 24 * 60 * 60 * 1000)
           commit('SET_TOKEN', res.access_token)
+          commit('SET_AUTH_TYPE', loginParam.auth_type)
           resolve()
         })
         .catch(error => {
@@ -49,7 +55,6 @@ const user = {
         })
       })
     },
-
     GetMD5 ({ commit }, file) {
       return new Promise((resolve) => {
         const sparkMD5 = new SparkMD5.ArrayBuffer()
@@ -97,8 +102,10 @@ const user = {
           reject(error)
         }).finally(() => {
           commit('SET_TOKEN', '')
+          commit('SET_AUTH_TYPE', '')
           commit('SET_PERMISSIONS', [])
           storage.remove(ACCESS_TOKEN)
+          storage.remove(AUTH_TYPE)
         })
       })
     }

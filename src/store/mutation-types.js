@@ -1,4 +1,5 @@
 export const ACCESS_TOKEN = 'access_token'
+export const AUTH_TYPE = 'auth_type'
 export const USER_ID = 'user_id'
 export const USER_NAME = 'user_name'
 export const TENANT_ID = 'tenant_id'

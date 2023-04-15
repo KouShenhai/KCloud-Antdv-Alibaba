@@ -75,6 +75,9 @@
           </tbody>
         </table>
       </a-form-item>
+      <div class="user-login-other">
+        <a :href="ssoUri" class="sso">单点登录</a>
+      </div>
     </a-form-model>
   </div>
 </template>
@@ -105,19 +108,43 @@ export default {
         password: [{ required: true, message: '请输入密码', trigger: 'blur' }],
         captcha: [{ required: true, message: '请输入验证码', trigger: 'blur' }]
       },
-      tenantLink: '',
-      logining: false
+      logining: false,
+      ssoUri: '',
+      uri: ''
     }
   },
   created () {
-
+    this.getPublicKey()
+    this.getTenant()
+    this.checkLogin()
+    this.getSsoUri()
   },
   mounted () {
-    this.getPublicKey()
-    this.requestFailed()
-    this.getTenant()
   },
   methods: {
+    checkLogin () {
+      let queryAttr = decodeURIComponent(window.location.search)
+      this.uri = window.location.protocol + '//127.0.0.1:' + window.location.port
+      let pwdAuth = true
+      if (queryAttr.length > 0) {
+        queryAttr = queryAttr.substring(1)
+        const data = queryAttr.split('?')
+        for (let i = 0; i < data.length; i++) {
+          const queryData = data[i].split('=')
+          if (queryData[0] === 'code') {
+            pwdAuth = false
+            const params = { auth_type: 1, grant_type: 'authorization_code', code: queryData[1], redirect_uri: this.uri }
+            this.Login(params).then(() => this.loginSuccess())
+          }
+        }
+      }
+      if (pwdAuth) {
+        this.requestFailed()
+      }
+    },
+    getSsoUri () {
+      this.ssoUri = 'http://127.0.0.1:1111/oauth2/authorize?client_id=95TxSsTPFA3tF12TBSMmUVK0da&client_secret=FpHwIfw4wY92dO&response_type=code&scope=password mail mobile&redirect_uri=' + this.uri
+    },
     getPublicKey () {
       publicKey().then(res => {
         this.publicKey = res.data
@@ -150,7 +177,8 @@ export default {
           const uuid = this.form.uuid
           const captcha = this.form.captcha
           const tenantId = this.form.tenantId
-          const params = { username: username, password: password, captcha: captcha, uuid: uuid, grant_type: 'password', tenantId: tenantId }
+          // 0 密码 1 单点
+          const params = { username: username, password: password, captcha: captcha, uuid: uuid, grant_type: 'password', tenantId: tenantId, auth_type: 0 }
           this.Login(params)
             .then(() => this.loginSuccess())
             .catch(() => this.requestFailed())
@@ -214,6 +242,10 @@ export default {
     width: 100%;
     text-align: center;
     font-size: 16px;
+  }
+
+  .sso {
+    float: right;
   }
 }
 </style>
