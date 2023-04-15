@@ -114,9 +114,9 @@ export default {
     }
   },
   created () {
+    this.checkLogin()
     this.getPublicKey()
     this.getTenant()
-    this.checkLogin()
     this.getSsoUri()
   },
   mounted () {

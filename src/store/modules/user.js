@@ -1,6 +1,6 @@
 import storage from 'store'
-import { login, getInfo, logout } from '@/api/login'
-import {ACCESS_TOKEN, USER_ID, USER_NAME, TENANT_ID, AUTH_TYPE } from '@/store/mutation-types'
+import { login, getInfo, logout, ssoOut } from '@/api/login'
+import { ACCESS_TOKEN, USER_ID, USER_NAME, TENANT_ID, AUTH_TYPE } from '@/store/mutation-types'
 import SparkMD5 from 'spark-md5'
 
 const user = {
@@ -96,6 +96,10 @@ const user = {
     // 登出
     Logout ({ commit }) {
       return new Promise((resolve, reject) => {
+        const authType = storage.get(AUTH_TYPE)
+        if (authType === 1) {
+          ssoOut().then(() => {})
+        }
         logout(storage.get(ACCESS_TOKEN)).then(() => {
           resolve()
         }).catch(error => {

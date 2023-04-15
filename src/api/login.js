@@ -3,6 +3,7 @@ import request from '@/utils/request'
 export const userApi = {
   Token: '/auth/oauth2/token',
   Logout: '/auth/oauth2/logout',
+  SsoOut: '/auth/logout',
   UserInfo: '/admin/sys/user/api/info',
   Captcha: '/auth/oauth2/captcha',
   Tenant: '/auth/oauth2/tenant',
@@ -25,6 +26,13 @@ export function login (params) {
       'Authorization': 'Basic OTVUeFNzVFBGQTN0RjEyVEJTTW1VVkswZGE6RnBId0lmdzR3WTkyZE8=',
       'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
     }
+  })
+}
+
+export function ssoOut () {
+  return request({
+    url: userApi.SsoOut,
+    method: 'get'
   })
 }
 
