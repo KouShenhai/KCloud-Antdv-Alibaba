@@ -9,7 +9,7 @@ import errorCode from '@/utils/errorCode'
 import qs from 'qs'
 import { blobValidate } from '@/utils/ruoyi'
 import { saveAs } from 'file-saver'
-import moment from "moment/moment";
+import moment from 'moment/moment'
 
 // 是否显示重新登录
 let isReloginShow
