@@ -9,6 +9,7 @@ import errorCode from '@/utils/errorCode'
 import qs from 'qs'
 import { blobValidate } from '@/utils/ruoyi'
 import { saveAs } from 'file-saver'
+import moment from "moment/moment";
 
 // 是否显示重新登录
 let isReloginShow
@@ -51,6 +52,7 @@ request.interceptors.request.use(config => {
     config.headers['Authorization'] = 'Bearer ' + token // 让每个请求携带自定义token 请根据实际情况自行修改
     config.headers['Gray'] = 'true'
     config.headers['User-Id'] = userId
+    config.headers['Trace-Id'] = userId + moment(new Date())
     config.headers['User-Name'] = userName
     config.headers['Tenant-Id'] = tenantId
   }
