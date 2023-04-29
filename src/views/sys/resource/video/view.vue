@@ -129,7 +129,6 @@
   import CreateForm from './modules/CreateForm'
   import { tableMixin } from '@/store/table-mixin'
   import moment from 'moment'
-  import axios from 'axios'
 
   export default {
     name: 'ResourceVideo',
@@ -231,27 +230,20 @@
       download (row) {
         this.loading = true
         download(row.id).then(res => {
-          axios({
-            method: 'get',
-            url: res.data,
-            responseType: 'blob'
-          }).then((res) => {
-            // 为blob设置文件类型
-            const blob = new Blob([res.data])
-            // 创建一个临时的url指向blob对象
-            const url = window.URL.createObjectURL(blob)
-            const a = document.createElement('a')
-            a.href = url
-            a.download = moment(new Date()).format('YYYYMMDDHHmmss') + '.mp4'
-            a.click()
-            // 释放这个临时的对象url
-            window.URL.revokeObjectURL(url)
-            this.loading = false
-            this.$message.success(
-              '下载成功',
-              3
-            )
-          })
+          const url = window.URL.createObjectURL(res) // 创建下载链接
+          const link = document.createElement('a') // 赋值给a标签的href属性
+          link.style.display = 'none'
+          link.download = moment(new Date()).format('YYYYMMDDHHmmss') + '.mp4'
+          link.href = url
+          document.body.appendChild(link) // 将a标签挂载上去
+          link.click() // a标签click事件
+          document.body.removeChild(link) // 移除a标签
+          window.URL.revokeObjectURL(url) // 销毁下载链接
+          this.loading = false
+          this.$message.success(
+            '下载成功',
+            3
+          )
         })
       },
       linkQuery () {

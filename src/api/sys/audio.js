@@ -81,6 +81,7 @@ export function getDiagram (id) {
 export function download (id) {
   return request({
     url: '/admin/sys/resource/audio/api/download?id=' + id,
-    method: 'get'
+    method: 'get',
+    responseType: 'blob'
   })
 }

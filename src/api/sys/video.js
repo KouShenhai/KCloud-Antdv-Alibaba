@@ -77,6 +77,7 @@ export function getDiagram (id) {
 export function download (id) {
   return request({
     url: '/admin/sys/resource/video/api/download?id=' + id,
-    method: 'get'
+    method: 'get',
+    responseType: 'blob'
   })
 }
