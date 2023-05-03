@@ -54,24 +54,24 @@
       <a-form-item>
         <table class="account-table">
           <thead>
-          <tr>
-            <th class="account-table">账号（老寇云）</th>
-            <th class="account-table">账号（阿里）</th>
-          </tr>
+            <tr>
+              <th class="account-table">账号（老寇云）</th>
+              <th class="account-table">账号（阿里）</th>
+            </tr>
           </thead>
           <tbody>
-          <tr>
-            <td class="account-table">admin/admin123</td>
-            <td class="account-table">tenant/tenant123</td>
-          </tr>
-          <tr>
-            <td class="account-table">test/test123</td>
-            <td class="account-table">-</td>
-          </tr>
-          <tr>
-            <td class="account-table">laok5/test123</td>
-            <td class="account-table">-</td>
-          </tr>
+            <tr>
+              <td class="account-table">admin/admin123</td>
+              <td class="account-table">tenant/tenant123</td>
+            </tr>
+            <tr>
+              <td class="account-table">test/test123</td>
+              <td class="account-table">-</td>
+            </tr>
+            <tr>
+              <td class="account-table">laok5/test123</td>
+              <td class="account-table">-</td>
+            </tr>
           </tbody>
         </table>
       </a-form-item>
@@ -85,7 +85,7 @@
 <script>
 import { mapActions } from 'vuex'
 import { timeFix } from '@/utils/util'
-import { captcha, tenant, publicKey, ssoOut } from '@/api/login'
+import { captcha, tenant, publicKey } from '@/api/login'
 import { JSEncrypt } from 'jsencrypt'
 export default {
   name: 'Login',
@@ -143,7 +143,6 @@ export default {
       }
     },
     getSsoUri () {
-      ssoOut().then(() => {})
       this.ssoUri = 'http://127.0.0.1:1111/oauth2/authorize?client_id=95TxSsTPFA3tF12TBSMmUVK0da&client_secret=FpHwIfw4wY92dO&response_type=code&scope=password mail mobile&redirect_uri=' + this.uri
     },
     getPublicKey () {

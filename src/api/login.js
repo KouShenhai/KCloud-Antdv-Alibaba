@@ -3,7 +3,7 @@ import request from '@/utils/request'
 export const userApi = {
   Token: '/auth/oauth2/token',
   Logout: '/auth/oauth2/logout',
-  SsoOut: '/auth/logout',
+  SsoOut: '/auth/login?logout',
   UserInfo: '/admin/sys/user/api/info',
   Captcha: '/auth/oauth2/captcha',
   Tenant: '/auth/oauth2/tenant',
