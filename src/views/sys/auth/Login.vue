@@ -85,7 +85,7 @@
 <script>
 import { mapActions } from 'vuex'
 import { timeFix } from '@/utils/util'
-import { captcha, tenant, publicKey } from '@/api/login'
+import { captcha, tenant, publicKey, ssoOut } from '@/api/login'
 import { JSEncrypt } from 'jsencrypt'
 export default {
   name: 'Login',
@@ -143,6 +143,7 @@ export default {
       }
     },
     getSsoUri () {
+      ssoOut().then(() => {})
       this.ssoUri = 'http://127.0.0.1:1111/oauth2/authorize?client_id=95TxSsTPFA3tF12TBSMmUVK0da&client_secret=FpHwIfw4wY92dO&response_type=code&scope=password mail mobile&redirect_uri=' + this.uri
     },
     getPublicKey () {
