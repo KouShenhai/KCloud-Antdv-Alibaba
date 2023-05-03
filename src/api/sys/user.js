@@ -70,12 +70,9 @@ export function updateInfo (data) {
 // 用户头像上传
 export function uploadAvatar (data) {
   return request({
-    url: '/oss/api/upload',
+    url: '/admin/sys/oss/api/upload',
     method: 'post',
-    data: data,
-    headers: {
-      'xss-ticket': 'xss-white'
-    }
+    data: data
   })
 }
 

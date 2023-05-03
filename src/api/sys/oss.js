@@ -3,12 +3,9 @@ import request from '@/utils/request'
 // oss上传
 export function uploadOss (data) {
   return request({
-    url: '/oss/api/upload',
+    url: '/admin/sys/oss/api/upload',
     method: 'post',
-    data: data,
-    headers: {
-      'xss-ticket': 'xss-white'
-    }
+    data: data
   })
 }
 

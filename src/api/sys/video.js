@@ -46,10 +46,7 @@ export function uploadVideo (data) {
   return request({
     url: '/admin/sys/resource/video/api/upload',
     method: 'post',
-    data: data,
-    headers: {
-      'xss-ticket': 'xss-white'
-    }
+    data: data
   })
 }
 // 审批记录

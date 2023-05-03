@@ -47,10 +47,7 @@ export function uploadAudio (data) {
   return request({
     url: '/admin/sys/resource/audio/api/upload',
     method: 'post',
-    data: data,
-    headers: {
-      'xss-ticket': 'xss-white'
-    }
+    data: data
   })
 }
 // 获取审批记录

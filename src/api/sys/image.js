@@ -48,10 +48,7 @@ export function uploadImage (data) {
   return request({
     url: '/admin/sys/resource/image/api/upload',
     method: 'post',
-    data: data,
-    headers: {
-      'xss-ticket': 'xss-white'
-    }
+    data: data
   })
 }
 
