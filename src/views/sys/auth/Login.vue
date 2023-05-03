@@ -87,6 +87,8 @@ import { mapActions } from 'vuex'
 import { timeFix } from '@/utils/util'
 import { captcha, tenant, publicKey } from '@/api/login'
 import { JSEncrypt } from 'jsencrypt'
+import storage from 'store'
+import { ACCESS_TOKEN, AUTH_TYPE } from '@/store/mutation-types'
 export default {
   name: 'Login',
   components: {
@@ -133,6 +135,8 @@ export default {
           const queryData = data[i].split('=')
           if (queryData[0] === 'code') {
             pwdAuth = false
+            storage.remove(ACCESS_TOKEN)
+            storage.remove(AUTH_TYPE)
             const params = { auth_type: 1, grant_type: 'authorization_code', code: queryData[1], redirect_uri: this.uri }
             this.Login(params).then(() => this.loginSuccess())
           }
