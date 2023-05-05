@@ -135,6 +135,8 @@ export default {
             pwdAuth = false
             const params = { auth_type: 1, grant_type: 'authorization_code', code: queryData[1], redirect_uri: this.uri }
             this.Login(params).then(() => this.loginSuccess())
+              .catch(() => {})
+              .finally(() => {})
           }
         }
       }

@@ -46,8 +46,7 @@ export default {
   },
   data () {
     return {
-      timeFix: timeFix(),
-      refreshTime: ''
+      timeFix: timeFix()
     }
   },
   computed: {
