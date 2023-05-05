@@ -44,8 +44,8 @@ const user = {
     Login ({ commit }, loginParam) {
       return new Promise((resolve, reject) => {
         login(loginParam).then(res => {
-          storage.set(ACCESS_TOKEN, res.access_token, 7 * 24 * 60 * 60 * 1000)
-          storage.set(AUTH_TYPE, loginParam.auth_type, 7 * 24 * 60 * 60 * 1000)
+          storage.set(ACCESS_TOKEN, res.access_token, 60 * 60 * 1000)
+          storage.set(AUTH_TYPE, loginParam.auth_type, 60 * 60 * 1000)
           commit('SET_TOKEN', res.access_token)
           commit('SET_AUTH_TYPE', loginParam.auth_type)
           resolve()
@@ -83,9 +83,9 @@ const user = {
           commit('SET_USER_NAME', name)
           commit('SET_AVATAR', avatar)
           commit('SET_USER_ID', id)
-          storage.set(USER_ID, id, 7 * 24 * 60 * 60 * 1000)
-          storage.set(USER_NAME, name, 7 * 24 * 60 * 60 * 1000)
-          storage.set(TENANT_ID, tenantId, 7 * 24 * 60 * 60 * 1000)
+          storage.set(USER_ID, id, 60 * 60 * 1000)
+          storage.set(USER_NAME, name, 60 * 60 * 1000)
+          storage.set(TENANT_ID, tenantId, 60 * 60 * 1000)
           resolve(res)
         }).catch(error => {
           reject(error)
