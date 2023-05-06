@@ -115,9 +115,9 @@ export default {
   },
   created () {
     this.checkLogin()
+    this.getSsoUri()
     this.getPublicKey()
     this.getTenant()
-    this.getSsoUri()
   },
   mounted () {
   },
@@ -132,11 +132,13 @@ export default {
         for (let i = 0; i < data.length; i++) {
           const queryData = data[i].split('=')
           if (queryData[0] === 'code') {
-            pwdAuth = false
             const params = { auth_type: 1, grant_type: 'authorization_code', code: queryData[1], redirect_uri: this.uri }
-            this.Login(params).then(() => this.loginSuccess())
+            this.Login(params)
+              .then(() => this.loginSuccess())
               .catch(() => {})
-              .finally(() => {})
+              .finally(() => {
+                pwdAuth = false
+              })
           }
         }
       }
