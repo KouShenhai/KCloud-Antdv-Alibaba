@@ -49,6 +49,7 @@
    ```shel
    npm install mavon-editor --save
    npm i spark-md5 -S
+   npm install --save js-md5
    ```
   
 ## 致谢

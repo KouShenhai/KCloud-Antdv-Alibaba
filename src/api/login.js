@@ -7,7 +7,7 @@ export const userApi = {
   UserInfo: '/admin/sys/user/api/info',
   Captcha: '/auth/oauth2/captcha',
   Tenant: '/auth/oauth2/tenant',
-  PublicKey: '/auth/oauth2/public_key'
+  SecretInfo: '/auth/oauth2/secret_info'
 }
 
 /**
@@ -71,9 +71,9 @@ export function logout (token) {
   })
 }
 
-export function publicKey () {
+export function secretInfo () {
   return request({
-    url: userApi.PublicKey,
+    url: userApi.SecretInfo,
     method: 'get',
     headers: {
       'Content-Type': 'application/json;charset=UTF-8'
