@@ -51,8 +51,9 @@ import { listUnRead, unReadCount } from '@/api/sys/message'
 import Ellipsis from '@/components/Ellipsis'
 import NoticeDetail from './NoticeDetail'
 import { socketApi } from '@/api/sys/socket'
-import { mapGetters } from 'vuex'
 import { notification } from 'ant-design-vue'
+import { ACCESS_TOKEN } from '@/store/mutation-types'
+import storage from 'store'
 export default {
   name: 'HeaderNotice',
   components: {
@@ -88,9 +89,7 @@ export default {
     this.connectWebsocket()
   },
   computed: {
-  ...mapGetters([
-      'id'
-    ])
+
   },
   methods: {
     getList () {
@@ -147,13 +146,13 @@ export default {
         let ip = '192.168.62.1:7777'
         let protocol = 'ws'
         let url = ''
-        if (window.location.protocol === 'https:') {
+        if (window.location.protocol === 'https') {
           protocol = 'wss'
         }
         if (process.env.NODE_ENV === 'production') {
           ip = '175.178.69.253:7777'
         }
-        url = `${protocol}://` + ip + socketApi.URI + this.id
+        url = `${protocol}://` + ip + socketApi.URI + '?Authorization=Bearer ' + storage.get(ACCESS_TOKEN)
         // 打开一个websocket
         websocket = new WebSocket(url)
         // 建立连接

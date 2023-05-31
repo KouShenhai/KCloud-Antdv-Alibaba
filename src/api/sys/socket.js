@@ -1,3 +1,3 @@
 export const socketApi = {
-  URI: '/im/ws/'
+  URI: '/ws'
 }
