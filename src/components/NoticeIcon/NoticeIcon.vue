@@ -162,10 +162,10 @@ export default {
         }
         // 客户端接收服务端返回的数据
         websocket.onmessage = evt => {
+          this.getUnReadCount()
           notification.success({
             message: '消息提示',
-            description: evt.data,
-            duration: 0
+            description: evt.data
           })
           console.log(evt.data)
         }
