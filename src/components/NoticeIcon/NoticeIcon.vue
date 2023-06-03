@@ -143,7 +143,7 @@ export default {
       if (typeof WebSocket === 'undefined') {
         console.log('您的浏览器不支持WebSocket')
       } else {
-        let ip = '127.0.0.1:7777'
+        let ip = '127.0.0.1:5555'
         let protocol = 'ws'
         let url = ''
         if (window.location.protocol === 'https') {
@@ -182,12 +182,6 @@ export default {
   }
 }
 </script>
-
-<style lang="css">
-  .header-notice-wrapper {
-    top: 50px !important;
-  }
-</style>
 <style lang="less" scoped>
   .header-notice{
     display: inline-block;
