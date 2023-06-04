@@ -16,11 +16,15 @@ export function listUnRead (query) {
   })
 }
 
-export function saveMessage (data) {
+export function saveMessage (data, requestId) {
   return request({
     url: '/admin/sys/message/api/insert',
     method: 'post',
-    data: data
+    data: data,
+    headers: {
+      'Content-Type': 'application/json;charset=UTF-8',
+      'request-id': requestId
+    }
   })
 }
 

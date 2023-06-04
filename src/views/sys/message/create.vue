@@ -65,6 +65,7 @@ import Editor from '@/components/Editor'
 import { userOption } from '@/api/sys/user'
 import { uploadOss } from '@/api/sys/oss'
 import { mapActions } from 'vuex'
+import { idempotentToken } from '@/api/login'
 export default {
   name: 'NoticeForm',
   components: {
@@ -117,6 +118,7 @@ export default {
       // 状态数据字典
       statusOptions: [],
       typeOptions: [],
+      idempotentToken: '',
       // 表单参数
       form: {
         title: '',
@@ -179,19 +181,24 @@ export default {
      /** 新增按钮操作 */
     handleAdd () {
       this.reset()
+       this.getToken()
       this.formTitle = '新增消息'
+    },
+    getToken () {
+      idempotentToken().then(res => {
+        this.idempotentToken = res.data.token
+      })
     },
     /** 提交按钮 */
     submitForm: function () {
       this.$refs.baseForm.validate(valid => {
         if (valid) {
           this.submitLoading = true
-          saveMessage(this.form).then(response => {
+          saveMessage(this.form, this.idempotentToken).then(() => {
             this.$message.success(
               '发送成功',
               3
             )
-            this.reset()
             this.back()
           }).finally(() => {
             this.submitLoading = false
@@ -202,6 +209,7 @@ export default {
       })
     },
     back () {
+      this.reset()
       this.$router.push('/sys/message/view')
     }
   }

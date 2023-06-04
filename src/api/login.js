@@ -7,7 +7,8 @@ export const userApi = {
   UserInfo: '/admin/sys/user/api/info',
   Captcha: '/auth/oauth2/captcha',
   Tenant: '/auth/oauth2/tenant',
-  SecretInfo: '/auth/oauth2/secret_info'
+  SecretInfo: '/auth/oauth2/secret_info',
+  IdempotentToken: '/auth/oauth2/idempotent_token'
 }
 
 /**
@@ -74,6 +75,16 @@ export function logout (token) {
 export function secretInfo () {
   return request({
     url: userApi.SecretInfo,
+    method: 'get',
+    headers: {
+      'Content-Type': 'application/json;charset=UTF-8'
+    }
+  })
+}
+
+export function idempotentToken () {
+  return request({
+    url: userApi.IdempotentToken,
     method: 'get',
     headers: {
       'Content-Type': 'application/json;charset=UTF-8'
