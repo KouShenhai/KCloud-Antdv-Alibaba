@@ -87,8 +87,6 @@ import { mapActions } from 'vuex'
 import { timeFix } from '@/utils/util'
 import { captcha, tenant, secretInfo } from '@/api/login'
 import { JSEncrypt } from 'jsencrypt'
-import storage from 'store'
-import { APP_KEY, APP_SECRET } from '@/store/mutation-types'
 export default {
   name: 'Login',
   components: {
@@ -154,8 +152,6 @@ export default {
     getPublicKey () {
       secretInfo().then(res => {
         this.publicKey = res.data.publicKey
-        storage.set(APP_KEY, res.data.appKey, 60 * 60 * 1000)
-        storage.set(APP_SECRET, res.data.appSecret, 60 * 60 * 1000)
       })
     },
     getTenant () {

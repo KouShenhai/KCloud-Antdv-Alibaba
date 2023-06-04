@@ -4,13 +4,11 @@ import storage from 'store'
 import notification from 'ant-design-vue/es/notification'
 import message from 'ant-design-vue/es/message'
 import { VueAxios } from './axios'
-import {ACCESS_TOKEN, APP_KEY, APP_SECRET, TENANT_ID, USER_ID, USER_NAME} from '@/store/mutation-types'
+import { ACCESS_TOKEN, TENANT_ID, USER_ID, USER_NAME } from '@/store/mutation-types'
 import errorCode from '@/utils/errorCode'
 import qs from 'qs'
 import { blobValidate } from '@/utils/ruoyi'
 import { saveAs } from 'file-saver'
-import md5 from 'js-md5'
-import moment from 'moment'
 
 // 是否显示重新登录
 let isReloginShow
@@ -47,20 +45,12 @@ request.interceptors.request.use(config => {
   const userId = storage.get(USER_ID)
   const userName = storage.get(USER_NAME)
   const tenantId = storage.get(TENANT_ID)
-  const appKey = storage.get(APP_KEY)
-  const appSecret = storage.get(APP_SECRET)
-  const timestamp = moment().valueOf()
-  // 如果 token 存在
-  // 让每个请求携带自定义 token 请根据实际情况自行修改
   if (token) {
     config.headers['Authorization'] = 'Bearer ' + token // 让每个请求携带自定义token 请根据实际情况自行修改
     config.headers['Gray'] = 'true'
     config.headers['User-Id'] = userId
     config.headers['User-Name'] = userName
     config.headers['Tenant-Id'] = tenantId
-    config.headers['Timestamp'] = timestamp.toString()
-    // MD5(appKey+appSecret+timestamp+userId+username+tenantId)
-    config.headers['Sign'] = md5(appKey + appSecret + timestamp + userId + userName + tenantId)
   }
   // 处理params参数
   if (config.params) {
