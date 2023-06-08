@@ -67,6 +67,7 @@ export default {
       loadingMore: false,
       showLoadingMore: true,
       visible: false,
+      isConnect: false,
       queryParam: {
         pageNum: 1,
         pageSize: 5,
@@ -159,6 +160,7 @@ export default {
         websocket.onopen = () => {
           // 发送数据
           console.log('websocket建立连接')
+          this.isConnect = true
         }
         // 客户端接收服务端返回的数据
         websocket.onmessage = evt => {
@@ -172,12 +174,25 @@ export default {
         // 发生错误时
         websocket.onerror = evt => {
           console.log('websocket错误：', evt)
+          this.isConnect = false
         }
         // 关闭连接
         websocket.onclose = evt => {
           console.log('websocket关闭：', evt)
+          this.isConnect = false
+          this.restConnectWebsocket()
         }
       }
+    },
+    restConnectWebsocket () {
+      console.log('尝试重新连接')
+      const time = setInterval(() => {
+        if (this.isConnect) {
+          return
+        }
+        clearInterval(time)
+        this.connectWebsocket()
+      }, 5000)
     }
   }
 }
