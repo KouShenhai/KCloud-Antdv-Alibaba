@@ -147,7 +147,7 @@ export default {
       }
     },
     getSsoUri () {
-      this.ssoUri = 'http://127.0.0.1:1111/oauth2/authorize?client_id=95TxSsTPFA3tF12TBSMmUVK0da&client_secret=FpHwIfw4wY92dO&response_type=code&scope=password mail mobile&redirect_uri=' + this.uri
+      this.ssoUri = 'https://127.0.0.1:1111/oauth2/authorize?client_id=95TxSsTPFA3tF12TBSMmUVK0da&client_secret=FpHwIfw4wY92dO&response_type=code&scope=password mail mobile&redirect_uri=' + this.uri
     },
     getPublicKey () {
       secretInfo().then(res => {

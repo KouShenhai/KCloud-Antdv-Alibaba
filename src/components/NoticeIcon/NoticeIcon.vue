@@ -144,16 +144,7 @@ export default {
       if (typeof WebSocket === 'undefined') {
         console.log('您的浏览器不支持WebSocket')
       } else {
-        let ip = '127.0.0.1:5555'
-        let protocol = 'ws'
-        let url = ''
-        if (window.location.protocol === 'https') {
-          protocol = 'wss'
-        }
-        if (process.env.NODE_ENV === 'production') {
-          ip = '175.178.69.253:7777'
-        }
-        url = `${protocol}://` + ip + socketApi.URI + '?Authorization=Bearer ' + storage.get(ACCESS_TOKEN)
+        const url = `wss://1.com:5555` + socketApi.URI + '?Authorization=Bearer ' + storage.get(ACCESS_TOKEN)
         // 打开一个websocket
         websocket = new WebSocket(url)
         // 建立连接

@@ -181,7 +181,7 @@ export default {
      /** 新增按钮操作 */
     handleAdd () {
       this.reset()
-       this.getToken()
+      this.getToken()
       this.formTitle = '新增消息'
     },
     getToken () {
@@ -210,6 +210,7 @@ export default {
     },
     back () {
       this.reset()
+      this.getToken()
       this.$router.push('/sys/message/view')
     }
   }
