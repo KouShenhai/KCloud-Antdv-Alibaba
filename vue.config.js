@@ -109,8 +109,10 @@ const vueConfig = {
     proxy: {
       // detail: https://cli.vuejs.org/config/#devserver-proxy
       [process.env.VUE_APP_BASE_API]: {
+        // 使用 HTTPS
         target: `https://127.0.0.1:5555`,
-        // target: `http://192.168.62.137:5555`,
+        // 使用 HTTP
+        // target: `http://127.0.0.1:5555`,
         secure: false,
         changeOrigin: true,
         pathRewrite: {
