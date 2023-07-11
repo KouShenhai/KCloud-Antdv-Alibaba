@@ -181,7 +181,6 @@ export default {
      /** 新增按钮操作 */
     handleAdd () {
       this.reset()
-      this.getToken()
       this.formTitle = '新增消息'
     },
     getToken () {
@@ -191,6 +190,7 @@ export default {
     },
     /** 提交按钮 */
     submitForm: function () {
+      this.getToken()
       this.$refs.baseForm.validate(valid => {
         if (valid) {
           this.submitLoading = true
@@ -210,7 +210,6 @@ export default {
     },
     back () {
       this.reset()
-      this.getToken()
       this.$router.push('/sys/message/view')
     }
   }
