@@ -15,7 +15,7 @@
         <a-button type="primary" :loading="submitLoading" @click="submitForm">
           确定
         </a-button>
-        <a-button type="dashed" :loading="submitLoading" @click="back">
+        <a-button type="dashed" :loading="submitLoading" @click="back()">
           取消
         </a-button>
       </a-space>
@@ -136,7 +136,6 @@ export default {
   filters: {
   },
   created () {
-
   },
   computed: {
     prop () {
@@ -180,17 +179,19 @@ export default {
     },
      /** 新增按钮操作 */
     handleAdd () {
+      this.getToken()
       this.reset()
       this.formTitle = '新增消息'
     },
     getToken () {
-      idempotentToken().then(res => {
-        this.idempotentToken = res.data.token
-      })
+      if (this.idempotentToken === '') {
+        idempotentToken().then(res => {
+          this.idempotentToken = res.data.token
+        })
+      }
     },
     /** 提交按钮 */
     submitForm: function () {
-      this.getToken()
       this.$refs.baseForm.validate(valid => {
         if (valid) {
           this.submitLoading = true
@@ -199,6 +200,7 @@ export default {
               '发送成功',
               3
             )
+            this.idempotentToken = ''
             this.back()
           }).finally(() => {
             this.submitLoading = false
@@ -210,6 +212,7 @@ export default {
     },
     back () {
       this.reset()
+      this.getToken()
       this.$router.push('/sys/message/view')
     }
   }
