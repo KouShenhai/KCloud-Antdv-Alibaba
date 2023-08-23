@@ -151,7 +151,7 @@ export default {
     },
     getPublicKey () {
       secretInfo().then(res => {
-        this.publicKey = res.data.publicKey
+        this.publicKey = res.data
       })
     },
     getTenant () {
