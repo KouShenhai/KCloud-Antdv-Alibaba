@@ -4,10 +4,10 @@ export const userApi = {
   Token: '/auth/oauth2/token',
   Logout: '/auth/oauth2/logout',
   SsoOut: '/auth/logout',
-  UserInfo: '/admin/sys/user/api/info',
-  Captcha: '/auth/oauth2/captcha',
+  UserInfo: '/admin/v1/users/profile',
+  Captcha: '/auth/v1/captchas/',
   Tenant: '/auth/oauth2/tenant',
-  SecretInfo: '/auth/oauth2/secret_info',
+  SecretInfo: '/auth/v1/secrets',
   IdempotentToken: '/auth/oauth2/idempotent_token'
 }
 
@@ -46,7 +46,7 @@ export function tenant () {
 
 export function captcha (uuid) {
   return request({
-    url: userApi.Captcha + '?uuid=' + uuid,
+    url: userApi.Captcha + uuid,
     method: 'get'
   })
 }
