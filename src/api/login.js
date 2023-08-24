@@ -2,7 +2,7 @@ import request from '@/utils/request'
 
 export const userApi = {
   Token: '/auth/oauth2/token',
-  Logout: '/auth/oauth2/logout',
+  Logout: '/admin/v1/logouts',
   SsoOut: '/auth/logout',
   UserInfo: '/admin/v1/users/profile',
   Captcha: '/auth/v1/captchas/',
