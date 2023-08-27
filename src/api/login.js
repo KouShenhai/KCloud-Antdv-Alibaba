@@ -6,7 +6,7 @@ export const userApi = {
   SsoOut: '/auth/logout',
   UserInfo: '/admin/v1/users/profile',
   Captcha: '/auth/v1/captchas/',
-  Tenant: '/auth/oauth2/tenant',
+  Tenant: '/admin/v1/tenants/option-list',
   SecretInfo: '/auth/v1/secrets',
   IdempotentToken: '/auth/oauth2/idempotent_token'
 }
