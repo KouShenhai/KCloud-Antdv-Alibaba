@@ -1,7 +1,7 @@
 import request from '@/utils/request'
 
 export const menuApi = {
-  Router: '/admin/sys/menu/api/list'
+  Router: '/admin/v1/menus/tree-list'
 }
 
 // 获取路由
