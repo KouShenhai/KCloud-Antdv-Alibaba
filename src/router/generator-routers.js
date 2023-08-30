@@ -14,7 +14,7 @@ const constantRouterComponents = {
   PageView: PageView,
   UserLayout: UserLayout, // 登陆注册页面的通用布局
   // 动态引入的页面组件
-  'index': () => import('@/views/index'),
+  'index': () => import('@/views/index')
 }
 
 // 前端未找到页面路由（固定不用改）
@@ -124,7 +124,7 @@ export const generator = (routerMap, parent, routers) => {
       // 路由名称，建议唯一
       name: name,
       // 该路由对应页面的 组件(动态加载)
-      component: (() => import(`@/views${item.path}`)),
+      component: () => import(`@/views${item.path}`),
       hidden: item.hidden,
       // meta: 页面标题, 菜单图标, 页面权限(供指令权限用，可去掉)
       meta: {
