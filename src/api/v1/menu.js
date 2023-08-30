@@ -12,7 +12,7 @@ export function listMenu (data) {
 // 查询菜单详细
 export function getMenu (id) {
   return request({
-    url: '/admin/sys/menu/api/detail?id=' + id,
+    url: '/admin/v1/menus/' + id,
     method: 'get'
   })
 }
