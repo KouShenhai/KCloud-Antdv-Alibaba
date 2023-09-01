@@ -7,7 +7,7 @@ import { VueAxios } from './axios'
 import { ACCESS_TOKEN, TENANT_ID, USER_ID, USER_NAME } from '@/store/mutation-types'
 import errorCode from '@/utils/errorCode'
 import qs from 'qs'
-import { blobValidate } from '@/utils/ruoyi'
+import { blobValidate } from '@/utils/laokou'
 import { saveAs } from 'file-saver'
 
 // 是否显示重新登录
@@ -47,7 +47,6 @@ request.interceptors.request.use(config => {
   const tenantId = storage.get(TENANT_ID)
   if (token) {
     config.headers['Authorization'] = 'Bearer ' + token // 让每个请求携带自定义token 请根据实际情况自行修改
-    config.headers['Gray'] = 'true'
     config.headers['User-Id'] = userId
     config.headers['User-Name'] = userName
     config.headers['Tenant-Id'] = tenantId

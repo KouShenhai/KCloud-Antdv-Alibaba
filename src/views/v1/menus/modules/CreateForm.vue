@@ -212,7 +212,8 @@ export default {
         if (valid) {
           this.submitLoading = true
           if (this.form.id !== '') {
-            updateMenu(this.form).then(response => {
+            const data = { menuCO: this.form }
+            updateMenu(data).then(() => {
               this.$message.success(
                 '修改成功',
                 3
@@ -224,7 +225,7 @@ export default {
               this.submitLoading = false
             })
           } else {
-            addMenu(this.form).then(response => {
+            addMenu(this.form).then(() => {
               this.$message.success(
                 '新增成功',
                 3
