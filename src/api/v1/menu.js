@@ -17,29 +17,29 @@ export function getMenu (id) {
   })
 }
 
-// 查询菜单下拉树结构
-export function treeSelect () {
-  return request({
-    url: '/admin/sys/menu/api/tree',
-    method: 'get'
-  })
-}
-
-// 根据角色ID查询菜单下拉树结构
-export function roleMenuTreeSelect (roleId) {
-  return request({
-    url: '/admin/sys/menu/api/get?roleId=' + roleId,
-    method: 'get'
-  })
-}
-
-// 租户菜单
-export function tenantTreeSelect () {
-  return request({
-    url: '/admin/sys/menu/api/tenant',
-    method: 'get'
-  })
-}
+// // 查询菜单下拉树结构
+// export function treeSelect () {
+//   return request({
+//     url: '/admin/sys/menu/api/tree',
+//     method: 'get'
+//   })
+// }
+//
+// // 根据角色ID查询菜单下拉树结构
+// export function roleMenuTreeSelect (roleId) {
+//   return request({
+//     url: '/admin/sys/menu/api/get?roleId=' + roleId,
+//     method: 'get'
+//   })
+// }
+//
+// // 租户菜单
+// export function tenantTreeSelect () {
+//   return request({
+//     url: '/admin/sys/menu/api/tenant',
+//     method: 'get'
+//   })
+// }
 
 // 新增菜单
 export function addMenu (data) {
@@ -53,7 +53,7 @@ export function addMenu (data) {
 // 修改菜单
 export function updateMenu (data) {
   return request({
-    url: '/admin/sys/menu/api/update',
+    url: '/admin/v1/menus',
     method: 'put',
     data: data
   })

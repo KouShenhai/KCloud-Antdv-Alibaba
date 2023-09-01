@@ -63,11 +63,10 @@ export function getInfo () {
 
 export function logout (token) {
   return request({
-    url: userApi.Logout,
+    url: userApi.Logout + '/' + token,
     method: 'get',
     headers: {
-      'Content-Type': 'application/json;charset=UTF-8',
-      'Authorization': 'Bearer ' + token
+      'Content-Type': 'application/json;charset=UTF-8'
     }
   })
 }
