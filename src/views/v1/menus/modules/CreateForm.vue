@@ -99,7 +99,7 @@
 
 <script>
 
-import { getMenu, addMenu, updateMenu } from '@/api/v1/menu'
+import { getMenu, insertMenu, updateMenu } from '@/api/v1/menu'
 import allIcon from '@/core/icons'
 import icons from '@/utils/requireIcons'
 import IconSelector from '@/components/IconSelector'
@@ -225,7 +225,8 @@ export default {
               this.submitLoading = false
             })
           } else {
-            addMenu(this.form).then(() => {
+            const data = { menuCO: this.form }
+            insertMenu(data).then(() => {
               this.$message.success(
                 '新增成功',
                 3
