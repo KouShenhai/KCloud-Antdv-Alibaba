@@ -76,7 +76,7 @@ import allIcon from '@/core/icons'
 import { tableMixin } from '@/store/table-mixin'
 
 export default {
-  name: 'Menu',
+  name: 'Menus',
   components: {
     CreateForm
   },
