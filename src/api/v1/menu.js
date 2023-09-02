@@ -12,7 +12,7 @@ export function listMenu (data) {
 // 查询菜单详细
 export function getMenu (id) {
   return request({
-    url: '/admin/v1/menus/' + id,
+    url: '/admin/v1/menus' + '/' + id,
     method: 'get'
   })
 }
@@ -42,9 +42,9 @@ export function getMenu (id) {
 // }
 
 // 新增菜单
-export function addMenu (data) {
+export function insertMenu (data) {
   return request({
-    url: '/admin/sys/menu/api/insert',
+    url: '/admin/v1/menus',
     method: 'post',
     data: data
   })
@@ -60,9 +60,9 @@ export function updateMenu (data) {
 }
 
 // 删除菜单
-export function delMenu (menuId) {
+export function deleteMenu (id) {
   return request({
-    url: '/admin/sys/menu/api/delete?id=' + menuId,
+    url: '/admin/v1/menus' + '/' + id,
     method: 'delete'
   })
 }
