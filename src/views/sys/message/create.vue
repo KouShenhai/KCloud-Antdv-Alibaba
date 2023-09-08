@@ -65,7 +65,6 @@ import Editor from '@/components/Editor'
 import { userOption } from '@/api/sys/user'
 import { uploadOss } from '@/api/sys/oss'
 import { mapActions } from 'vuex'
-import { idempotentToken } from '@/api/v1/login'
 export default {
   name: 'NoticeForm',
   components: {
@@ -183,24 +182,16 @@ export default {
       this.reset()
       this.formTitle = '新增消息'
     },
-    getToken () {
-      if (this.idempotentToken === '') {
-        idempotentToken().then(res => {
-          this.idempotentToken = res.data.token
-        })
-      }
-    },
     /** 提交按钮 */
     submitForm: function () {
       this.$refs.baseForm.validate(valid => {
         if (valid) {
           this.submitLoading = true
-          saveMessage(this.form, this.idempotentToken).then(() => {
+          saveMessage(this.form).then(() => {
             this.$message.success(
               '发送成功',
               3
             )
-            this.idempotentToken = ''
             this.back()
           }).finally(() => {
             this.submitLoading = false

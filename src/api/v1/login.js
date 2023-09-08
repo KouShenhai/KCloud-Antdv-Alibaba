@@ -8,7 +8,6 @@ export const userApi = {
   Captcha: '/auth/v1/captchas/',
   Tenant: '/admin/v1/tenants/option-list',
   Secret: '/auth/v1/secrets'
-  // IdempotentToken: '/auth/oauth2/idempotent_token'
 }
 
 export function login (params) {
@@ -70,16 +69,6 @@ export function logout (token) {
 export function secret () {
   return request({
     url: userApi.Secret,
-    method: 'get',
-    headers: {
-      'Content-Type': 'application/json;charset=UTF-8'
-    }
-  })
-}
-
-export function idempotentToken () {
-  return request({
-    url: '',
     method: 'get',
     headers: {
       'Content-Type': 'application/json;charset=UTF-8'
