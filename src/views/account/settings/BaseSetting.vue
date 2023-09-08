@@ -87,7 +87,7 @@ export default {
     ...mapGetters(['name'])
   },
   mounted () {
-    this.getUser()
+    this.getInfo()
   },
   methods: {
     ...mapActions(['GetMD5']),
@@ -104,7 +104,7 @@ export default {
     beforeUpload () {
       return false
     },
-    getUser () {
+    getInfo () {
       info().then(response => {
         this.user.mail = response.data.mail
         this.user.id = response.data.id

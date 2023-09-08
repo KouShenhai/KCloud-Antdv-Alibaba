@@ -22,13 +22,13 @@
 </template>
 
 <script>
-  import {getMessageByDetailId} from '@/api/v1/message'
+  import { getByDetailId } from '@/api/v1/message'
 export default {
   name: 'NoticeDetail',
   components: {
   },
   computed: {
-    prop() {
+    prop () {
       return {
         subfield: false, // 单双栏模式
         defaultOpen: 'preview', // edit： 默认展示编辑区域 ， preview： 默认展示预览区域
@@ -54,7 +54,7 @@ export default {
     /** 修改按钮操作 */
     getNotice (row) {
       this.visible = true
-      getMessageByDetailId(row.id).then(response => {
+      getByDetailId(row.id).then(response => {
         this.form.title = response.data.title
         this.form.content = response.data.content
       })

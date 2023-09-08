@@ -28,21 +28,21 @@ export function saveMessage (data, requestId) {
   })
 }
 
-export function unReadCount () {
+export function unreadCount () {
   return request({
     url: '/admin/v1/message/unread-count',
     method: 'get'
   })
 }
 
-export function getMessageByDetailId (id) {
+export function getByDetailId (id) {
   return request({
     url: '/admin/sys/message/api/get?id=' + id,
     method: 'get'
   })
 }
 
-export function getMessageById (id) {
+export function getById (id) {
   return request({
     url: '/admin/sys/message/api/detail?id=' + id,
     method: 'get'

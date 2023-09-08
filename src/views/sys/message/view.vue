@@ -92,7 +92,7 @@
 
 <script>
 
-import { listMessage, getMessageById } from '@/api/v1/message'
+import { listMessage, getById } from '@/api/v1/message'
 import { tableMixin } from '@/store/table-mixin'
 export default {
   name: 'Notice',
@@ -162,7 +162,7 @@ export default {
   },
   methods: {
     getMessage (row) {
-      getMessageById(row.id).then(response => {
+      getById(row.id).then(response => {
         this.form.content = response.data.content
         this.form.title = response.data.title
         this.visible = true

@@ -47,7 +47,7 @@
 </template>
 
 <script>
-import { listUnRead, unReadCount } from '@/api/v1/message'
+import { listUnRead, unreadCount } from '@/api/v1/message'
 import Ellipsis from '@/components/Ellipsis'
 import NoticeDetail from './NoticeDetail'
 import { socketApi } from '@/api/sys/socket'
@@ -134,7 +134,7 @@ export default {
       this.loadingMore = false
     },
     getUnReadCount () {
-      unReadCount().then(response => {
+      unreadCount().then(response => {
           this.count = response.data
         }
       )
