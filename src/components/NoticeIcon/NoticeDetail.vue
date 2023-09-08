@@ -22,7 +22,7 @@
 </template>
 
 <script>
-  import {getMessageByDetailId} from '@/api/sys/message'
+  import {getMessageByDetailId} from '@/api/v1/message'
 export default {
   name: 'NoticeDetail',
   components: {

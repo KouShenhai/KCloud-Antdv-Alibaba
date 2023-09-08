@@ -1,5 +1,5 @@
 // eslint-disable-next-line
-import { getRouters } from '@/api/menu'
+import { getRouters } from '@/api/v1/router'
 import { indexRouterMap } from '@/config/router.config'
 import allIcon from '@/core/icons'
 import { validURL } from '@/utils/validate'

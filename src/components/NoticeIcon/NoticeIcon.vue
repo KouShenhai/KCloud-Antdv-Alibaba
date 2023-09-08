@@ -47,7 +47,7 @@
 </template>
 
 <script>
-import { listUnRead, unReadCount } from '@/api/sys/message'
+import { listUnRead, unReadCount } from '@/api/v1/message'
 import Ellipsis from '@/components/Ellipsis'
 import NoticeDetail from './NoticeDetail'
 import { socketApi } from '@/api/sys/socket'

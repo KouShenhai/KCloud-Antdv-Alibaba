@@ -30,7 +30,7 @@ export function saveMessage (data, requestId) {
 
 export function unReadCount () {
   return request({
-    url: '/admin/sys/message/api/count',
+    url: '/admin/v1/message/unread-count',
     method: 'get'
   })
 }

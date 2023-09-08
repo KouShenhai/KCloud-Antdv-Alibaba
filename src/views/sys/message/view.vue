@@ -92,7 +92,7 @@
 
 <script>
 
-import { listMessage, getMessageById } from '@/api/sys/message'
+import { listMessage, getMessageById } from '@/api/v1/message'
 import { tableMixin } from '@/store/table-mixin'
 export default {
   name: 'Notice',

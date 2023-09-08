@@ -60,12 +60,12 @@
 
 <script>
 
-import { saveMessage } from '@/api/sys/message'
+import { saveMessage } from '@/api/v1/message'
 import Editor from '@/components/Editor'
 import { userOption } from '@/api/sys/user'
 import { uploadOss } from '@/api/sys/oss'
 import { mapActions } from 'vuex'
-import { idempotentToken } from '@/api/login'
+import { idempotentToken } from '@/api/v1/login'
 export default {
   name: 'NoticeForm',
   components: {

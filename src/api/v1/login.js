@@ -3,19 +3,14 @@ import request from '@/utils/request'
 export const userApi = {
   Token: '/auth/oauth2/token',
   Logout: '/admin/v1/logouts',
-  SsoOut: '/auth/logout',
-  UserInfo: '/admin/v1/users/profile',
+  Out: '/auth/logout',
+  Info: '/admin/v1/users/profile',
   Captcha: '/auth/v1/captchas/',
   Tenant: '/admin/v1/tenants/option-list',
-  SecretInfo: '/auth/v1/secrets',
-  IdempotentToken: '/auth/oauth2/idempotent_token'
+  Secret: '/auth/v1/secrets'
+  // IdempotentToken: '/auth/oauth2/idempotent_token'
 }
 
-/**
- * login func
- * @param params
- * @returns {*}
- */
 export function login (params) {
   return request({
     url: userApi.Token,
@@ -30,9 +25,9 @@ export function login (params) {
   })
 }
 
-export function ssoOut () {
+export function out () {
   return request({
-    url: userApi.SsoOut,
+    url: userApi.Out,
     method: 'get'
   })
 }
@@ -51,9 +46,9 @@ export function captcha (uuid) {
   })
 }
 
-export function getInfo () {
+export function info () {
   return request({
-    url: userApi.UserInfo,
+    url: userApi.Info,
     method: 'get',
     headers: {
       'Content-Type': 'application/json;charset=UTF-8'
@@ -63,17 +58,18 @@ export function getInfo () {
 
 export function logout (token) {
   return request({
-    url: userApi.Logout + '/' + token,
-    method: 'get',
+    url: userApi.Logout,
+    data: { token: token },
+    method: 'post',
     headers: {
       'Content-Type': 'application/json;charset=UTF-8'
     }
   })
 }
 
-export function secretInfo () {
+export function secret () {
   return request({
-    url: userApi.SecretInfo,
+    url: userApi.Secret,
     method: 'get',
     headers: {
       'Content-Type': 'application/json;charset=UTF-8'
@@ -83,7 +79,7 @@ export function secretInfo () {
 
 export function idempotentToken () {
   return request({
-    url: userApi.IdempotentToken,
+    url: '',
     method: 'get',
     headers: {
       'Content-Type': 'application/json;charset=UTF-8'
