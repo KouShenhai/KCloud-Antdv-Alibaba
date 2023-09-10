@@ -43,7 +43,7 @@
 <script>
 
 import { addSource, updateSource, getSource } from '@/api/sys/source'
-  import { listDictByType } from '@/api/sys/dict'
+  import { listDictByType } from '@/api/v1/dict'
   export default {
     name: 'CreateForm',
     components: {

@@ -3,11 +3,11 @@
     <a-card :bordered="false">
       <!-- 条件搜索 -->
       <div class="table-page-search-wrapper">
-        <a-form layout="inline" v-hasPermi="['sys:dict:query']">
+        <a-form layout="inline" v-hasPermi="['dicts:list']">
           <a-row :gutter="48">
             <a-col :md="8" :sm="24">
               <a-form-item label="字典名称">
-                <a-input v-model="queryParam.dictLabel" placeholder="请输入字典名称" allow-clear/>
+                <a-input v-model="queryParam.label" placeholder="请输入字典名称" allow-clear/>
               </a-form-item>
             </a-col>
             <a-col :md="8" :sm="24">
@@ -25,7 +25,7 @@
         </a-form>
       </div>
       <div class="table-operations">
-        <a-button type="primary" @click="$refs.createForm.handleAdd()" v-hasPermi="['sys:dict:insert']">
+        <a-button type="primary" @click="$refs.createForm.handleAdd()" v-hasPermi="['dicts:insert']">
           <a-icon type="plus" />新增
         </a-button>
       </div>
@@ -44,15 +44,15 @@
         :pagination="false"
         :bordered="tableBordered">
         <span slot="operation" slot-scope="text, record">
-          <a @click="$refs.createForm.handleUpdate(record, undefined)" v-hasPermi="['sys:dict:update']">
+          <a @click="$refs.createForm.handleUpdate(record, undefined)" v-hasPermi="['dicts:update']">
             <a-icon type="edit" />修改
           </a>
-          <a-divider type="vertical" v-hasPermi="['sys:dict:insert']"/>
-          <a @click="$refs.createForm.handleAdd()" v-hasPermi="['sys:dict:insert']">
+          <a-divider type="vertical" v-hasPermi="['dicts:insert']"/>
+          <a @click="$refs.createForm.handleAdd()" v-hasPermi="['dicts:insert']">
             <a-icon type="plus" />新增
           </a>
-          <a-divider type="vertical" v-hasPermi="['sys:dict:delete']"/>
-          <a @click="handleDelete(record)" v-hasPermi="['sys:dict:delete']">
+          <a-divider type="vertical" v-hasPermi="['dicts:delete']"/>
+          <a @click="handleDelete(record)" v-hasPermi="['dicts:delete']">
             <a-icon type="delete" />删除
           </a>
         </span>
@@ -75,7 +75,7 @@
 
 <script>
 
-import { listDict, delDict } from '@/api/sys/dict'
+import { listDict, deleteDictById } from '@/api/v1/dict'
 import CreateForm from './modules/CreateForm'
 import { tableMixin } from '@/store/table-mixin'
 
@@ -93,19 +93,19 @@ export default {
       queryParam: {
         pageNum: 1,
         pageSize: 10,
-        dictLabel: undefined,
+        label: undefined,
         type: undefined
       },
       columns: [
         {
           title: '字典名称',
-          dataIndex: 'dictLabel',
+          dataIndex: 'label',
           ellipsis: true,
           align: 'center'
         },
         {
           title: '字典值',
-          dataIndex: 'dictValue',
+          dataIndex: 'value',
           ellipsis: true,
           align: 'center'
         },
@@ -185,12 +185,12 @@ export default {
     /** 删除按钮操作 */
     handleDelete (row) {
       const that = this
-      const dictIds = row.id
+      const id = row.id
       this.$confirm({
         title: '确认删除所选中数据?',
-        content: '当前选中字典编号为' + dictIds + '的数据',
+        content: '当前选中字典编号为' + id + '的数据',
         onOk () {
-          return delDict(dictIds)
+          return deleteDictById(id)
             .then(() => {
               that.getList()
               that.$message.success(

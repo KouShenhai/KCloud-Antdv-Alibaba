@@ -12,7 +12,7 @@ export function listDept (data) {
 // 查询部门详细
 export function getDeptById (id) {
   return request({
-    url: '/admin/sys/dept/api/detail?id=' + id,
+    url: '/admin/v1/depts/' + id,
     method: 'get'
   })
 }

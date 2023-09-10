@@ -5,11 +5,11 @@
     </a-divider>
     <a-form-model ref="form" :model="form" :rules="rules">
       <a-form-model-item label="字典名称" prop="dictLabel">
-        <a-input v-model="form.dictLabel" placeholder="请输入字典名称" />
+        <a-input v-model="form.label" placeholder="请输入字典名称" />
       </a-form-model-item>
 
       <a-form-model-item label="字典值" prop="dictValue">
-        <a-input v-model="form.dictValue" placeholder="请输入字典值" type="textarea" allow-clear />
+        <a-input v-model="form.value" placeholder="请输入字典值" type="textarea" allow-clear />
       </a-form-model-item>
 
       <a-form-model-item label="字典类型" prop="type">
@@ -39,7 +39,7 @@
 
 <script>
 
-import { getDict, addDict, updateDict } from '@/api/sys/dict'
+import { getDictById, insertDict, updateDict } from '@/api/v1/dict'
 
 export default {
   name: 'CreateForm',
@@ -55,16 +55,16 @@ export default {
       // 表单参数
       form: {
         id: undefined,
-        dictLabel: undefined,
+        label: undefined,
         type: undefined,
-        dictValue: '',
+        value: '',
         sort: 1,
         remark: undefined
       },
       open: false,
       rules: {
-        dictLabel: [{ required: true, message: '字典名称不能为空', trigger: 'blur' }],
-        dictValue: [{ required: true, message: '字典值不能为空', trigger: 'blur' }],
+        label: [{ required: true, message: '字典名称不能为空', trigger: 'blur' }],
+        value: [{ required: true, message: '字典值不能为空', trigger: 'blur' }],
         type: [{ required: true, message: '字典类型不能为空', trigger: 'blur' }]
       }
     }
@@ -90,9 +90,9 @@ export default {
     reset () {
       this.form = {
         id: undefined,
-        dictLabel: undefined,
+        label: undefined,
         type: undefined,
-        dictValue: '',
+        value: '',
         sort: 1,
         remark: undefined
       }
@@ -106,8 +106,8 @@ export default {
     /** 修改按钮操作 */
     handleUpdate (row, ids) {
       this.reset()
-      const dictId = row ? row.id : ids
-      getDict(dictId).then(response => {
+      const id = row ? row.id : ids
+      getDictById(id).then(response => {
         this.form = response.data
         this.open = true
         this.formTitle = '字典修改'
@@ -119,7 +119,8 @@ export default {
         if (valid) {
           this.submitLoading = true
           if (this.form.id !== undefined) {
-            updateDict(this.form).then(response => {
+            const data = { dictCO: this.form }
+            updateDict(data).then(() => {
               this.$message.success(
                 '修改成功',
                 3
@@ -130,7 +131,8 @@ export default {
               this.submitLoading = false
             })
           } else {
-            addDict(this.form).then(response => {
+            const data = { dictCO: this.form }
+            insertDict(data).then(() => {
               this.$message.success(
                 '新增成功',
                 3
