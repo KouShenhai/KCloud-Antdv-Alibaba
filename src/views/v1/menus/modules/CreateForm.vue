@@ -99,7 +99,7 @@
 
 <script>
 
-import { getMenu, insertMenu, updateMenu } from '@/api/v1/menu'
+import { getMenuById, insertMenu, updateMenu } from '@/api/v1/menu'
 import allIcon from '@/core/icons'
 import icons from '@/utils/requireIcons'
 import IconSelector from '@/components/IconSelector'
@@ -198,7 +198,7 @@ export default {
     handleUpdate (row) {
       this.reset()
       this.$emit('select-tree')
-      getMenu(row.id).then(response => {
+      getMenuById(row.id).then(response => {
         this.form = response.data
         this.form.type = '' + response.data.type
         this.form.visible = '' + response.data.visible

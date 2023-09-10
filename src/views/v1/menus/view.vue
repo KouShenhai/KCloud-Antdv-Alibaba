@@ -70,7 +70,7 @@
 
 <script>
 
-import { listMenu, deleteMenu } from '@/api/v1/menu'
+import { listMenu, deleteMenuById } from '@/api/v1/menu'
 import CreateForm from './modules/CreateForm'
 import allIcon from '@/core/icons'
 import { tableMixin } from '@/store/table-mixin'
@@ -216,7 +216,7 @@ export default {
         title: '确认删除所选中数据?',
         content: '当前选中编号为' + id + '的数据',
         onOk () {
-          return deleteMenu(id)
+          return deleteMenuById(id)
             .then(() => {
               that.getList()
               that.$message.success(
