@@ -65,3 +65,6 @@ export function delDept (id) {
     method: 'delete'
   })
 }
+
+
+

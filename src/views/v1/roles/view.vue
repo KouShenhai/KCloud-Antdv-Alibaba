@@ -3,7 +3,7 @@
     <a-card :bordered="false">
       <!-- 条件搜索 -->
       <div class="table-page-search-wrapper">
-        <a-form layout="inline" v-hasPermi="['sys:role:query']">
+        <a-form layout="inline" v-hasPermi="['roles:query']">
           <a-row :gutter="48">
             <a-col :md="8" :sm="24">
               <a-form-item label="角色名称">
@@ -20,7 +20,7 @@
         </a-form>
       </div>
       <div class="table-operations">
-        <a-button type="primary" @click="$refs.createForm.handleAdd()" v-hasPermi="['sys:role:insert']">
+        <a-button type="primary" @click="$refs.createForm.handleAdd()" v-hasPermi="['roles:insert']">
           <a-icon type="plus" />新增
         </a-button>
       </div>
@@ -39,17 +39,17 @@
         :pagination="false"
         :bordered="tableBordered">
         <span slot="operation" slot-scope="text, record">
-          <a @click="$refs.createForm.handleUpdate(record, undefined)" v-hasPermi="['sys:role:update']">
+          <a @click="$refs.createForm.handleUpdate(record, undefined)" v-hasPermi="['roles:update']">
             <a-icon type="edit" />
             修改
           </a>
-          <a-divider type="vertical" v-hasPermi="['sys:role:insert']" />
-          <a @click="$refs.createForm.handleAdd()" v-hasPermi="['sys:role:insert']">
+          <a-divider type="vertical" v-hasPermi="['roles:insert']" />
+          <a @click="$refs.createForm.handleAdd()" v-hasPermi="['roles:insert']">
             <a-icon type="plus" />
             新增
           </a>
-          <a-divider type="vertical" v-hasPermi="['sys:role:delete']" />
-          <a @click="handleDelete(record)" v-hasPermi="['sys:role:delete']">
+          <a-divider type="vertical" v-hasPermi="['roles:delete']" />
+          <a @click="handleDelete(record)" v-hasPermi="['roles:delete']">
             <a-icon type="delete" />
             删除
           </a>
@@ -73,7 +73,7 @@
 
 <script>
 
-import { pageRole, delRole } from '@/api/sys/role'
+import { listRole, deleteRole } from '@/api/v1/role'
 import CreateForm from './modules/CreateForm'
 import { tableMixin } from '@/store/table-mixin'
 
@@ -131,7 +131,7 @@ export default {
     /** 查询角色列表 */
     getList () {
       this.loading = true
-      pageRole(this.queryParam).then(response => {
+      listRole(this.queryParam).then(response => {
           this.list = response.data.records
           this.total = response.data.total - 0
           this.loading = false
@@ -170,7 +170,7 @@ export default {
         title: '确认删除所选中数据?',
         content: '当前选中编号为' + roleIds + '的数据',
         onOk () {
-          return delRole(roleIds)
+          return deleteRole(roleIds)
             .then(() => {
               that.getList()
               that.$message.success(

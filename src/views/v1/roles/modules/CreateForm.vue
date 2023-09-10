@@ -64,9 +64,9 @@
 
 <script>
 
-import { getRole, addRole, updateRole } from '@/api/sys/role'
-import { treeSelect as menuTreeSelect, roleMenuTreeSelect } from '@/api/sys/menu'
-import { treeSelect as deptTreeSelect, roleDeptTreeSelect } from '@/api/sys/dept'
+import { getRoleById, insertRole, updateRole } from '@/api/v1/role'
+import { listMenuTree as menuTreeSelect, listRoleMenuIDS } from '@/api/v1/menu'
+import { listDeptTree as deptTreeSelect, listRoleDeptIDS } from '@/api/v1/dept'
 export default {
   name: 'CreateForm',
   props: {
@@ -269,7 +269,7 @@ export default {
     },
     /** 根据角色ID查询菜单树结构 */
     getRoleMenuTreeSelect (roleId) {
-      return roleMenuTreeSelect(roleId).then(response => {
+      return listRoleMenuIDS(roleId).then(response => {
         this.menuOptions = this.menuOptionsAll
         return response
       })
@@ -352,7 +352,7 @@ export default {
     },
     /** 根据角色ID查询部门树结构 */
     getRoleDeptTreeSelect (roleId) {
-      return roleDeptTreeSelect(roleId).then(response => {
+      return listRoleDeptIDS(roleId).then(response => {
         this.deptOptions = this.deptOptionsAll
         return response
       })
@@ -360,10 +360,10 @@ export default {
     /** 修改按钮操作 */
     handleUpdate (row) {
       this.reset()
-      const roleId = row.id
-      const roleMenu = this.getRoleMenuTreeSelect(roleId)
-      const roleDept = this.getRoleDeptTreeSelect(roleId)
-      getRole(roleId).then(response => {
+      const id = row.id
+      const roleMenu = this.getRoleMenuTreeSelect(id)
+      const roleDept = this.getRoleDeptTreeSelect(id)
+      getRoleById(id).then(response => {
         this.form = response.data
         this.form.menuCheckStrictly = false
         this.form.deptCheckStrictly = false
@@ -395,7 +395,8 @@ export default {
           if (this.form.id !== undefined) {
             this.form.menuIds = this.getMenuAllCheckedKeys()
             this.form.deptIds = this.getDeptAllCheckedKeys()
-            updateRole(this.form).then(response => {
+            const data = { roleCO: this.form }
+            updateRole(data).then(() => {
               this.$message.success(
                 '修改成功',
                 3
@@ -408,7 +409,8 @@ export default {
           } else {
             this.form.menuIds = this.getMenuAllCheckedKeys()
             this.form.deptIds = this.getDeptAllCheckedKeys()
-            addRole(this.form).then(response => {
+            const data = { roleCO: this.form }
+            insertRole(data).then(() => {
               this.$message.success(
                 '新增成功',
                 3
