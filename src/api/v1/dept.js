@@ -9,36 +9,13 @@ export function listDept (data) {
   })
 }
 
-// export function listDept () {
-//   return request({
-//     url: '/admin/sys/dept/api/list',
-//     method: 'get'
-//   })
-// }
-
 // 查询部门详细
-export function getDept (id) {
+export function getDeptById (id) {
   return request({
     url: '/admin/sys/dept/api/detail?id=' + id,
     method: 'get'
   })
 }
-
-// 查询部门下拉树结构
-// export function treeSelect () {
-//   return request({
-//     url: '/admin/sys/dept/api/tree',
-//     method: 'get'
-//   })
-// }
-
-// 根据角色ID查询部门树结构
-// export function roleDeptTreeSelect (roleId) {
-//   return request({
-//     url: '/admin/sys/dept/api/get?roleId=' + roleId,
-//     method: 'get'
-//   })
-// }
 
 // 新增部门
 export function insertDept (data) {
@@ -59,7 +36,7 @@ export function updateDept (data) {
 }
 
 // 删除部门
-export function deleteDept (id) {
+export function deleteDeptById (id) {
   return request({
     url: '/admin/v1/depts' + '/' + id,
     method: 'delete'

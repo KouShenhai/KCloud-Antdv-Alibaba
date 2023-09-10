@@ -100,7 +100,7 @@
 </template>
 <script>
 
-import { listUser, delUser, updateStatus } from '@/api/sys/user'
+import { listUser, delUser, updateStatus } from '@/api/v1/user'
 import { treeSelect } from '@/api/sys/dept'
 import ResetPassword from './modules/ResetPassword'
 import CreateForm from '@/views/sys/user/modules/CreateForm'

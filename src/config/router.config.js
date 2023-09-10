@@ -34,7 +34,7 @@ export const indexRouterMap = [
     hidden: true
   },
   {
-    path: '/sys/message/create',
+    path: '/v1/messages/create',
     name: '新增消息',
     permissions: '',
     component: 'NoticeForm',
@@ -57,7 +57,7 @@ export const constantRouterMap = [
       {
         path: 'login',
         name: 'login',
-        component: () => import(/* webpackChunkName: "user" */ '@/views/sys/auth/Login')
+        component: () => import(/* webpackChunkName: "user" */ '@/views/v1/auth/Login')
       }
     ]
   },

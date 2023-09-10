@@ -45,7 +45,7 @@
 
 <script>
 
-  import { getOss, addOss, updateOss } from '@/api/sys/oss'
+  import { getOss, addOss, updateOss } from '@/api/v1/oss'
   export default {
     name: 'CreateForm',
     components: {

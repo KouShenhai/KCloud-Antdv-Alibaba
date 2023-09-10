@@ -43,9 +43,9 @@
 </template>
 
 <script>
-import { updateInfo, uploadAvatar } from '@/api/sys/user'
+import { updateInfo, uploadAvatar } from '@/api/v1/user'
 import { mapActions, mapGetters } from 'vuex'
-import { getInfo } from '@/api/login'
+import { info } from '@/api/v1/login'
 export default {
   name: 'BaseSettings',
   components: {
@@ -87,7 +87,7 @@ export default {
     ...mapGetters(['name'])
   },
   mounted () {
-    this.getUser()
+    this.getInfo()
   },
   methods: {
     ...mapActions(['GetMD5']),
@@ -104,8 +104,8 @@ export default {
     beforeUpload () {
       return false
     },
-    getUser () {
-      getInfo().then(response => {
+    getInfo () {
+      info().then(response => {
         this.user.mail = response.data.mail
         this.user.id = response.data.id
         this.user.mobile = response.data.mobile

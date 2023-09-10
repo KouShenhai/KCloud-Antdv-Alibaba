@@ -67,7 +67,7 @@
 
 <script>
 
-import {queryDept, deleteDept, listDept} from '@/api/v1/dept'
+import { deleteDeptById, listDept } from '@/api/v1/dept'
 import CreateForm from './modules/CreateForm'
 import { tableMixin } from '@/store/table-mixin'
 
@@ -154,7 +154,7 @@ export default {
         title: '确认删除所选中数据?',
         content: '当前选中编号为' + id + '的数据',
         onOk () {
-          return deleteDept(id)
+          return deleteDeptById(id)
             .then(() => {
               that.getList()
               that.$message.success(

@@ -77,9 +77,9 @@ export function uploadAvatar (data) {
 }
 
 // 用户下拉列表
-export function userOption () {
+export function getUserOption () {
   return request({
-    url: '/admin/sys/user/api/option/list',
+    url: '/admin/v1/users/option-list',
     method: 'get'
   })
 }

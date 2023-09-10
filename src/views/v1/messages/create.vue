@@ -60,12 +60,11 @@
 
 <script>
 
-import { saveMessage } from '@/api/sys/message'
+import { insertMessage } from '@/api/v1/message'
 import Editor from '@/components/Editor'
-import { userOption } from '@/api/sys/user'
-import { uploadOss } from '@/api/sys/oss'
+import { getUserOption } from '@/api/v1/user'
+import { uploadOss } from '@/api/v1/oss'
 import { mapActions } from 'vuex'
-import { idempotentToken } from '@/api/login'
 export default {
   name: 'NoticeForm',
   components: {
@@ -152,7 +151,7 @@ export default {
   mounted () {
     this.formTitle = this.$route.params.formTitle
     this.handleAdd()
-    userOption().then(response => {
+    getUserOption().then(response => {
       this.userOptions = response.data
     })
   },
@@ -179,28 +178,20 @@ export default {
     },
      /** 新增按钮操作 */
     handleAdd () {
-      this.getToken()
       this.reset()
       this.formTitle = '新增消息'
-    },
-    getToken () {
-      if (this.idempotentToken === '') {
-        idempotentToken().then(res => {
-          this.idempotentToken = res.data.token
-        })
-      }
     },
     /** 提交按钮 */
     submitForm: function () {
       this.$refs.baseForm.validate(valid => {
         if (valid) {
           this.submitLoading = true
-          saveMessage(this.form, this.idempotentToken).then(() => {
+          const data = { messageCO: this.form }
+          insertMessage(data).then(() => {
             this.$message.success(
               '发送成功',
               3
             )
-            this.idempotentToken = ''
             this.back()
           }).finally(() => {
             this.submitLoading = false
@@ -212,8 +203,7 @@ export default {
     },
     back () {
       this.reset()
-      this.getToken()
-      this.$router.push('/sys/message/view')
+      this.$router.push('/v1/messages/view')
     }
   }
 }

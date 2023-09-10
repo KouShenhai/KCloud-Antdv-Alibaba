@@ -86,7 +86,7 @@
 </template>
 <script>
 
-import { listOss, delOss, useOss } from '@/api/sys/oss'
+import { listOss, delOss, useOss } from '@/api/v1/oss'
 import CreateForm from '@/views/sys/oss/modules/CreateForm'
 import { tableMixin } from '@/store/table-mixin'
 export default {

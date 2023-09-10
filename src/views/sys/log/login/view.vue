@@ -60,7 +60,7 @@
 
 <script>
 
-import { list, exportList } from '@/api/sys/login'
+import { list, exportList } from '@/api/v1/loginlog'
 import { tableMixin } from '@/store/table-mixin'
 import moment from 'moment/moment'
 

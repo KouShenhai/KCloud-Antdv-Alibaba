@@ -92,7 +92,7 @@
 
 <script>
 import { pageTask, delegateTask, transferTask, resolveTask } from '@/api/workflow/task'
-import { userOption } from '@/api/sys/user'
+import { getUserOption } from '@/api/v1/user'
 import { tableMixin } from '@/store/table-mixin'
 import { USER_ID } from '@/store/mutation-types'
 import CreateForm from './modules/CreateForm'
@@ -217,7 +217,7 @@ export default {
       )
     },
     getUserList () {
-      userOption().then(res => {
+      getUserOption().then(res => {
         const userId = storage.get(USER_ID)
         this.form.userId = userId
         this.userList = res.data.filter(function (row) {

@@ -17,7 +17,7 @@
   </a-modal>
 </template>
 <script>
-import { updatePwd } from '@/api/sys/user'
+import { updatePwd } from '@/api/v1/user'
 import { mapGetters } from 'vuex'
 export default {
   props: {
