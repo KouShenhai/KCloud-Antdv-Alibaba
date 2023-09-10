@@ -3,7 +3,7 @@
     <a-card :bordered="false">
       <!-- 条件搜索 -->
       <div class="table-page-search-wrapper">
-        <a-form layout="inline" v-hasPermi="['roles:query']">
+        <a-form layout="inline" v-hasPermi="['roles:list']">
           <a-row :gutter="48">
             <a-col :md="8" :sm="24">
               <a-form-item label="角色名称">
@@ -73,7 +73,7 @@
 
 <script>
 
-import { listRole, deleteRole } from '@/api/v1/role'
+import { listRole, deleteRoleById } from '@/api/v1/role'
 import CreateForm from './modules/CreateForm'
 import { tableMixin } from '@/store/table-mixin'
 
@@ -165,12 +165,12 @@ export default {
     /** 删除按钮操作 */
     handleDelete (row) {
       const that = this
-      const roleIds = row.id
+      const id = row.id
       this.$confirm({
         title: '确认删除所选中数据?',
-        content: '当前选中编号为' + roleIds + '的数据',
+        content: '当前选中编号为' + id + '的数据',
         onOk () {
-          return deleteRole(roleIds)
+          return deleteRoleById(id)
             .then(() => {
               that.getList()
               that.$message.success(

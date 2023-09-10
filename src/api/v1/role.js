@@ -44,9 +44,9 @@ export function updateRole (data) {
 }
 
 // 删除角色
-export function deleteRole (roleId) {
+export function deleteRoleById (roleId) {
   return request({
-    url: '/admin/sys/role/api/delete?id=' + roleId,
+    url: '/admin/v1/roles/' + roleId,
     method: 'delete'
   })
 }
