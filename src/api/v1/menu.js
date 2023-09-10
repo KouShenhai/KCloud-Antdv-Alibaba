@@ -42,3 +42,19 @@ export function deleteMenuById (id) {
     method: 'delete'
   })
 }
+
+// 查询树形下拉菜单列表
+export function listMenuTree () {
+  return request({
+    url: '/admin/v1/menus/tree',
+    method: 'get'
+  })
+}
+
+// 根据角色ID查询菜单树IDS
+export function listRoleMenuIDS (roleId) {
+  return request({
+    url: '/admin/v1/menus/' + roleId + '/ids',
+    method: 'get'
+  })
+}

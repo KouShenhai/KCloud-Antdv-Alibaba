@@ -42,3 +42,19 @@ export function deleteDeptById (id) {
     method: 'delete'
   })
 }
+
+// 根据角色ID查询部门IDS
+export function listRoleDeptIDS (roleId) {
+  return request({
+    url: '/admin/v1/depts/' + roleId + '/ids',
+    method: 'get'
+  })
+}
+
+// 查询树形下拉部门列表
+export function listDeptTree () {
+  return request({
+    url: '/admin/v1/depts/tree',
+    method: 'get'
+  })
+}

@@ -56,7 +56,7 @@
 <script>
 
   import { getUser, addUser, updateUser } from '@/api/v1/user'
-  import { listRole } from '@/api/sys/role'
+  import { listRole } from '@/api/v1/role'
   export default {
     name: 'CreateForm',
     props: {
@@ -179,7 +179,6 @@
         })
         getUser(userId).then(response => {
           this.form = response.data
-          this.form.roleIds = this.form.roleIds
           this.open = true
           this.formTitle = '用户修改'
           this.form.password = ''
