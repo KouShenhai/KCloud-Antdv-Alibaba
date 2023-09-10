@@ -2,23 +2,23 @@ import request from '@/utils/request'
 
 export function listMessage (query) {
   return request({
-    url: '/admin/sys/message/api/query',
+    url: '/admin/v1/messages/list',
     method: 'post',
     data: query
   })
 }
 
-export function listUnRead (query) {
+export function listUnreadMessage (query) {
   return request({
-    url: '/admin/sys/message/api/unread/list',
+    url: '/admin/v1/messages/unread-list',
     method: 'post',
     data: query
   })
 }
 
-export function saveMessage (data) {
+export function insertMessage (data) {
   return request({
-    url: '/admin/sys/message/api/insert',
+    url: '/admin/v1/messages',
     method: 'post',
     data: data,
     headers: {
@@ -27,23 +27,23 @@ export function saveMessage (data) {
   })
 }
 
-export function unreadCount () {
+export function getUnreadMessageCount () {
   return request({
     url: '/admin/v1/message/unread-count',
     method: 'get'
   })
 }
 
-export function getByDetailId (id) {
+export function getMessageByDetailId (id) {
   return request({
-    url: '/admin/sys/message/api/get?id=' + id,
-    method: 'get'
+    url: '/admin/v1/messages/' + id,
+    method: 'post'
   })
 }
 
-export function getById (id) {
+export function getMessageById (id) {
   return request({
-    url: '/admin/sys/message/api/detail?id=' + id,
+    url: '/admin/v1/messages/' + id,
     method: 'get'
   })
 }

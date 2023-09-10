@@ -55,7 +55,7 @@
 
 <script>
 
-  import { getUser, addUser, updateUser } from '@/api/sys/user'
+  import { getUser, addUser, updateUser } from '@/api/v1/user'
   import { listRole } from '@/api/sys/role'
   export default {
     name: 'CreateForm',

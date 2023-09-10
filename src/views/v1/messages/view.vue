@@ -2,7 +2,7 @@
   <page-header-wrapper>
     <a-card :bordered="false">
       <!-- 条件搜索 -->
-      <div class="table-page-search-wrapper" v-hasPermi="['sys:message:query']">
+      <div class="table-page-search-wrapper" v-hasPermi="['messages:list']">
         <a-form layout="inline">
           <a-row :gutter="48">
             <a-col :md="8" :sm="24">
@@ -21,7 +21,7 @@
       </div>
       <!-- 操作 -->
       <div class="table-operations">
-        <a-button type="primary" @click="handleAdd()" v-hasPermi="['sys:message:insert']">
+        <a-button type="primary" @click="handleAdd()" v-hasPermi="['messages:insert']">
           <a-icon type="plus" />新增
         </a-button>
         <table-setting
@@ -44,12 +44,12 @@
           {{ typeFormat(record) }}
         </span>
         <span slot="operation" slot-scope="text, record">
-          <a @click="handleAdd()" v-hasPermi="['sys:message:insert']">
+          <a @click="handleAdd()" v-hasPermi="['messages:insert']">
             <a-icon type="plus" />
             新增
           </a>
-          <a-divider type="vertical" v-hasPermi="['sys:message:detail']"/>
-          <a @click="getMessage(record)" v-hasPermi="['sys:message:detail']">
+          <a-divider type="vertical" v-hasPermi="['messages:detail']"/>
+          <a @click="getMessage(record)" v-hasPermi="['messages:detail']">
             <a-icon type="eye" />
             查看
           </a>
@@ -92,7 +92,7 @@
 
 <script>
 
-import { listMessage, getById } from '@/api/v1/message'
+import { listMessage, getMessageById } from '@/api/v1/message'
 import { tableMixin } from '@/store/table-mixin'
 export default {
   name: 'Notice',
@@ -162,7 +162,7 @@ export default {
   },
   methods: {
     getMessage (row) {
-      getById(row.id).then(response => {
+      getMessageById(row.id).then(response => {
         this.form.content = response.data.content
         this.form.title = response.data.title
         this.visible = true

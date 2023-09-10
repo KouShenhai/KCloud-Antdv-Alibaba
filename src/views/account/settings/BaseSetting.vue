@@ -43,7 +43,7 @@
 </template>
 
 <script>
-import { updateInfo, uploadAvatar } from '@/api/sys/user'
+import { updateInfo, uploadAvatar } from '@/api/v1/user'
 import { mapActions, mapGetters } from 'vuex'
 import { info } from '@/api/v1/login'
 export default {

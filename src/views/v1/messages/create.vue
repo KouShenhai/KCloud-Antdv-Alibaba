@@ -60,10 +60,10 @@
 
 <script>
 
-import { saveMessage } from '@/api/v1/message'
+import { insertMessage } from '@/api/v1/message'
 import Editor from '@/components/Editor'
-import { userOption } from '@/api/sys/user'
-import { uploadOss } from '@/api/sys/oss'
+import { getUserOption } from '@/api/v1/user'
+import { uploadOss } from '@/api/v1/oss'
 import { mapActions } from 'vuex'
 export default {
   name: 'NoticeForm',
@@ -151,7 +151,7 @@ export default {
   mounted () {
     this.formTitle = this.$route.params.formTitle
     this.handleAdd()
-    userOption().then(response => {
+    getUserOption().then(response => {
       this.userOptions = response.data
     })
   },
@@ -178,7 +178,6 @@ export default {
     },
      /** 新增按钮操作 */
     handleAdd () {
-      this.getToken()
       this.reset()
       this.formTitle = '新增消息'
     },
@@ -187,7 +186,8 @@ export default {
       this.$refs.baseForm.validate(valid => {
         if (valid) {
           this.submitLoading = true
-          saveMessage(this.form).then(() => {
+          const data = { messageCO: this.form }
+          insertMessage(data).then(() => {
             this.$message.success(
               '发送成功',
               3
@@ -203,8 +203,7 @@ export default {
     },
     back () {
       this.reset()
-      this.getToken()
-      this.$router.push('/sys/message/view')
+      this.$router.push('/v1/messages/view')
     }
   }
 }

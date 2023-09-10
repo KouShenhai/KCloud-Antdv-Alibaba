@@ -38,7 +38,7 @@
 
 <script>
 
-import { getDept, insertDept, updateDept } from '@/api/v1/dept'
+import { getDeptById, insertDept, updateDept } from '@/api/v1/dept'
 
 export default {
   name: 'CreateForm',
@@ -110,7 +110,7 @@ export default {
       this.reset()
       this.$emit('select-tree', row)
       const deptId = row.id
-      getDept(deptId).then(response => {
+      getDeptById(deptId).then(response => {
         this.form = response.data
         this.open = true
         this.formTitle = '修改部门'

@@ -10,7 +10,7 @@ export function listDept (data) {
 }
 
 // 查询部门详细
-export function getDept (id) {
+export function getDeptById (id) {
   return request({
     url: '/admin/sys/dept/api/detail?id=' + id,
     method: 'get'
@@ -36,7 +36,7 @@ export function updateDept (data) {
 }
 
 // 删除部门
-export function deleteDept (id) {
+export function deleteDeptById (id) {
   return request({
     url: '/admin/v1/depts' + '/' + id,
     method: 'delete'

@@ -20,7 +20,7 @@
   </a-modal>
 </template>
 <script>
-import { resetUserPwd } from '@/api/sys/user'
+import { resetUserPwd } from '@/api/v1/user'
 
 export default {
   name: 'ResetPassword',
