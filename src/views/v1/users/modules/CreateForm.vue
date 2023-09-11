@@ -34,8 +34,8 @@
           v-model="form.roleIds"
           placeholder="请选择"
         >
-          <a-select-option v-for="(d, index) in roleOptions" :key="index" :value="d.id">
-            {{ d.name }}
+          <a-select-option v-for="(d, index) in roleOptions" :key="index" :value="d.value">
+            {{ d.label }}
           </a-select-option>
         </a-select>
       </a-form-model-item>
@@ -55,8 +55,8 @@
 
 <script>
 
-  import { getUser, addUser, updateUser } from '@/api/v1/user'
-  import { listRole } from '@/api/v1/role'
+import { getUserById, updateUser, insertUser } from '@/api/v1/user'
+  import { listRoleOption } from '@/api/v1/role'
   export default {
     name: 'CreateForm',
     props: {
@@ -147,12 +147,12 @@
       handleAdd () {
         this.reset()
         this.$emit('select-tree')
-        listRole({}).then(response => {
+        listRoleOption().then(response => {
           const roles = []
           response.data.forEach(item => {
             roles.push({
-              id: item.id,
-              name: item.name
+              value: item.value,
+              label: item.label
             })
           })
           this.roleOptions = roles
@@ -166,18 +166,18 @@
         this.reset()
         this.$emit('select-tree')
         // eslint-disable-next-line no-unused-vars
-        const userId = row.id
-        listRole({}).then(response => {
+        const id = row.id
+        listRoleOption().then(response => {
           const roles = []
           response.data.forEach(item => {
             roles.push({
-              id: item.id,
-              name: item.name
+              value: item.value,
+              label: item.label
             })
           })
           this.roleOptions = roles
         })
-        getUser(userId).then(response => {
+        getUserById(id).then(response => {
           this.form = response.data
           this.open = true
           this.formTitle = '用户修改'
@@ -190,7 +190,8 @@
           if (valid) {
             this.submitLoading = true
             if (this.form.id !== undefined) {
-              updateUser(this.form).then(response => {
+              const data = { userCO: this.form }
+              updateUser(data).then(() => {
                 this.$message.success(
                   '修改成功',
                   3
@@ -201,7 +202,8 @@
                 this.submitLoading = false
               })
             } else {
-              addUser(this.form).then(response => {
+              const data = { userCO: this.form }
+              insertUser(data).then(() => {
                 this.$message.success(
                   '新增成功',
                   3

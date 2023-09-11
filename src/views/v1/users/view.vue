@@ -5,11 +5,11 @@
         <a-col :span="20">
           <!-- 条件搜索 -->
           <div class="table-page-search-wrapper">
-            <a-form layout="inline" v-hasPermi="['sys:user:query']">
+            <a-form layout="inline" v-hasPermi="['users:list']">
               <a-row :gutter="48">
                 <a-col :md="8" :sm="24">
                   <a-form-item label="用户名">
-                    <a-input v-model="queryParam.username" placeholder="请输入用户名" allow-clear />
+                    <a-input v-model="queryParam.username" placeholder="请输入用户名(不支持模糊查询)" allow-clear />
                   </a-form-item>
                 </a-col>
                 <a-col :md="8" :sm="24">
@@ -22,7 +22,7 @@
             </a-form>
           </div>
           <div class="table-operations">
-            <a-button type="primary" @click="$refs.createForm.handleAdd()" v-hasPermi="['sys:user:insert']">
+            <a-button type="primary" @click="$refs.createForm.handleAdd()" v-hasPermi="['users:insert']">
               <a-icon type="plus" />新增
             </a-button>
           </div>
@@ -53,29 +53,29 @@
               <img style="width:50px;height:50px" :src="record.avatar" />
             </span>
             <span slot="operation" slot-scope="text, record">
-              <a @click="$refs.createForm.handleUpdate(record)" v-hasPermi="['sys:user:update']">
+              <a @click="$refs.createForm.handleUpdate(record)" v-hasPermi="['users:update']">
                 <a-icon type="edit" />
                 修改
               </a>
-              <a-divider type="vertical" v-hasPermi="['sys:user:insert']"/>
-              <a @click="$refs.createForm.handleAdd()" v-hasPermi="['sys:user:insert']">
+              <a-divider type="vertical" v-hasPermi="['users:insert']"/>
+              <a @click="$refs.createForm.handleAdd()" v-hasPermi="['users:insert']">
                 <a-icon type="plus" />新增
               </a>
-              <a-divider type="vertical" v-hasPermi="['sys:user:status']" v-if="record.status == 1"/>
-              <a @click="changeStatus(record)" v-hasPermi="['sys:user:status']" v-if="record.status == 1">
+              <a-divider type="vertical" v-hasPermi="['users:status']" v-if="record.status == 1"/>
+              <a @click="changeStatus(record)" v-hasPermi="['users:status']" v-if="record.status == 1">
                 <a-icon type="unlock" />启用
               </a>
-              <a-divider type="vertical" v-hasPermi="['sys:user:status']" v-if="record.status == 0"/>
-              <a @click="changeStatus(record)" v-hasPermi="['sys:user:status']" v-if="record.status == 0">
+              <a-divider type="vertical" v-hasPermi="['users:status']" v-if="record.status == 0"/>
+              <a @click="changeStatus(record)" v-hasPermi="['users:status']" v-if="record.status == 0">
                 <a-icon type="lock" />锁定
               </a>
-              <a-divider type="vertical" v-hasPermi="['sys:user:delete']"/>
-              <a @click="handleDelete(record)" v-hasPermi="['sys:user:delete']">
+              <a-divider type="vertical" v-hasPermi="['users:delete']"/>
+              <a @click="handleDelete(record)" v-hasPermi="['users:delete']">
                 <a-icon type="delete" />
                 删除
               </a>
-              <a-divider type="vertical" v-hasPermi="['sys:user:password']"/>
-              <a @click="$refs.resetPassword.handleResetPwd(record)" v-hasPermi="['sys:user:password']">
+              <a-divider type="vertical" v-hasPermi="['users:reset-password']"/>
+              <a @click="$refs.resetPassword.handleResetPwd(record)" v-hasPermi="['users:reset-password']">
                 <a-icon type="key" />
                 重置密码
               </a>
@@ -100,10 +100,10 @@
 </template>
 <script>
 
-import { listUser, delUser, updateStatus } from '@/api/v1/user'
-import { treeSelect } from '@/api/sys/dept'
+import { listUser, deleteUserById, updateUserStatus } from '@/api/v1/user'
+import { listDeptTree } from '@/api/v1/dept'
 import ResetPassword from './modules/ResetPassword'
-import CreateForm from '@/views/sys/user/modules/CreateForm'
+import CreateForm from './modules/CreateForm'
 import { tableMixin } from '@/store/table-mixin'
 export default {
   name: 'User',
@@ -182,7 +182,8 @@ export default {
       this.loading = true
       const id = row.id
       const status = (row.status + 1) % 2
-      updateStatus(id, status).then(() => {
+      let data = { id: id, status: status }
+      updateUserStatus(data).then(() => {
         const notice = status === 1 ? '锁定' : '启用'
         this.$message.success(
            notice + '成功',
@@ -202,7 +203,7 @@ export default {
     },
     /** 查询部门下拉树结构 */
     getTreeSelect () {
-      treeSelect().then(response => {
+      listDeptTree().then(response => {
         this.deptOptions = response.data.children
       })
     },
@@ -243,12 +244,12 @@ export default {
     /** 删除按钮操作 */
     handleDelete (row) {
       const that = this
-      const userId = row.id
+      const id = row.id
       this.$confirm({
         title: '确认删除所选中数据?',
-        content: '当前选中编号为' + userId + '的数据',
+        content: '当前选中编号为' + id + '的数据',
         onOk () {
-          return delUser(userId)
+          return deleteUserById(id)
             .then(() => {
               that.getList()
               that.$message.success(

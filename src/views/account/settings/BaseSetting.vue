@@ -43,7 +43,7 @@
 </template>
 
 <script>
-import { updateInfo, uploadAvatar } from '@/api/v1/user'
+import { updateUserProfile, uploadAvatar } from '@/api/v1/user'
 import { mapActions, mapGetters } from 'vuex'
 import { info } from '@/api/v1/login'
 export default {
@@ -84,7 +84,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['name'])
+    ...mapGetters(['id'])
   },
   mounted () {
     this.getInfo()
@@ -117,10 +117,11 @@ export default {
       this.$refs.form.validate(valid => {
         if (valid) {
           this.submitLoading = true
-          updateInfo(this.user).then(() => {
+          const data = { userProfileCO: this.user }
+          updateUserProfile(data).then(() => {
             this.$notification.success({
               message: '提示',
-              description: '修改成功'
+              description: '修改成功,请退出登录后生效'
             })
           }).finally(() => {
             this.submitLoading = false

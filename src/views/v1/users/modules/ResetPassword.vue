@@ -20,7 +20,7 @@
   </a-modal>
 </template>
 <script>
-import { resetUserPwd } from '@/api/v1/user'
+import { resetUserPassword } from '@/api/v1/user'
 
 export default {
   name: 'ResetPassword',
@@ -97,7 +97,7 @@ export default {
         if (valid) {
           this.submitLoading = true
           this.form.password = this.form.newPassword
-          resetUserPwd(this.form).then(response => {
+          resetUserPassword(this.form).then(response => {
             this.$message.success(
               '重置成功',
               3
