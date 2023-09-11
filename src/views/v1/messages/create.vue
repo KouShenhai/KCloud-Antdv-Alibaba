@@ -62,7 +62,7 @@
 
 import { insertMessage } from '@/api/v1/message'
 import Editor from '@/components/Editor'
-import { getUserOption } from '@/api/v1/user'
+import { listUserOption } from '@/api/v1/user'
 import { uploadOss } from '@/api/v1/oss'
 import { mapActions } from 'vuex'
 export default {
@@ -151,7 +151,7 @@ export default {
   mounted () {
     this.formTitle = this.$route.params.formTitle
     this.handleAdd()
-    getUserOption().then(response => {
+    listUserOption().then(response => {
       this.userOptions = response.data
     })
   },

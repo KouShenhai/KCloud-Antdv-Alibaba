@@ -100,10 +100,10 @@
 </template>
 <script>
 
-import { listUser, delUser, updateStatus } from '@/api/v1/user'
-import { treeSelect } from '@/api/sys/dept'
+import { listUser, deleteUserById, updateUserStatus } from '@/api/v1/user'
+import { listDeptTree } from '@/api/v1/dept'
 import ResetPassword from './modules/ResetPassword'
-import CreateForm from '@/views/sys/user/modules/CreateForm'
+import CreateForm from './modules/CreateForm'
 import { tableMixin } from '@/store/table-mixin'
 export default {
   name: 'User',
@@ -182,7 +182,8 @@ export default {
       this.loading = true
       const id = row.id
       const status = (row.status + 1) % 2
-      updateStatus(id, status).then(() => {
+      let data = { id: id, status: status }
+      updateUserStatus(data).then(() => {
         const notice = status === 1 ? '锁定' : '启用'
         this.$message.success(
            notice + '成功',
@@ -202,7 +203,7 @@ export default {
     },
     /** 查询部门下拉树结构 */
     getTreeSelect () {
-      treeSelect().then(response => {
+      listDeptTree().then(response => {
         this.deptOptions = response.data.children
       })
     },
@@ -243,12 +244,12 @@ export default {
     /** 删除按钮操作 */
     handleDelete (row) {
       const that = this
-      const userId = row.id
+      const id = row.id
       this.$confirm({
         title: '确认删除所选中数据?',
-        content: '当前选中编号为' + userId + '的数据',
+        content: '当前选中编号为' + id + '的数据',
         onOk () {
-          return delUser(userId)
+          return deleteUserById(id)
             .then(() => {
               that.getList()
               that.$message.success(
