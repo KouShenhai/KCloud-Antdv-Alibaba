@@ -60,9 +60,9 @@ export function updateUserStatus (data) {
 }
 
 // 修改用户个人信息
-export function updateInfo (data) {
+export function updateUserProfile (data) {
   return request({
-    url: '/admin/sys/user/api/info',
+    url: '/admin/v1/users/profile',
     method: 'put',
     data: data
   })
