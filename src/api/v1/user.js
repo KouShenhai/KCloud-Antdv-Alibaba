@@ -2,16 +2,16 @@ import request from '@/utils/request'
 // 查询用户列表
 export function listUser (query) {
   return request({
-    url: '/admin/sys/user/api/query',
+    url: '/admin/v1/users/list',
     method: 'post',
     data: query
   })
 }
 
 // 获取用户
-export function getUser (userId) {
+export function getUser (id) {
   return request({
-    url: '/admin/sys/user/api/detail?id=' + userId,
+    url: '/admin/sys/user/api/detail?id=' + id,
     method: 'get'
   })
 }
