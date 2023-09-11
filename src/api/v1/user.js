@@ -86,9 +86,10 @@ export function listUserOption () {
 }
 
 // 重置密码
-export function resetPassword (id, pwd) {
+export function updateProfilePassword (data) {
   return request({
-    url: '/admin/sys/user/api/pwd?id=' + id + '&newPassword=' + pwd,
+    url: '/admin/v1/users/profile-password',
+    data: data,
     method: 'put'
   })
 }
