@@ -42,7 +42,7 @@
 
 <script>
 
-import { addSource, updateSource, getSourceById } from '@/api/v1/source'
+import { insertSource, updateSource, getSourceById } from '@/api/v1/source'
   import { listDictByType } from '@/api/v1/dict'
   export default {
     name: 'CreateForm',
@@ -148,7 +148,8 @@ import { addSource, updateSource, getSourceById } from '@/api/v1/source'
           if (valid) {
             this.submitLoading = true
             if (this.form.id !== undefined) {
-              updateSource(this.form).then(() => {
+              const data = { sourceCO: this.form }
+              updateSource(data).then(() => {
                 this.$message.success(
                   '修改成功',
                   3
@@ -159,7 +160,8 @@ import { addSource, updateSource, getSourceById } from '@/api/v1/source'
                 this.submitLoading = false
               })
             } else {
-              addSource(this.form).then(() => {
+              const data = { sourceCO: this.form }
+              insertSource(data).then(() => {
                 this.$message.success(
                   '新增成功',
                   3

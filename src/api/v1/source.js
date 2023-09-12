@@ -18,9 +18,9 @@ export function getSourceById (id) {
 }
 
 // 新增数据源
-export function addSource (data) {
+export function insertSource (data) {
   return request({
-    url: '/admin/sys/source/api/insert',
+    url: '/admin/v1/sources',
     method: 'post',
     data: data
   })
@@ -29,24 +29,24 @@ export function addSource (data) {
 // 修改数据源
 export function updateSource (data) {
   return request({
-    url: '/admin/sys/source/api/update',
+    url: '/admin/v1/sources',
     method: 'put',
     data: data
   })
 }
 
 // 删除数据源
-export function delSource (userId) {
+export function deleteSourceById (userId) {
   return request({
-    url: '/admin/sys/source/api/delete?id=' + userId,
+    url: '/admin/v1/sources/' + userId,
     method: 'delete'
   })
 }
 
 // 数据源下拉列表
-export function sourceOption () {
+export function listSourceOption () {
   return request({
-    url: '/admin/sys/source/api/option/list',
+    url: '/admin/v1/sources/option-list',
     method: 'get'
   })
 }

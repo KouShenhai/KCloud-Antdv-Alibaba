@@ -43,7 +43,7 @@
 <script>
 
   import { getTenant, addTenant, updateTenant } from '@/api/v1/tenant'
-  import { sourceOption } from '@/api/v1/source'
+  import { listSourceOption } from '@/api/v1/source'
   import { packageOption } from '@/api/sys/package'
 
   export default {
@@ -90,7 +90,7 @@
     },
     methods: {
       getSourceOption () {
-        sourceOption().then(res => {
+        listSourceOption().then(res => {
           this.sourceOption = res.data
         })
       },
