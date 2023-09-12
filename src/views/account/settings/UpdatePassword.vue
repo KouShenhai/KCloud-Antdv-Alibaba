@@ -17,7 +17,7 @@
   </a-modal>
 </template>
 <script>
-import { updateProfilePassword } from '@/api/v1/user'
+import { updatePassword } from '@/api/v1/user'
 import { mapGetters } from 'vuex'
 export default {
   props: {
@@ -93,7 +93,7 @@ export default {
         if (valid) {
           this.submitLoading = true
           const data = { id: this.id, password: this.form.newPassword }
-          updateProfilePassword(data).then(() => {
+          updatePassword(data).then(() => {
             this.$message.success(
               '修改成功',
               3

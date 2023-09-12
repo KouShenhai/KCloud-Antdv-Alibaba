@@ -86,9 +86,9 @@ export function listUserOption () {
 }
 
 // 重置密码
-export function updateProfilePassword (data) {
+export function updatePassword (data) {
   return request({
-    url: '/admin/v1/users/profile-password',
+    url: '/admin/v1/users/password',
     data: data,
     method: 'put'
   })
