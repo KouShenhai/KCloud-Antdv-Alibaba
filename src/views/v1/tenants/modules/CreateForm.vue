@@ -42,8 +42,8 @@
 
 <script>
 
-  import { getTenant, addTenant, updateTenant } from '@/api/sys/tenant'
-  import { sourceOption } from '@/api/sys/source'
+  import { getTenant, addTenant, updateTenant } from '@/api/v1/tenant'
+  import { sourceOption } from '@/api/v1/source'
   import { packageOption } from '@/api/sys/package'
 
   export default {

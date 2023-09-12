@@ -3,7 +3,7 @@ import request from '@/utils/request'
 // 查询数据源列表
 export function listSource (query) {
   return request({
-    url: '/admin/sys/source/api/query',
+    url: '/admin/v1/sources/list',
     method: 'post',
     data: query
   })
