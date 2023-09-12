@@ -5,26 +5,26 @@
       <b>{{ formTitle }}</b>
     </a-divider>
     <a-form-model ref="form" :model="form" :rules="rules">
-      <a-form-model-item label="租户名称" prop="name">
+      <a-form-model-item label="数据源名称" prop="name">
         <a-input v-model="form.name" placeholder="请输入" />
       </a-form-model-item>
-      <a-form-model-item label="租户套餐" prop="packageId">
+      <a-form-model-item label="数据源驱动" prop="driverClassName">
         <a-select
-          v-model="form.packageId"
+          v-model="form.driverClassName"
           placeholder="请选择">
-          <a-select-option v-for="(d, index) in packageOption" :key="index" :value="d.value">
+          <a-select-option v-for="(d, index) in dictOption" :key="index" :value="d.value">
             {{ d.label }}
           </a-select-option>
         </a-select>
       </a-form-model-item>
-      <a-form-model-item label="租户数据源" prop="sourceId">
-        <a-select
-          v-model="form.sourceId"
-          placeholder="请选择">
-          <a-select-option v-for="(d, index) in sourceOption" :key="index" :value="d.value">
-            {{ d.label }}
-          </a-select-option>
-        </a-select>
+      <a-form-model-item label="数据源连接" prop="url">
+        <a-input v-model="form.url" placeholder="请输入" type="textarea" allow-clear />
+      </a-form-model-item>
+      <a-form-model-item label="数据源用户名" prop="username">
+        <a-input v-model="form.username" autocomplete="off" placeholder="请输入" />
+      </a-form-model-item>
+      <a-form-model-item label="数据源密码" prop="password">
+        <a-input-password v-model="form.password" autocomplete="off" placeholder="请输入" :maxLength="20" />
       </a-form-model-item>
       <div class="bottom-control">
         <a-space>
@@ -42,10 +42,8 @@
 
 <script>
 
-  import { getTenant, addTenant, updateTenant } from '@/api/sys/tenant'
-  import { sourceOption } from '@/api/sys/source'
-  import { packageOption } from '@/api/sys/package'
-
+import { addSource, updateSource, getSourceById } from '@/api/v1/source'
+  import { listDictByType } from '@/api/v1/dict'
   export default {
     name: 'CreateForm',
     components: {
@@ -54,26 +52,34 @@
     data () {
       return {
         submitLoading: false,
+        // 默认密码
         formTitle: '',
+        dictOption: [],
         // 表单参数
         form: {
           id: undefined,
-          name: undefined,
-          packageId: undefined,
-          sourceId: ''
+          username: '',
+          password: '',
+          driverClassName: '',
+          name: '',
+          url: ''
         },
-        packageOption: [],
-        sourceOption: [],
         open: false,
         rules: {
+          username: [
+            { required: true, message: '数据源用户名不能为空', trigger: 'blur' }
+          ],
+          password: [
+            { required: true, message: '数据源密码不能为空', trigger: 'blur' }
+          ],
           name: [
-            { required: true, message: '租户名称不能为空', trigger: 'blur' }
+            { required: true, message: '数据源名称不能为空', trigger: 'blur' }
           ],
-          packageId: [
-            { required: true, message: '请选择套餐', trigger: 'blur' }
+          driverClassName: [
+            { required: true, message: '请选择数据源驱动', trigger: 'blur' }
           ],
-          sourceId: [
-            { required: true, message: '请选择数据源', trigger: 'blur' }
+          url: [
+            { required: true, message: '数据源连接不能为空', trigger: 'blur' }
           ]
         }
       }
@@ -81,22 +87,19 @@
     filters: {
     },
     created () {
-      this.getPackageOption()
-      this.getSourceOption()
+
     },
     computed: {
     },
     watch: {
     },
+    mounted () {
+      this.getDict()
+    },
     methods: {
-      getSourceOption () {
-        sourceOption().then(res => {
-          this.sourceOption = res.data
-        })
-      },
-      getPackageOption () {
-        packageOption().then(res => {
-          this.packageOption = res.data
+      getDict () {
+        listDictByType('DRIVER_CLASS').then(res => {
+          this.dictOption = res.data
         })
       },
       onClose () {
@@ -111,26 +114,33 @@
       reset () {
         this.form = {
           id: undefined,
-          name: undefined,
-          packageId: undefined,
-          sourceId: ''
+          username: '',
+          password: '',
+          driverClassName: '',
+          name: '',
+          url: ''
         }
       },
       /** 新增按钮操作 */
       handleAdd () {
         this.reset()
         this.open = true
-        this.formTitle = '租户新增'
+        this.formTitle = '数据源新增'
       },
       /** 修改按钮操作 */
       handleUpdate (row) {
         this.reset()
+        this.open = true
         const id = row.id
-        getTenant(id).then(response => {
-          this.form = response.data
-          this.open = true
-          this.formTitle = '租户修改'
+        getSourceById(id).then(res => {
+          this.form.id = res.data.id
+          this.form.name = res.data.name
+          this.form.driverClassName = res.data.driverClassName
+          this.form.password = res.data.password
+          this.form.username = res.data.username
+          this.form.url = res.data.url
         })
+        this.formTitle = '数据源修改'
       },
       /** 提交按钮 */
       submitForm: function () {
@@ -138,7 +148,7 @@
           if (valid) {
             this.submitLoading = true
             if (this.form.id !== undefined) {
-              updateTenant(this.form).then(() => {
+              updateSource(this.form).then(() => {
                 this.$message.success(
                   '修改成功',
                   3
@@ -149,7 +159,7 @@
                 this.submitLoading = false
               })
             } else {
-              addTenant(this.form).then(() => {
+              addSource(this.form).then(() => {
                 this.$message.success(
                   '新增成功',
                   3

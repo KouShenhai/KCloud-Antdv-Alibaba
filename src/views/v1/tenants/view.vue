@@ -5,10 +5,10 @@
         <a-col :span="20">
           <!-- 条件搜索 -->
           <div class="table-page-search-wrapper">
-            <a-form layout="inline" v-hasPermi="['sys:source:query']">
+            <a-form layout="inline" v-hasPermi="['tenants:list']">
               <a-row :gutter="48">
                 <a-col :md="8" :sm="24">
-                  <a-form-item label="数据源名称">
+                  <a-form-item label="租户名称">
                     <a-input v-model="queryParam.name" placeholder="请输入" allow-clear />
                   </a-form-item>
                 </a-col>
@@ -22,7 +22,7 @@
             </a-form>
           </div>
           <div class="table-operations">
-            <a-button type="primary" @click="$refs.createForm.handleAdd()" v-hasPermi="['sys:source:insert']">
+            <a-button type="primary" @click="$refs.createForm.handleAdd()" v-hasPermi="['tenants:insert']">
               <a-icon type="plus" />新增
             </a-button>
           </div>
@@ -40,17 +40,17 @@
             :data-source="list"
             :pagination="false"
             :bordered="tableBordered">
-            <span slot="operation" slot-scope="text, record" >
-              <a @click="$refs.createForm.handleUpdate(record)" v-hasPermi="['sys:source:update']">
+            <span slot="operation" slot-scope="text, record">
+              <a @click="$refs.createForm.handleUpdate(record)" v-hasPermi="['tenants:update']">
                 <a-icon type="edit" />
                 修改
               </a>
-              <a-divider type="vertical" v-hasPermi="['sys:source:insert']"/>
-              <a @click="$refs.createForm.handleAdd()" v-hasPermi="['sys:source:insert']">
+              <a-divider type="vertical" v-hasPermi="['tenants:insert']"/>
+              <a @click="$refs.createForm.handleAdd()" v-hasPermi="['tenants:insert']">
                 <a-icon type="plus" />新增
               </a>
-              <a-divider type="vertical" v-hasPermi="['sys:source:delete']"/>
-              <a @click="handleDelete(record)" v-hasPermi="['sys:source:delete']">
+              <a-divider type="vertical" v-hasPermi="['tenants:delete']"/>
+              <a @click="handleDelete(record)" v-hasPermi="['tenants:delete']">
                 <a-icon type="delete" />
                 删除
               </a>
@@ -75,11 +75,11 @@
 </template>
 <script>
 
-import { listSource, delSource } from '@/api/v1/source'
-import CreateForm from '@/views/sys/source/modules/CreateForm'
+import { listTenant, delTenant } from '@/api/v1/tenant'
+import CreateForm from '@/views/v1/tenants/modules/CreateForm'
 import { tableMixin } from '@/store/table-mixin'
 export default {
-  name: 'Source',
+  name: 'Tenant',
   components: {
     CreateForm
   },
@@ -92,28 +92,12 @@ export default {
       queryParam: {
         pageNum: 1,
         pageSize: 10,
-        name: ''
+        name: undefined
       },
       columns: [
         {
-          title: '数据源名称',
+          title: '租户名称',
           dataIndex: 'name',
-          align: 'center'
-        },
-        {
-          title: '数据源驱动',
-          dataIndex: 'driverClassName',
-          align: 'center'
-        },
-        {
-          title: '数据源连接',
-          dataIndex: 'url',
-          align: 'center',
-          ellipsis: true
-        },
-        {
-          title: '数据源用户名',
-          dataIndex: 'username',
           align: 'center'
         },
         {
@@ -135,10 +119,10 @@ export default {
   watch: {
   },
   methods: {
-    /** 查询数据源列表 */
+    /** 查询租户列表 */
     getList () {
       this.loading = true
-      listSource(this.queryParam).then(response => {
+      listTenant(this.queryParam).then(response => {
           this.list = response.data.records
           this.total = response.data.total - 0
           this.loading = false
@@ -154,7 +138,8 @@ export default {
     resetQuery () {
       this.queryParam = {
         pageNum: 1,
-        pageSize: 10
+        pageSize: 10,
+        name: undefined
       }
       this.handleQuery()
     },
@@ -173,12 +158,12 @@ export default {
     /** 删除按钮操作 */
     handleDelete (row) {
       const that = this
-      const sourceId = row.id
+      const id = row.id
       this.$confirm({
         title: '确认删除所选中数据?',
-        content: '当前选中编号为' + sourceId + '的数据',
+        content: '当前选中编号为' + id + '的数据',
         onOk () {
-          return delSource(sourceId)
+          return delTenant(id)
             .then(() => {
               that.getList()
               that.$message.success(

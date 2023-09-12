@@ -2,7 +2,7 @@ import request from '@/utils/request'
 // 查询租户列表
 export function listTenant (query) {
   return request({
-    url: '/admin/sys/tenant/api/query',
+    url: '/admin/v1/tenants/list',
     method: 'post',
     data: query
   })
