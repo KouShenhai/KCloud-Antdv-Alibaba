@@ -10,9 +10,9 @@ export function listSource (query) {
 }
 
 // 查询数据源
-export function getSource (id) {
+export function getSourceById (id) {
   return request({
-    url: '/admin/sys/source/api/detail?id=' + id,
+    url: '/admin/v1/sources/' + id,
     method: 'get'
   })
 }

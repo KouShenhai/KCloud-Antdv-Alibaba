@@ -42,7 +42,7 @@
 
 <script>
 
-import { addSource, updateSource, getSource } from '@/api/v1/source'
+import { addSource, updateSource, getSourceById } from '@/api/v1/source'
   import { listDictByType } from '@/api/v1/dict'
   export default {
     name: 'CreateForm',
@@ -132,7 +132,7 @@ import { addSource, updateSource, getSource } from '@/api/v1/source'
         this.reset()
         this.open = true
         const id = row.id
-        getSource(id).then(res => {
+        getSourceById(id).then(res => {
           this.form.id = res.data.id
           this.form.name = res.data.name
           this.form.driverClassName = res.data.driverClassName
