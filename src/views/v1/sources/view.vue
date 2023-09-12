@@ -75,8 +75,8 @@
 </template>
 <script>
 
-import { listSource, delSource } from '@/api/v1/source'
-import CreateForm from '@/views/sys/source/modules/CreateForm'
+import { listSource, deleteSourceById } from '@/api/v1/source'
+import CreateForm from './modules/CreateForm'
 import { tableMixin } from '@/store/table-mixin'
 export default {
   name: 'Source',
@@ -173,12 +173,12 @@ export default {
     /** 删除按钮操作 */
     handleDelete (row) {
       const that = this
-      const sourceId = row.id
+      const id = row.id
       this.$confirm({
         title: '确认删除所选中数据?',
-        content: '当前选中编号为' + sourceId + '的数据',
+        content: '当前选中编号为' + id + '的数据',
         onOk () {
-          return delSource(sourceId)
+          return deleteSourceById(id)
             .then(() => {
               that.getList()
               that.$message.success(
