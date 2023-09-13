@@ -36,8 +36,8 @@
 
 <script>
 
-import { getPackage, addPackage, updatePackage } from '@/api/v1/package'
-import { tenantTreeSelect } from '@/api/sys/menu'
+import { getPackageById, insertPackage, updatePackage } from '@/api/v1/package'
+import { listTenantTree } from '@/api/v1/menu'
 export default {
   name: 'CreateForm',
   props: {
@@ -90,7 +90,7 @@ export default {
     },
     /** 查询菜单树结构 */
     getMenuTreeSelect () {
-      tenantTreeSelect().then(response => {
+      listTenantTree().then(response => {
         this.menuOptions = response.data.children
         this.menuOptionsAll = this.menuOptions
       })
@@ -183,7 +183,7 @@ export default {
     handleUpdate (row) {
       this.reset()
       const id = row.id
-      getPackage(id).then(response => {
+      getPackageById(id).then(response => {
         this.form = response.data
         this.form.menuCheckStrictly = false
         this.open = true
@@ -204,7 +204,8 @@ export default {
           this.submitLoading = true
           if (this.form.id !== undefined) {
             this.form.menuIds = this.getMenuAllCheckedKeys()
-            updatePackage(this.form).then(() => {
+            const data = { packageCO: this.form }
+            updatePackage(data).then(() => {
               this.$message.success(
                 '修改成功',
                 3
@@ -216,7 +217,8 @@ export default {
             })
           } else {
             this.form.menuIds = this.getMenuAllCheckedKeys()
-            addPackage(this.form).then(() => {
+            const data = { packageCO: this.form }
+            insertPackage(data).then(() => {
               this.$message.success(
                 '新增成功',
                 3

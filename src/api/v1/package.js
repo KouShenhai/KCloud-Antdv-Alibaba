@@ -10,17 +10,17 @@ export function listPackage (query) {
 }
 
 // 查询套餐详情
-export function getPackage (id) {
+export function getPackageById (id) {
   return request({
-    url: '/admin/sys/package/api/detail?id=' + id,
+    url: '/admin/v1/packages/' + id,
     method: 'get'
   })
 }
 
 // 新增套餐
-export function addPackage (data) {
+export function insertPackage (data) {
   return request({
-    url: '/admin/sys/package/api/insert',
+    url: '/admin/v1/packages',
     method: 'post',
     data: data
   })
@@ -29,16 +29,16 @@ export function addPackage (data) {
 // 修改套餐
 export function updatePackage (data) {
   return request({
-    url: '/admin/sys/package/api/update',
+    url: '/admin/v1/packages',
     method: 'put',
     data: data
   })
 }
 
 // 删除套餐
-export function delPackage (id) {
+export function deletePackageById (id) {
   return request({
-    url: '/admin/sys/package/api/delete?id=' + id,
+    url: '/admin/v1/packages/' + id,
     method: 'delete'
   })
 }
@@ -46,7 +46,7 @@ export function delPackage (id) {
 // 套餐下拉列表
 export function packageOption () {
   return request({
-    url: '/admin/sys/package/api/option/list',
+    url: '/admin/v1/packages/option-list',
     method: 'get'
   })
 }
