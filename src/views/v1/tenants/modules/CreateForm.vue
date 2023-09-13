@@ -44,7 +44,7 @@
 
   import { getTenant, addTenant, updateTenant } from '@/api/v1/tenant'
   import { listSourceOption } from '@/api/v1/source'
-  import { packageOption } from '@/api/sys/package'
+  import { packageOption } from '@/api/v1/package'
 
   export default {
     name: 'CreateForm',

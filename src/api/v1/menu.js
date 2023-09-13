@@ -58,3 +58,11 @@ export function listRoleMenuIDS (roleId) {
     method: 'get'
   })
 }
+
+// 租户菜单
+export function listTenantTree () {
+  return request({
+    url: '/admin/v1/menus/tenant-tree',
+    method: 'get'
+  })
+}

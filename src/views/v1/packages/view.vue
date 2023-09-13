@@ -3,7 +3,7 @@
     <a-card :bordered="false">
       <!-- 条件搜索 -->
       <div class="table-page-search-wrapper">
-        <a-form layout="inline" v-hasPermi="['sys:package:query']">
+        <a-form layout="inline" v-hasPermi="['packages:list']">
           <a-row :gutter="48">
             <a-col :md="8" :sm="24">
               <a-form-item label="套餐名称">
@@ -20,7 +20,7 @@
         </a-form>
       </div>
       <div class="table-operations">
-        <a-button type="primary" @click="$refs.createForm.handleAdd()" v-hasPermi="['sys:package:insert']">
+        <a-button type="primary" @click="$refs.createForm.handleAdd()" v-hasPermi="['packages:insert']">
           <a-icon type="plus" />新增
         </a-button>
       </div>
@@ -39,17 +39,17 @@
         :pagination="false"
         :bordered="tableBordered">
         <span slot="operation" slot-scope="text, record">
-          <a @click="$refs.createForm.handleUpdate(record, undefined)" v-hasPermi="['sys:package:update']">
+          <a @click="$refs.createForm.handleUpdate(record, undefined)" v-hasPermi="['packages:update']">
             <a-icon type="edit" />
             修改
           </a>
-          <a-divider type="vertical" v-hasPermi="['sys:package:insert']" />
-          <a @click="$refs.createForm.handleAdd()" v-hasPermi="['sys:package:insert']">
+          <a-divider type="vertical" v-hasPermi="['packages:insert']" />
+          <a @click="$refs.createForm.handleAdd()" v-hasPermi="['packages:insert']">
             <a-icon type="plus" />
             新增
           </a>
-          <a-divider type="vertical" v-hasPermi="['sys:package:delete']" />
-          <a @click="handleDelete(record)" v-hasPermi="['sys:package:delete']">
+          <a-divider type="vertical" v-hasPermi="['packages:delete']" />
+          <a @click="handleDelete(record)" v-hasPermi="['packages:delete']">
             <a-icon type="delete" />
             删除
           </a>
@@ -73,7 +73,7 @@
 
 <script>
 
-import { pagePackage, delPackage } from '@/api/sys/package'
+import { listPackage, deletePackageById } from '@/api/v1/package'
 import CreateForm from './modules/CreateForm'
 import { tableMixin } from '@/store/table-mixin'
 
@@ -123,7 +123,7 @@ export default {
     /** 查询套餐列表 */
     getList () {
       this.loading = true
-      pagePackage(this.queryParam).then(response => {
+      listPackage(this.queryParam).then(response => {
           this.list = response.data.records
           this.total = response.data.total - 0
           this.loading = false
@@ -162,7 +162,7 @@ export default {
         title: '确认删除所选中数据?',
         content: '当前选中编号为' + id + '的数据',
         onOk () {
-          return delPackage(id)
+          return deletePackageById(id)
             .then(() => {
               that.getList()
               that.$message.success(
