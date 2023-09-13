@@ -36,7 +36,7 @@
 
 <script>
 
-import { getPackage, addPackage, updatePackage } from '@/api/sys/package'
+import { getPackage, addPackage, updatePackage } from '@/api/v1/package'
 import { tenantTreeSelect } from '@/api/sys/menu'
 export default {
   name: 'CreateForm',

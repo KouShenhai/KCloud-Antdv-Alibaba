@@ -50,7 +50,7 @@
 import { getUnreadMessageCount, listUnreadMessage } from '@/api/v1/message'
 import Ellipsis from '@/components/Ellipsis'
 import NoticeDetail from './NoticeDetail'
-import { socketApi } from '@/api/sys/socket'
+import { socketApi } from '@/api/v1/socket'
 import { notification } from 'ant-design-vue'
 import { ACCESS_TOKEN } from '@/store/mutation-types'
 import storage from 'store'

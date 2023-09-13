@@ -1,9 +1,9 @@
 import request from '@/utils/request'
 
 // 查询套擦
-export function pagePackage (query) {
+export function listPackage (query) {
   return request({
-    url: '/admin/sys/package/api/query',
+    url: '/admin/v1/packages/list',
     method: 'post',
     data: query
   })
