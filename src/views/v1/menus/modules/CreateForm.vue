@@ -158,10 +158,6 @@ export default {
       this.open = false
       this.iconVisible = false
     },
-    hideIconSelect () {
-      this.iconList = icons
-      this.iconVisible = false
-    },
     // 取消按钮
     cancel () {
       this.open = false

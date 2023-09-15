@@ -67,7 +67,7 @@
 
 <script>
 
-import { deleteDeptById, listDept } from '@/api/v1/dept'
+import { deleteDeptById, listDept, listDeptTree } from '@/api/v1/dept'
 import CreateForm from './modules/CreateForm'
 import { tableMixin } from '@/store/table-mixin'
 
@@ -127,12 +127,9 @@ export default {
     },
     /** 查询菜单下拉树结构 */
     getTreeSelect () {
-      const query = { name: '' }
-      listDept(query).then(response => {
-        this.deptOptions = []
-        const dept = { id: 0, name: '主目录', children: [] }
-        dept.children = this.handleTree(response.data, 'id')
-        this.deptOptions.push(dept)
+      this.deptOptions = []
+      listDeptTree().then(response => {
+        this.deptOptions.push(response.data)
       })
     },
     /** 搜索按钮操作 */

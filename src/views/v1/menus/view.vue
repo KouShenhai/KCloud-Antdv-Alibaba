@@ -70,7 +70,7 @@
 
 <script>
 
-import { listMenu, deleteMenuById } from '@/api/v1/menu'
+import { listMenu, listMenuTree, deleteMenuById } from '@/api/v1/menu'
 import CreateForm from './modules/CreateForm'
 import allIcon from '@/core/icons'
 import { tableMixin } from '@/store/table-mixin'
@@ -200,12 +200,9 @@ export default {
     },
     /** 查询菜单下拉树结构 */
     getTreeSelect () {
-      const query = { name: '' }
-      listMenu(query).then(response => {
-        this.menuOptions = []
-        const menu = { id: 0, name: '主目录', children: [] }
-        menu.children = this.handleTree(response.data, 'id')
-        this.menuOptions.push(menu)
+      this.menuOptions = []
+      listMenuTree().then(response => {
+        this.menuOptions.push(response.data)
       })
     },
     /** 删除按钮操作 */
