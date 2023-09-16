@@ -79,8 +79,7 @@ export default {
   },
   methods: {
     nodeFilter (tree, key) {
-      const data = tree
-      data.forEach(item => {
+      tree.forEach(item => {
          if (item.id === key) {
            this.form.path = item.path
          }
