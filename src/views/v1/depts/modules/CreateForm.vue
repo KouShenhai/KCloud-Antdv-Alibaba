@@ -11,7 +11,8 @@
           :dropdown-style="{ maxHeight: '400px', overflow: 'auto' }"
           :tree-data="deptOptions"
           placeholder="请选择"
-          :replaceFields="{children:'children', title:'name', key:'id', value: 'id' }"
+          @select="onSelect"
+          :replaceFields="{children:'children', title:'name', key:'id', value: 'id', path: 'path' }"
           tree-default-expand-all
         >
         </a-tree-select>
@@ -57,6 +58,7 @@ export default {
         id: undefined,
         pid: undefined,
         name: undefined,
+        path: undefined,
         sort: 0
       },
       open: false,
@@ -76,6 +78,20 @@ export default {
   watch: {
   },
   methods: {
+    nodeFilter (tree, key) {
+      const data = tree
+      data.forEach(item => {
+         if (item.id === key) {
+           this.form.path = item.path
+         }
+         if (item.children) {
+           this.nodeFilter(item.children, key)
+         }
+      })
+    },
+    onSelect (key, event) {
+      this.nodeFilter(this.deptOptions, key)
+    },
     onClose () {
       this.open = false
     },
@@ -90,6 +106,7 @@ export default {
         id: undefined,
         pid: undefined,
         name: undefined,
+        path: undefined,
         sort: 0
       }
     },

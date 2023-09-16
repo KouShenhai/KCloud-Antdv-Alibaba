@@ -92,6 +92,7 @@ export default {
       menuOptions: [],
       menuOptionsAll: [],
       deptOptionsAll: [],
+      deptIds: [],
       formTitle: '',
       // 部门列表
       deptOptions: [],
@@ -102,7 +103,7 @@ export default {
         sort: 0,
         menuIds: [],
         menuCheckStrictly: false,
-        deptCheckStrictly: false
+        deptCheckStrictly: true
       },
       open: false,
       rules: {
@@ -179,7 +180,7 @@ export default {
     // 所有菜单节点数据
     getMenuAllCheckedKeys () {
       // 全选与半选
-      return this.menuCheckedKeys.concat(this.halfCheckedKeys)
+      return this.menuCheckedKeys
     },
     getAllMenuNode (nodes) {
       if (!nodes || nodes.length === 0) {
@@ -245,7 +246,20 @@ export default {
     // 所有部门节点数据
     getDeptAllCheckedKeys () {
       // 全选与半选
-      return this.deptCheckedKeys
+      this.deptIds = []
+      this.nodeFilter(this.deptOptions)
+      return this.deptIds
+    },
+    nodeFilter (tree) {
+      tree.forEach(item => {
+        if (this.deptCheckedKeys.indexOf(item.id) > -1) {
+          this.deptIds.push(item.id)
+        } else {
+          if (item.children) {
+            this.nodeFilter(item.children)
+          }
+        }
+      })
     },
     handleCheckedTreeNodeAll (value) {
       this.check4 = !this.check4
@@ -341,7 +355,7 @@ export default {
         sort: 1,
         menuIds: [],
         menuCheckStrictly: false,
-        deptCheckStrictly: false
+        deptCheckStrictly: true
       }
     },
      /** 新增按钮操作 */
@@ -366,7 +380,7 @@ export default {
       getRoleById(id).then(response => {
         this.form = response.data
         this.form.menuCheckStrictly = false
-        this.form.deptCheckStrictly = false
+        this.form.deptCheckStrictly = true
         this.open = true
         this.$nextTick(() => {
           roleMenu.then(res => {
