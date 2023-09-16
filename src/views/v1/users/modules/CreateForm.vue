@@ -5,13 +5,14 @@
       <b>{{ formTitle }}</b>
     </a-divider>
     <a-form-model ref="form" :model="form" :rules="rules">
-      <a-form-model-item label="用户名" prop="username" v-if="form.id == undefined">
+      <a-form-model-item label="用户名" prop="username" v-if="form.id === undefined">
         <a-input v-model="form.username" placeholder="请输入" />
       </a-form-model-item>
       <a-form-model-item label="部门" prop="deptId">
         <a-tree-select
           v-model="form.deptId"
           style="width: 100%"
+          @select="onSelect"
           :dropdown-style="{ maxHeight: '400px', overflow: 'auto' }"
           :tree-data="deptOptions"
           placeholder="请选择"
@@ -20,7 +21,7 @@
         >
         </a-tree-select>
       </a-form-model-item>
-      <a-form-model-item label="密码" prop="password" v-if="form.id == undefined">
+      <a-form-model-item label="密码" prop="password" v-if="form.id === undefined">
         <a-input-password v-model="form.password" placeholder="请输入" :maxLength="20" />
       </a-form-model-item>
       <a-form-model-item label="状态" prop="status">
@@ -55,9 +56,10 @@
 
 <script>
 
-import { getUserById, updateUser, insertUser } from '@/api/v1/user'
-  import { listRoleOption } from '@/api/v1/role'
-  export default {
+import { getUserById, insertUser, updateUser } from '@/api/v1/user'
+import { listRoleOption } from '@/api/v1/role'
+
+export default {
     name: 'CreateForm',
     props: {
       deptOptions: {
@@ -71,7 +73,7 @@ import { getUserById, updateUser, insertUser } from '@/api/v1/user'
     data () {
       return {
         submitLoading: false,
-        replaceFields: { children: 'children', title: 'name', key: 'id', value: 'id' },
+        replaceFields: { children: 'children', title: 'name', key: 'id', value: 'id', path: 'path' },
         // 角色选项
         roleOptions: [],
         statusOptions: [
@@ -94,6 +96,7 @@ import { getUserById, updateUser, insertUser } from '@/api/v1/user'
           username: undefined,
           password: undefined,
           status: '0',
+          deptPath: '',
           roleIds: []
         },
         open: false,
@@ -124,6 +127,19 @@ import { getUserById, updateUser, insertUser } from '@/api/v1/user'
     watch: {
     },
     methods: {
+      nodeFilter (tree, key) {
+        tree.forEach(item => {
+          if (item.id === key) {
+            this.form.deptPath = item.path
+          }
+          if (item.children) {
+            this.nodeFilter(item.children, key)
+          }
+        })
+      },
+      onSelect (key, event) {
+        this.nodeFilter(this.deptOptions, key)
+      },
       onClose () {
         this.open = false
       },
@@ -140,6 +156,7 @@ import { getUserById, updateUser, insertUser } from '@/api/v1/user'
           username: undefined,
           password: undefined,
           status: 0,
+          deptPath: '',
           roleIds: []
         }
       },
