@@ -182,7 +182,7 @@ export default {
       this.loading = true
       const id = row.id
       const status = (row.status + 1) % 2
-      let data = { id: id, status: status }
+      const data = { id: id, status: status }
       updateUserStatus(data).then(() => {
         const notice = status === 1 ? '锁定' : '启用'
         this.$message.success(

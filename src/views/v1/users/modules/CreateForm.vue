@@ -31,6 +31,7 @@
       </a-form-model-item>
       <a-form-model-item label="角色" prop="roleIds">
         <a-select
+          :disabled="superAdminDisable"
           mode="multiple"
           v-model="form.roleIds"
           placeholder="请选择"
@@ -76,6 +77,7 @@ export default {
         replaceFields: { children: 'children', title: 'name', key: 'id', value: 'id', path: 'path' },
         // 角色选项
         roleOptions: [],
+        superAdminDisable: false,
         statusOptions: [
           {
             label: '正常',
@@ -199,6 +201,11 @@ export default {
           this.open = true
           this.formTitle = '用户修改'
           this.form.password = ''
+          if (response.data.superAdmin === 1) {
+            this.superAdminDisable = true
+          } else {
+            this.superAdminDisable = false
+          }
         })
       },
       /** 提交按钮 */

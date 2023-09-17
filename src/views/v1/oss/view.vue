@@ -5,7 +5,7 @@
         <a-col :span="20">
           <!-- 条件搜索 -->
           <div class="table-page-search-wrapper">
-            <a-form layout="inline" v-hasPermi="['sys:oss:query']">
+            <a-form layout="inline" v-hasPermi="['oss:list']">
               <a-row :gutter="48">
                 <a-col :md="8" :sm="24">
                   <a-form-item label="存储名称">
@@ -22,7 +22,7 @@
             </a-form>
           </div>
           <div class="table-operations">
-            <a-button type="primary" @click="$refs.createForm.handleAdd()" v-hasPermi="['sys:oss:insert']">
+            <a-button type="primary" @click="$refs.createForm.handleAdd()" v-hasPermi="['oss:insert']">
               <a-icon type="plus" />新增
             </a-button>
           </div>
@@ -40,28 +40,20 @@
             :data-source="list"
             :pagination="false"
             :bordered="tableBordered">
-            <span slot="status" slot-scope="text, record">
-              {{ statusFormat(record) }}
-            </span>
             <span slot="enabled" slot-scope="text, record">
               {{ enabledFormat(record) }}
             </span>
             <span slot="operation" slot-scope="text, record">
-              <a @click="$refs.createForm.handleUpdate(record)" v-hasPermi="['sys:oss:update']">
+              <a @click="$refs.createForm.handleUpdate(record)" v-hasPermi="['oss:update']">
                 <a-icon type="edit" />
                 修改
               </a>
-              <a-divider type="vertical" v-hasPermi="['sys:oss:insert']"/>
-              <a @click="$refs.createForm.handleAdd()" v-hasPermi="['sys:oss:insert']">
+              <a-divider type="vertical" v-hasPermi="['oss:insert']"/>
+              <a @click="$refs.createForm.handleAdd()" v-hasPermi="['oss:insert']">
                 <a-icon type="plus" />新增
               </a>
-              <a-divider type="vertical" v-hasPermi="['sys:oss:use']"/>
-              <a @click="handleUse(record)" v-hasPermi="['sys:oss:use']">
-                <a-icon type="tool" />
-                启用
-              </a>
-              <a-divider type="vertical" v-hasPermi="['sys:oss:delete']"/>
-              <a @click="handleDelete(record)" v-hasPermi="['sys:oss:delete']">
+              <a-divider type="vertical" v-hasPermi="['oss:delete']"/>
+              <a @click="handleDelete(record)" v-hasPermi="['oss:delete']">
                 <a-icon type="delete" />
                 删除
               </a>
@@ -86,8 +78,8 @@
 </template>
 <script>
 
-import { listOss, delOss, useOss } from '@/api/v1/oss'
-import CreateForm from '@/views/sys/oss/modules/CreateForm'
+import { listOss, delOss } from '@/api/v1/oss'
+import CreateForm from './modules/CreateForm'
 import { tableMixin } from '@/store/table-mixin'
 export default {
   name: 'Oss',
@@ -149,14 +141,6 @@ export default {
           width: '10%'
         },
         {
-          scopedSlots: { customRender: 'status' },
-          title: '状态',
-          dataIndex: 'status',
-          align: 'center',
-          ellipsis: true,
-          width: '10%'
-        },
-        {
           scopedSlots: { customRender: 'enabled' },
           title: '路径样式访问',
           dataIndex: 'pathStyleAccessEnabled',
@@ -184,22 +168,6 @@ export default {
   watch: {
   },
   methods: {
-    handleUse (row) {
-      useOss(row.id).then(() => {
-        this.$message.success(
-          '启用成功',
-          3
-        )
-      }).finally(() => this.getList())
-    },
-    statusFormat (row) {
-      // 0：未启用   1：已启用
-      if (row.status === 1) {
-        return '已启用'
-      } else {
-        return '未启用'
-      }
-    },
     enabledFormat (row) {
       // 1已开启 0未启用
       if (row.pathStyleAccessEnabled === 1) {

@@ -12,7 +12,7 @@ export function uploadOss (data) {
 // 查询存储列表
 export function listOss (query) {
   return request({
-    url: '/admin/sys/oss/api/query',
+    url: '/admin/v1/oss/list',
     method: 'post',
     data: query
   })
@@ -49,13 +49,5 @@ export function delOss (id) {
   return request({
     url: '/admin/sys/oss/api/delete?id=' + id,
     method: 'delete'
-  })
-}
-
-// 启用存储
-export function useOss (id) {
-  return request({
-    url: '/admin/sys/oss/api/use?id=' + id,
-    method: 'get'
   })
 }
