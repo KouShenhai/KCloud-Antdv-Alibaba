@@ -42,7 +42,7 @@
 
 <script>
 
-  import { getTenant, addTenant, updateTenant } from '@/api/v1/tenant'
+  import { getTenantById, insertTenant, updateTenant } from '@/api/v1/tenant'
   import { listSourceOption } from '@/api/v1/source'
   import { packageOption } from '@/api/v1/package'
 
@@ -126,7 +126,7 @@
       handleUpdate (row) {
         this.reset()
         const id = row.id
-        getTenant(id).then(response => {
+        getTenantById(id).then(response => {
           this.form = response.data
           this.open = true
           this.formTitle = '租户修改'
@@ -138,7 +138,8 @@
           if (valid) {
             this.submitLoading = true
             if (this.form.id !== undefined) {
-              updateTenant(this.form).then(() => {
+              const data = { tenantCO: this.form }
+              updateTenant(data).then(() => {
                 this.$message.success(
                   '修改成功',
                   3
@@ -149,7 +150,8 @@
                 this.submitLoading = false
               })
             } else {
-              addTenant(this.form).then(() => {
+              const data = { tenantCO: this.form }
+              insertTenant(data).then(() => {
                 this.$message.success(
                   '新增成功',
                   3
