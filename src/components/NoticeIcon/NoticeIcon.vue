@@ -98,11 +98,7 @@ export default {
       listUnreadMessage(this.queryParam).then(response => {
           this.list = this.list.concat(response.data.records)
           this.total = response.data.total - 0
-          if (this.total <= this.queryParam.pageNum * this.queryParam.pageSize) {
-            this.showLoadingMore = false
-          } else {
-            this.showLoadingMore = true
-          }
+          this.showLoadingMore = this.total > this.queryParam.pageNum * this.queryParam.pageSize
           this.loading = false
         }
       )

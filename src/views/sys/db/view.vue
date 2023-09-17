@@ -2,11 +2,11 @@
   <a-spin :spinning="loading" tip="加载中...">
     <div :style="'height:'+ height">
       <iframe
-:src="src"
-ref="frame"
-frameborder="no"
-style="width: 100%; height: 100%"
-scrolling="auto" />
+        :src="src"
+        ref="frame"
+        frameborder="no"
+        style="width: 100%; height: 100%"
+        scrolling="auto" />
     </div>
   </a-spin>
 </template>

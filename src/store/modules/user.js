@@ -12,7 +12,8 @@ const user = {
     avatar: '',
     permissions: [],
     tenantId: '',
-    authType: ''
+    authType: '',
+    superAdmin: ''
   },
 
   mutations: {
@@ -36,6 +37,9 @@ const user = {
     },
     SET_AUTH_TYPE: (state, authType) => {
       state.authType = authType
+    },
+    SET_SUPER_ADMIN: (state, superAdmin) => {
+      state.superAdmin = superAdmin
     }
   },
 
@@ -75,6 +79,7 @@ const user = {
           const id = user.id
           const name = user.username
           const tenantId = user.tenantId
+          const superAdmin = user.superAdmin
           const avatar = user.avatar === '' ? require('@/assets/images/profile.jpg') : user.avatar
           if (user.permissionList && user.permissionList.length > 0) {
             commit('SET_PERMISSIONS', user.permissionList)
@@ -83,6 +88,7 @@ const user = {
           commit('SET_USER_NAME', name)
           commit('SET_AVATAR', avatar)
           commit('SET_USER_ID', id)
+          commit('SET_SUPER_ADMIN', superAdmin)
           storage.set(USER_ID, id, 60 * 60 * 1000)
           storage.set(USER_NAME, name, 60 * 60 * 1000)
           storage.set(TENANT_ID, tenantId, 60 * 60 * 1000)
