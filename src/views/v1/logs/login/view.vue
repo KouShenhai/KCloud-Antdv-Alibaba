@@ -3,16 +3,16 @@
     <a-card :bordered="false">
       <!-- 条件搜索 -->
       <div class="table-page-search-wrapper">
-        <a-form layout="inline" v-hasPermi="['log:login']">
+        <a-form layout="inline" v-hasPermi="['log:login-list']">
           <a-row :gutter="48">
             <a-col :md="8" :sm="24">
-              <a-form-item label="登录名称">
-                <a-input v-model="queryParam.loginName" style="width: 100%" allow-clear/>
+              <a-form-item label="用户名称">
+                <a-input v-model="queryParam.username" style="width: 100%" allow-clear/>
               </a-form-item>
             </a-col>
             <a-col :md="8" :sm="24">
-              <a-form-item label="使用状态">
-                <a-select placeholder="请选择状态" v-model="queryParam.requestStatus" style="width: 100%" allow-clear>
+              <a-form-item label="登录状态">
+                <a-select placeholder="请选择状态" v-model="queryParam.status" style="width: 100%" allow-clear>
                   <a-select-option v-for="(d, index) in statusOptions" :key="index" :value="d.value">{{ d.label }}</a-select-option>
                 </a-select>
               </a-form-item>
@@ -94,8 +94,8 @@ export default {
       queryParam: {
         pageNum: 1,
         pageSize: 10,
-        loginName: undefined,
-        requestStatus: undefined
+        username: undefined,
+        status: undefined
       },
       columns: [
         {
