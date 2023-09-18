@@ -95,18 +95,14 @@
           processInstanceId: undefined
         }
       },
-      ...mapActions(['GetMD5']),
       uploadFile (data) {
         if (data.fileList.length > 0) {
           this.disabled = true
-          this.GetMD5(data.file).then(result => {
-            const formData = new FormData()
-            formData.append('file', data.file)
-            formData.append('md5', result)
-            uploadImage(formData).then(response => {
-              this.form.url = response.data.url
-              this.display = true
-            })
+          const formData = new FormData()
+          formData.append('file', data.file)
+          uploadImage(formData).then(response => {
+            this.form.url = response.data.url
+            this.display = true
           })
         } else {
           this.display = false

@@ -156,15 +156,11 @@ export default {
     })
   },
   methods: {
-    ...mapActions(['GetMD5']),
     imgAdd (pos, file) {
-      this.GetMD5(file).then(result => {
-        const imgData = new FormData()
-        imgData.append('file', file)
-        imgData.append('md5', result)
-        uploadOss(imgData).then(res => {
-          this.$refs.content.$img2Url(pos, res.data.url)
-        })
+      const imgData = new FormData()
+      imgData.append('file', file)
+      uploadOss(imgData).then(res => {
+        this.$refs.content.$img2Url(pos, res.data.url)
       })
     },
     // 表单重置
