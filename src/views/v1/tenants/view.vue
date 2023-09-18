@@ -75,7 +75,7 @@
 </template>
 <script>
 
-import { listTenant, delTenant } from '@/api/v1/tenant'
+import { listTenant, delelteTenantById } from '@/api/v1/tenant'
 import CreateForm from '@/views/v1/tenants/modules/CreateForm'
 import { tableMixin } from '@/store/table-mixin'
 export default {
@@ -163,7 +163,7 @@ export default {
         title: '确认删除所选中数据?',
         content: '当前选中编号为' + id + '的数据',
         onOk () {
-          return delTenant(id)
+          return delelteTenantById(id)
             .then(() => {
               that.getList()
               that.$message.success(
