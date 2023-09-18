@@ -29,7 +29,7 @@ export function insertMessage (data) {
 
 export function getUnreadMessageCount () {
   return request({
-    url: '/admin/v1/message/unread-count',
+    url: '/admin/v1/messages/unread-count',
     method: 'get'
   })
 }

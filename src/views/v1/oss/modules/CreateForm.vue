@@ -45,7 +45,7 @@
 
 <script>
 
-  import { getOss, addOss, updateOss } from '@/api/v1/oss'
+import { getOssById, updateOss, insertOss } from '@/api/v1/oss'
   export default {
     name: 'CreateForm',
     components: {
@@ -131,7 +131,7 @@
       handleUpdate (row) {
         this.reset()
         const id = row.id
-        getOss(id).then(response => {
+        getOssById(id).then(response => {
           this.form = response.data
           this.form.pathStyleAccessEnabled = '' + response.data.pathStyleAccessEnabled
           this.form.status = '' + response.data.status
@@ -145,7 +145,8 @@
           if (valid) {
             this.submitLoading = true
             if (this.form.id !== undefined) {
-              updateOss(this.form).then(() => {
+              const data = { ossCO: this.form }
+              updateOss(data).then(() => {
                 this.$message.success(
                   '修改成功',
                   3
@@ -156,7 +157,8 @@
                 this.submitLoading = false
               })
             } else {
-              addOss(this.form).then(() => {
+              const data = { ossCO: this.form }
+              insertOss(data).then(() => {
                 this.$message.success(
                   '新增成功',
                   3

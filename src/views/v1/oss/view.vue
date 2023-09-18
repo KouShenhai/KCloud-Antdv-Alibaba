@@ -78,7 +78,7 @@
 </template>
 <script>
 
-import { listOss, delOss } from '@/api/v1/oss'
+import { listOss, deleteOssById } from '@/api/v1/oss'
 import CreateForm from './modules/CreateForm'
 import { tableMixin } from '@/store/table-mixin'
 export default {
@@ -220,7 +220,7 @@ export default {
         title: '确认删除所选中数据?',
         content: '当前选中编号为' + id + '的数据',
         onOk () {
-          return delOss(id)
+          return deleteOssById(id)
             .then(() => {
               that.getList()
               that.$message.success(
