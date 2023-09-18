@@ -71,7 +71,7 @@ export function updateUserProfile (data) {
 // 用户头像上传
 export function uploadAvatar (data) {
   return request({
-    url: '/admin/sys/oss/api/upload',
+    url: '/admin/v1/oss/upload',
     method: 'post',
     data: data
   })

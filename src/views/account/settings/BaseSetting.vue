@@ -90,15 +90,11 @@ export default {
     this.getInfo()
   },
   methods: {
-    ...mapActions(['GetMD5']),
     uploadImg (data) {
-      this.GetMD5(data.file).then(result => {
-        const formData = new FormData()
-        formData.append('file', data.file)
-        formData.append('md5', result)
-        uploadAvatar(formData).then(response => {
-          this.user.avatar = response.data.url
-        })
+      const formData = new FormData()
+      formData.append('file', data.file)
+      uploadAvatar(formData).then(response => {
+        this.user.avatar = response.data.url
       })
     },
     beforeUpload () {
