@@ -3,16 +3,16 @@
     <a-card :bordered="false">
       <!-- 条件搜索 -->
       <div class="table-page-search-wrapper">
-        <a-form layout="inline" v-hasPermi="['sys:log:operate:query']">
+        <a-form layout="inline" v-hasPermi="['logs:operate-list']">
           <a-row :gutter="48">
             <a-col :md="8" :sm="24">
               <a-form-item label="模块名称">
-                <a-input v-model="queryParam.module" placeholder="请输入模块名称" allow-clear/>
+                <a-input v-model="queryParam.moduleName" placeholder="请输入模块名称" allow-clear/>
               </a-form-item>
             </a-col>
             <a-col :md="8" :sm="24">
               <a-form-item label="状态">
-                <a-select placeholder="操作状态" v-model="queryParam.requestStatus" style="width: 100%" allow-clear>
+                <a-select placeholder="操作状态" v-model="queryParam.status" style="width: 100%" allow-clear>
                   <a-select-option v-for="(d, index) in statusOptions" :key="index" :value="d.value">{{ d.label }}</a-select-option>
                 </a-select>
               </a-form-item>
@@ -21,7 +21,7 @@
               <span class="table-page-search-submitButtons">
                 <a-button type="primary" @click="handleQuery"><a-icon type="search" />查询</a-button>
                 <a-button style="margin-left: 8px" @click="resetQuery"><a-icon type="redo" />重置</a-button>
-                <a-button :loading="exportLoading" type="danger" style="margin-left: 8px" @click="exportList"><a-icon type="export" />导出</a-button>
+                <a-button v-hasPermi="['logs:operate-export']" :loading="exportLoading" type="danger" style="margin-left: 8px" @click="exportList"><a-icon type="export" />导出</a-button>
               </span>
             </a-col>
           </a-row>
@@ -38,7 +38,7 @@
         :bordered="tableBordered"
         @change="handleTableChange"
       >
-        <span slot="requestStatus" slot-scope="text, record">
+        <span slot="status" slot-scope="text, record">
           {{ statusFormat(record) }}
         </span>
       </a-table>
@@ -60,7 +60,7 @@
 
 <script>
 
-import { list, exportList } from '@/api/sys/operate'
+import { operateExport, listOperate } from '@/api/v1/operate'
 import { tableMixin } from '@/store/table-mixin'
 import moment from 'moment'
 export default {
@@ -94,18 +94,18 @@ export default {
       queryParam: {
         pageNum: 1,
         pageSize: 10,
-        module: undefined,
-        requestStatus: undefined
+        moduleName: undefined,
+        status: undefined
       },
       columns: [
         {
           title: '模块名称',
-          dataIndex: 'module',
+          dataIndex: 'moduleName',
           align: 'center'
         },
         {
           title: '操作名称',
-          dataIndex: 'operation',
+          dataIndex: 'name',
           align: 'center'
         },
         {
@@ -115,24 +115,24 @@ export default {
         },
         {
           title: '请求方式',
-          dataIndex: 'requestMethod',
+          dataIndex: 'requestType',
           align: 'center'
         },
         {
           title: '请求地址',
-          dataIndex: 'requestUri',
+          dataIndex: 'uri',
           align: 'center',
           ellipsis: true
         },
         {
           title: '主机',
-          dataIndex: 'requestIp',
+          dataIndex: 'ip',
           width: '11%',
           align: 'center'
         },
         {
           title: '操作地点',
-          dataIndex: 'requestAddress',
+          dataIndex: 'address',
           align: 'center',
           ellipsis: true
         },
@@ -156,13 +156,13 @@ export default {
         },
         {
           title: '状态',
-          dataIndex: 'requestStatus',
-          scopedSlots: { customRender: 'requestStatus' },
+          dataIndex: 'status',
+          scopedSlots: { customRender: 'status' },
           align: 'center'
         },
         {
           title: '错误信息',
-          dataIndex: 'errorMsg',
+          dataIndex: 'errorMessage',
           align: 'center',
           ellipsis: true
         },
@@ -200,7 +200,7 @@ export default {
     },
     exportList () {
       this.exportLoading = true
-      exportList(this.queryParam).then(res => {
+      operateExport(this.queryParam).then(res => {
         const filename = '操作日志_' + moment(new Date()).format('YYYYMMDDHHmmss') + '.xlsx'
         const url = window.URL.createObjectURL(res) // 创建下载链接
         const link = document.createElement('a') // 赋值给a标签的href属性
@@ -221,7 +221,7 @@ export default {
     /** 查询登录日志列表 */
     getList () {
       this.loading = true
-      list(this.queryParam).then(response => {
+      listOperate(this.queryParam).then(response => {
           this.list = response.data.records
           this.total = response.data.total - 0
           this.loading = false
@@ -229,7 +229,7 @@ export default {
       )
     },
     statusFormat (row, column) {
-      if (row.requestStatus === 0) {
+      if (row.status === 0) {
         return '成功'
       }
       return '失败'
@@ -245,8 +245,8 @@ export default {
       this.queryParam = {
         pageNum: 1,
         pageSize: 10,
-        module: undefined,
-        requestStatus: undefined
+        moduleName: undefined,
+        status: undefined
       }
       this.handleQuery()
     },
