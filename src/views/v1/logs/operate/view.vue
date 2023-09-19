@@ -106,7 +106,8 @@ export default {
         {
           title: '操作名称',
           dataIndex: 'name',
-          align: 'center'
+          align: 'center',
+          ellipsis: true
         },
         {
           title: '操作人员',
