@@ -59,7 +59,7 @@
 
 import { getUserById, insertUser, updateUser } from '@/api/v1/user'
 import { listRoleOption } from '@/api/v1/role'
-
+import { getToken } from '@/api/v1/token'
 export default {
     name: 'CreateForm',
     props: {
@@ -73,6 +73,7 @@ export default {
     },
     data () {
       return {
+        accessToken: '',
         submitLoading: false,
         replaceFields: { children: 'children', title: 'name', key: 'id', value: 'id', path: 'path' },
         // 角色选项
@@ -129,6 +130,12 @@ export default {
     watch: {
     },
     methods: {
+      // eslint-disable-next-line vue/no-dupe-keys
+      token () {
+        getToken().then(res => {
+          this.accessToken = res.data.token
+        })
+      },
       nodeFilter (tree, key) {
         tree.forEach(item => {
           if (item.id === key) {
@@ -165,6 +172,7 @@ export default {
       /** 新增按钮操作 */
       handleAdd () {
         this.reset()
+        this.token()
         this.$emit('select-tree')
         listRoleOption().then(response => {
           const roles = []
@@ -201,11 +209,7 @@ export default {
           this.open = true
           this.formTitle = '用户修改'
           this.form.password = ''
-          if (response.data.superAdmin === 1) {
-            this.superAdminDisable = true
-          } else {
-            this.superAdminDisable = false
-          }
+          this.superAdminDisable = response.data.superAdmin === 1
         })
       },
       /** 提交按钮 */
@@ -227,7 +231,7 @@ export default {
               })
             } else {
               const data = { userCO: this.form }
-              insertUser(data).then(() => {
+              insertUser(data, this.accessToken).then(() => {
                 this.$message.success(
                   '新增成功',
                   3

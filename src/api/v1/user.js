@@ -16,11 +16,15 @@ export function getUserById (id) {
   })
 }
 // 新增用户
-export function insertUser (data) {
+export function insertUser (data, token) {
   return request({
     url: '/admin/v1/users',
     method: 'post',
-    data: data
+    data: data,
+    headers: {
+      'Content-Type': 'application/json;charset=UTF-8',
+      'request-id': token
+    }
   })
 }
 
