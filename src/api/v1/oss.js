@@ -3,7 +3,7 @@ import request from '@/utils/request'
 // oss上传
 export function uploadOss (data) {
   return request({
-    url: '/admin/sys/oss/api/upload',
+    url: '/admin/v1/oss/upload',
     method: 'post',
     data: data
   })
