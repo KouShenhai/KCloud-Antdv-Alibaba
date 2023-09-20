@@ -2,7 +2,7 @@ import request from '@/utils/request'
 // 在线列表
 export function listOnline (query) {
   return request({
-    url: '/admin/sys/user/api/online/query',
+    url: '/admin/v1/users/online-list',
     method: 'post',
     data: query
   })
@@ -11,7 +11,8 @@ export function listOnline (query) {
 // 账号踢出
 export function killOnline (token) {
   return request({
-    url: '/admin/sys/user/api/online/kill?token=' + token,
+    url: '/admin/v1/users/online-kill',
+    data: { token: token },
     method: 'delete'
   })
 }

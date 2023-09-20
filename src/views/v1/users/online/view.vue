@@ -3,7 +3,7 @@
     <a-card :bordered="false">
       <!-- 条件搜索 -->
       <div class="table-page-search-wrapper">
-        <a-form layout="inline" v-hasPermi="['sys:user:online:query']">
+        <a-form layout="inline" v-hasPermi="['users:online-list']">
           <a-row :gutter="48">
             <a-col :md="8" :sm="24">
               <a-form-item label="用户名">
@@ -40,7 +40,7 @@
       >
         <span slot="operation" slot-scope="text, record">
           <a-popconfirm
-            v-hasPermi="['sys:user:online:kill']"
+            v-hasPermi="['users:online-kill']"
             ok-text="是"
             cancel-text="否"
             @confirm="confirmHandleForceLogout(record)"
