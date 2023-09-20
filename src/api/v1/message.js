@@ -16,13 +16,14 @@ export function listUnreadMessage (query) {
   })
 }
 
-export function insertMessage (data) {
+export function insertMessage (data, token) {
   return request({
     url: '/admin/v1/messages',
     method: 'post',
     data: data,
     headers: {
-      'Content-Type': 'application/json;charset=UTF-8'
+      'Content-Type': 'application/json;charset=UTF-8',
+      'request-id': token
     }
   })
 }

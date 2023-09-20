@@ -17,11 +17,15 @@ export function getTenantById (id) {
 }
 
 // 新增租户
-export function insertTenant (data) {
+export function insertTenant (data, token) {
   return request({
     url: '/admin/v1/tenants',
     method: 'post',
-    data: data
+    data: data,
+    headers: {
+      'Content-Type': 'application/json;charset=UTF-8',
+      'request-id': token
+    }
   })
 }
 

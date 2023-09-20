@@ -18,11 +18,15 @@ export function getMenuById (id) {
 }
 
 // 新增菜单
-export function insertMenu (data) {
+export function insertMenu (data, token) {
   return request({
     url: '/admin/v1/menus',
     method: 'post',
-    data: data
+    data: data,
+    headers: {
+      'Content-Type': 'application/json;charset=UTF-8',
+      'request-id': token
+    }
   })
 }
 

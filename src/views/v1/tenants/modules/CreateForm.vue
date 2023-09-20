@@ -45,6 +45,7 @@
   import { getTenantById, insertTenant, updateTenant } from '@/api/v1/tenant'
   import { listSourceOption } from '@/api/v1/source'
   import { packageOption } from '@/api/v1/package'
+  import { getToken } from '@/api/v1/token'
 
   export default {
     name: 'CreateForm',
@@ -53,6 +54,7 @@
     },
     data () {
       return {
+        accessToken: '',
         submitLoading: false,
         formTitle: '',
         // 表单参数
@@ -89,6 +91,11 @@
     watch: {
     },
     methods: {
+      token () {
+        getToken().then(res => {
+          this.accessToken = res.data.token
+        })
+      },
       getSourceOption () {
         listSourceOption().then(res => {
           this.sourceOption = res.data
@@ -119,6 +126,7 @@
       /** 新增按钮操作 */
       handleAdd () {
         this.reset()
+        this.token()
         this.open = true
         this.formTitle = '租户新增'
       },
@@ -151,7 +159,7 @@
               })
             } else {
               const data = { tenantCO: this.form }
-              insertTenant(data).then(() => {
+              insertTenant(data, this.accessToken).then(() => {
                 this.$message.success(
                   '新增成功',
                   3

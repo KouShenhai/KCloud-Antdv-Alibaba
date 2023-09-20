@@ -67,6 +67,7 @@
 import { getRoleById, insertRole, updateRole } from '@/api/v1/role'
 import { listMenuTree as menuTreeSelect, listRoleMenuIDS } from '@/api/v1/menu'
 import { listDeptTree as deptTreeSelect, listRoleDeptIDS } from '@/api/v1/dept'
+import { getToken } from '@/api/v1/token'
 export default {
   name: 'CreateForm',
   props: {
@@ -76,6 +77,7 @@ export default {
   },
   data () {
     return {
+      accessToken: '',
       check1: false,
       check2: false,
       check3: false,
@@ -133,6 +135,11 @@ export default {
   watch: {
   },
   methods: {
+    token () {
+      getToken().then(res => {
+        this.accessToken = res.data.token
+      })
+    },
     onExpandDept (expandedKeys) {
       this.deptExpandedKeys = expandedKeys
       this.autoExpandParent2 = false
@@ -361,6 +368,7 @@ export default {
      /** 新增按钮操作 */
     handleAdd () {
       this.reset()
+      this.token()
       this.open = true
       this.formTitle = '角色新增'
     },
@@ -424,7 +432,7 @@ export default {
             this.form.menuIds = this.getMenuAllCheckedKeys()
             this.form.deptIds = this.getDeptAllCheckedKeys()
             const data = { roleCO: this.form }
-            insertRole(data).then(() => {
+            insertRole(data, this.accessToken).then(() => {
               this.$message.success(
                 '新增成功',
                 3

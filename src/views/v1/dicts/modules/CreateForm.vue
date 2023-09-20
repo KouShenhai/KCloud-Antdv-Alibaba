@@ -40,6 +40,7 @@
 <script>
 
 import { getDictById, insertDict, updateDict } from '@/api/v1/dict'
+import { getToken } from '@/api/v1/token'
 
 export default {
   name: 'CreateForm',
@@ -50,6 +51,7 @@ export default {
   },
   data () {
     return {
+      accessToken: '',
       submitLoading: false,
       formTitle: '',
       // 表单参数
@@ -78,6 +80,11 @@ export default {
   watch: {
   },
   methods: {
+    token () {
+      getToken().then(res => {
+        this.accessToken = res.data.token
+      })
+    },
     onClose () {
       this.open = false
     },
@@ -100,6 +107,7 @@ export default {
      /** 新增按钮操作 */
     handleAdd () {
       this.reset()
+      this.token()
       this.open = true
       this.formTitle = '字典新增'
     },
@@ -132,7 +140,7 @@ export default {
             })
           } else {
             const data = { dictCO: this.form }
-            insertDict(data).then(() => {
+            insertDict(data, this.accessToken).then(() => {
               this.$message.success(
                 '新增成功',
                 3

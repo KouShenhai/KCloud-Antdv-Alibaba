@@ -64,6 +64,7 @@ import { insertMessage } from '@/api/v1/message'
 import Editor from '@/components/Editor'
 import { listUserOption } from '@/api/v1/user'
 import { uploadOss } from '@/api/v1/oss'
+import { getToken } from '@/api/v1/token'
 export default {
   name: 'NoticeForm',
   components: {
@@ -71,6 +72,7 @@ export default {
   },
   data () {
     return {
+      accessToken: '',
       userOptions: [],
       toolbars: {
         strikethrough: true, // 中划线
@@ -155,6 +157,11 @@ export default {
     })
   },
   methods: {
+    token () {
+      getToken().then(res => {
+        this.accessToken = res.data.token
+      })
+    },
     imgAdd (pos, file) {
       const imgData = new FormData()
       imgData.append('file', file)
@@ -174,6 +181,7 @@ export default {
      /** 新增按钮操作 */
     handleAdd () {
       this.reset()
+      this.token()
       this.formTitle = '新增消息'
     },
     /** 提交按钮 */
@@ -182,7 +190,7 @@ export default {
         if (valid) {
           this.submitLoading = true
           const data = { messageCO: this.form }
-          insertMessage(data).then(() => {
+          insertMessage(data, this.accessToken).then(() => {
             this.$message.success(
               '发送成功',
               3
@@ -198,6 +206,7 @@ export default {
     },
     back () {
       this.reset()
+      this.token()
       this.$router.push('/v1/messages/view')
     }
   }

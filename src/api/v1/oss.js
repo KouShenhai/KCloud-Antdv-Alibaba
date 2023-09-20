@@ -27,11 +27,15 @@ export function getOssById (id) {
 }
 
 // 新增存储
-export function insertOss (data) {
+export function insertOss (data, token) {
   return request({
     url: '/admin/v1/oss',
     method: 'post',
-    data: data
+    data: data,
+    headers: {
+      'Content-Type': 'application/json;charset=UTF-8',
+      'request-id': token
+    }
   })
 }
 

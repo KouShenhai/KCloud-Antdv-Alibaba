@@ -18,11 +18,15 @@ export function getSourceById (id) {
 }
 
 // 新增数据源
-export function insertSource (data) {
+export function insertSource (data, token) {
   return request({
     url: '/admin/v1/sources',
     method: 'post',
-    data: data
+    data: data,
+    headers: {
+      'Content-Type': 'application/json;charset=UTF-8',
+      'request-id': token
+    }
   })
 }
 

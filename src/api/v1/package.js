@@ -18,11 +18,15 @@ export function getPackageById (id) {
 }
 
 // 新增套餐
-export function insertPackage (data) {
+export function insertPackage (data, token) {
   return request({
     url: '/admin/v1/packages',
     method: 'post',
-    data: data
+    data: data,
+    headers: {
+      'Content-Type': 'application/json;charset=UTF-8',
+      'request-id': token
+    }
   })
 }
 
