@@ -64,7 +64,6 @@ import { insertMessage } from '@/api/v1/message'
 import Editor from '@/components/Editor'
 import { listUserOption } from '@/api/v1/user'
 import { uploadOss } from '@/api/v1/oss'
-import { mapActions } from 'vuex'
 export default {
   name: 'NoticeForm',
   components: {
