@@ -1,17 +1,17 @@
 import request from '@/utils/request'
 
 // 查询登录日志列表
-export function list (query) {
+export function listLogin (query) {
   return request({
-    url: '/admin/sys/log/api/login/query',
+    url: '/admin/v1/logs/login-list',
     method: 'post',
     data: query
   })
 }
 
-export function exportList (query) {
+export function exportLogin (query) {
   return request({
-    url: '/admin/sys/log/api/login/export',
+    url: '/admin/v1/logs/login-export',
     method: 'post',
     data: query,
     responseType: 'blob'

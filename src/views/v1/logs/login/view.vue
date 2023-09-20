@@ -3,7 +3,7 @@
     <a-card :bordered="false">
       <!-- 条件搜索 -->
       <div class="table-page-search-wrapper">
-        <a-form layout="inline" v-hasPermi="['log:login-list']">
+        <a-form layout="inline" v-hasPermi="['logs:login-list']">
           <a-row :gutter="48">
             <a-col :md="8" :sm="24">
               <a-form-item label="用户名称">
@@ -21,7 +21,7 @@
               <span class="table-page-search-submitButtons">
                 <a-button type="primary" @click="handleQuery"><a-icon type="search" />查询</a-button>
                 <a-button style="margin-left: 8px" @click="resetQuery"><a-icon type="redo" />重置</a-button>
-                <a-button :loading="exportLoading" type="danger" style="margin-left: 8px" @click="exportList"><a-icon type="export" />导出</a-button>
+                <a-button v-hasPermi="['logs:login-export']" :loading="exportLoading" type="danger" style="margin-left: 8px" @click="exportList"><a-icon type="export" />导出</a-button>
               </span>
             </a-col>
           </a-row>
@@ -38,7 +38,7 @@
         @change="handleTableChange"
         :bordered="tableBordered"
       >
-        <span slot="requestStatus" slot-scope="text, record">
+        <span slot="status" slot-scope="text, record">
           {{ statusFormat(record) }}
         </span>
       </a-table>
@@ -60,7 +60,7 @@
 
 <script>
 
-import { list, exportList } from '@/api/v1/loginlog'
+import { listLogin, exportLogin } from '@/api/v1/loginlog'
 import { tableMixin } from '@/store/table-mixin'
 import moment from 'moment/moment'
 
@@ -100,19 +100,19 @@ export default {
       columns: [
         {
           title: '用户名称',
-          dataIndex: 'loginName',
+          dataIndex: 'username',
           align: 'center',
           ellipsis: true
         },
         {
           title: '登录地址',
-          dataIndex: 'requestIp',
+          dataIndex: 'ip',
           align: 'center',
           ellipsis: true
         },
         {
           title: '登录地点',
-          dataIndex: 'requestAddress',
+          dataIndex: 'address',
           align: 'center',
           ellipsis: true
         },
@@ -130,20 +130,27 @@ export default {
         },
         {
           title: '登录状态',
-          dataIndex: 'requestStatus',
-          scopedSlots: { customRender: 'requestStatus' },
+          dataIndex: 'status',
+          scopedSlots: { customRender: 'status' },
           align: 'center'
         },
         {
+          title: '登录类型',
+          dataIndex: 'type',
+          align: 'center',
+          ellipsis: true
+        },
+        {
           title: '登录信息',
-          dataIndex: 'msg',
+          dataIndex: 'message',
           align: 'center',
           width: '20%'
         },
         {
           title: '登录时间',
           dataIndex: 'createDate',
-          align: 'center'
+          align: 'center',
+          width: '20%'
         }
       ]
     }
@@ -160,7 +167,7 @@ export default {
   methods: {
     exportList () {
       this.exportLoading = true
-      exportList(this.queryParam).then(res => {
+      exportLogin(this.queryParam).then(res => {
         const filename = '登录日志_' + moment(new Date()).format('YYYYMMDDHHmmss') + '.xlsx'
         const url = window.URL.createObjectURL(res) // 创建下载链接
         const link = document.createElement('a') // 赋值给a标签的href属性
@@ -187,7 +194,7 @@ export default {
     /** 查询登录日志列表 */
     getList () {
       this.loading = true
-      list(this.addDateRange(this.queryParam, this.dateRange)).then(response => {
+      listLogin(this.addDateRange(this.queryParam, this.dateRange)).then(response => {
           this.list = response.data.records
           this.total = response.data.total - 0
           this.loading = false
@@ -195,7 +202,7 @@ export default {
       )
     },
     statusFormat (row, column) {
-      if (row.requestStatus === 0) {
+      if (row.status === 0) {
         return '成功'
       }
       return '失败'
@@ -211,8 +218,8 @@ export default {
       this.queryParam = {
         pageNum: 1,
         pageSize: 10,
-        loginName: undefined,
-        requestStatus: undefined
+        username: undefined,
+        status: undefined
       }
       this.handleQuery()
     },
