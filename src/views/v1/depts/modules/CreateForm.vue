@@ -39,6 +39,7 @@
 <script>
 
 import { getDeptById, insertDept, updateDept } from '@/api/v1/dept'
+import { getToken } from '@/api/v1/token'
 
 export default {
   name: 'CreateForm',
@@ -50,6 +51,7 @@ export default {
   },
   data () {
     return {
+      accessToken: '',
       submitLoading: false,
       formTitle: '',
       // 表单参数
@@ -57,7 +59,7 @@ export default {
         id: undefined,
         pid: undefined,
         name: undefined,
-        sort: 0
+        sort: 1
       },
       open: false,
       rules: {
@@ -76,6 +78,11 @@ export default {
   watch: {
   },
   methods: {
+    token () {
+      getToken().then(res => {
+        this.accessToken = res.data.token
+      })
+    },
     onClose () {
       this.open = false
     },
@@ -90,12 +97,13 @@ export default {
         id: undefined,
         pid: undefined,
         name: undefined,
-        sort: 0
+        sort: 1
       }
     },
      /** 新增按钮操作 */
     handleAdd (row) {
       this.reset()
+      this.token()
       this.$emit('select-tree')
        if (row != null && row.id) {
          this.form.pid = row.id
@@ -135,7 +143,7 @@ export default {
             })
           } else {
             const data = { deptCO: this.form }
-            insertDept(data).then(() => {
+            insertDept(data, this.accessToken).then(() => {
               this.$message.success(
                 '新增成功',
                 3

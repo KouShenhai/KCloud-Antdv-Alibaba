@@ -43,7 +43,9 @@
 <script>
 
 import { insertSource, updateSource, getSourceById } from '@/api/v1/source'
-  import { listDictByType } from '@/api/v1/dict'
+import { listDictByType } from '@/api/v1/dict'
+import { getToken } from '@/api/v1/token'
+
   export default {
     name: 'CreateForm',
     components: {
@@ -51,6 +53,7 @@ import { insertSource, updateSource, getSourceById } from '@/api/v1/source'
     },
     data () {
       return {
+        accessToken: '',
         submitLoading: false,
         // 默认密码
         formTitle: '',
@@ -97,6 +100,11 @@ import { insertSource, updateSource, getSourceById } from '@/api/v1/source'
       this.getDict()
     },
     methods: {
+      token () {
+        getToken().then(res => {
+          this.accessToken = res.data.token
+        })
+      },
       getDict () {
         listDictByType('DRIVER_CLASS').then(res => {
           this.dictOption = res.data
@@ -124,6 +132,7 @@ import { insertSource, updateSource, getSourceById } from '@/api/v1/source'
       /** 新增按钮操作 */
       handleAdd () {
         this.reset()
+        this.token()
         this.open = true
         this.formTitle = '数据源新增'
       },
@@ -161,7 +170,7 @@ import { insertSource, updateSource, getSourceById } from '@/api/v1/source'
               })
             } else {
               const data = { sourceCO: this.form }
-              insertSource(data).then(() => {
+              insertSource(data, this.accessToken).then(() => {
                 this.$message.success(
                   '新增成功',
                   3

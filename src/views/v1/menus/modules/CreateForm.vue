@@ -103,7 +103,7 @@ import { getMenuById, insertMenu, updateMenu } from '@/api/v1/menu'
 import allIcon from '@/core/icons'
 import icons from '@/utils/requireIcons'
 import IconSelector from '@/components/IconSelector'
-
+import { getToken } from '@/api/v1/token'
 export default {
   name: 'CreateForm',
   props: {
@@ -117,6 +117,7 @@ export default {
   },
   data () {
     return {
+      accessToken: '',
       allIcon,
       iconVisible: false,
       iconList: icons,
@@ -154,6 +155,11 @@ export default {
   watch: {
   },
   methods: {
+    token () {
+      getToken().then(res => {
+        this.accessToken = res.data.token
+      })
+    },
     onClose () {
       this.open = false
       this.iconVisible = false
@@ -181,6 +187,7 @@ export default {
      /** 新增按钮操作 */
     handleAdd (row) {
       this.reset()
+      this.token()
       this.$emit('select-tree')
       if (row != null && row.id) {
         this.form.pid = row.id
@@ -222,7 +229,7 @@ export default {
             })
           } else {
             const data = { menuCO: this.form }
-            insertMenu(data).then(() => {
+            insertMenu(data, this.accessToken).then(() => {
               this.$message.success(
                 '新增成功',
                 3

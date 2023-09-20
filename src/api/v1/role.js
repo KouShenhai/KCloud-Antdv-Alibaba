@@ -26,11 +26,15 @@ export function listRoleOption () {
 }
 
 // 新增角色
-export function insertRole (data) {
+export function insertRole (data, token) {
   return request({
     url: '/admin/v1/roles',
     method: 'post',
-    data: data
+    data: data,
+    headers: {
+      'Content-Type': 'application/json;charset=UTF-8',
+      'request-id': token
+    }
   })
 }
 

@@ -46,6 +46,8 @@
 <script>
 
 import { getOssById, updateOss, insertOss } from '@/api/v1/oss'
+import { getToken } from '@/api/v1/token'
+
   export default {
     name: 'CreateForm',
     components: {
@@ -53,6 +55,7 @@ import { getOssById, updateOss, insertOss } from '@/api/v1/oss'
     },
     data () {
       return {
+        accessToken: '',
         submitLoading: false,
         formTitle: '',
         // 表单参数
@@ -99,6 +102,11 @@ import { getOssById, updateOss, insertOss } from '@/api/v1/oss'
     watch: {
     },
     methods: {
+      token () {
+        getToken().then(res => {
+          this.accessToken = res.data.token
+        })
+      },
       onClose () {
         this.open = false
       },
@@ -124,6 +132,7 @@ import { getOssById, updateOss, insertOss } from '@/api/v1/oss'
       /** 新增按钮操作 */
       handleAdd () {
         this.reset()
+        this.token()
         this.open = true
         this.formTitle = '存储新增'
       },
@@ -158,7 +167,7 @@ import { getOssById, updateOss, insertOss } from '@/api/v1/oss'
               })
             } else {
               const data = { ossCO: this.form }
-              insertOss(data).then(() => {
+              insertOss(data, this.accessToken).then(() => {
                 this.$message.success(
                   '新增成功',
                   3

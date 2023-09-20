@@ -26,11 +26,15 @@ export function getDictById (id) {
 }
 
 // 新增字典
-export function insertDict (data) {
+export function insertDict (data, token) {
   return request({
     url: '/admin/v1/dicts',
     method: 'post',
-    data: data
+    data: data,
+    headers: {
+      'Content-Type': 'application/json;charset=UTF-8',
+      'request-id': token
+    }
   })
 }
 

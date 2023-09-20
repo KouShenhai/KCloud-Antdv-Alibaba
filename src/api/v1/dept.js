@@ -18,11 +18,15 @@ export function getDeptById (id) {
 }
 
 // 新增部门
-export function insertDept (data) {
+export function insertDept (data, token) {
   return request({
     url: '/admin/v1/depts',
     method: 'post',
-    data: data
+    data: data,
+    headers: {
+      'Content-Type': 'application/json;charset=UTF-8',
+      'request-id': token
+    }
   })
 }
 

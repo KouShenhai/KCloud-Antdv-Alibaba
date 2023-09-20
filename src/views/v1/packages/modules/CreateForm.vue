@@ -38,6 +38,8 @@
 
 import { getPackageById, insertPackage, updatePackage } from '@/api/v1/package'
 import { listTenantTree } from '@/api/v1/menu'
+import { getToken } from '@/api/v1/token'
+
 export default {
   name: 'CreateForm',
   props: {
@@ -47,6 +49,7 @@ export default {
   },
   data () {
     return {
+      accessToken: '',
       submitLoading: false,
       menuExpandedKeys: [],
       autoExpandParent: false,
@@ -84,6 +87,11 @@ export default {
   watch: {
   },
   methods: {
+    token () {
+      getToken().then(res => {
+        this.accessToken = res.data.token
+      })
+    },
     onExpandMenu (expandedKeys) {
       this.menuExpandedKeys = expandedKeys
       this.autoExpandParent = false
@@ -176,8 +184,9 @@ export default {
      /** 新增按钮操作 */
     handleAdd () {
       this.reset()
+      this.token()
       this.open = true
-      this.formTitle = '角色新增'
+      this.formTitle = '套餐新增'
     },
     /** 修改按钮操作 */
     handleUpdate (row) {
@@ -194,7 +203,7 @@ export default {
             this.selectNodeFilter(this.menuOptions, [])
           }
         })
-        this.formTitle = '角色修改'
+        this.formTitle = '套餐修改'
       })
     },
     /** 提交按钮 */
@@ -218,7 +227,7 @@ export default {
           } else {
             this.form.menuIds = this.getMenuAllCheckedKeys()
             const data = { packageCO: this.form }
-            insertPackage(data).then(() => {
+            insertPackage(data, this.accessToken).then(() => {
               this.$message.success(
                 '新增成功',
                 3
