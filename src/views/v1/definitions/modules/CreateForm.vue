@@ -34,7 +34,7 @@
 
 <script>
 
-import { insertDefinition } from '@/api/workflow/definition'
+import { insertDefinition } from '@/api/v1/definition'
 export default {
   name: 'CreateForm',
   props: {
