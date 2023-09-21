@@ -3,7 +3,7 @@
     <a-card :bordered="false">
       <!-- 条件搜索 -->
       <div class="table-page-search-wrapper">
-        <a-form layout="inline" v-hasPermi="['workflow:definition:query']">
+        <a-form layout="inline" v-hasPermi="['definitions:list']">
           <a-row :gutter="48">
             <a-col :md="8" :sm="24">
               <a-form-item label="流程名称">
@@ -20,10 +20,10 @@
         </a-form>
       </div>
       <div class="table-operations">
-        <a-button type="primary" @click="$refs.createForm.handleAdd()" v-hasPermi="['workflow:definition:insert']">
+        <a-button type="primary" @click="$refs.createForm.handleAdd()" v-hasPermi="['definitions:insert']">
           <a-icon type="plus" />新增
         </a-button>
-        <a-button @click="downloadTemplate" v-hasPermi="['workflow:definition:template']">
+        <a-button @click="downloadTemplate" v-hasPermi="['definitions:template']">
           <a-icon type="download" />模板
         </a-button>
       </div>
@@ -45,27 +45,27 @@
           {{ statusFormat(record) }}
         </span>
         <span slot="operation" slot-scope="text, record">
-          <a @click="$refs.createForm.handleAdd()" v-hasPermi="['workflow:definition:insert']">
+          <a @click="$refs.createForm.handleAdd()" v-hasPermi="['definitions:insert']">
             <a-icon type="plus" />
             新增
           </a>
-          <a-divider type="vertical"  v-hasPermi="['workflow:definition:suspend']"/>
-          <a @click="suspendFlow(record)"  v-hasPermi="['workflow:definition:suspend']">
+          <a-divider type="vertical"  v-hasPermi="['definitions:suspend']"/>
+          <a @click="suspendFlow(record)"  v-hasPermi="['definitions:suspend']">
             <a-icon type="pause-circle" />
             挂起
           </a>
-          <a-divider type="vertical"  v-hasPermi="['workflow:definition:activate']"/>
-          <a @click="activateFlow(record)"  v-hasPermi="['workflow:definition:activate']">
+          <a-divider type="vertical"  v-hasPermi="['definitions:activate']"/>
+          <a @click="activateFlow(record)"  v-hasPermi="['definitions:activate']">
             <a-icon type="play-circle" />
             激活
           </a>
-          <a-divider type="vertical"  v-hasPermi="['workflow:definition:delete']"/>
-          <a @click="handleDelete(record)"  v-hasPermi="['workflow:definition:delete']">
+          <a-divider type="vertical"  v-hasPermi="['definitions:delete']"/>
+          <a @click="handleDelete(record)"  v-hasPermi="['definitions:delete']">
             <a-icon type="delete" />
             删除
           </a>
-          <a-divider type="vertical"  v-hasPermi="['workflow:definition:diagram']"/>
-          <a @click="getDefinition(record)"  v-hasPermi="['workflow:definition:diagram']">
+          <a-divider type="vertical"  v-hasPermi="['definitions:diagram']"/>
+          <a @click="getDefinition(record)"  v-hasPermi="['definitions:diagram']">
             <a-icon type="eye" />
             查看
           </a>
@@ -100,7 +100,7 @@
 
 <script>
 
-import { pageDefinition, delDefinition, suspendDefinition, activateDefinition, getDefinition, getTemplate } from '@/api/workflow/definition'
+import { pageDefinition, delDefinition, suspendDefinition, activateDefinition, getDefinition, getTemplate } from '@/api/v1/definition'
 import CreateForm from './modules/CreateForm'
 import { tableMixin } from '@/store/table-mixin'
 import moment from 'moment'
