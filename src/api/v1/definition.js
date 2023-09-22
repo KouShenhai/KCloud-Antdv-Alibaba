@@ -1,9 +1,9 @@
 import request from '@/utils/request'
 
 // 分页
-export function pageDefinition (query) {
+export function listDefinition (query) {
   return request({
-    url: '/admin/workflow/definition/api/query',
+    url: '/admin/v1/definitions/list',
     method: 'post',
     data: query
   })
@@ -12,7 +12,7 @@ export function pageDefinition (query) {
 // 新增
 export function insertDefinition (data) {
   return request({
-    url: '/admin/workflow/definition/api/insert',
+    url: '/admin/v1/definitions',
     method: 'post',
     data: data
   })
@@ -21,7 +21,7 @@ export function insertDefinition (data) {
 // 挂起
 export function suspendDefinition (definitionId) {
   return request({
-    url: '/admin/workflow/definition/api/suspend?definitionId=' + definitionId,
+    url: '/admin/v1/definitions/' + definitionId + '/suspend',
     method: 'put'
   })
 }
@@ -29,7 +29,7 @@ export function suspendDefinition (definitionId) {
 // 激活
 export function activateDefinition (definitionId) {
   return request({
-    url: '/admin/workflow/definition/api/activate?definitionId=' + definitionId,
+    url: '/admin/v1/definitions/' + definitionId + '/activate',
     method: 'put'
   })
 }
@@ -37,21 +37,21 @@ export function activateDefinition (definitionId) {
 // 删除
 export function delDefinition (deploymentId) {
   return request({
-    url: '/admin/workflow/definition/api/delete?deploymentId=' + deploymentId,
+    url: '/admin/v1/definitions/' + deploymentId,
     method: 'delete'
   })
 }
 
-export function getDefinition (id) {
+export function getDefinitionDiagram (id) {
   return request({
-    url: '/admin/workflow/definition/api/image?definitionId=' + id,
+    url: '/admin/v1/definitions/' + id + '/diagram',
     method: 'get'
   })
 }
 
-export function getTemplate () {
+export function definitionTemplate () {
   return request({
-    url: '/admin/workflow/definition/api/template',
+    url: '/admin/v1/definitions/template',
     method: 'get',
     responseType: 'blob'
   })
