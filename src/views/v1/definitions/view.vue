@@ -7,7 +7,7 @@
           <a-row :gutter="48">
             <a-col :md="8" :sm="24">
               <a-form-item label="流程名称">
-                <a-input v-model="queryParam.processName" placeholder="请输入流程名称" allow-clear/>
+                <a-input v-model="queryParam.name" placeholder="请输入流程名称" allow-clear/>
               </a-form-item>
             </a-col>
             <a-col :md="8" :sm="24">
@@ -100,7 +100,7 @@
 
 <script>
 
-import { pageDefinition, delDefinition, suspendDefinition, activateDefinition, getDefinition, getTemplate } from '@/api/v1/definition'
+import { listDefinition, delDefinition, suspendDefinition, activateDefinition, getDefinitionDiagram, definitionTemplate } from '@/api/v1/definition'
 import CreateForm from './modules/CreateForm'
 import { tableMixin } from '@/store/table-mixin'
 import moment from 'moment'
@@ -125,7 +125,7 @@ export default {
       queryParam: {
         pageNum: 1,
         pageSize: 10,
-        processName: ''
+        name: ''
       },
       columns: [
         {
@@ -141,7 +141,7 @@ export default {
         },
         {
           title: '状态',
-          dataIndex: 'suspended',
+          dataIndex: 'isSuspended',
           scopedSlots: { customRender: 'suspended' },
           align: 'center'
         },
@@ -166,7 +166,7 @@ export default {
   },
   methods: {
     downloadTemplate () {
-      getTemplate().then(res => {
+      definitionTemplate().then(res => {
         const url = window.URL.createObjectURL(res) // 创建下载链接
         const link = document.createElement('a') // 赋值给a标签的href属性
         link.style.display = 'none'
@@ -183,7 +183,7 @@ export default {
       })
     },
     statusFormat (row) {
-      if (row.suspended) {
+      if (row.isSuspended) {
         return '挂起'
       }
       return '激活'
@@ -195,7 +195,7 @@ export default {
     /** 查询流程定义列表 */
     getList () {
       this.loading = true
-      pageDefinition(this.queryParam).then(response => {
+      listDefinition(this.queryParam).then(response => {
           this.list = response.data.records
           this.total = response.data.total - 0
           this.loading = false
@@ -204,7 +204,7 @@ export default {
     },
     getDefinition (row) {
       this.visible = true
-      getDefinition(row.definitionId).then(res => {
+      getDefinitionDiagram(row.definitionId).then(res => {
          this.flowUri = 'data:image/png;base64,' + res.data
       })
     },
@@ -219,7 +219,7 @@ export default {
       this.queryParam = {
         pageNum: 1,
         pageSize: 10,
-        processName: ''
+        name: ''
       }
       this.handleQuery()
     },
