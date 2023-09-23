@@ -3,16 +3,16 @@
     <a-card :bordered="false">
       <!-- 条件搜索 -->
       <div class="table-page-search-wrapper">
-        <a-form layout="inline" v-hasPermi="['sys:resource:image:query']">
+        <a-form layout="inline" v-hasPermi="['resource:list']">
           <a-row :gutter="48">
             <a-col :md="8" :sm="24">
-              <a-form-item label="图片编号">
-                <a-input v-model="queryParam.id" placeholder="请输入图片编号" allow-clear/>
+              <a-form-item label="资源编号">
+                <a-input v-model="queryParam.id" placeholder="请输入资源编号" allow-clear/>
               </a-form-item>
             </a-col>
             <a-col :md="8" :sm="24">
-              <a-form-item label="图片名称">
-                <a-input v-model="queryParam.title" placeholder="请输入图片名称" allow-clear/>
+              <a-form-item label="资源名称">
+                <a-input v-model="queryParam.title" placeholder="请输入资源名称" allow-clear/>
               </a-form-item>
             </a-col>
             <a-col :md="8" :sm="24">
@@ -25,10 +25,10 @@
         </a-form>
       </div>
       <div class="table-operations">
-        <a-button type="primary" @click="$refs.createForm.handleAdd()" v-hasPermi="['sys:resource:image:insert']">
+        <a-button type="primary" @click="$refs.createForm.handleAdd()" v-hasPermi="['resource:insert']">
           <a-icon type="plus" />新增
         </a-button>
-        <a-button :loading="syncLoading" type="danger" @click="syncIndex()" v-hasPermi="['sys:resource:image:syncIndex']">
+        <a-button :loading="syncLoading" type="danger" @click="syncIndex()" v-hasPermi="['resource:sync']">
           <a-icon type="sync" /> 同步
         </a-button>
       </div>
@@ -50,31 +50,31 @@
           {{ statusFormat(record) }}
         </span>
         <span slot="operation" slot-scope="text, record" >
-          <a @click="$refs.createForm.handleAdd()" v-hasPermi="['sys:resource:image:insert']">
+          <a @click="$refs.createForm.handleAdd()" v-hasPermi="['resource:insert']">
             <a-icon type="plus" />新增
           </a>
-          <a-divider type="vertical" v-hasPermi="['sys:resource:image:update']" v-if="record.status == 3 || record.status == 2"/>
-          <a v-hasPermi="['sys:resource:image:update']" @click="$refs.createForm.handleUpdate(record, undefined)" v-if="record.status == 3 || record.status == 2">
+          <a-divider type="vertical" v-hasPermi="['resource:update']" v-if="record.status == 3 || record.status == 2"/>
+          <a v-hasPermi="['resource:update']" @click="$refs.createForm.handleUpdate(record, undefined)" v-if="record.status == 3 || record.status == 2">
             <a-icon type="edit" />修改
           </a>
-          <a-divider type="vertical" v-if="record.status == 3 || record.status == 2" v-hasPermi="['sys:resource:image:detail']"/>
-          <a @click="handleQuery1(record)" v-if="record.status == 3 || record.status == 2" v-hasPermi="['sys:resource:image:detail']">
+          <a-divider type="vertical" v-if="record.status == 3 || record.status == 2" v-hasPermi="['resource:detail']"/>
+          <a @click="handleQuery1(record)" v-if="record.status == 3 || record.status == 2" v-hasPermi="['resource:detail']">
             <a-icon type="eye" />查看
           </a>
-          <a-divider type="vertical" v-if="record.status == 3 || record.status == 2" v-hasPermi="['sys:resource:image:download']"/>
-          <a @click="download(record)" v-if="record.status == 3 || record.status == 2" v-hasPermi="['sys:resource:image:download']">
+          <a-divider type="vertical" v-if="record.status == 3 || record.status == 2" v-hasPermi="['resource:download']"/>
+          <a @click="download(record)" v-if="record.status == 3 || record.status == 2" v-hasPermi="['resource:download']">
             <a-icon type="download" />下载
           </a>
-          <a-divider type="vertical" v-if="record.status != 3 && record.status != 2" v-hasPermi="['sys:resource:image:diagram']"/>
-          <a @click="handleQuery2(record)" v-if="record.status != 3 && record.status != 2" v-hasPermi="['sys:resource:image:diagram']">
+          <a-divider type="vertical" v-if="record.status != 3 && record.status != 2" v-hasPermi="['resource:diagram']"/>
+          <a @click="handleQuery2(record)" v-if="record.status != 3 && record.status != 2" v-hasPermi="['resource:diagram']">
             <a-icon type="gold" />查看
           </a>
-          <a-divider type="vertical" v-hasPermi="['sys:resource:audio:auditLog']"/>
-          <a @click="handleQuery3(record)" v-hasPermi="['sys:resource:audio:auditLog']">
+          <a-divider type="vertical" v-hasPermi="['resource:audit-log']"/>
+          <a @click="handleQuery3(record)" v-hasPermi="['resource:audit-log']">
             <a-icon type="file" />审批日志
           </a>
-          <a-divider type="vertical" v-if="record.status == 3 || record.status == 2" v-hasPermi="['sys:resource:image:delete']"/>
-          <a @click="handleDelete(record)" v-if="record.status == 3 || record.status == 2" v-hasPermi="['sys:resource:image:delete']">
+          <a-divider type="vertical" v-if="record.status == 3 || record.status == 2" v-hasPermi="['resource:delete']"/>
+          <a @click="handleDelete(record)" v-if="record.status == 3 || record.status == 2" v-hasPermi="['resource:delete']">
             <a-icon type="delete" />删除
           </a>
         </span>
@@ -357,7 +357,7 @@
         const id = row.id
         this.$confirm({
           title: '确认删除所选中数据?',
-          content: '当前选中图片编号为' + id + '的数据',
+          content: '当前选中资源编号为' + id + '的数据',
           onOk () {
             return delImage(id)
               .then(() => {
