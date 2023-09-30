@@ -13,6 +13,11 @@
                   </a-form-item>
                 </a-col>
                 <a-col :md="8" :sm="24">
+                  <a-form-item label="创建时间">
+                    <a-range-picker style="width: 100%" v-model="dateRange" valueFormat="YYYY-MM-DD" format="YYYY-MM-DD" allow-clear/>
+                  </a-form-item>
+                </a-col>
+                <a-col :md="8" :sm="24">
                   <span class="table-page-search-submitButtons">
                     <a-button type="primary" @click="handleQuery"><a-icon type="search" />查询</a-button>
                     <a-button style="margin-left: 8px" @click="resetQuery"><a-icon type="redo" />重置</a-button>
@@ -106,6 +111,7 @@ import ResetPassword from './modules/ResetPassword'
 import CreateForm from './modules/CreateForm'
 import { tableMixin } from '@/store/table-mixin'
 import { mapGetters } from 'vuex'
+import moment from 'moment'
 export default {
   name: 'User',
   components: {
@@ -116,6 +122,7 @@ export default {
   data () {
     return {
       list: [],
+      dateRange: [],
       selectedRowKeys: [],
       selectedRows: [],
       // 非单个禁用
@@ -135,7 +142,9 @@ export default {
         pageNum: 1,
         pageSize: 10,
         username: undefined,
-        status: undefined
+        status: undefined,
+        startTime: '',
+        endTime: ''
       },
       columns: [
         {
@@ -212,6 +221,15 @@ export default {
     /** 查询用户列表 */
     getList () {
       this.loading = true
+      if (this.dateRange.length !== 2) {
+        const start = moment().subtract(1, 'years').format('yyyy-MM-DD')
+        const end = moment().format('yyyy-MM-DD')
+        this.dateRange = []
+        this.dateRange.push(start)
+        this.dateRange.push(end)
+      }
+      this.queryParam.startTime = this.dateRange[0] + ' 00:00:00'
+      this.queryParam.endTime = this.dateRange[1] + ' 23:59:59'
       listUser(this.queryParam).then(response => {
           this.list = response.data.records
           this.total = response.data.total - 0
@@ -230,7 +248,9 @@ export default {
         pageNum: 1,
         pageSize: 10,
         username: undefined,
-        status: undefined
+        status: undefined,
+        startTime: '',
+        endTime: ''
       }
       this.handleQuery()
     },

@@ -17,6 +17,13 @@
                 </a-select>
               </a-form-item>
             </a-col>
+          </a-row>
+          <a-row :gutter="48">
+            <a-col :md="8" :sm="24">
+              <a-form-item label="创建时间">
+                <a-range-picker style="width: 100%" v-model="dateRange" valueFormat="YYYY-MM-DD" format="YYYY-MM-DD" allow-clear/>
+              </a-form-item>
+            </a-col>
             <a-col :md="8" :sm="24">
               <span class="table-page-search-submitButtons">
                 <a-button type="primary" @click="handleQuery"><a-icon type="search" />查询</a-button>
@@ -95,7 +102,9 @@ export default {
         pageNum: 1,
         pageSize: 10,
         username: undefined,
-        status: undefined
+        status: undefined,
+        startTime: '',
+        endTime: ''
       },
       columns: [
         {
@@ -194,7 +203,16 @@ export default {
     /** 查询登录日志列表 */
     getList () {
       this.loading = true
-      listLogin(this.addDateRange(this.queryParam, this.dateRange)).then(response => {
+      if (this.dateRange.length !== 2) {
+        const start = moment().subtract(1, 'years').format('yyyy-MM-DD')
+        const end = moment().format('yyyy-MM-DD')
+        this.dateRange = []
+        this.dateRange.push(start)
+        this.dateRange.push(end)
+      }
+      this.queryParam.startTime = this.dateRange[0] + ' 00:00:00'
+      this.queryParam.endTime = this.dateRange[1] + ' 23:59:59'
+      listLogin(this.queryParam).then(response => {
           this.list = response.data.records
           this.total = response.data.total - 0
           this.loading = false
@@ -219,7 +237,9 @@ export default {
         pageNum: 1,
         pageSize: 10,
         username: undefined,
-        status: undefined
+        status: undefined,
+        startTime: '',
+        endTime: ''
       }
       this.handleQuery()
     },
