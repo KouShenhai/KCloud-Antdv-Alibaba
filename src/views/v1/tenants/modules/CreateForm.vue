@@ -166,6 +166,8 @@
                 )
                 this.open = false
                 this.$emit('ok')
+              }).catch(() => {
+                this.token()
               }).finally(() => {
                 this.submitLoading = false
               })

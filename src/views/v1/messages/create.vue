@@ -196,6 +196,8 @@ export default {
               3
             )
             this.back()
+          }).catch(() => {
+            this.token()
           }).finally(() => {
             this.submitLoading = false
           })
