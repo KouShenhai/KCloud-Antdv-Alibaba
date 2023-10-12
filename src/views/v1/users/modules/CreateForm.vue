@@ -173,6 +173,7 @@ export default {
       handleAdd () {
         this.reset()
         this.token()
+        this.superAdminDisable = false
         this.$emit('select-tree')
         listRoleOption().then(response => {
           const roles = []
