@@ -1,9 +1,9 @@
 import request from '@/utils/request'
 
 // 查询图片列表
-export function listImage (query) {
+export function listResource (query) {
   return request({
-    url: '/admin/sys/resource/image/api/query',
+    url: '/admin/v1/resource/list',
     method: 'post',
     data: query
   })
