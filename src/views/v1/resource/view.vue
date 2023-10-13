@@ -119,12 +119,12 @@
 </template>
 
 <script>
-  import { listImage, delImage, getImage, getAuditLog, syncIndex, getDiagram, download } from '@/api/v1/resource'
+  import { listResource, delImage, getImage, getAuditLog, syncIndex, getDiagram, download } from '@/api/v1/resource'
   import CreateForm from './modules/CreateForm'
   import { tableMixin } from '@/store/table-mixin'
   import moment from 'moment'
   export default {
-    name: 'ResourceImage',
+    name: 'Resource',
     components: {
       CreateForm
     },
@@ -146,7 +146,7 @@
           pageNum: 1,
           pageSize: 10,
           title: undefined,
-          code: 'image',
+          code: '',
           id: ''
         },
         columns: [
@@ -172,7 +172,7 @@
           {
             title: '操作',
             dataIndex: 'operation',
-            width: '30%',
+            width: '31%',
             scopedSlots: { customRender: 'operation' },
             align: 'center'
           }
@@ -283,7 +283,7 @@
       /** 查询字典列表 */
       getList () {
         this.loading = true
-        listImage(this.queryParam).then(response => {
+        listResource(this.queryParam).then(response => {
             this.list = response.data.records
             this.total = response.data.total - 0
             this.loading = false
@@ -326,10 +326,10 @@
           return '待审批'
         } else if (res.status === 1) {
           return '审批中'
-        } else if (res.status === 2) {
-          return '审批拒绝'
+        } else if (res.status === -1) {
+          return '驳回审批'
         }
-        return '审批通过'
+        return '通过审批'
       },
       /** 重置按钮操作 */
       resetQuery () {
@@ -337,7 +337,7 @@
           pageNum: 1,
           pageSize: 10,
           title: undefined,
-          code: 'image',
+          code: '',
           id: ''
         }
         this.handleQuery()
