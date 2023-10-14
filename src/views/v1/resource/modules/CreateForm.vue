@@ -11,10 +11,18 @@
         <a-input v-model="form.url" placeholder="请上传资源" style="display: none" />
         <a-upload name="file" @change="uploadFile" accept=".gif,.GIF,.jpg,.JPG,.jpeg,.JPEG,.png,.PNG,.bmp,.BMP,.webp,.WEBP" :before-upload="beforeUpload">
           <a-button :disabled="disabled">
-            上传图片
+            上传资源
           </a-button>
         </a-upload>
-        <img :src="form.url" v-show="display" width="100" height="100"/>
+        <img :src="form.url" v-show="display1" width="100" height="100"/>
+        <audio v-show="display2" loop="loop" :src="form.url" controls="controls"><object :data="form.url" ><embed :src="form.url" /></object></audio>
+        <video
+          v-show="display3"
+          :src="form.url"
+          loop="loop"
+          width="200"
+          height="100"
+          controls="controls"><source :src="form.url" type="video/mp4"><object :data="form.url" width="200" height="100"><embed :src="form.url" width="200" height="100" /></object></video>
       </a-form-model-item>
       <a-form-model-item label="备注" prop="remark">
         <a-input v-model="form.remark" placeholder="请输入备注" type="textarea" allow-clear />
@@ -35,8 +43,7 @@
 
 <script>
 
-  import { getImage, addImage, updateImage, uploadImage } from '@/api/v1/resource'
-  import { mapActions } from 'vuex'
+  import { getResourceById, addImage, updateResource, uploadResource } from '@/api/v1/resource'
 
   export default {
     name: 'CreateForm',
@@ -50,16 +57,18 @@
         tagInputValue: '',
         // 表单参数
         form: {
-          resourceId: undefined,
+          id: undefined,
           title: undefined,
           url: undefined,
-          code: 'image',
+          code: '',
           remark: undefined,
-          processInstanceId: undefined
+          instanceId: undefined
         },
         disabled: false,
         open: false,
-        display: false,
+        display1: false,
+        display2: false,
+        display3: false,
         rules: {
           title: [{ required: true, message: '标题不能为空', trigger: 'blur' }],
           remark: [{ required: true, message: '备注不能为空', trigger: 'blur' }]
@@ -87,12 +96,12 @@
       reset () {
         this.disabled = false
         this.form = {
-          resourceId: undefined,
+          id: undefined,
           title: undefined,
           url: undefined,
-          code: 'image',
+          code: '',
           remark: undefined,
-          processInstanceId: undefined
+          instanceId: undefined
         }
       },
       uploadFile (data) {
@@ -100,12 +109,12 @@
           this.disabled = true
           const formData = new FormData()
           formData.append('file', data.file)
-          uploadImage(formData).then(response => {
+          uploadResource(formData).then(response => {
             this.form.url = response.data.url
-            this.display = true
+            this.display1 = true
           })
         } else {
-          this.display = false
+          this.display1 = false
           this.disabled = false
           this.form.url = undefined
         }
@@ -123,16 +132,30 @@
       handleUpdate (row, ids) {
         this.reset()
         const id = row ? row.id : ids
-        getImage(id).then(response => {
-          this.form.resourceId = response.data.id
+        getResourceById(id).then(response => {
+          this.form.id = response.data.id
           this.form.url = response.data.url
           this.form.title = response.data.title
-          this.form.code = 'image'
-          this.display = true
-          this.form.processInstanceId = response.data.processInstanceId
+          this.form.code = response.data.code
+          if (this.form.code === 'image') {
+            this.display1 = true
+            this.display2 = false
+            this.display3 = false
+          }
+          if (this.form.code === 'audio') {
+            this.display1 = false
+            this.display2 = true
+            this.display3 = false
+          }
+          if (this.form.code === 'video') {
+            this.display1 = false
+            this.display2 = false
+            this.display3 = true
+          }
+          this.form.instanceId = response.data.instanceId
           this.form.remark = response.data.remark
           this.open = true
-          this.formTitle = '图片修改'
+          this.formTitle = '资源修改'
         })
       },
       /** 提交按钮 */
@@ -141,7 +164,7 @@
           if (valid) {
             this.submitLoading = true
             if (this.form.resourceId !== undefined) {
-              updateImage(this.form).then(response => {
+              updateResource(this.form).then(() => {
                 this.$message.success(
                   '修改成功',
                   3

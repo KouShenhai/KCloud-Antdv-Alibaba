@@ -27,9 +27,9 @@ export function addImage (data) {
 }
 
 // 修改图片
-export function updateImage (data) {
+export function updateResource (data) {
   return request({
-    url: '/admin/sys/resource/image/api/update',
+    url: '/admin/v1/resource',
     method: 'put',
     data: data
   })
@@ -43,10 +43,10 @@ export function delImage (id) {
   })
 }
 
-// 上传图片
-export function uploadImage (data) {
+// 上传资源
+export function uploadResource (data) {
   return request({
-    url: '/admin/sys/resource/image/api/upload',
+    url: '/admin/v1/resource/upload',
     method: 'post',
     data: data
   })
