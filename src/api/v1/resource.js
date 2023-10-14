@@ -1,6 +1,6 @@
 import request from '@/utils/request'
 
-// 查询图片列表
+// 查询资源列表
 export function listResource (query) {
   return request({
     url: '/admin/v1/resource/list',
@@ -9,15 +9,15 @@ export function listResource (query) {
   })
 }
 
-// 获取图片
-export function getImage (id) {
+// 根据ID获取资源
+export function getResourceById (id) {
   return request({
-    url: '/admin/sys/resource/image/api/detail?id=' + id,
+    url: '/admin/v1/resource/' + id,
     method: 'get'
   })
 }
 
-// 新增图片
+// 新增资源
 export function addImage (data) {
   return request({
     url: '/admin/sys/resource/image/api/insert',

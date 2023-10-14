@@ -16,6 +16,20 @@
               </a-form-item>
             </a-col>
             <a-col :md="8" :sm="24">
+              <a-form-item label="状态">
+                <a-select placeholder="审批状态" v-model="queryParam.status" style="width: 100%" allow-clear>
+                  <a-select-option v-for="(d, index) in statusOptions" :key="index" :value="d.value">{{ d.label }}</a-select-option>
+                </a-select>
+              </a-form-item>
+            </a-col>
+            <a-col :md="8" :sm="24">
+              <a-form-item label="类型">
+                <a-select placeholder="资源类型" v-model="queryParam.code" style="width: 100%" allow-clear>
+                  <a-select-option v-for="(d, index) in codeOptions" :key="index" :value="d.value">{{ d.label }}</a-select-option>
+                </a-select>
+              </a-form-item>
+            </a-col>
+            <a-col :md="8" :sm="24">
               <span class="table-page-search-submitButtons">
                 <a-button type="primary" @click="handleQuery"><a-icon type="search" />查询</a-button>
                 <a-button style="margin-left: 8px" @click="resetQuery"><a-icon type="redo" />重置</a-button>
@@ -49,32 +63,35 @@
         <span slot="status" slot-scope="text, record">
           {{ statusFormat(record) }}
         </span>
+        <span slot="code" slot-scope="text, record">
+          {{ codeFormat(record) }}
+        </span>
         <span slot="operation" slot-scope="text, record" >
           <a @click="$refs.createForm.handleAdd()" v-hasPermi="['resource:insert']">
             <a-icon type="plus" />新增
           </a>
-          <a-divider type="vertical" v-hasPermi="['resource:update']" v-if="record.status == 3 || record.status == 2"/>
-          <a v-hasPermi="['resource:update']" @click="$refs.createForm.handleUpdate(record, undefined)" v-if="record.status == 3 || record.status == 2">
+          <a-divider type="vertical" v-hasPermi="['resource:update']" v-if="record.status == 2 || record.status == -1"/>
+          <a v-hasPermi="['resource:update']" @click="$refs.createForm.handleUpdate(record, undefined)" v-if="record.status == 2 || record.status == -1">
             <a-icon type="edit" />修改
           </a>
-          <a-divider type="vertical" v-if="record.status == 3 || record.status == 2" v-hasPermi="['resource:detail']"/>
-          <a @click="handleQuery1(record)" v-if="record.status == 3 || record.status == 2" v-hasPermi="['resource:detail']">
+          <a-divider type="vertical" v-if="record.status == 2 || record.status == -1" v-hasPermi="['resource:detail']"/>
+          <a @click="handleQuery1(record)" v-if="record.status == 2 || record.status == -1" v-hasPermi="['resource:detail']">
             <a-icon type="eye" />查看
           </a>
-          <a-divider type="vertical" v-if="record.status == 3 || record.status == 2" v-hasPermi="['resource:download']"/>
-          <a @click="download(record)" v-if="record.status == 3 || record.status == 2" v-hasPermi="['resource:download']">
+          <a-divider type="vertical" v-if="record.status == 2 || record.status == -1" v-hasPermi="['resource:download']"/>
+          <a @click="download(record)" v-if="record.status == 2 || record.status == -1" v-hasPermi="['resource:download']">
             <a-icon type="download" />下载
           </a>
-          <a-divider type="vertical" v-if="record.status != 3 && record.status != 2" v-hasPermi="['resource:diagram']"/>
-          <a @click="handleQuery2(record)" v-if="record.status != 3 && record.status != 2" v-hasPermi="['resource:diagram']">
+          <a-divider type="vertical" v-if="record.status != 2 && record.status != -1" v-hasPermi="['resource:diagram']"/>
+          <a @click="handleQuery2(record)" v-if="record.status != 2 && record.status != -1" v-hasPermi="['resource:diagram']">
             <a-icon type="gold" />查看
           </a>
           <a-divider type="vertical" v-hasPermi="['resource:audit-log']"/>
           <a @click="handleQuery3(record)" v-hasPermi="['resource:audit-log']">
             <a-icon type="file" />审批日志
           </a>
-          <a-divider type="vertical" v-if="record.status == 3 || record.status == 2" v-hasPermi="['resource:delete']"/>
-          <a @click="handleDelete(record)" v-if="record.status == 3 || record.status == 2" v-hasPermi="['resource:delete']">
+          <a-divider type="vertical" v-if="record.status == 2 || record.status == -1" v-hasPermi="['resource:delete']"/>
+          <a @click="handleDelete(record)" v-if="record.status == 2 || record.status == -1" v-hasPermi="['resource:delete']">
             <a-icon type="delete" />删除
           </a>
         </span>
@@ -99,7 +116,7 @@
       @cancel="close"
       :footer="null">
       <template slot="title" >
-        <center><a-tag color="blue">图片</a-tag>{{ imageTitle }}</center>
+        <center><a-tag color="blue">{{resourceType}}</a-tag>{{ resourceTitle }}</center>
       </template>
       <a-table
         v-show="visible3"
@@ -113,13 +130,21 @@
         </span>
       </a-table>
       <img v-show="visible2" :src="diagramUrl" style="width: 100%;height: 100%">
-      <img v-show="visible1" :src="imageUrl" style="width: 100%;height: 100%">
+      <img v-show="visible1" :src="resourceUrl" style="width: 100%;height: 100%">
+      <audio v-show="visible4" loop="loop" :src="resourceUrl" controls="controls"><object :data="resourceUrl" ><embed :src="resourceUrl" /></object></audio>
+      <video
+        v-show="visible5"
+        :src="resourceUrl"
+        loop="loop"
+        width="200"
+        height="100"
+        controls="controls"><source :src="resourceUrl" type="video/mp4"><object :data="resourceUrl" width="200" height="100"><embed :src="resourceUrl" width="200" height="100" /></object></video>
     </a-modal>
   </page-header-wrapper>
 </template>
 
 <script>
-  import { listResource, delImage, getImage, getAuditLog, syncIndex, getDiagram, download } from '@/api/v1/resource'
+  import { listResource, delImage, getResourceById, getAuditLog, syncIndex, getDiagram, download } from '@/api/v1/resource'
   import CreateForm from './modules/CreateForm'
   import { tableMixin } from '@/store/table-mixin'
   import moment from 'moment'
@@ -132,12 +157,15 @@
     data () {
       return {
         diagramUrl: '',
-        imageTitle: '',
-        imageUrl: '',
+        resourceTitle: '',
+        resourceUrl: '',
+        resourceType: '',
         list: [],
         visible1: false,
         visible2: false,
         visible3: false,
+        visible4: false,
+        visible5: false,
         syncLoading: false,
         loading: false,
         total: 0,
@@ -147,8 +175,34 @@
           pageSize: 10,
           title: undefined,
           code: '',
+          status: '',
           id: ''
         },
+        codeOptions: [
+          {
+            label: '音频', value: 'audio'
+          },
+          {
+            label: '视频', value: 'video'
+          },
+          {
+            label: '图片', value: 'image'
+          }
+        ],
+        statusOptions: [
+          {
+            label: '待审批', value: 0
+          },
+          {
+            label: '审批中', value: 1
+          },
+          {
+            label: '驳回审批', value: -1
+          },
+          {
+            label: '通过审批', value: 2
+          }
+        ],
         columns: [
           {
             title: '标题',
@@ -161,6 +215,13 @@
             dataIndex: 'status',
             ellipsis: true,
             scopedSlots: { customRender: 'status' },
+            align: 'center'
+          },
+          {
+            title: '类型',
+            dataIndex: 'code',
+            ellipsis: true,
+            scopedSlots: { customRender: 'code' },
             align: 'center'
           },
           {
@@ -259,11 +320,13 @@
         })
       },
       handleQuery3 (row) {
-        this.imageTitle = '审批日志'
+        this.resourceTitle = '审批日志'
         this.visible = true
         this.visible2 = false
         this.visible1 = false
         this.visible3 = true
+        this.visible4 = false
+        this.visible5 = false
         const businessId = row.id
         getAuditLog(businessId).then(response => {
           this.list1 = response.data
@@ -273,12 +336,15 @@
       close () {
         this.visible = false
         this.diagramUrl = ''
-        this.imageUrl = ''
-        this.imageTitle = ''
+        this.resourceUrl = ''
+        this.resourceTitle = ''
+        this.resourceType = ''
         this.list1 = []
         this.visible3 = false
         this.visible1 = false
         this.visible2 = false
+        this.visible4 = false
+        this.visible5 = false
       },
       /** 查询字典列表 */
       getList () {
@@ -292,12 +358,31 @@
       },
       handleQuery1 (row) {
         this.visible = true
-        this.visible1 = true
         this.visible2 = false
+        this.visible3 = false
         const id = row.id
-        getImage(id).then(response => {
-          this.imageUrl = response.data.url
-          this.imageTitle = response.data.title
+        getResourceById(id).then(response => {
+          this.resourceUrl = response.data.url
+          this.resourceTitle = response.data.title
+          const code = response.data.code
+          if (code === 'video') {
+            this.resourceType = '视频'
+            this.visible1 = false
+            this.visible5 = true
+            this.visible4 = false
+          }
+          if (code === 'audio') {
+            this.resourceType = '音频'
+            this.visible1 = false
+            this.visible5 = false
+            this.visible4 = true
+          }
+          if (code === 'image') {
+            this.resourceType = '图片'
+            this.visible1 = true
+            this.visible5 = false
+            this.visible4 = false
+          }
         })
       },
       auditStatusFormat (res) {
@@ -311,7 +396,7 @@
         this.visible = true
         this.visible2 = true
         this.visible1 = false
-        this.imageTitle = '流程图'
+        this.resourceTitle = '查看流程'
         getDiagram(row.processInstanceId).then(res => {
           this.diagramUrl = 'data:image/png;base64,' + res.data
         })
@@ -331,6 +416,16 @@
         }
         return '通过审批'
       },
+      codeFormat (res) {
+        if (res.code === 'audio') {
+          return '音频'
+        } else if (res.code === 'video') {
+          return '视频'
+        } else if (res.code === 'image') {
+          return '图片'
+        }
+        return '未知'
+      },
       /** 重置按钮操作 */
       resetQuery () {
         this.queryParam = {
@@ -338,6 +433,7 @@
           pageSize: 10,
           title: undefined,
           code: '',
+          status: '',
           id: ''
         }
         this.handleQuery()
