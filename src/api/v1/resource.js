@@ -17,12 +17,28 @@ export function getResourceById (id) {
   })
 }
 
+export function getResourceDetailTask (id) {
+  return request({
+    url: '/admin/v1/resource/' + id + '/detail-task',
+    method: 'get'
+  })
+}
+
 // 新增资源
 export function addImage (data) {
   return request({
     url: '/admin/sys/resource/image/api/insert',
     method: 'post',
     data: data
+  })
+}
+
+// 资源任务分页
+export function listResourceTask (query) {
+  return request({
+    url: '/admin/v1/resource/task-list',
+    method: 'post',
+    data: query
   })
 }
 
