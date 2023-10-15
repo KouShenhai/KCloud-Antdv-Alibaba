@@ -5,26 +5,29 @@
     </a-divider>
     <a-form-model ref="form2">
       <a-form-model-item label="编号" prop="id">
-        {{form2.id}}
+        {{ form2.id}}
       </a-form-model-item>
       <a-form-model-item label="类型" prop="code">
-        <span v-show="form2.code == 'image'">图片</span>
-        <span v-show="form2.code == 'video'">视频</span>
-        <span v-show="form2.code == 'audio'">音频</span>
+        <span v-show="form2.code === 'image'">图片</span>
+        <span v-show="form2.code === 'video'">视频</span>
+        <span v-show="form2.code === 'audio'">音频</span>
       </a-form-model-item>
       <a-form-model-item label="标题" prop="title">
-        {{form2.title}}
+        {{ form2.title}}
+      </a-form-model-item>
+      <a-form-model-item label="备注" prop="remark">
+        <a-input v-model="form2.remark" disabled="disabled" type="textarea" allow-clear />
       </a-form-model-item>
       <a-form-model-item label="资源" prop="url">
-        <audio v-show="form2.code == 'audio'" loop='loop' :src="form2.url" controls='controls'><object :data="form2.url" ><embed :src="form2.url" /></object></audio>
-        <img v-show="form2.code == 'image'" :src="form2.url" width="100" height="100"/>
+        <audio v-show="form2.code === 'audio'" loop='loop' :src="form2.url" controls='controls'><object :data="form2.url" ><embed :src="form2.url" /></object></audio>
+        <img v-show="form2.code === 'image'" :src="form2.url" width="100" height="100" alt="暂无图片"/>
         <video
-             v-show="form2.code == 'video'"
-             :src='form2.url'
-             loop='loop'
-             width='250'
-             height='100'
-             controls='controls'><source :src='form2.url' type='video/mp4'><object :data='form2.url' width='200' height='100'><embed :src='form2.url' width='200' height='100' /></object></video>
+          v-show="form2.code === 'video'"
+          :src="form2.url"
+          loop="loop"
+          width="250"
+          height="100"
+          controls="controls"><source :src='form2.url' type="video/mp4"><object :data="form2.url" width="200" height="100"><embed :src="form2.url" width="200" height="100" /></object></video>
       </a-form-model-item>
     </a-form-model>
     <a-form-model ref="form" :model="form" :rules="rules">
@@ -46,10 +49,10 @@
 </template>
 
 <script>
-
-  import { auditTask, detailTask } from '@/api/workflow/task'
+  import { getResourceDetailTask } from '@/api/v1/resource'
+  import { auditTask } from '@/api/v1/task'
 export default {
-  name: 'CreateForm',
+  name: 'TaskForm',
   props: {
 
   },
@@ -103,12 +106,13 @@ export default {
       this.reset()
     },
     getDetail (id) {
-      detailTask(id).then(response => {
+      getResourceDetailTask(id).then(response => {
         this.form2.title = response.data.title
         this.form2.code = response.data.code
         this.form2.id = response.data.id
         this.form2.remark = response.data.remark
         this.form2.url = response.data.url
+        this.form2.id = id
       })
     },
     // 表单重置
@@ -135,10 +139,10 @@ export default {
      /** 新增按钮操作 */
     handleAudit (row) {
       this.form.taskId = row.taskId
-      this.form.instanceId = row.processInstanceId
+      this.form.instanceId = row.instanceId
       this.form.taskName = row.taskName
       this.form.businessKey = row.businessKey
-      this.form.instanceName = row.processInstanceName
+      this.form.instanceName = row.instanceName
       this.getDetail(this.form.businessKey)
       this.open = true
       this.formTitle = '审批'

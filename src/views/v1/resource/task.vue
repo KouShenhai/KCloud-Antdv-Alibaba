@@ -3,11 +3,11 @@
     <a-card :bordered="false">
       <!-- 条件搜索 -->
       <div class="table-page-search-wrapper">
-        <a-form layout="inline" v-hasPermi="['workflow:task:resource:query']">
+        <a-form layout="inline" v-hasPermi="['resource:task-list']">
           <a-row :gutter="48">
             <a-col :md="8" :sm="24">
               <a-form-item label="流程名称">
-                <a-input v-model="queryParam.processName" placeholder="请输入" allow-clear/>
+                <a-input v-model="queryParam.name" placeholder="请输入" allow-clear/>
               </a-form-item>
             </a-col>
             <a-col :md="8" :sm="24">
@@ -53,22 +53,22 @@
         :pagination="false"
         :bordered="tableBordered">
         <span slot="operation" slot-scope="text, record">
-          <a @click="$refs.createForm.handleAudit(record)" v-hasPermi="['workflow:task:resource:audit']">
+          <a @click="$refs.createForm.handleAudit(record)" v-hasPermi="['resource:audit-task']">
             <a-icon type="audit"/>
             审批
           </a>
-          <a-divider type="vertical" v-hasPermi="['workflow:task:resource:resolve']"/>
-          <a @click="resolveProcess(record)" v-hasPermi="['workflow:task:resource:resolve']">
+          <a-divider type="vertical" v-hasPermi="['resource:resolve-task']"/>
+          <a @click="resolveProcess(record)" v-hasPermi="['resource:resolve-task']">
             <a-icon type="user-delete" />
             处理
           </a>
-          <a-divider type="vertical" v-hasPermi="['workflow:task:resource:transfer']"/>
-          <a @click="handleProcess(record,0)" v-hasPermi="['workflow:task:resource:transfer']">
+          <a-divider type="vertical" v-hasPermi="['resource:transfer-task']"/>
+          <a @click="handleProcess(record,0)" v-hasPermi="['resource:transfer-task']">
             <a-icon type="user" />
             转办
           </a>
-          <a-divider type="vertical" v-hasPermi="['workflow:task:resource:delegate']"/>
-          <a @click="handleProcess(record,1)" v-hasPermi="['workflow:task:resource:delegate']">
+          <a-divider type="vertical" v-hasPermi="['resource:delegate-task']"/>
+          <a @click="handleProcess(record,1)" v-hasPermi="['resource:delegate-task']">
             <a-icon type="user-add" />
             委派
           </a>
@@ -91,14 +91,15 @@
 </template>
 
 <script>
-import { pageTask, delegateTask, transferTask, resolveTask } from '@/api/workflow/task'
+import { listResourceTask } from '@/api/v1/resource'
+import { delegateTask, transferTask, resolveTask } from '@/api/v1/task'
 import { listUserOption } from '@/api/v1/user'
 import { tableMixin } from '@/store/table-mixin'
 import { USER_ID } from '@/store/mutation-types'
-import CreateForm from './modules/CreateForm'
+import CreateForm from './modules/TaskForm'
 import storage from 'store'
 export default {
-  name: 'Process',
+  name: 'Task',
   components: {
     CreateForm
   },
@@ -124,7 +125,7 @@ export default {
       queryParam: {
         pageNum: 1,
         pageSize: 10,
-        processName: ''
+        name: ''
       },
       columns: [
         {
@@ -135,7 +136,7 @@ export default {
         },
         {
           title: '流程名称',
-          dataIndex: 'processName',
+          dataIndex: 'name',
           align: 'center',
           ellipsis: true
         },
@@ -147,19 +148,19 @@ export default {
         },
         {
           title: '实例名称',
-          dataIndex: 'processInstanceName',
+          dataIndex: 'instanceName',
           align: 'center',
           ellipsis: true
         },
         {
           title: '任务执行人',
-          dataIndex: 'assigneeName',
+          dataIndex: 'username',
           align: 'center',
           ellipsis: true
         },
         {
           title: '创建时间',
-          dataIndex: 'createTime',
+          dataIndex: 'createDate',
           align: 'center',
           width: '14%'
         },
@@ -209,7 +210,7 @@ export default {
     /** 查询流程定义列表 */
     getList () {
       this.loading = true
-      pageTask(this.queryParam).then(response => {
+      listResourceTask(this.queryParam).then(response => {
           this.list = response.data.records
           this.total = response.data.total - 0
           this.loading = false
@@ -289,7 +290,7 @@ export default {
       this.queryParam = {
         pageNum: 1,
         pageSize: 10,
-        processName: ''
+        name: ''
       }
       this.handleQuery()
     },
