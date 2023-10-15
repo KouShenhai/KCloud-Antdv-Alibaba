@@ -163,8 +163,9 @@
         this.$refs.form.validate(valid => {
           if (valid) {
             this.submitLoading = true
-            if (this.form.resourceId !== undefined) {
-              updateResource(this.form).then(() => {
+            if (this.form.id !== undefined) {
+              const data = { resourceCO: this.form }
+              updateResource(data).then(() => {
                 this.$message.success(
                   '修改成功',
                   3
