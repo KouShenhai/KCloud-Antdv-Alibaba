@@ -24,6 +24,15 @@ export function getResourceDetailTask (id) {
   })
 }
 
+// 审批
+export function auditResourceTask (data) {
+  return request({
+    url: '/admin/v1/resource/audit-task',
+    method: 'post',
+    data: data
+  })
+}
+
 // 新增资源
 export function addImage (data) {
   return request({

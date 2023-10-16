@@ -49,7 +49,7 @@
 </template>
 
 <script>
-  import { getResourceDetailTask } from '@/api/v1/resource'
+  import { getResourceDetailTask, auditResourceTask } from '@/api/v1/resource'
   import { auditTask } from '@/api/v1/task'
 export default {
   name: 'TaskForm',
@@ -153,7 +153,7 @@ export default {
         if (valid) {
           this.submitLoading = true
           this.form.values.auditStatus = auditStatus
-          auditTask(this.form).then(() => {
+          auditResourceTask(this.form).then(() => {
             this.$message.success(
               '审批成功',
               3
