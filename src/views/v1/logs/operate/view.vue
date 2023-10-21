@@ -101,7 +101,8 @@ export default {
         {
           title: '模块名称',
           dataIndex: 'moduleName',
-          align: 'center'
+          align: 'center',
+          ellipsis: true
         },
         {
           title: '操作名称',
