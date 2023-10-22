@@ -10,11 +10,15 @@ export function listDefinition (query) {
 }
 
 // 新增
-export function insertDefinition (data) {
+export function insertDefinition (data, token) {
   return request({
     url: '/admin/v1/definitions',
     method: 'post',
-    data: data
+    data: data,
+    headers: {
+      'Content-Type': 'application/json;charset=UTF-8',
+      'request-id': token
+    }
   })
 }
 

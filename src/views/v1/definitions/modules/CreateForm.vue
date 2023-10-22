@@ -5,18 +5,18 @@
     </a-divider>
     <a-form-model ref="form" :model="form">
       <a-form-model-item label="流程图" prop="file">
-      <a-upload
-                name="file"
-                :remove="handleRemove"
-                :multiple="false"
-                :file-list="fileList"
-                @change="uploadFile"
-                accept=".xml"
-                :before-upload="beforeUpload">
-        <a-button :disabled="disabled">
-          上传流程图
-        </a-button>
-      </a-upload>
+        <a-upload
+          name="file"
+          :remove="handleRemove"
+          :multiple="false"
+          :file-list="fileList"
+          @change="uploadFile"
+          accept=".xml"
+          :before-upload="beforeUpload">
+          <a-button :disabled="disabled">
+            上传流程图
+          </a-button>
+        </a-upload>
       </a-form-model-item>
       <div class="bottom-control">
         <a-space>
@@ -35,6 +35,7 @@
 <script>
 
 import { insertDefinition } from '@/api/v1/definition'
+import { getToken } from '@/api/v1/token'
 export default {
   name: 'CreateForm',
   props: {
@@ -44,6 +45,7 @@ export default {
   },
   data () {
     return {
+      accessToken: '',
       fileList: [],
       submitLoading: false,
       formTitle: '',
@@ -66,6 +68,12 @@ export default {
   watch: {
   },
   methods: {
+    // eslint-disable-next-line vue/no-dupe-keys
+    token () {
+      getToken().then(res => {
+        this.accessToken = res.data.token
+      })
+    },
     onClose () {
       this.open = false
     },
@@ -82,6 +90,7 @@ export default {
      /** 新增按钮操作 */
     handleAdd () {
       this.reset()
+      this.token()
       this.open = true
       this.formTitle = '流程新增'
     },
@@ -96,11 +105,7 @@ export default {
       this.fileList = newFileList
     },
     uploadFile (data) {
-      if (data.fileList.length > 0) {
-        this.disabled = true
-      } else {
-        this.disabled = false
-      }
+      this.disabled = data.fileList.length > 0
       this.fileData = data.file
     },
     /** 提交按钮 */
@@ -111,13 +116,15 @@ export default {
             this.submitLoading = true
             const formData = new FormData()
             formData.append('file', this.fileData)
-            insertDefinition(formData).then(() => {
+            insertDefinition(formData, this.accessToken).then(() => {
               this.$message.success(
                 '新增成功',
                 3
               )
               this.open = false
               this.$emit('ok')
+            }).catch(() => {
+              this.token()
             }).finally(() => {
               this.submitLoading = false
               this.reset()

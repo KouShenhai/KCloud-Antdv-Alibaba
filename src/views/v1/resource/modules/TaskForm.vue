@@ -51,6 +51,7 @@
 <script>
   import { getResourceDetailTask, auditResourceTask } from '@/api/v1/resource'
   import { auditTask } from '@/api/v1/task'
+  import {getToken} from "@/api/v1/token";
 export default {
   name: 'TaskForm',
   props: {
@@ -60,6 +61,7 @@ export default {
   },
   data () {
     return {
+      accessToken: '',
       submitLoading: false,
       formTitle: '',
       form2: {
@@ -97,6 +99,11 @@ export default {
   watch: {
   },
   methods: {
+    token () {
+      getToken().then(res => {
+        this.accessToken = res.data.token
+      })
+    },
     onClose () {
       this.open = false
     },
@@ -144,6 +151,7 @@ export default {
       this.form.businessKey = row.businessKey
       this.form.instanceName = row.instanceName
       this.getDetail(this.form.businessKey)
+      this.token()
       this.open = true
       this.formTitle = '审批'
     },
@@ -153,7 +161,7 @@ export default {
         if (valid) {
           this.submitLoading = true
           this.form.values.auditStatus = auditStatus
-          auditResourceTask(this.form).then(() => {
+          auditResourceTask(this.form, this.accessToken).then(() => {
             this.$message.success(
               '审批成功',
               3
@@ -161,6 +169,8 @@ export default {
             this.open = false
             this.$emit('ok')
             this.reset()
+          }).catch(() => {
+            this.token()
           }).finally(() => {
             this.submitLoading = false
           })
