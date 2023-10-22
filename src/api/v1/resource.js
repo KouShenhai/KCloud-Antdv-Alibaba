@@ -25,11 +25,15 @@ export function getResourceDetailTask (id) {
 }
 
 // 审批
-export function auditResourceTask (data) {
+export function auditResourceTask (data, token) {
   return request({
     url: '/admin/v1/resource/audit-task',
     method: 'post',
-    data: data
+    data: data,
+    headers: {
+      'Content-Type': 'application/json;charset=UTF-8',
+      'request-id': token
+    }
   })
 }
 
