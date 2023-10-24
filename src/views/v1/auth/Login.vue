@@ -182,7 +182,7 @@ export default {
           const captcha = this.form.captcha
           const tenantId = this.form.tenantId
           // 0 密码 1 单点
-          const params = { username: username, password: password, captcha: captcha, uuid: uuid, grant_type: 'password', tenantId: tenantId, auth_type: 0 }
+          const params = { username: username, password: password, captcha: captcha, uuid: uuid, grant_type: 'password', tenant_id: tenantId, auth_type: 0 }
           this.Login(params)
             .then(() => this.loginSuccess())
             .catch(() => this.requestFailed())
