@@ -140,6 +140,7 @@ export default {
       if (typeof WebSocket === 'undefined') {
         console.log('您的浏览器不支持WebSocket')
       } else {
+        // const url = `wss://192.168.30.130:5555` + socketApi.URI + '?Authorization=Bearer ' + storage.get(ACCESS_TOKEN)
         const url = `wss://127.0.0.1:5555` + socketApi.URI + '?Authorization=Bearer ' + storage.get(ACCESS_TOKEN)
         // 打开一个websocket
         websocket = new WebSocket(url)
