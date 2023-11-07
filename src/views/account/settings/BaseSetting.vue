@@ -44,7 +44,7 @@
 
 <script>
 import { updateUserProfile, uploadAvatar } from '@/api/v1/user'
-import { mapActions, mapGetters } from 'vuex'
+import { mapGetters } from 'vuex'
 import { info } from '@/api/v1/login'
 export default {
   name: 'BaseSettings',
