@@ -9,6 +9,7 @@ import errorCode from '@/utils/errorCode'
 import qs from 'qs'
 import { blobValidate } from '@/utils/laokou'
 import { saveAs } from 'file-saver'
+import moment from 'moment'
 
 // 是否显示重新登录
 let isReloginShow
@@ -50,6 +51,11 @@ request.interceptors.request.use(config => {
     config.headers['User-Id'] = userId
     config.headers['User-Name'] = userName
     config.headers['Tenant-Id'] = tenantId
+  }
+  if (userId) {
+    config.headers['Trace-Id'] = userId + moment().valueOf()
+  } else {
+    config.headers['Trace-Id'] = '' + moment().valueOf()
   }
   // 处理params参数
   if (config.params) {

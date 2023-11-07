@@ -50,8 +50,7 @@
 
 <script>
   import { getResourceDetailTask, auditResourceTask } from '@/api/v1/resource'
-  import { auditTask } from '@/api/v1/task'
-  import {getToken} from "@/api/v1/token";
+  import { getToken } from '@/api/v1/token'
 export default {
   name: 'TaskForm',
   props: {
