@@ -103,6 +103,9 @@ const user = {
           commit('SET_PERMISSIONS', [])
           storage.remove(ACCESS_TOKEN)
           storage.remove(AUTH_TYPE)
+          storage.remove(USER_ID)
+          storage.remove(USER_NAME)
+          storage.remove(TENANT_ID)
         })
       })
     }
