@@ -146,9 +146,11 @@ export default {
         if (isProd) {
           url = `wss://vue.laokou.org/laokou` + socketApi.URI + '?Authorization=Bearer ' + storage.get(ACCESS_TOKEN)
         } else {
-          url = `wss://127.0.0.1:5555` + socketApi.URI + '?Authorization=Bearer ' + storage.get(ACCESS_TOKEN)
+          // test 使用 wss
+          // url = `wss://127.0.0.1:5555` + socketApi.URI + '?Authorization=Bearer ' + storage.get(ACCESS_TOKEN)
+          // dev 使用 ws
+          url = `ws://127.0.0.1:5555` + socketApi.URI + '?Authorization=Bearer ' + storage.get(ACCESS_TOKEN)
         }
-        // const url = `wss://127.0.0.1:5555` + socketApi.URI + '?Authorization=Bearer ' + storage.get(ACCESS_TOKEN)
         // 打开一个websocket
         websocket = new WebSocket(url)
         // 建立连接
