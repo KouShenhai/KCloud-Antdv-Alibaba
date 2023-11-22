@@ -64,6 +64,14 @@ export function updateResource (data) {
   })
 }
 
+export function searchResource (query) {
+  return request({
+    url: '/admin/v1/resource/search',
+    method: 'post',
+    data: query
+  })
+}
+
 // 删除图片
 export function delImage (id) {
   return request({
