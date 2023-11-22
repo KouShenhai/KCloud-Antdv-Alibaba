@@ -89,10 +89,10 @@ export function getAuditLog (businessId) {
   })
 }
 
-// 同步图片数据
-export function syncIndex () {
+// 同步资源
+export function syncResourceIndex () {
   return request({
-    url: '/admin/sys/resource/image/api/syncIndex',
+    url: '/admin/v1/resource/sync',
     method: 'post'
   })
 }

@@ -144,7 +144,7 @@
 </template>
 
 <script>
-  import { listResource, delImage, getResourceById, getAuditLog, syncIndex, getDiagram, download } from '@/api/v1/resource'
+  import { listResource, delImage, getResourceById, getAuditLog, syncResourceIndex, getDiagram, download } from '@/api/v1/resource'
   import CreateForm from './modules/CreateForm'
   import { tableMixin } from '@/store/table-mixin'
   import moment from 'moment'
@@ -311,7 +311,7 @@
       syncIndex () {
         const that = this
         that.syncLoading = true
-        syncIndex().then(() => {
+        syncResourceIndex().then(() => {
           that.syncLoading = false
           that.$message.success(
             '索引同步成功',
