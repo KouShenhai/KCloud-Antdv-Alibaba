@@ -6,7 +6,7 @@
       </a-input>
     </div>
     <br/>
-    <div v-if="searchWord != ''">
+    <div v-if="searchWord !== ''">
       <span style="font-size: 14px;font-weight: bolder;">搜索 <span style="color:red;">{{ searchWord }}</span> 找到 <span style="color:red;">{{ total }}</span> 个相关内容</span>
     </div><br/>
     <div v-for="(item, i) in list" :key="i">
