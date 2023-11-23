@@ -80,7 +80,7 @@
           this.form.queryStringList = []
           this.form.queryStringList.push({ field: 'remark', value: this.keyword })
           this.form.queryStringList.push({ field: 'title', value: this.keyword })
-          const data = { searchIndex: this.form }
+          const data = { search: this.form }
           searchResource(data).then(response => {
               this.searchWord = keyword
               this.list = response.data == null ? [] : response.data.records
