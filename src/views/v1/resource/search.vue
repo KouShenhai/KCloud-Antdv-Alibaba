@@ -43,7 +43,7 @@
             pageNum: 1,
             pageSize: 10,
             needPage: true,
-            orSearchList: [],
+            orQueryList: [],
             highlightFieldList: ['title', 'remark'],
             queryStringList: [],
             indexNames: ['laokou_resource']
