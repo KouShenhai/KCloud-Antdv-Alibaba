@@ -86,6 +86,7 @@
 import { mapActions } from 'vuex'
 import { timeFix } from '@/utils/util'
 import { captcha, tenant, secret } from '@/api/v1/login'
+import { getTenantIdByDomainName } from '@/api/v1/tenant'
 import { JSEncrypt } from 'jsencrypt'
 export default {
   name: 'Login',
@@ -118,10 +119,16 @@ export default {
     this.getSsoUri()
     this.getPublicKey()
     this.getTenant()
+    this.getTenantId()
   },
   mounted () {
   },
   methods: {
+    getTenantId () {
+      getTenantIdByDomainName().then(res => {
+        console.log(res)
+      })
+    },
     checkLogin () {
       let queryAttr = decodeURIComponent(window.location.search)
       this.uri = window.location.protocol + '//127.0.0.1:' + window.location.port
