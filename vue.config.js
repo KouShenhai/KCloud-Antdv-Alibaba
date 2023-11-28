@@ -104,6 +104,7 @@ const vueConfig = {
   },
 
   devServer: {
+    disableHostCheck: true,
     // development server port 8000
     port: 8000,
     proxy: {

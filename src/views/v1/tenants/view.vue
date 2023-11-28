@@ -101,6 +101,11 @@ export default {
           align: 'center'
         },
         {
+          title: '租户标签',
+          dataIndex: 'label',
+          align: 'center'
+        },
+        {
           title: '操作',
           dataIndex: 'operation',
           scopedSlots: { customRender: 'operation' },

@@ -126,7 +126,7 @@ export default {
   methods: {
     getTenantId () {
       getTenantIdByDomainName().then(res => {
-        console.log(res)
+        this.form.tenantId = res.data
       })
     },
     checkLogin () {
