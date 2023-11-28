@@ -39,9 +39,17 @@ export function updateTenant (data) {
 }
 
 // 删除租户
-export function delelteTenantById (id) {
+export function deleteTenantById (id) {
   return request({
     url: '/admin/v1/tenants/' + id,
     method: 'delete'
+  })
+}
+
+// 解析域名查看ID
+export function getTenantIdByDomainName () {
+  return request({
+    url: '/admin/v1/tenants/id',
+    method: 'get'
   })
 }
