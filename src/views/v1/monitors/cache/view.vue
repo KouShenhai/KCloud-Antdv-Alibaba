@@ -63,7 +63,7 @@
 
 <script>
 
-import { getCache } from '@/api/monitor/cache'
+import { getCache } from '@/api/v1/cache'
 import * as echarts from 'echarts'
 
 export default {

@@ -116,7 +116,7 @@
       @cancel="close"
       :footer="null">
       <template slot="title" >
-        <center><a-tag color="blue">{{resourceType}}</a-tag>{{ resourceTitle }}</center>
+        <center><a-tag color="blue">{{ resourceType }}</a-tag>{{ resourceTitle }}</center>
       </template>
       <a-table
         v-show="visible3"
