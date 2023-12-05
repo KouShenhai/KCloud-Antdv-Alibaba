@@ -68,7 +68,7 @@
 </template>
 
 <script>
-import { listOnline, killOnline } from '@/api/monitor/online'
+import { listOnline, killOnline } from '@/api/v1/online'
 import { tableMixin } from '@/store/table-mixin'
 export default {
   name: 'Online',

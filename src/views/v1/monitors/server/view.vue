@@ -174,7 +174,7 @@
 
 <script>
 
-import { getServer } from '@/api/monitor/server'
+import { getServer } from '@/api/v1/server'
 import { tableMixin } from '@/store/table-mixin'
 
 export default {

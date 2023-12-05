@@ -24,7 +24,7 @@ export function insertTenant (data, token) {
     data: data,
     headers: {
       'Content-Type': 'application/json;charset=UTF-8',
-      'request-id': token
+      'Request-Id': token
     }
   })
 }
