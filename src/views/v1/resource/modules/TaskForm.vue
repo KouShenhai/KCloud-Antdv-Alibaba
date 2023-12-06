@@ -5,7 +5,7 @@
     </a-divider>
     <a-form-model ref="form2">
       <a-form-model-item label="编号" prop="id">
-        {{ form2.id}}
+        {{ form2.id }}
       </a-form-model-item>
       <a-form-model-item label="类型" prop="code">
         <span v-show="form2.code === 'image'">图片</span>
@@ -13,7 +13,7 @@
         <span v-show="form2.code === 'audio'">音频</span>
       </a-form-model-item>
       <a-form-model-item label="标题" prop="title">
-        {{ form2.title}}
+        {{ form2.title }}
       </a-form-model-item>
       <a-form-model-item label="备注" prop="remark">
         <a-input v-model="form2.remark" disabled="disabled" type="textarea" allow-clear />
@@ -167,11 +167,11 @@ export default {
             )
             this.open = false
             this.$emit('ok')
-            this.reset()
           }).catch(() => {
             this.token()
           }).finally(() => {
             this.submitLoading = false
+            this.reset()
           })
         } else {
           return false

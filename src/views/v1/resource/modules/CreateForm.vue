@@ -14,7 +14,7 @@
             上传资源
           </a-button>
         </a-upload>
-        <img :src="form.url" v-show="display1" width="100" height="100"/>
+        <img :src="form.url" v-show="display1" width="100" height="100" alt="暂无图片"/>
         <audio v-show="display2" loop="loop" :src="form.url" controls="controls"><object :data="form.url" ><embed :src="form.url" /></object></audio>
         <video
           v-show="display3"
@@ -44,13 +44,14 @@
 <script>
 
   import { getResourceById, addImage, updateResource, uploadResource } from '@/api/v1/resource'
-
+  import { getToken } from '@/api/v1/token'
   export default {
     name: 'CreateForm',
     components: {
     },
     data () {
       return {
+        accessToken: '',
         submitLoading: false,
         formTitle: '',
         tagInputVisible: false,
@@ -84,6 +85,11 @@
     watch: {
     },
     methods: {
+      token () {
+        getToken().then(res => {
+          this.accessToken = res.data.token
+        })
+      },
       onClose () {
         this.open = false
       },
@@ -131,6 +137,7 @@
       /** 修改按钮操作 */
       handleUpdate (row, ids) {
         this.reset()
+        this.token()
         const id = row ? row.id : ids
         getResourceById(id).then(response => {
           this.form.id = response.data.id
@@ -165,18 +172,20 @@
             this.submitLoading = true
             if (this.form.id !== undefined) {
               const data = { resourceCO: this.form }
-              updateResource(data).then(() => {
+              updateResource(data, this.accessToken).then(() => {
                 this.$message.success(
                   '修改成功',
                   3
                 )
                 this.open = false
                 this.$emit('ok')
+              }).catch(() => {
+                this.token()
               }).finally(() => {
                 this.submitLoading = false
               })
             } else {
-              addImage(this.form).then(response => {
+              addImage(this.form).then(() => {
                 this.$message.success(
                   '新增成功',
                   3
