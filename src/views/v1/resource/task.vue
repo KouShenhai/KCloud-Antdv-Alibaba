@@ -34,7 +34,7 @@
         <a-form-model ref="form" :model="form" :rules="rules">
           <a-form-model-item label="选择用户" prop="assignee">
             <a-select
-              v-model="form.assignee"
+              v-model="form.userId"
               placeholder="请选择">
               <a-select-option v-for="(d, index) in userList" :key="index" :value="d.value">
                 {{ d.label }}
@@ -91,13 +91,13 @@
 </template>
 
 <script>
-import { listResourceTask } from '@/api/v1/resource'
-import { delegateTask, transferTask, resolveTask } from '@/api/v1/task'
+import { listResourceTask, delegateResourceTask, resolveResourceTask, transferResourceTask } from '@/api/v1/resource'
 import { listUserOption } from '@/api/v1/user'
 import { tableMixin } from '@/store/table-mixin'
 import { USER_ID } from '@/store/mutation-types'
 import CreateForm from './modules/TaskForm'
 import storage from 'store'
+import { getToken } from '@/api/v1/token'
 export default {
   name: 'Task',
   components: {
@@ -106,6 +106,7 @@ export default {
   mixins: [tableMixin],
   data () {
     return {
+      accessToken: '',
       list: [],
       loading: false,
       total: 0,
@@ -114,7 +115,6 @@ export default {
       open: false,
       form: {
         userId: '',
-        assignee: '',
         taskId: '',
         instanceId: '',
         businessKey: '',
@@ -173,7 +173,7 @@ export default {
         }
       ],
       rules: {
-        assignee: [
+        userId: [
           { required: true, message: '请选择用户', trigger: 'blur' }
         ]
       }
@@ -186,23 +186,34 @@ export default {
     this.getUserList()
   },
   computed: {
+
+  },
+  mounted () {
+    this.token()
   },
   watch: {
   },
   methods: {
+    token () {
+      getToken().then(res => {
+        this.accessToken = res.data.token
+      })
+    },
     resolveProcess (row) {
       this.loading = true
       this.reset()
-      this.form.businessKey = row.businessKey
-      this.form.instanceId = row.processInstanceId
-      this.form.instanceName = row.processInstanceName
       this.form.taskId = row.taskId
-      resolveTask(this.form).then(() => {
+      this.form.instanceId = row.instanceId
+      this.form.businessKey = row.businessKey
+      this.form.instanceName = row.instanceName
+      resolveResourceTask(this.form, this.accessToken).then(() => {
         this.$message.success(
           '处理成功',
           3
         )
         this.getList()
+      }).catch(() => {
+        this.token()
       }).finally(() => {
         this.loading = false
       })
@@ -233,20 +244,24 @@ export default {
           const type = this.type
           this.submitLoading = true
           if (type === 0) {
-            transferTask(this.form).then(() => {
+            transferResourceTask(this.form, this.accessToken).then(() => {
               this.$message.success(
                 '转办成功',
                 3
               )
               this.getList()
+            }).catch(() => {
+              this.token()
             })
           } else {
-            delegateTask(this.form).then(() => {
+            delegateResourceTask(this.form, this.accessToken).then(() => {
               this.$message.success(
                 '委派成功',
                 3
               )
               this.getList()
+            }).catch(() => {
+              this.token()
             })
           }
           this.open = false
@@ -260,8 +275,8 @@ export default {
       this.reset()
       this.type = type
       this.form.businessKey = row.businessKey
-      this.form.instanceId = row.processInstanceId
-      this.form.instanceName = row.processInstanceName
+      this.form.instanceId = row.instanceId
+      this.form.instanceName = row.instanceName
       this.form.taskId = row.taskId
       this.title = type === 0 ? '转办' : '委派'
       this.open = true
@@ -271,8 +286,7 @@ export default {
     },
     reset () {
       this.form = {
-        userId: this.form.userId,
-        assignee: '',
+        userId: '',
         taskId: '',
         instanceId: '',
         businessKey: '',
