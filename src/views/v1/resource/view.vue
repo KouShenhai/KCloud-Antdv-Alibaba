@@ -312,11 +312,12 @@
         const that = this
         that.syncLoading = true
         syncResourceIndex().then(() => {
-          that.syncLoading = false
           that.$message.success(
             '索引同步成功',
             3
           )
+        }).finally(() => {
+          that.syncLoading = false
         })
       },
       handleQuery3 (row) {
