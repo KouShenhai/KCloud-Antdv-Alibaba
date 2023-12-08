@@ -125,11 +125,15 @@ export function syncResourceIndex () {
 }
 
 // 新增资源
-export function addImage (data) {
+export function insertResource (data, token) {
   return request({
-    url: '/admin/sys/resource/image/api/insert',
+    url: '/admin/v1/resource',
     method: 'post',
-    data: data
+    data: data,
+    headers: {
+      'Content-Type': 'application/json;charset=UTF-8',
+      'Request-Id': token
+    }
   })
 }
 
