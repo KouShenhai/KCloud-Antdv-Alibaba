@@ -137,34 +137,34 @@ export function insertResource (data, token) {
   })
 }
 
-// 删除图片
-export function delImage (id) {
+// 删除资源
+export function deleteResourceById (id) {
   return request({
-    url: '/admin/sys/resource/image/api/delete?id=' + id,
+    url: '/admin/v1/resource/' + id,
     method: 'delete'
   })
 }
 
 // 获取审批记录
-export function getAuditLog (businessId) {
+export function getResourceAuditLogById (id) {
   return request({
-    url: '/admin/sys/resource/image/api/auditLog?businessId=' + businessId,
+    url: '/admin/v1/resource/' + id + '/audit-log',
     method: 'get'
   })
 }
 
 // 审批流程图
-export function getDiagram (id) {
+export function getResourceDiagram (instanceId) {
   return request({
-    url: '/admin/sys/resource/image/api/diagram?processInstanceId=' + id,
+    url: '/admin/v1/resource/' + instanceId + '/diagram',
     method: 'get'
   })
 }
 
-// 下载图片
-export function download (id) {
+// 下载资源
+export function downloadResource (id) {
   return request({
-    url: '/admin/sys/resource/image/api/download?id=' + id,
+    url: '/admin/v1/resource/' + id + '/download',
     method: 'get',
     responseType: 'blob'
   })
