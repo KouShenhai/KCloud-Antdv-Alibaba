@@ -144,7 +144,15 @@
 </template>
 
 <script>
-  import { listResource, delImage, getResourceById, getAuditLog, syncResourceIndex, getDiagram, download } from '@/api/v1/resource'
+import {
+  listResource,
+  getResourceById,
+  getResourceAuditLogById,
+  syncResourceIndex,
+  getResourceDiagram,
+  downloadResource,
+  deleteResourceById
+} from '@/api/v1/resource'
   import CreateForm from './modules/CreateForm'
   import { tableMixin } from '@/store/table-mixin'
   import moment from 'moment'
@@ -241,27 +249,27 @@
           columns1: [
           {
             title: '审核人',
-            dataIndex: 'auditName',
+            dataIndex: 'approver',
             ellipsis: true,
             align: 'center'
           },
           {
             title: '审核时间',
-            dataIndex: 'auditDate',
+            dataIndex: 'createDate',
             ellipsis: true,
-            align: 'center'
-          },
-          {
-            title: '审核状态',
-            dataIndex: 'auditStatus',
-            ellipsis: true,
-            scopedSlots: { customRender: 'auditStatus' },
             align: 'center'
           },
           {
             title: '审核意见',
             dataIndex: 'comment',
             ellipsis: true,
+            align: 'center'
+          },
+          {
+            title: '审核状态',
+            dataIndex: 'status',
+            ellipsis: true,
+            scopedSlots: { customRender: 'auditStatus' },
             align: 'center'
           }
         ],
@@ -283,12 +291,14 @@
     methods: {
       download (row) {
         this.loading = true
-        download(row.id).then(res => {
+        const title = row.title
+        const suffix = title.slice(title.lastIndexOf('.'))
+        downloadResource(row.id).then(res => {
           console.log(res)
           const url = window.URL.createObjectURL(res) // 创建下载链接
           const link = document.createElement('a') // 赋值给a标签的href属性
           link.style.display = 'none'
-          link.download = moment(new Date()).format('YYYYMMDDHHmmss') + '.png'
+          link.download = moment(new Date()).format('YYYYMMDDHHmmss') + suffix
           link.href = url
           document.body.appendChild(link) // 将a标签挂载上去
           link.click() // a标签click事件
@@ -321,15 +331,16 @@
         })
       },
       handleQuery3 (row) {
+        this.resetQuery2()
         this.resourceTitle = '审批日志'
+        this.resourceType = row.code === 'audio' ? '音频' : (row.code === 'video' ? '视频' : '图片')
         this.visible = true
         this.visible2 = false
         this.visible1 = false
         this.visible3 = true
         this.visible4 = false
         this.visible5 = false
-        const businessId = row.id
-        getAuditLog(businessId).then(response => {
+        getResourceAuditLogById(row.id).then(response => {
           this.list1 = response.data
         })
       },
@@ -387,9 +398,9 @@
         })
       },
       auditStatusFormat (res) {
-        if (res.auditStatus === 0) {
+        if (res.status === 0) {
           return '审批驳回'
-        } else if (res.auditStatus === 1) {
+        } else if (res.status === 1) {
           return '审批通过'
         }
       },
@@ -397,8 +408,9 @@
         this.visible = true
         this.visible2 = true
         this.visible1 = false
+        this.resourceType = row.code === 'audio' ? '音频' : (row.code === 'video' ? '视频' : '图片')
         this.resourceTitle = '查看流程'
-        getDiagram(row.processInstanceId).then(res => {
+        getResourceDiagram(row.instanceId).then(res => {
           this.diagramUrl = 'data:image/png;base64,' + res.data
         })
       },
@@ -439,6 +451,14 @@
         }
         this.handleQuery()
       },
+      /** 重置按钮操作 */
+      resetQuery2 () {
+        this.queryParam2 = {
+          pageNum: 1,
+          pageSize: 10,
+          id: ''
+        }
+      },
       onShowSizeChange (current, pageSize) {
         this.queryParam.pageSize = pageSize
         this.getList()
@@ -456,7 +476,7 @@
           title: '确认删除所选中数据?',
           content: '当前选中资源编号为' + id + '的数据',
           onOk () {
-            return delImage(id)
+            return deleteResourceById(id)
               .then(() => {
                 that.getList()
                 that.$message.success(
