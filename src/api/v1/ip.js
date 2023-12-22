@@ -53,3 +53,17 @@ export function insertBlack (data, token) {
     }
   })
 }
+
+export function refreshWhite (label) {
+  return request({
+    url: '/admin/v1/ips/white/refresh/' + label,
+    method: 'get'
+  })
+}
+
+export function refreshBlack (label) {
+  return request({
+    url: '/admin/v1/ips/black/refresh/' + label,
+    method: 'get'
+  })
+}

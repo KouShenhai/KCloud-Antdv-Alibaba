@@ -7,6 +7,9 @@
             <a-button type="primary" @click="$refs.createForm.handleAdd()" v-hasPermi="['ips:white:insert']">
               <a-icon type="plus" />新增
             </a-button>
+            <a-button :loading="refreshLoading" type="danger" @click="refresh('white')" v-hasPermi="['ips:white:refresh']">
+              <a-icon type="sync" /> 同步
+            </a-button>
           </div>
           <create-form
             ref="createForm"
@@ -51,7 +54,7 @@
 </template>
 <script>
 
-import { listWhite, deleteWhiteById } from '@/api/v1/ip'
+import {listWhite, deleteWhiteById, refreshWhite } from '@/api/v1/ip'
 import CreateForm from '@/views/v1/ips/white/modules/CreateForm.vue'
 import { tableMixin } from '@/store/table-mixin'
 export default {
@@ -63,6 +66,7 @@ export default {
   data () {
     return {
       list: [],
+      refreshLoading: false,
       loading: false,
       total: 0,
       queryParam: {
@@ -98,6 +102,17 @@ export default {
   watch: {
   },
   methods: {
+    refresh (label) {
+      this.refreshLoading = true
+      refreshWhite(label).then(() => {
+        this.$message.success(
+          '刷新缓存成功',
+          3
+        )
+      }).catch().finally(() => {
+        this.refreshLoading = false
+      })
+    },
     /** 查询存储列表 */
     getList () {
       this.loading = true

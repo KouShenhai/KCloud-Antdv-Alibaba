@@ -4,8 +4,11 @@
       <a-row :gutter="24">
         <a-col :span="20">
           <div class="table-operations">
-            <a-button type="primary" @click="$refs.createForm.handleAdd()" v-hasPermi="['ips:white:insert']">
+            <a-button type="primary" @click="$refs.createForm.handleAdd()" v-hasPermi="['ips:black:insert']">
               <a-icon type="plus" />新增
+            </a-button>
+            <a-button :loading="refreshLoading" type="danger" @click="refresh('black')" v-hasPermi="['ips:black:refresh']">
+              <a-icon type="sync" /> 同步
             </a-button>
           </div>
           <create-form
@@ -22,11 +25,11 @@
             :pagination="false"
             :bordered="tableBordered">
             <span slot="operation" slot-scope="text, record">
-              <a @click="$refs.createForm.handleAdd()" v-hasPermi="['ips:white:insert']">
+              <a @click="$refs.createForm.handleAdd()" v-hasPermi="['ips:black:insert']">
                 <a-icon type="plus" />新增
               </a>
-              <a-divider type="vertical" v-hasPermi="['ips:white:delete']"/>
-              <a @click="handleDelete(record)" v-hasPermi="['ips:white:delete']">
+              <a-divider type="vertical" v-hasPermi="['ips:black:delete']"/>
+              <a @click="handleDelete(record)" v-hasPermi="['ips:black:delete']">
                 <a-icon type="delete" />
                 删除
               </a>
@@ -51,7 +54,7 @@
 </template>
 <script>
 
-import { listBlack, deleteBlackById } from '@/api/v1/ip'
+import { listBlack, deleteBlackById, refreshBlack } from '@/api/v1/ip'
 import CreateForm from '@/views/v1/ips/black/modules/CreateForm.vue'
 import { tableMixin } from '@/store/table-mixin'
 export default {
@@ -63,6 +66,7 @@ export default {
   data () {
     return {
       list: [],
+      refreshLoading: false,
       loading: false,
       total: 0,
       freshLoading: false,
@@ -99,6 +103,17 @@ export default {
   watch: {
   },
   methods: {
+    refresh (label) {
+      this.refreshLoading = true
+      refreshBlack(label).then(() => {
+        this.$message.success(
+          '刷新缓存成功',
+          3
+        )
+      }).catch().finally(() => {
+        this.refreshLoading = false
+      })
+    },
     /** 查询存储列表 */
     getList () {
       this.loading = true
