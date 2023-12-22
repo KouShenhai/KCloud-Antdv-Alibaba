@@ -4,10 +4,10 @@
       <a-row :gutter="24">
         <a-col :span="20">
           <div class="table-operations">
-            <a-button type="primary" @click="$refs.createForm.handleAdd()" v-hasPermi="['ips:white:insert']">
+            <a-button type="primary" @click="$refs.createForm.handleAdd()" v-hasPermi="['ips:insert-white']">
               <a-icon type="plus" />新增
             </a-button>
-            <a-button :loading="refreshLoading" type="danger" @click="refresh('white')" v-hasPermi="['ips:white:refresh']">
+            <a-button :loading="refreshLoading" type="danger" @click="refresh('white')" v-hasPermi="['ips:refresh-white']">
               <a-icon type="sync" /> 同步
             </a-button>
           </div>
@@ -25,11 +25,11 @@
             :pagination="false"
             :bordered="tableBordered">
             <span slot="operation" slot-scope="text, record">
-              <a @click="$refs.createForm.handleAdd()" v-hasPermi="['ips:white:insert']">
+              <a @click="$refs.createForm.handleAdd()" v-hasPermi="['ips:insert-white']">
                 <a-icon type="plus" />新增
               </a>
-              <a-divider type="vertical" v-hasPermi="['ips:white:delete']"/>
-              <a @click="handleDelete(record)" v-hasPermi="['ips:white:delete']">
+              <a-divider type="vertical" v-hasPermi="['ips:delete-white']"/>
+              <a @click="handleDelete(record)" v-hasPermi="['ips:delete-white']">
                 <a-icon type="delete" />
                 删除
               </a>
@@ -54,7 +54,7 @@
 </template>
 <script>
 
-import {listWhite, deleteWhiteById, refreshWhite } from '@/api/v1/ip'
+import { listWhite, deleteWhiteById, refreshWhite } from '@/api/v1/ip'
 import CreateForm from '@/views/v1/ips/white/modules/CreateForm.vue'
 import { tableMixin } from '@/store/table-mixin'
 export default {

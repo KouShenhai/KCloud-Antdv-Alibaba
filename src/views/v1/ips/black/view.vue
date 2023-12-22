@@ -4,10 +4,10 @@
       <a-row :gutter="24">
         <a-col :span="20">
           <div class="table-operations">
-            <a-button type="primary" @click="$refs.createForm.handleAdd()" v-hasPermi="['ips:black:insert']">
+            <a-button type="primary" @click="$refs.createForm.handleAdd()" v-hasPermi="['ips:insert-black']">
               <a-icon type="plus" />新增
             </a-button>
-            <a-button :loading="refreshLoading" type="danger" @click="refresh('black')" v-hasPermi="['ips:black:refresh']">
+            <a-button :loading="refreshLoading" type="danger" @click="refresh('black')" v-hasPermi="['ips:refresh-black']">
               <a-icon type="sync" /> 同步
             </a-button>
           </div>
@@ -25,11 +25,11 @@
             :pagination="false"
             :bordered="tableBordered">
             <span slot="operation" slot-scope="text, record">
-              <a @click="$refs.createForm.handleAdd()" v-hasPermi="['ips:black:insert']">
+              <a @click="$refs.createForm.handleAdd()" v-hasPermi="['ips:insert-black']">
                 <a-icon type="plus" />新增
               </a>
-              <a-divider type="vertical" v-hasPermi="['ips:black:delete']"/>
-              <a @click="handleDelete(record)" v-hasPermi="['ips:black:delete']">
+              <a-divider type="vertical" v-hasPermi="['ips:delete-black']"/>
+              <a @click="handleDelete(record)" v-hasPermi="['ips:delete-black']">
                 <a-icon type="delete" />
                 删除
               </a>
