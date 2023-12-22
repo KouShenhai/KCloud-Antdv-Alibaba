@@ -55,15 +55,9 @@ export default {
       total: 0,
       queryParam: {
         pageNum: 1,
-        pageSize: 10,
-        serviceId: ''
+        pageSize: 10
       },
       columns: [
-        {
-          title: '服务ID',
-          dataIndex: 'serviceId',
-          align: 'center'
-        },
         {
           title: '主机',
           dataIndex: 'host',

@@ -22,7 +22,6 @@ export function gracefulShutdownInstance (r) {
     method: 'get',
     headers: {
       'Content-Type': 'application/json;charset=UTF-8',
-      'Service-Id': r.serviceId,
       'Service-Host': r.host,
       'Service-Port': r.port
     }
