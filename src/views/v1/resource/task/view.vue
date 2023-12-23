@@ -95,7 +95,7 @@ import { listResourceTask, delegateResourceTask, resolveResourceTask, transferRe
 import { listUserOption } from '@/api/v1/user'
 import { tableMixin } from '@/store/table-mixin'
 import { USER_ID } from '@/store/mutation-types'
-import CreateForm from './modules/TaskForm'
+import CreateForm from '../modules/TaskForm.vue'
 import storage from 'store'
 import { getToken } from '@/api/v1/token'
 export default {

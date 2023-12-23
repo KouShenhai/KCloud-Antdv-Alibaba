@@ -153,7 +153,7 @@ import {
   downloadResource,
   deleteResourceById
 } from '@/api/v1/resource'
-  import CreateForm from './modules/CreateForm'
+  import CreateForm from '../modules/CreateForm.vue'
   import { tableMixin } from '@/store/table-mixin'
   import moment from 'moment'
   export default {
