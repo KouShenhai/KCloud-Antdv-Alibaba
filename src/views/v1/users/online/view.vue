@@ -40,7 +40,7 @@
       >
         <span slot="operation" slot-scope="text, record">
           <a-popconfirm
-            v-hasPermi="['users:online-kill']"
+            v-hasPermi="['users:kill-online']"
             ok-text="是"
             cancel-text="否"
             @confirm="confirmHandleForceLogout(record)"
