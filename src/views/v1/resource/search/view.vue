@@ -12,7 +12,7 @@
     <div v-for="(item, i) in list" :key="i">
       <div style="font-size: 14px;font-weight: bolder;" v-html="item.title"/>
       <span style="font-size: 14px;" v-html="item.remark"/>
-      <router-link style="color: dodgerblue;" :to="{name: 'resourceview', query: {id: item.id}}"> 查看详情</router-link>
+      <router-link style="color: dodgerblue;" :to="{name: 'resourceheaven-view', query: {id: item.id}}"> 查看详情</router-link>
       <br/>
       <br/>
     </div>
@@ -42,7 +42,6 @@
           form: {
             pageNum: 1,
             pageSize: 10,
-            needPage: true,
             orQueryList: [],
             highlightFieldList: ['title', 'remark'],
             queryStringList: [],
