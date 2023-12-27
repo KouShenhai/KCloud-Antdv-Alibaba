@@ -50,6 +50,7 @@
    npm install mavon-editor --save
    npm i spark-md5 -S
    npm install --save js-md5
+   npm install vue-json-viewer --save
    ```
   
 ## 致谢
