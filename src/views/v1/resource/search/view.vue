@@ -43,8 +43,9 @@
             pageNum: 1,
             pageSize: 10,
             orQueryList: [],
-            highlightFieldList: ['title', 'remark'],
             queryStringList: [],
+            // eslint-disable-next-line standard/array-bracket-even-spacing
+            sortFieldList: [{ field: 'title', value: 'desc' }, { field: 'remark', value: 'desc' } ],
             indexNames: ['laokou_resource']
           },
           list: [],
