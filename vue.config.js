@@ -114,6 +114,7 @@ const vueConfig = {
         // target: `https://127.0.0.1:5555`,
         // dev 使用 HTTP
         target: `http://127.0.0.1:5555`,
+        // target: `https://192.168.30.130:5555`,
         secure: false,
         changeOrigin: true,
         pathRewrite: {
