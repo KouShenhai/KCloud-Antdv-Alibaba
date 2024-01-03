@@ -38,6 +38,7 @@ const assetsCDN = {
 }
 
 // vue.config.js
+let CompressionWebpackPlugin = require('compression-webpack-plugin')
 const vueConfig = {
   configureWebpack: {
     // webpack plugins
@@ -51,6 +52,14 @@ const vueConfig = {
         APP_VERSION: `"${require('./package.json').version}"`,
         GIT_HASH: JSON.stringify(getGitHash()),
         BUILD_DATE: buildDate
+      }),
+      new CompressionWebpackPlugin({
+        // 压缩方式
+        algorithm: 'gzip',
+        // 匹配压缩文件
+        test: /\.js$|\.css$/,
+        // 对于大于10k压缩
+        threshold: 10240
       })
     ],
     // if prod, add externals
@@ -115,6 +124,7 @@ const vueConfig = {
         // dev 使用 HTTP
         target: `http://127.0.0.1:5555`,
         // target: `https://192.168.30.130:5555`,
+        // target: `https://nginx.laokou.org`,
         secure: false,
         changeOrigin: true,
         pathRewrite: {

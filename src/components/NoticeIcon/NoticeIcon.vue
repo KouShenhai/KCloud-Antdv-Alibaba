@@ -141,14 +141,13 @@ export default {
         console.log('您的浏览器不支持WebSocket')
       } else {
         const isProd = process.env.NODE_ENV === 'production'
-        // const url = `wss://192.168.30.130:5555` + socketApi.URI + '?Authorization=Bearer ' + storage.get(ACCESS_TOKEN)
         let url
         if (isProd) {
-          url = `wss://vue.laokou.org/laokou` + socketApi.URI + '?Authorization=Bearer ' + storage.get(ACCESS_TOKEN)
+          url = `wss://nginx.laokou.org/laokou` + socketApi.URI + '?Authorization=Bearer ' + storage.get(ACCESS_TOKEN)
         } else {
           // test 使用 wss
-          // url = `wss://127.0.0.1:5555` + socketApi.URI + '?Authorization=Bearer ' + storage.get(ACCESS_TOKEN)
           // dev 使用 ws
+          // url = `wss://127.0.0.1:5555` + socketApi.URI + '?Authorization=Bearer ' + storage.get(ACCESS_TOKEN)
           url = `ws://127.0.0.1:5555` + socketApi.URI + '?Authorization=Bearer ' + storage.get(ACCESS_TOKEN)
         }
         // 打开一个websocket
