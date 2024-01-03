@@ -143,7 +143,7 @@ export default {
         const isProd = process.env.NODE_ENV === 'production'
         let url
         if (isProd) {
-          url = `wss://nginx.laokou.org/laokou` + socketApi.URI + '?Authorization=Bearer ' + storage.get(ACCESS_TOKEN)
+          url = `wss://laokou.org/laokou` + socketApi.URI + '?Authorization=Bearer ' + storage.get(ACCESS_TOKEN)
         } else {
           // test 使用 wss
           // dev 使用 ws

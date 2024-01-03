@@ -38,7 +38,7 @@ const assetsCDN = {
 }
 
 // vue.config.js
-let CompressionWebpackPlugin = require('compression-webpack-plugin')
+const CompressionWebpackPlugin = require('compression-webpack-plugin')
 const vueConfig = {
   configureWebpack: {
     // webpack plugins
