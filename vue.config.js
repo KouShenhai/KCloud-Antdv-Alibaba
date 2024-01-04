@@ -56,10 +56,16 @@ const vueConfig = {
       new CompressionWebpackPlugin({
         // 压缩方式
         algorithm: 'gzip',
+        filename: '[path][base].gz',
         // 匹配压缩文件
-        test: /\.js$|\.css$/,
+        test: new RegExp('\\.(js|css)$'),
         // 对于大于10k压缩
-        threshold: 10240
+        threshold: 10240,
+        // 示例：一个1024b大小的文件，压缩后大小为768b，minRatio : 0.75
+        // 默认: 0.8
+        minRatio: 0.8,
+        // 是否删除源文件，默认: false
+        deleteOriginalAssets: false
       })
     ],
     // if prod, add externals
@@ -67,9 +73,14 @@ const vueConfig = {
   },
 
   chainWebpack: (config) => {
-    config.resolve.alias
-      .set('@$', resolve('src'))
-
+    config.resolve.alias.set('@$', resolve('src'))
+    // 生产模式下启用gzip压缩 需要配置nginx支持gzip
+    // 开启压缩js代码
+    config.optimization.minimize(true)
+    config.optimization.splitChunks({
+      // 开启代码分割
+      chunks: 'all'
+    })
     const svgRule = config.module.rule('svg')
     svgRule.uses.clear()
     svgRule
