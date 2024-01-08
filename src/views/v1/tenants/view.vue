@@ -54,6 +54,10 @@
                 <a-icon type="delete" />
                 删除
               </a>
+              <a-divider type="vertical" v-hasPermi="['tenants:download-datasource']"/>
+              <a @click="download(record)" v-hasPermi="['tenants:download-datasource']">
+                <a-icon type="download" />下载
+              </a>
             </span>
           </a-table>
           <!-- 分页 -->
@@ -75,9 +79,10 @@
 </template>
 <script>
 
-import { listTenant, deleteTenantById } from '@/api/v1/tenant'
+import { listTenant, deleteTenantById, downloadTenantDatasource } from '@/api/v1/tenant'
 import CreateForm from '@/views/v1/tenants/modules/CreateForm'
 import { tableMixin } from '@/store/table-mixin'
+import moment from 'moment/moment'
 export default {
   name: 'Tenant',
   components: {
@@ -133,6 +138,25 @@ export default {
           this.loading = false
         }
       )
+    },
+    download (row) {
+      this.loading = true
+      downloadTenantDatasource(row.id).then(res => {
+        const url = window.URL.createObjectURL(res) // 创建下载链接
+        const link = document.createElement('a') // 赋值给a标签的href属性
+        link.style.display = 'none'
+        link.download = '多租户数据库_' + moment(new Date()).format('YYYYMMDDHHmmss') + '.zip'
+        link.href = url
+        document.body.appendChild(link) // 将a标签挂载上去
+        link.click() // a标签click事件
+        document.body.removeChild(link) // 移除a标签
+        window.URL.revokeObjectURL(url) // 销毁下载链接
+        this.loading = false
+        this.$message.success(
+          '下载成功',
+          3
+        )
+      })
     },
     /** 搜索按钮操作 */
     handleQuery () {
