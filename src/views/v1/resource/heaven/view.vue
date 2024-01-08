@@ -294,7 +294,6 @@ import {
         const title = row.title
         const suffix = title.slice(title.lastIndexOf('.'))
         downloadResource(row.id).then(res => {
-          console.log(res)
           const url = window.URL.createObjectURL(res) // 创建下载链接
           const link = document.createElement('a') // 赋值给a标签的href属性
           link.style.display = 'none'

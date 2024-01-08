@@ -53,3 +53,11 @@ export function getTenantIdByDomainName () {
     method: 'get'
   })
 }
+
+export function downloadTenantDatasource (id) {
+  return request({
+    url: '/admin/v1/tenants/' + id + '/download-datasource',
+    method: 'get',
+    responseType: 'blob'
+  })
+}
