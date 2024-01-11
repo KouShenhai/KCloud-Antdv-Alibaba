@@ -156,7 +156,8 @@ export default {
     getSsoUri () {
       const isProd = process.env.NODE_ENV === 'production'
       if (isProd) {
-        this.ssoUri = 'laokou.org.cn/laokou/auth/oauth2/authorize?client_id=95TxSsTPFA3tF12TBSMmUVK0da&client_secret=FpHwIfw4wY92dO&response_type=code&scope=password mail mobile&redirect_uri=' + this.uri
+        this.ssoUri = 'https://nginx.laokou.org/laokou/auth/oauth2/authorize?client_id=95TxSsTPFA3tF12TBSMmUVK0da&client_secret=FpHwIfw4wY92dO&response_type=code&scope=password mail mobile&redirect_uri=' + this.uri
+        // this.ssoUri = 'laokou.org.cn/laokou/auth/oauth2/authorize?client_id=95TxSsTPFA3tF12TBSMmUVK0da&client_secret=FpHwIfw4wY92dO&response_type=code&scope=password mail mobile&redirect_uri=' + this.uri
       } else {
         this.ssoUri = 'http://127.0.0.1:5555/auth/oauth2/authorize?client_id=95TxSsTPFA3tF12TBSMmUVK0da&client_secret=FpHwIfw4wY92dO&response_type=code&scope=password mail mobile&redirect_uri=' + this.uri
       }
