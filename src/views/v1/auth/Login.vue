@@ -131,7 +131,12 @@ export default {
     },
     checkLogin () {
       let queryAttr = decodeURIComponent(window.location.search)
-      this.uri = window.location.protocol + '//127.0.0.1:' + window.location.port
+      const isProd = process.env.NODE_ENV === 'production'
+      if (isProd) {
+        this.uri = 'https://vue.laokou.org'
+      } else {
+        this.uri = window.location.protocol + '//127.0.0.1:' + window.location.port
+      }
       let pwdAuth = true
       if (queryAttr.length > 0) {
         queryAttr = queryAttr.substring(1)
@@ -156,7 +161,7 @@ export default {
     getSsoUri () {
       const isProd = process.env.NODE_ENV === 'production'
       if (isProd) {
-        this.ssoUri = 'https://nginx.laokou.org/laokou/auth/oauth2/authorize?client_id=95TxSsTPFA3tF12TBSMmUVK0da&client_secret=FpHwIfw4wY92dO&response_type=code&scope=password mail mobile&redirect_uri=' + this.uri
+        this.ssoUri = 'https://vue.laokou.org:1111/oauth2/authorize?client_id=95TxSsTPFA3tF12TBSMmUVK0da&client_secret=FpHwIfw4wY92dO&response_type=code&scope=password mail mobile&redirect_uri=https://vue.laokou.org'
         // this.ssoUri = 'laokou.org.cn/laokou/auth/oauth2/authorize?client_id=95TxSsTPFA3tF12TBSMmUVK0da&client_secret=FpHwIfw4wY92dO&response_type=code&scope=password mail mobile&redirect_uri=' + this.uri
       } else {
         this.ssoUri = 'http://127.0.0.1:5555/auth/oauth2/authorize?client_id=95TxSsTPFA3tF12TBSMmUVK0da&client_secret=FpHwIfw4wY92dO&response_type=code&scope=password mail mobile&redirect_uri=' + this.uri
