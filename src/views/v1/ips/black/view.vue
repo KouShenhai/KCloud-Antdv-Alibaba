@@ -8,7 +8,7 @@
               <a-icon type="plus" />新增
             </a-button>
             <a-button :loading="refreshLoading" type="danger" @click="refresh('black')" v-hasPermi="['ips:refresh-black']">
-              <a-icon type="sync" /> 同步
+              <a-icon type="sync" /> 刷新
             </a-button>
           </div>
           <create-form
