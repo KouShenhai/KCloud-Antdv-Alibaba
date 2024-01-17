@@ -90,7 +90,6 @@ export default {
     this.connectWebsocket()
   },
   computed: {
-
   },
   methods: {
     getList () {
@@ -143,13 +142,13 @@ export default {
         const isProd = process.env.NODE_ENV === 'production'
         let url
         if (isProd) {
-          url = `wss://vue.laokou.org/laokou` + socketApi.URI + '?Authorization=Bearer ' + storage.get(ACCESS_TOKEN)
-          // url = `wss://laokou.org.cn/laokou` + socketApi.URI + '?Authorization=Bearer ' + storage.get(ACCESS_TOKEN)
+          url = `wss://vue.laokou.org/laokou` + socketApi.URI
+          // url = `wss://laokou.org.cn/laokou` + socketApi.URI
         } else {
           // test 使用 wss
           // dev 使用 ws
-          // url = `wss://127.0.0.1:5555` + socketApi.URI + '?Authorization=Bearer ' + storage.get(ACCESS_TOKEN)
-          url = `ws://127.0.0.1:5555` + socketApi.URI + '?Authorization=Bearer ' + storage.get(ACCESS_TOKEN)
+          // url = `wss://127.0.0.1:5555` + socketApi.URI
+          url = `ws://localhost:5555` + socketApi.URI
         }
         // 打开一个websocket
         websocket = new WebSocket(url)
@@ -157,16 +156,25 @@ export default {
         websocket.onopen = () => {
           // 发送数据
           console.log('websocket建立连接')
+          websocket.send(storage.get(ACCESS_TOKEN))
           this.isConnect = true
         }
         // 客户端接收服务端返回的数据
         websocket.onmessage = evt => {
           this.getUnReadCount()
-          notification.success({
-            message: '消息提示',
-            description: evt.data
-          })
-          console.log(evt.data)
+          const res = JSON.parse(evt.data)
+          if (res.code === 200) {
+            notification.success({
+              message: '消息提示',
+              description: res.msg
+            })
+          } else {
+            notification.error({
+              message: '消息提示',
+              description: res.msg
+            })
+          }
+          console.log(res)
         }
         // 发生错误时
         websocket.onerror = evt => {
