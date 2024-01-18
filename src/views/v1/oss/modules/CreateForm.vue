@@ -5,7 +5,7 @@
       <b>{{ formTitle }}</b>
     </a-divider>
     <a-form-model ref="form" :model="form" :rules="rules">
-      <a-form-model-item label="存储名称" prop="name">
+      <a-form-model-item label="名称" prop="name">
         <a-input v-model="form.name" placeholder="请输入" />
       </a-form-model-item>
       <a-form-model-item label="终端地址" prop="endpoint">
@@ -134,7 +134,7 @@ import { getToken } from '@/api/v1/token'
         this.reset()
         this.token()
         this.open = true
-        this.formTitle = '存储新增'
+        this.formTitle = '新增OSS'
       },
       /** 修改按钮操作 */
       handleUpdate (row) {
@@ -145,7 +145,7 @@ import { getToken } from '@/api/v1/token'
           this.form.pathStyleAccessEnabled = '' + response.data.pathStyleAccessEnabled
           this.form.status = '' + response.data.status
           this.open = true
-          this.formTitle = '存储修改'
+          this.formTitle = '修改OSS'
         })
       },
       /** 提交按钮 */

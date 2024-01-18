@@ -8,7 +8,7 @@
             <a-form layout="inline" v-hasPermi="['oss:list']">
               <a-row :gutter="48">
                 <a-col :md="8" :sm="24">
-                  <a-form-item label="存储名称">
+                  <a-form-item label="名称">
                     <a-input v-model="queryParam.name" placeholder="请输入" allow-clear />
                   </a-form-item>
                 </a-col>
@@ -99,7 +99,7 @@ export default {
       },
       columns: [
         {
-          title: '存储名称',
+          title: '名称',
           dataIndex: 'name',
           align: 'center',
           ellipsis: true,
@@ -176,7 +176,7 @@ export default {
         return '未启用'
       }
     },
-    /** 查询存储列表 */
+    /** 查询OSS列表 */
     getList () {
       this.loading = true
       listOss(this.queryParam).then(response => {

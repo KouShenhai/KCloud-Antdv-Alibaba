@@ -1,6 +1,6 @@
 import request from '@/utils/request'
 
-// oss上传
+// OSS上传文件
 export function uploadOss (data) {
   return request({
     url: '/admin/v1/oss/upload',
@@ -9,7 +9,7 @@ export function uploadOss (data) {
   })
 }
 
-// 查询存储列表
+// 查询OSS列表
 export function listOss (query) {
   return request({
     url: '/admin/v1/oss/list',
@@ -18,7 +18,7 @@ export function listOss (query) {
   })
 }
 
-// 查询存储详细
+// 根据ID查看OSS
 export function getOssById (id) {
   return request({
     url: '/admin/v1/oss/' + id,
@@ -26,7 +26,7 @@ export function getOssById (id) {
   })
 }
 
-// 新增存储
+// 新增OSS
 export function insertOss (data, token) {
   return request({
     url: '/admin/v1/oss',
@@ -39,7 +39,7 @@ export function insertOss (data, token) {
   })
 }
 
-// 修改存储
+// 修改OSS
 export function updateOss (data) {
   return request({
     url: '/admin/v1/oss',
@@ -48,7 +48,7 @@ export function updateOss (data) {
   })
 }
 
-// 删除存储
+// 删除OSS
 export function deleteOssById (id) {
   return request({
     url: '/admin/v1/oss/' + id,
