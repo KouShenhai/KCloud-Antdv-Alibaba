@@ -51,6 +51,7 @@ request.interceptors.request.use(config => {
     config.headers['User-Id'] = userId
     config.headers['User-Name'] = userName
     config.headers['Tenant-Id'] = tenantId
+    config.headers['Service-Gray'] = 'true'
   }
   if (userId) {
     config.headers['Trace-Id'] = userId + moment().valueOf()
