@@ -68,8 +68,8 @@ const user = {
           const tenantId = user.tenantId
           const superAdmin = user.superAdmin
           const avatar = user.avatar === '' ? require('@/assets/images/profile.jpg') : user.avatar
-          if (user.permissionList && user.permissionList.length > 0) {
-            commit('SET_PERMISSIONS', user.permissionList)
+          if (user.permissions && user.permissions.length > 0) {
+            commit('SET_PERMISSIONS', user.permissions)
           }
           commit('SET_TENANT_ID', tenantId)
           commit('SET_USER_NAME', name)
