@@ -59,7 +59,7 @@ export function logout (token) {
   return request({
     url: userApi.Logout,
     data: { token: token },
-    method: 'post',
+    method: 'delete',
     headers: {
       'Content-Type': 'application/json;charset=UTF-8'
     }
