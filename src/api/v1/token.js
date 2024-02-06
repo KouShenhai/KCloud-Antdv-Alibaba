@@ -4,6 +4,6 @@ import request from '@/utils/request'
 export function getToken () {
   return request({
     url: '/admin/v1/tokens',
-    method: 'get'
+    method: 'post'
   })
 }

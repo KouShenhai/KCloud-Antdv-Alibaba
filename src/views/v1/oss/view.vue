@@ -22,7 +22,7 @@
             </a-form>
           </div>
           <div class="table-operations">
-            <a-button type="primary" @click="$refs.createForm.handleAdd()" v-hasPermi="['oss:insert']">
+            <a-button type="primary" @click="$refs.createForm.handleAdd()" v-hasPermi="['oss:create']">
               <a-icon type="plus" />新增
             </a-button>
           </div>
@@ -44,16 +44,16 @@
               {{ enabledFormat(record) }}
             </span>
             <span slot="operation" slot-scope="text, record">
-              <a @click="$refs.createForm.handleUpdate(record)" v-hasPermi="['oss:update']">
+              <a @click="$refs.createForm.handleUpdate(record)" v-hasPermi="['oss:modify']">
                 <a-icon type="edit" />
                 修改
               </a>
-              <a-divider type="vertical" v-hasPermi="['oss:insert']"/>
-              <a @click="$refs.createForm.handleAdd()" v-hasPermi="['oss:insert']">
+              <a-divider type="vertical" v-hasPermi="['oss:create']"/>
+              <a @click="$refs.createForm.handleAdd()" v-hasPermi="['oss:create']">
                 <a-icon type="plus" />新增
               </a>
-              <a-divider type="vertical" v-hasPermi="['oss:delete']"/>
-              <a @click="handleDelete(record)" v-hasPermi="['oss:delete']">
+              <a-divider type="vertical" v-hasPermi="['oss:remove']"/>
+              <a @click="handleDelete(record)" v-hasPermi="['oss:remove']">
                 <a-icon type="delete" />
                 删除
               </a>

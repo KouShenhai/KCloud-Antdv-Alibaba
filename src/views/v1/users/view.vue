@@ -27,7 +27,7 @@
             </a-form>
           </div>
           <div class="table-operations">
-            <a-button type="primary" @click="$refs.createForm.handleAdd()" v-hasPermi="['users:insert']">
+            <a-button type="primary" @click="$refs.createForm.handleAdd()" v-hasPermi="['users:create']">
               <a-icon type="plus" />新增
             </a-button>
           </div>
@@ -58,24 +58,24 @@
               <img style="width:50px;height:50px" :src="record.avatar" />
             </span>
             <span slot="operation" slot-scope="text, record">
-              <a @click="$refs.createForm.handleUpdate(record)" v-show="record.superAdmin !== 1 || superAdmin === 1" v-hasPermi="['users:update']">
+              <a @click="$refs.createForm.handleUpdate(record)" v-show="record.superAdmin !== 1 || superAdmin === 1" v-hasPermi="['users:modify']">
                 <a-icon type="edit" />
                 修改
               </a>
-              <a-divider type="vertical" v-show="record.superAdmin !== 1 || superAdmin === 1" v-hasPermi="['users:insert']"/>
-              <a @click="$refs.createForm.handleAdd()" v-show="record.superAdmin !== 1 || superAdmin === 1" v-hasPermi="['users:insert']">
+              <a-divider type="vertical" v-show="record.superAdmin !== 1 || superAdmin === 1" v-hasPermi="['users:create']"/>
+              <a @click="$refs.createForm.handleAdd()" v-show="record.superAdmin !== 1 || superAdmin === 1" v-hasPermi="['users:create']">
                 <a-icon type="plus" />新增
               </a>
-              <a-divider type="vertical" v-show="record.superAdmin !== 1 || superAdmin === 1" v-hasPermi="['users:status']" v-if="record.status == 1"/>
-              <a @click="changeStatus(record)" v-show="record.superAdmin !== 1 || superAdmin === 1" v-hasPermi="['users:status']" v-if="record.status == 1">
+              <a-divider type="vertical" v-show="record.superAdmin !== 1 || superAdmin === 1" v-hasPermi="['users:modify-status']" v-if="record.status == 1"/>
+              <a @click="changeStatus(record)" v-show="record.superAdmin !== 1 || superAdmin === 1" v-hasPermi="['users:modify-status']" v-if="record.status == 1">
                 <a-icon type="unlock" />启用
               </a>
-              <a-divider type="vertical" v-show="record.superAdmin !== 1 || superAdmin === 1" v-hasPermi="['users:status']" v-if="record.status == 0"/>
-              <a @click="changeStatus(record)" v-show="record.superAdmin !== 1 || superAdmin === 1" v-hasPermi="['users:status']" v-if="record.status == 0">
+              <a-divider type="vertical" v-show="record.superAdmin !== 1 || superAdmin === 1" v-hasPermi="['users:modify-status']" v-if="record.status == 0"/>
+              <a @click="changeStatus(record)" v-show="record.superAdmin !== 1 || superAdmin === 1" v-hasPermi="['users:modify-status']" v-if="record.status == 0">
                 <a-icon type="lock" />锁定
               </a>
-              <a-divider type="vertical" v-show="record.superAdmin !== 1 || superAdmin === 1" v-hasPermi="['users:delete']"/>
-              <a @click="handleDelete(record)" v-show="record.superAdmin !== 1 || superAdmin === 1" v-hasPermi="['users:delete']">
+              <a-divider type="vertical" v-show="record.superAdmin !== 1 || superAdmin === 1" v-hasPermi="['users:remove']"/>
+              <a @click="handleDelete(record)" v-show="record.superAdmin !== 1 || superAdmin === 1" v-hasPermi="['users:remove']">
                 <a-icon type="delete" />
                 删除
               </a>

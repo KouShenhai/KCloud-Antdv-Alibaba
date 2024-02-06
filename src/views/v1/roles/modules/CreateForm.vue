@@ -65,7 +65,7 @@
 <script>
 
 import { getRoleById, insertRole, updateRole } from '@/api/v1/role'
-import { listMenuTree as menuTreeSelect, listRoleMenuIDS } from '@/api/v1/menu'
+import { list as menuTreeSelect, listRoleMenuIDS } from '@/api/v1/menu'
 import { listDeptTree as deptTreeSelect, listRoleDeptIDS } from '@/api/v1/dept'
 import { getToken } from '@/api/v1/token'
 export default {
@@ -98,6 +98,10 @@ export default {
       formTitle: '',
       // 部门列表
       deptOptions: [],
+      queryParam: {
+        name: '',
+        type: 'TREE_LIST'
+      },
       // 表单参数
       form: {
         id: undefined,
@@ -168,7 +172,7 @@ export default {
     },
     /** 查询菜单树结构 */
     getMenuTreeSelect () {
-      menuTreeSelect().then(response => {
+      menuTreeSelect(this.queryParam).then(response => {
         this.menuOptions = response.data.children
         this.menuOptionsAll = this.menuOptions
       })

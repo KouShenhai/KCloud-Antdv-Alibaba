@@ -22,7 +22,7 @@
             </a-form>
           </div>
           <div class="table-operations">
-            <a-button type="primary" @click="$refs.createForm.handleAdd()" v-hasPermi="['tenants:insert']">
+            <a-button type="primary" @click="$refs.createForm.handleAdd()" v-hasPermi="['tenants:create']">
               <a-icon type="plus" />新增
             </a-button>
           </div>
@@ -41,16 +41,16 @@
             :pagination="false"
             :bordered="tableBordered">
             <span slot="operation" slot-scope="text, record">
-              <a @click="$refs.createForm.handleUpdate(record)" v-hasPermi="['tenants:update']">
+              <a @click="$refs.createForm.handleUpdate(record)" v-hasPermi="['tenants:modify']">
                 <a-icon type="edit" />
                 修改
               </a>
-              <a-divider type="vertical" v-hasPermi="['tenants:insert']"/>
-              <a @click="$refs.createForm.handleAdd()" v-hasPermi="['tenants:insert']">
+              <a-divider type="vertical" v-hasPermi="['tenants:create']"/>
+              <a @click="$refs.createForm.handleAdd()" v-hasPermi="['tenants:create']">
                 <a-icon type="plus" />新增
               </a>
-              <a-divider type="vertical" v-hasPermi="['tenants:delete']"/>
-              <a @click="handleDelete(record)" v-hasPermi="['tenants:delete']">
+              <a-divider type="vertical" v-hasPermi="['tenants:remove']"/>
+              <a @click="handleDelete(record)" v-hasPermi="['tenants:remove']">
                 <a-icon type="delete" />
                 删除
               </a>

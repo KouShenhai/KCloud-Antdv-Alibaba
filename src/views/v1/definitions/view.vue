@@ -20,7 +20,7 @@
         </a-form>
       </div>
       <div class="table-operations">
-        <a-button type="primary" @click="$refs.createForm.handleAdd()" v-hasPermi="['definitions:insert']">
+        <a-button type="primary" @click="$refs.createForm.handleAdd()" v-hasPermi="['definitions:create']">
           <a-icon type="plus" />新增
         </a-button>
         <a-button @click="downloadTemplate" v-hasPermi="['definitions:template']">
@@ -45,7 +45,7 @@
           {{ statusFormat(record) }}
         </span>
         <span slot="operation" slot-scope="text, record">
-          <a @click="$refs.createForm.handleAdd()" v-hasPermi="['definitions:insert']">
+          <a @click="$refs.createForm.handleAdd()" v-hasPermi="['definitions:create']">
             <a-icon type="plus" />
             新增
           </a>
@@ -59,8 +59,8 @@
             <a-icon type="play-circle" />
             激活
           </a>
-          <a-divider type="vertical"  v-hasPermi="['definitions:delete']"/>
-          <a @click="handleDelete(record)"  v-hasPermi="['definitions:delete']">
+          <a-divider type="vertical"  v-hasPermi="['definitions:remove']"/>
+          <a @click="handleDelete(record)"  v-hasPermi="['definitions:remove']">
             <a-icon type="delete" />
             删除
           </a>

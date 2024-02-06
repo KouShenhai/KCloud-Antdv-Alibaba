@@ -21,7 +21,7 @@
       </div>
       <!-- 操作 -->
       <div class="table-operations">
-        <a-button type="primary" @click="handleAdd()" v-hasPermi="['messages:insert']">
+        <a-button type="primary" @click="handleAdd()" v-hasPermi="['messages:create']">
           <a-icon type="plus" />新增
         </a-button>
         <table-setting
@@ -44,7 +44,7 @@
           {{ typeFormat(record) }}
         </span>
         <span slot="operation" slot-scope="text, record">
-          <a @click="handleAdd()" v-hasPermi="['messages:insert']">
+          <a @click="handleAdd()" v-hasPermi="['messages:create']">
             <a-icon type="plus" />
             新增
           </a>

@@ -1,7 +1,7 @@
 import request from '@/utils/request'
 
 // 查询菜单列表
-export function listMenu (data) {
+export function list (data) {
   return request({
     url: '/admin/v1/menus/list',
     method: 'post',
@@ -10,7 +10,7 @@ export function listMenu (data) {
 }
 
 // 查看菜单
-export function getMenuById (id) {
+export function findById (id) {
   return request({
     url: '/admin/v1/menus' + '/' + id,
     method: 'get'
@@ -18,7 +18,7 @@ export function getMenuById (id) {
 }
 
 // 新增菜单
-export function insertMenu (data, token) {
+export function create (data, token) {
   return request({
     url: '/admin/v1/menus',
     method: 'post',
@@ -31,7 +31,7 @@ export function insertMenu (data, token) {
 }
 
 // 修改菜单
-export function updateMenu (data) {
+export function modify (data) {
   return request({
     url: '/admin/v1/menus',
     method: 'put',
@@ -40,18 +40,11 @@ export function updateMenu (data) {
 }
 
 // 删除菜单
-export function deleteMenuById (id) {
+export function remove (ids) {
   return request({
-    url: '/admin/v1/menus' + '/' + id,
-    method: 'delete'
-  })
-}
-
-// 查询树形下拉菜单列表
-export function listMenuTree () {
-  return request({
-    url: '/admin/v1/menus/tree',
-    method: 'get'
+    url: '/admin/v1/menus',
+    method: 'delete',
+    data: ids
   })
 }
 
