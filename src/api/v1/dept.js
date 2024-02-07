@@ -1,7 +1,7 @@
 import request from '@/utils/request'
 
 // 查询部门列表
-export function listDept (data) {
+export function list (data) {
   return request({
     url: '/admin/v1/depts/list',
     method: 'post',
@@ -51,14 +51,6 @@ export function deleteDeptById (id) {
 export function listRoleDeptIDS (roleId) {
   return request({
     url: '/admin/v1/depts/' + roleId + '/ids',
-    method: 'get'
-  })
-}
-
-// 查询树形下拉部门列表
-export function listDeptTree () {
-  return request({
-    url: '/admin/v1/depts/tree',
     method: 'get'
   })
 }

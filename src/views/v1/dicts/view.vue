@@ -75,7 +75,7 @@
 
 <script>
 
-import { listDict, deleteDictById } from '@/api/v1/dict'
+import { list, remove } from '@/api/v1/dict'
 import CreateForm from './modules/CreateForm'
 import { tableMixin } from '@/store/table-mixin'
 
@@ -151,7 +151,7 @@ export default {
     /** 查询字典列表 */
     getList () {
       this.loading = true
-      listDict(this.queryParam).then(response => {
+      list(this.queryParam).then(response => {
           this.list = response.data.records
           this.total = response.data.total - 0
           this.loading = false
@@ -190,7 +190,7 @@ export default {
         title: '确认删除所选中数据?',
         content: '当前选中字典编号为' + id + '的数据',
         onOk () {
-          return deleteDictById(id)
+          return remove([ id ])
             .then(() => {
               that.getList()
               that.$message.success(

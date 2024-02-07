@@ -67,7 +67,7 @@
 
 <script>
 
-import { deleteDeptById, listDept, listDeptTree } from '@/api/v1/dept'
+import { deleteDeptById, list } from '@/api/v1/dept'
 import CreateForm from './modules/CreateForm'
 import { tableMixin } from '@/store/table-mixin'
 
@@ -83,8 +83,13 @@ export default {
       // 部门树选项
       deptOptions: [],
       loading: false,
+      queryTreeParam: {
+        name: '',
+        type: 'TREE_LIST'
+      },
       queryParam: {
-        name: undefined
+        name: '',
+        type: 'LIST'
       },
       columns: [
         {
@@ -119,7 +124,7 @@ export default {
     /** 查询部门列表 */
     getList () {
       this.loading = true
-      listDept(this.queryParam).then(response => {
+      list(this.queryParam).then(response => {
           this.list = this.handleTree(response.data, 'id')
           this.loading = false
         }
@@ -128,8 +133,9 @@ export default {
     /** 查询菜单下拉树结构 */
     getTreeSelect () {
       this.deptOptions = []
-      listDeptTree().then(response => {
-        this.deptOptions.push(response.data)
+      list(this.queryTreeParam).then(response => {
+        const data = { id: 0, pid: '', name: '根目录', children: response.data, path: '0' }
+        this.deptOptions.push(data)
       })
     },
     /** 搜索按钮操作 */
@@ -139,7 +145,8 @@ export default {
     /** 重置按钮操作 */
     resetQuery () {
       this.queryParam = {
-        name: undefined
+        name: '',
+        type: 'LIST'
       }
       this.handleQuery()
     },

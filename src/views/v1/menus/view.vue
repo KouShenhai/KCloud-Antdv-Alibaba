@@ -220,8 +220,7 @@ export default {
         title: '确认删除所选中数据?',
         content: '当前选中编号为' + id + '的数据',
         onOk () {
-          const data = [ id ]
-          return remove(data)
+          return remove([ id ])
             .then(() => {
               that.getList()
               that.$message.success(

@@ -66,7 +66,7 @@
 
 import { getRoleById, insertRole, updateRole } from '@/api/v1/role'
 import { list as menuTreeSelect, listRoleMenuIDS } from '@/api/v1/menu'
-import { listDeptTree as deptTreeSelect, listRoleDeptIDS } from '@/api/v1/dept'
+import { list as deptTreeSelect, listRoleDeptIDS } from '@/api/v1/dept'
 import { getToken } from '@/api/v1/token'
 export default {
   name: 'CreateForm',
@@ -173,7 +173,7 @@ export default {
     /** 查询菜单树结构 */
     getMenuTreeSelect () {
       menuTreeSelect(this.queryParam).then(response => {
-        this.menuOptions = response.data.children
+        this.menuOptions = response.data
         this.menuOptionsAll = this.menuOptions
       })
     },
@@ -342,8 +342,8 @@ export default {
     /** 查询部门树结构 */
     getDeptTreeSelect () {
       deptTreeSelect().then(response => {
-        this.deptOptions = response.data.children
-        this.deptOptionsAll = response.data.children
+        this.deptOptions = response.data
+        this.deptOptionsAll = response.data
       })
     },
     // 表单重置

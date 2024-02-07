@@ -105,8 +105,8 @@
 </template>
 <script>
 
-import { listUser, deleteUserById, updateUserStatus } from '@/api/v1/user'
-import { listDeptTree } from '@/api/v1/dept'
+import { list, remove, updateUserStatus } from '@/api/v1/user'
+import { list as listDept } from '@/api/v1/dept'
 import ResetPassword from './modules/ResetPassword'
 import CreateForm from './modules/CreateForm'
 import { tableMixin } from '@/store/table-mixin'
@@ -214,7 +214,7 @@ export default {
     },
     /** 查询部门下拉树结构 */
     getTreeSelect () {
-      listDeptTree().then(response => {
+      listDept().then(response => {
         this.deptOptions = response.data.children
       })
     },
@@ -230,7 +230,7 @@ export default {
       }
       this.queryParam.startTime = this.dateRange[0] + ' 00:00:00'
       this.queryParam.endTime = this.dateRange[1] + ' 23:59:59'
-      listUser(this.queryParam).then(response => {
+      list(this.queryParam).then(response => {
           this.list = response.data.records
           this.total = response.data.total - 0
           this.loading = false
@@ -271,7 +271,7 @@ export default {
         title: '确认删除所选中数据?',
         content: '当前选中编号为' + id + '的数据',
         onOk () {
-          return deleteUserById(id)
+          return remove([ id ])
             .then(() => {
               that.getList()
               that.$message.success(

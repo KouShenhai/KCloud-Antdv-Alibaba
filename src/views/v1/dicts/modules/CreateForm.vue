@@ -39,7 +39,7 @@
 
 <script>
 
-import { getDictById, insertDict, updateDict } from '@/api/v1/dict'
+import { findById, insertDict, modify } from '@/api/v1/dict'
 import { getToken } from '@/api/v1/token'
 
 export default {
@@ -115,7 +115,7 @@ export default {
     handleUpdate (row, ids) {
       this.reset()
       const id = row ? row.id : ids
-      getDictById(id).then(response => {
+      findById(id).then(response => {
         this.form = response.data
         this.open = true
         this.formTitle = '字典修改'
@@ -128,7 +128,7 @@ export default {
           this.submitLoading = true
           if (this.form.id !== undefined) {
             const data = { dictCO: this.form }
-            updateDict(data).then(() => {
+            modify(data).then(() => {
               this.$message.success(
                 '修改成功',
                 3

@@ -1,6 +1,6 @@
 import request from '@/utils/request'
 // 查询用户列表
-export function listUser (query) {
+export function list (query) {
   return request({
     url: '/admin/v1/users/list',
     method: 'post',
@@ -38,10 +38,11 @@ export function updateUser (data) {
 }
 
 // 删除用户
-export function deleteUserById (id) {
+export function remove (ids) {
   return request({
-    url: '/admin/v1/users/' + id,
-    method: 'delete'
+    url: '/admin/v1/users',
+    method: 'delete',
+    data: ids
   })
 }
 
