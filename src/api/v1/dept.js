@@ -49,7 +49,7 @@ export function remove (ids) {
 }
 
 // 根据角色ID查询部门IDS
-export function listRoleDeptIDS (roleId) {
+export function findIds (roleId) {
   return request({
     url: '/admin/v1/depts/' + roleId + '/ids',
     method: 'get'

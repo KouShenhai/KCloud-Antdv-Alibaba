@@ -49,7 +49,7 @@ export function remove (ids) {
 }
 
 // 根据角色ID查询菜单树IDS
-export function listRoleMenuIDS (roleId) {
+export function findIds (roleId) {
   return request({
     url: '/admin/v1/menus/' + roleId + '/ids',
     method: 'get'

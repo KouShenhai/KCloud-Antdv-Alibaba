@@ -65,8 +65,8 @@
 <script>
 
 import { findById, create, modify } from '@/api/v1/role'
-import { list as menuTreeSelect, listRoleMenuIDS } from '@/api/v1/menu'
-import { list as deptTreeSelect, listRoleDeptIDS } from '@/api/v1/dept'
+import { list as menuTreeSelect, findIds as findMenuIds } from '@/api/v1/menu'
+import { list as deptTreeSelect, findIds as findDeptIds } from '@/api/v1/dept'
 import { getToken } from '@/api/v1/token'
 export default {
   name: 'CreateForm',
@@ -294,7 +294,7 @@ export default {
     },
     /** 根据角色ID查询菜单树结构 */
     getRoleMenuTreeSelect (roleId) {
-      return listRoleMenuIDS(roleId).then(response => {
+      return findMenuIds(roleId).then(response => {
         this.menuOptions = this.menuOptionsAll
         return response
       })
@@ -378,7 +378,7 @@ export default {
     },
     /** 根据角色ID查询部门树结构 */
     getRoleDeptTreeSelect (roleId) {
-      return listRoleDeptIDS(roleId).then(response => {
+      return findDeptIds(roleId).then(response => {
         this.deptOptions = this.deptOptionsAll
         return response
       })
