@@ -1,7 +1,7 @@
 import request from '@/utils/request'
 
 // 查询角色列表-分页
-export function listRole (query) {
+export function list (query) {
   return request({
     url: '/admin/v1/roles/list',
     method: 'post',
@@ -10,7 +10,7 @@ export function listRole (query) {
 }
 
 // 查看角色
-export function getRoleById (id) {
+export function findById (id) {
   return request({
     url: '/admin/v1/roles/' + id,
     method: 'get'
@@ -26,7 +26,7 @@ export function listRoleOption () {
 }
 
 // 新增角色
-export function insertRole (data, token) {
+export function create (data, token) {
   return request({
     url: '/admin/v1/roles',
     method: 'post',
@@ -39,7 +39,7 @@ export function insertRole (data, token) {
 }
 
 // 修改角色
-export function updateRole (data) {
+export function modify (data) {
   return request({
     url: '/admin/v1/roles',
     method: 'put',
@@ -48,9 +48,10 @@ export function updateRole (data) {
 }
 
 // 删除角色
-export function deleteRoleById (roleId) {
+export function remove (ids) {
   return request({
-    url: '/admin/v1/roles/' + roleId,
-    method: 'delete'
+    url: '/admin/v1/roles',
+    method: 'delete',
+    data: ids
   })
 }
