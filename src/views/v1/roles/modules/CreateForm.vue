@@ -341,7 +341,7 @@ export default {
     },
     /** 查询部门树结构 */
     getDeptTreeSelect () {
-      deptTreeSelect().then(response => {
+      deptTreeSelect(this.queryParam).then(response => {
         this.deptOptions = response.data
         this.deptOptionsAll = response.data
       })
