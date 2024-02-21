@@ -38,7 +38,7 @@
 
 <script>
 
-import { getDeptById, insertDept, updateDept } from '@/api/v1/dept'
+import { findById, create, modify } from '@/api/v1/dept'
 import { getToken } from '@/api/v1/token'
 
 export default {
@@ -118,7 +118,7 @@ export default {
       this.reset()
       this.$emit('select-tree', row)
       const deptId = row.id
-      getDeptById(deptId).then(response => {
+      findById(deptId).then(response => {
         this.form = response.data
         this.open = true
         this.formTitle = '修改部门'
@@ -131,7 +131,7 @@ export default {
           this.submitLoading = true
           if (this.form.id !== undefined) {
             const data = { deptCO: this.form }
-            updateDept(data).then(() => {
+            modify(data).then(() => {
               this.$message.success(
                 '修改成功',
                 3
@@ -143,7 +143,7 @@ export default {
             })
           } else {
             const data = { deptCO: this.form }
-            insertDept(data, this.accessToken).then(() => {
+            create(data, this.accessToken).then(() => {
               this.$message.success(
                 '新增成功',
                 3

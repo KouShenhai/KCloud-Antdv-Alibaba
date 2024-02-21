@@ -92,7 +92,7 @@
 
 <script>
 import { listResourceTask, delegateResourceTask, resolveResourceTask, transferResourceTask } from '@/api/v1/resource'
-import { listUserOption } from '@/api/v1/user'
+import { findOptionList } from '@/api/v1/user'
 import { tableMixin } from '@/store/table-mixin'
 import { USER_ID } from '@/store/mutation-types'
 import CreateForm from '../modules/TaskForm.vue'
@@ -229,7 +229,7 @@ export default {
       )
     },
     getUserList () {
-      listUserOption().then(res => {
+      findOptionList().then(res => {
         const userId = storage.get(USER_ID)
         this.form.userId = userId
         this.userList = res.data.filter(function (row) {

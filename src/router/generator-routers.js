@@ -59,7 +59,7 @@ export const generatorDynamicRouter = () => {
       // 路由菜单分离，路由全部为二级，解决多级菜单缓存问题
       const routers = []
       const menuNav = []
-      const routerData = buildRouters(res.data.children)
+      const routerData = buildRouters(res.data)
       const asyncRoutes = filterDynamicRoutes(indexRouterMap)
       rootMenu.children = asyncRoutes.concat(routerData)
       menuNav.push(rootMenu)

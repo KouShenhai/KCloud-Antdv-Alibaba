@@ -1,7 +1,7 @@
 import request from '@/utils/request'
 
 // 查询字典列表
-export function listDict (query) {
+export function list (query) {
   return request({
     url: '/admin/v1/dicts/list',
     method: 'post',
@@ -18,7 +18,7 @@ export function listDictByType (type) {
 }
 
 // 查看字典
-export function getDictById (id) {
+export function findById (id) {
   return request({
     url: '/admin/v1/dicts/' + id,
     method: 'get'
@@ -39,7 +39,7 @@ export function insertDict (data, token) {
 }
 
 // 修改字典
-export function updateDict (data) {
+export function modify (data) {
   return request({
     url: '/admin/v1/dicts',
     method: 'put',
@@ -48,9 +48,10 @@ export function updateDict (data) {
 }
 
 // 删除字典
-export function deleteDictById (id) {
+export function remove (id) {
   return request({
-    url: '/admin/v1/dicts/' + id,
-    method: 'delete'
+    url: '/admin/v1/dicts',
+    method: 'delete',
+    data: id
   })
 }

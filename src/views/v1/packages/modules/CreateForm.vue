@@ -36,8 +36,8 @@
 
 <script>
 
-import { getPackageById, insertPackage, updatePackage } from '@/api/v1/package'
-import { listTenantTree } from '@/api/v1/menu'
+import { findById, create, modify } from '@/api/v1/package'
+import { findTenantMenuList } from '@/api/v1/menu'
 import { getToken } from '@/api/v1/token'
 
 export default {
@@ -65,6 +65,9 @@ export default {
         name: undefined,
         menuIds: [],
         menuCheckStrictly: false
+      },
+      queryTreeParam: {
+        type: 'TREE_LIST'
       },
       open: false,
       rules: {
@@ -98,8 +101,8 @@ export default {
     },
     /** 查询菜单树结构 */
     getMenuTreeSelect () {
-      listTenantTree().then(response => {
-        this.menuOptions = response.data.children
+      findTenantMenuList(this.queryTreeParam).then(response => {
+        this.menuOptions = response.data
         this.menuOptionsAll = this.menuOptions
       })
     },
@@ -192,7 +195,7 @@ export default {
     handleUpdate (row) {
       this.reset()
       const id = row.id
-      getPackageById(id).then(response => {
+      findById(id).then(response => {
         this.form = response.data
         this.form.menuCheckStrictly = false
         this.open = true
@@ -214,7 +217,7 @@ export default {
           if (this.form.id !== undefined) {
             this.form.menuIds = this.getMenuAllCheckedKeys()
             const data = { packageCO: this.form }
-            updatePackage(data).then(() => {
+            modify(data).then(() => {
               this.$message.success(
                 '修改成功',
                 3
@@ -227,7 +230,7 @@ export default {
           } else {
             this.form.menuIds = this.getMenuAllCheckedKeys()
             const data = { packageCO: this.form }
-            insertPackage(data, this.accessToken).then(() => {
+            create(data, this.accessToken).then(() => {
               this.$message.success(
                 '新增成功',
                 3

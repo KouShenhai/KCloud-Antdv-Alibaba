@@ -99,7 +99,7 @@
 
 <script>
 
-import { getMenuById, insertMenu, updateMenu } from '@/api/v1/menu'
+import { create, findById, modify } from '@/api/v1/menu'
 import allIcon from '@/core/icons'
 import icons from '@/utils/requireIcons'
 import IconSelector from '@/components/IconSelector'
@@ -201,7 +201,7 @@ export default {
     handleUpdate (row) {
       this.reset()
       this.$emit('select-tree')
-      getMenuById(row.id).then(response => {
+      findById(row.id).then(response => {
         this.form = response.data
         this.form.type = '' + response.data.type
         this.form.visible = '' + response.data.visible
@@ -216,7 +216,7 @@ export default {
           this.submitLoading = true
           if (this.form.id !== '') {
             const data = { menuCO: this.form }
-            updateMenu(data).then(() => {
+            modify(data).then(() => {
               this.$message.success(
                 '修改成功',
                 3
@@ -229,7 +229,7 @@ export default {
             })
           } else {
             const data = { menuCO: this.form }
-            insertMenu(data, this.accessToken).then(() => {
+            create(data, this.accessToken).then(() => {
               this.$message.success(
                 '新增成功',
                 3

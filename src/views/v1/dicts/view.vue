@@ -25,7 +25,7 @@
         </a-form>
       </div>
       <div class="table-operations">
-        <a-button type="primary" @click="$refs.createForm.handleAdd()" v-hasPermi="['dicts:insert']">
+        <a-button type="primary" @click="$refs.createForm.handleAdd()" v-hasPermi="['dicts:create']">
           <a-icon type="plus" />新增
         </a-button>
       </div>
@@ -44,15 +44,15 @@
         :pagination="false"
         :bordered="tableBordered">
         <span slot="operation" slot-scope="text, record">
-          <a @click="$refs.createForm.handleUpdate(record, undefined)" v-hasPermi="['dicts:update']">
+          <a @click="$refs.createForm.handleUpdate(record, undefined)" v-hasPermi="['dicts:modify']">
             <a-icon type="edit" />修改
           </a>
-          <a-divider type="vertical" v-hasPermi="['dicts:insert']"/>
-          <a @click="$refs.createForm.handleAdd()" v-hasPermi="['dicts:insert']">
+          <a-divider type="vertical" v-hasPermi="['dicts:create']"/>
+          <a @click="$refs.createForm.handleAdd()" v-hasPermi="['dicts:create']">
             <a-icon type="plus" />新增
           </a>
-          <a-divider type="vertical" v-hasPermi="['dicts:delete']"/>
-          <a @click="handleDelete(record)" v-hasPermi="['dicts:delete']">
+          <a-divider type="vertical" v-hasPermi="['dicts:remove']"/>
+          <a @click="handleDelete(record)" v-hasPermi="['dicts:remove']">
             <a-icon type="delete" />删除
           </a>
         </span>
@@ -75,7 +75,7 @@
 
 <script>
 
-import { listDict, deleteDictById } from '@/api/v1/dict'
+import { list, remove } from '@/api/v1/dict'
 import CreateForm from './modules/CreateForm'
 import { tableMixin } from '@/store/table-mixin'
 
@@ -151,7 +151,7 @@ export default {
     /** 查询字典列表 */
     getList () {
       this.loading = true
-      listDict(this.queryParam).then(response => {
+      list(this.queryParam).then(response => {
           this.list = response.data.records
           this.total = response.data.total - 0
           this.loading = false
@@ -190,7 +190,7 @@ export default {
         title: '确认删除所选中数据?',
         content: '当前选中字典编号为' + id + '的数据',
         onOk () {
-          return deleteDictById(id)
+          return remove([ id ])
             .then(() => {
               that.getList()
               that.$message.success(

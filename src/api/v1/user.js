@@ -1,6 +1,6 @@
 import request from '@/utils/request'
 // 查询用户列表
-export function listUser (query) {
+export function list (query) {
   return request({
     url: '/admin/v1/users/list',
     method: 'post',
@@ -9,14 +9,14 @@ export function listUser (query) {
 }
 
 // 获取用户
-export function getUserById (id) {
+export function findById (id) {
   return request({
     url: '/admin/v1/users/' + id,
     method: 'get'
   })
 }
 // 新增用户
-export function insertUser (data, token) {
+export function create (data, token) {
   return request({
     url: '/admin/v1/users',
     method: 'post',
@@ -29,7 +29,7 @@ export function insertUser (data, token) {
 }
 
 // 修改用户
-export function updateUser (data) {
+export function modify (data) {
   return request({
     url: '/admin/v1/users',
     method: 'put',
@@ -38,10 +38,11 @@ export function updateUser (data) {
 }
 
 // 删除用户
-export function deleteUserById (id) {
+export function remove (ids) {
   return request({
-    url: '/admin/v1/users/' + id,
-    method: 'delete'
+    url: '/admin/v1/users',
+    method: 'delete',
+    data: ids
   })
 }
 
@@ -55,7 +56,7 @@ export function resetUserPassword (data) {
 }
 
 // 用户状态修改
-export function updateUserStatus (data) {
+export function modifyStatus (data) {
   return request({
     url: '/admin/v1/users/status',
     data: data,
@@ -64,7 +65,7 @@ export function updateUserStatus (data) {
 }
 
 // 修改用户个人信息
-export function updateUserProfile (data) {
+export function modifyProfile (data) {
   return request({
     url: '/admin/v1/users/profile',
     method: 'put',
@@ -82,7 +83,7 @@ export function uploadAvatar (data) {
 }
 
 // 用户下拉列表
-export function listUserOption () {
+export function findOptionList () {
   return request({
     url: '/admin/v1/users/option-list',
     method: 'get'
@@ -90,7 +91,7 @@ export function listUserOption () {
 }
 
 // 重置密码
-export function updatePassword (data) {
+export function modifyPassword (data) {
   return request({
     url: '/admin/v1/users/password',
     data: data,

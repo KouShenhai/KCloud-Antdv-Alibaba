@@ -62,7 +62,7 @@
 
 import { insertMessage } from '@/api/v1/message'
 import Editor from '@/components/Editor'
-import { listUserOption } from '@/api/v1/user'
+import { findOptionList } from '@/api/v1/user'
 import { uploadOss } from '@/api/v1/oss'
 import { getToken } from '@/api/v1/token'
 export default {
@@ -152,7 +152,7 @@ export default {
   mounted () {
     this.formTitle = this.$route.params.formTitle
     this.handleAdd()
-    listUserOption().then(response => {
+    findOptionList().then(response => {
       this.userOptions = response.data
     })
   },

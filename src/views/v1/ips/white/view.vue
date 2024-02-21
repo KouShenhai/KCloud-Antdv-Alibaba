@@ -4,7 +4,7 @@
       <a-row :gutter="24">
         <a-col :span="20">
           <div class="table-operations">
-            <a-button type="primary" @click="$refs.createForm.handleAdd()" v-hasPermi="['ips:insert-white']">
+            <a-button type="primary" @click="$refs.createForm.handleAdd()" v-hasPermi="['ips:create-white']">
               <a-icon type="plus" />新增
             </a-button>
             <a-button :loading="refreshLoading" type="danger" @click="refresh('white')" v-hasPermi="['ips:refresh-white']">
@@ -25,11 +25,11 @@
             :pagination="false"
             :bordered="tableBordered">
             <span slot="operation" slot-scope="text, record">
-              <a @click="$refs.createForm.handleAdd()" v-hasPermi="['ips:insert-white']">
+              <a @click="$refs.createForm.handleAdd()" v-hasPermi="['ips:create-white']">
                 <a-icon type="plus" />新增
               </a>
-              <a-divider type="vertical" v-hasPermi="['ips:delete-white']"/>
-              <a @click="handleDelete(record)" v-hasPermi="['ips:delete-white']">
+              <a-divider type="vertical" v-hasPermi="['ips:remove-white']"/>
+              <a @click="handleDelete(record)" v-hasPermi="['ips:remove-white']">
                 <a-icon type="delete" />
                 删除
               </a>

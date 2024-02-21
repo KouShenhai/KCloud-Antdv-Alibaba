@@ -20,7 +20,7 @@
         </a-form>
       </div>
       <div class="table-operations">
-        <a-button type="primary" @click="$refs.createForm.handleAdd()" v-hasPermi="['menus:insert']">
+        <a-button type="primary" @click="$refs.createForm.handleAdd()" v-hasPermi="['menus:create']">
           <a-icon type="plus" />新增
         </a-button>
       </div>
@@ -51,15 +51,15 @@
           {{ visibleFormat(record) }}
         </span>
         <span slot="operation" slot-scope="text, record">
-          <a @click="$refs.createForm.handleUpdate(record)" v-hasPermi="['menus:update']">
+          <a @click="$refs.createForm.handleUpdate(record)" v-hasPermi="['menus:modify']">
             <a-icon type="edit" />修改
           </a>
-          <a-divider type="vertical" v-hasPermi="['menus:insert']" />
-          <a @click="$refs.createForm.handleAdd(record)" v-hasPermi="['menus:insert']">
+          <a-divider type="vertical" v-hasPermi="['menus:create']" />
+          <a @click="$refs.createForm.handleAdd(record)" v-hasPermi="['menus:create']">
             <a-icon type="plus" />新增
           </a>
-          <a-divider type="vertical" v-hasPermi="['menus:delete']" />
-          <a @click="handleDelete(record)" v-hasPermi="['menus:delete']">
+          <a-divider type="vertical" v-hasPermi="['menus:remove']" />
+          <a @click="handleDelete(record)" v-hasPermi="['menus:remove']">
             <a-icon type="delete" />删除
           </a>
         </span>
@@ -70,7 +70,7 @@
 
 <script>
 
-import { listMenu, listMenuTree, deleteMenuById } from '@/api/v1/menu'
+import { list, remove } from '@/api/v1/menu'
 import CreateForm from './modules/CreateForm'
 import allIcon from '@/core/icons'
 import { tableMixin } from '@/store/table-mixin'
@@ -89,7 +89,12 @@ export default {
       menuOptions: [],
       loading: false,
       queryParam: {
-        name: ''
+        name: '',
+        type: 'LIST'
+      },
+      queryTreeParam: {
+        name: '',
+        type: 'TREE_LIST'
       },
       columns: [
         {
@@ -165,7 +170,7 @@ export default {
     /** 查询菜单列表 */
     getList () {
       this.loading = true
-      listMenu(this.queryParam).then(response => {
+      list(this.queryParam).then(response => {
           this.list = this.handleTree(response.data, 'id')
           this.loading = false
         }
@@ -194,15 +199,17 @@ export default {
     /** 重置按钮操作 */
     resetQuery () {
       this.queryParam = {
-        name: ''
+        name: '',
+        type: 'LIST'
       }
       this.handleQuery()
     },
     /** 查询菜单下拉树结构 */
     getTreeSelect () {
       this.menuOptions = []
-      listMenuTree().then(response => {
-        this.menuOptions.push(response.data)
+      list(this.queryTreeParam).then(response => {
+        const data = { id: '0', pid: '', name: '根目录', children: response.data }
+        this.menuOptions.push(data)
       })
     },
     /** 删除按钮操作 */
@@ -213,7 +220,7 @@ export default {
         title: '确认删除所选中数据?',
         content: '当前选中编号为' + id + '的数据',
         onOk () {
-          return deleteMenuById(id)
+          return remove([ id ])
             .then(() => {
               that.getList()
               that.$message.success(

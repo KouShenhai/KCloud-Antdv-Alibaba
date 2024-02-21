@@ -27,7 +27,7 @@
             </a-form>
           </div>
           <div class="table-operations">
-            <a-button type="primary" @click="$refs.createForm.handleAdd()" v-hasPermi="['users:insert']">
+            <a-button type="primary" @click="$refs.createForm.handleAdd()" v-hasPermi="['users:create']">
               <a-icon type="plus" />新增
             </a-button>
           </div>
@@ -58,24 +58,24 @@
               <img style="width:50px;height:50px" :src="record.avatar" />
             </span>
             <span slot="operation" slot-scope="text, record">
-              <a @click="$refs.createForm.handleUpdate(record)" v-show="record.superAdmin !== 1 || superAdmin === 1" v-hasPermi="['users:update']">
+              <a @click="$refs.createForm.handleUpdate(record)" v-show="record.superAdmin !== 1 || superAdmin === 1" v-hasPermi="['users:modify']">
                 <a-icon type="edit" />
                 修改
               </a>
-              <a-divider type="vertical" v-show="record.superAdmin !== 1 || superAdmin === 1" v-hasPermi="['users:insert']"/>
-              <a @click="$refs.createForm.handleAdd()" v-show="record.superAdmin !== 1 || superAdmin === 1" v-hasPermi="['users:insert']">
+              <a-divider type="vertical" v-show="record.superAdmin !== 1 || superAdmin === 1" v-hasPermi="['users:create']"/>
+              <a @click="$refs.createForm.handleAdd()" v-show="record.superAdmin !== 1 || superAdmin === 1" v-hasPermi="['users:create']">
                 <a-icon type="plus" />新增
               </a>
-              <a-divider type="vertical" v-show="record.superAdmin !== 1 || superAdmin === 1" v-hasPermi="['users:status']" v-if="record.status == 1"/>
-              <a @click="changeStatus(record)" v-show="record.superAdmin !== 1 || superAdmin === 1" v-hasPermi="['users:status']" v-if="record.status == 1">
+              <a-divider type="vertical" v-show="record.superAdmin !== 1 || superAdmin === 1" v-hasPermi="['users:modify-status']" v-if="record.status == 1"/>
+              <a @click="changeStatus(record)" v-show="record.superAdmin !== 1 || superAdmin === 1" v-hasPermi="['users:modify-status']" v-if="record.status == 1">
                 <a-icon type="unlock" />启用
               </a>
-              <a-divider type="vertical" v-show="record.superAdmin !== 1 || superAdmin === 1" v-hasPermi="['users:status']" v-if="record.status == 0"/>
-              <a @click="changeStatus(record)" v-show="record.superAdmin !== 1 || superAdmin === 1" v-hasPermi="['users:status']" v-if="record.status == 0">
+              <a-divider type="vertical" v-show="record.superAdmin !== 1 || superAdmin === 1" v-hasPermi="['users:modify-status']" v-if="record.status == 0"/>
+              <a @click="changeStatus(record)" v-show="record.superAdmin !== 1 || superAdmin === 1" v-hasPermi="['users:modify-status']" v-if="record.status == 0">
                 <a-icon type="lock" />锁定
               </a>
-              <a-divider type="vertical" v-show="record.superAdmin !== 1 || superAdmin === 1" v-hasPermi="['users:delete']"/>
-              <a @click="handleDelete(record)" v-show="record.superAdmin !== 1 || superAdmin === 1" v-hasPermi="['users:delete']">
+              <a-divider type="vertical" v-show="record.superAdmin !== 1 || superAdmin === 1" v-hasPermi="['users:remove']"/>
+              <a @click="handleDelete(record)" v-show="record.superAdmin !== 1 || superAdmin === 1" v-hasPermi="['users:remove']">
                 <a-icon type="delete" />
                 删除
               </a>
@@ -105,8 +105,8 @@
 </template>
 <script>
 
-import { listUser, deleteUserById, updateUserStatus } from '@/api/v1/user'
-import { listDeptTree } from '@/api/v1/dept'
+import { list, remove, modifyStatus } from '@/api/v1/user'
+import { list as listDept } from '@/api/v1/dept'
 import ResetPassword from './modules/ResetPassword'
 import CreateForm from './modules/CreateForm'
 import { tableMixin } from '@/store/table-mixin'
@@ -145,6 +145,10 @@ export default {
         status: undefined,
         startTime: '',
         endTime: ''
+      },
+      queryTreeParam: {
+        name: '',
+        type: 'TREE_LIST'
       },
       columns: [
         {
@@ -194,7 +198,7 @@ export default {
       const id = row.id
       const status = (row.status + 1) % 2
       const data = { id: id, status: status }
-      updateUserStatus(data).then(() => {
+      modifyStatus(data).then(() => {
         const notice = status === 1 ? '锁定' : '启用'
         this.$message.success(
            notice + '成功',
@@ -214,8 +218,8 @@ export default {
     },
     /** 查询部门下拉树结构 */
     getTreeSelect () {
-      listDeptTree().then(response => {
-        this.deptOptions = response.data.children
+      listDept(this.queryTreeParam).then(response => {
+        this.deptOptions = response.data
       })
     },
     /** 查询用户列表 */
@@ -230,7 +234,7 @@ export default {
       }
       this.queryParam.startTime = this.dateRange[0] + ' 00:00:00'
       this.queryParam.endTime = this.dateRange[1] + ' 23:59:59'
-      listUser(this.queryParam).then(response => {
+      list(this.queryParam).then(response => {
           this.list = response.data.records
           this.total = response.data.total - 0
           this.loading = false
@@ -271,7 +275,7 @@ export default {
         title: '确认删除所选中数据?',
         content: '当前选中编号为' + id + '的数据',
         onOk () {
-          return deleteUserById(id)
+          return remove([ id ])
             .then(() => {
               that.getList()
               that.$message.success(

@@ -39,7 +39,7 @@
         </a-form>
       </div>
       <div class="table-operations">
-        <a-button type="primary" @click="$refs.createForm.handleAdd()" v-hasPermi="['resource:insert']">
+        <a-button type="primary" @click="$refs.createForm.handleAdd()" v-hasPermi="['resource:create']">
           <a-icon type="plus" />新增
         </a-button>
         <a-button :loading="syncLoading" type="danger" @click="syncIndex()" v-hasPermi="['resource:sync']">
@@ -67,11 +67,11 @@
           {{ codeFormat(record) }}
         </span>
         <span slot="operation" slot-scope="text, record" >
-          <a @click="$refs.createForm.handleAdd()" v-hasPermi="['resource:insert']">
+          <a @click="$refs.createForm.handleAdd()" v-hasPermi="['resource:create']">
             <a-icon type="plus" />新增
           </a>
-          <a-divider type="vertical" v-hasPermi="['resource:update']" v-if="record.status == 2 || record.status == -1"/>
-          <a v-hasPermi="['resource:update']" @click="$refs.createForm.handleUpdate(record, undefined)" v-if="record.status == 2 || record.status == -1">
+          <a-divider type="vertical" v-hasPermi="['resource:modify']" v-if="record.status == 2 || record.status == -1"/>
+          <a v-hasPermi="['resource:modify']" @click="$refs.createForm.handleUpdate(record, undefined)" v-if="record.status == 2 || record.status == -1">
             <a-icon type="edit" />修改
           </a>
           <a-divider type="vertical" v-if="record.status == 2 || record.status == -1" v-hasPermi="['resource:detail']"/>
@@ -90,8 +90,8 @@
           <a @click="handleQuery3(record)" v-hasPermi="['resource:audit-log']">
             <a-icon type="file" />审批日志
           </a>
-          <a-divider type="vertical" v-if="record.status == 2 || record.status == -1" v-hasPermi="['resource:delete']"/>
-          <a @click="handleDelete(record)" v-if="record.status == 2 || record.status == -1" v-hasPermi="['resource:delete']">
+          <a-divider type="vertical" v-if="record.status == 2 || record.status == -1" v-hasPermi="['resource:remove']"/>
+          <a @click="handleDelete(record)" v-if="record.status == 2 || record.status == -1" v-hasPermi="['resource:remove']">
             <a-icon type="delete" />删除
           </a>
         </span>

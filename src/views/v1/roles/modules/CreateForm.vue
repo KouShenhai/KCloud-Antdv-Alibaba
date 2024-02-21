@@ -64,9 +64,9 @@
 
 <script>
 
-import { getRoleById, insertRole, updateRole } from '@/api/v1/role'
-import { listMenuTree as menuTreeSelect, listRoleMenuIDS } from '@/api/v1/menu'
-import { listDeptTree as deptTreeSelect, listRoleDeptIDS } from '@/api/v1/dept'
+import { findById, create, modify } from '@/api/v1/role'
+import { list as menuTreeSelect, findIds as findMenuIds } from '@/api/v1/menu'
+import { list as deptTreeSelect, findIds as findDeptIds } from '@/api/v1/dept'
 import { getToken } from '@/api/v1/token'
 export default {
   name: 'CreateForm',
@@ -98,6 +98,10 @@ export default {
       formTitle: '',
       // 部门列表
       deptOptions: [],
+      queryParam: {
+        name: '',
+        type: 'TREE_LIST'
+      },
       // 表单参数
       form: {
         id: undefined,
@@ -168,8 +172,8 @@ export default {
     },
     /** 查询菜单树结构 */
     getMenuTreeSelect () {
-      menuTreeSelect().then(response => {
-        this.menuOptions = response.data.children
+      menuTreeSelect(this.queryParam).then(response => {
+        this.menuOptions = response.data
         this.menuOptionsAll = this.menuOptions
       })
     },
@@ -290,7 +294,7 @@ export default {
     },
     /** 根据角色ID查询菜单树结构 */
     getRoleMenuTreeSelect (roleId) {
-      return listRoleMenuIDS(roleId).then(response => {
+      return findMenuIds(roleId).then(response => {
         this.menuOptions = this.menuOptionsAll
         return response
       })
@@ -337,9 +341,9 @@ export default {
     },
     /** 查询部门树结构 */
     getDeptTreeSelect () {
-      deptTreeSelect().then(response => {
-        this.deptOptions = response.data.children
-        this.deptOptionsAll = response.data.children
+      deptTreeSelect(this.queryParam).then(response => {
+        this.deptOptions = response.data
+        this.deptOptionsAll = response.data
       })
     },
     // 表单重置
@@ -374,7 +378,7 @@ export default {
     },
     /** 根据角色ID查询部门树结构 */
     getRoleDeptTreeSelect (roleId) {
-      return listRoleDeptIDS(roleId).then(response => {
+      return findDeptIds(roleId).then(response => {
         this.deptOptions = this.deptOptionsAll
         return response
       })
@@ -385,7 +389,7 @@ export default {
       const id = row.id
       const roleMenu = this.getRoleMenuTreeSelect(id)
       const roleDept = this.getRoleDeptTreeSelect(id)
-      getRoleById(id).then(response => {
+      findById(id).then(response => {
         this.form = response.data
         this.form.menuCheckStrictly = false
         this.form.deptCheckStrictly = true
@@ -418,7 +422,7 @@ export default {
             this.form.menuIds = this.getMenuAllCheckedKeys()
             this.form.deptIds = this.getDeptAllCheckedKeys()
             const data = { roleCO: this.form }
-            updateRole(data).then(() => {
+            modify(data).then(() => {
               this.$message.success(
                 '修改成功',
                 3
@@ -432,7 +436,7 @@ export default {
             this.form.menuIds = this.getMenuAllCheckedKeys()
             this.form.deptIds = this.getDeptAllCheckedKeys()
             const data = { roleCO: this.form }
-            insertRole(data, this.accessToken).then(() => {
+            create(data, this.accessToken).then(() => {
               this.$message.success(
                 '新增成功',
                 3

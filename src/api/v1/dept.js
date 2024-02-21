@@ -1,7 +1,7 @@
 import request from '@/utils/request'
 
 // 查询部门列表
-export function listDept (data) {
+export function list (data) {
   return request({
     url: '/admin/v1/depts/list',
     method: 'post',
@@ -10,7 +10,7 @@ export function listDept (data) {
 }
 
 // 查询部门详细
-export function getDeptById (id) {
+export function findById (id) {
   return request({
     url: '/admin/v1/depts/' + id,
     method: 'get'
@@ -18,7 +18,7 @@ export function getDeptById (id) {
 }
 
 // 新增部门
-export function insertDept (data, token) {
+export function create (data, token) {
   return request({
     url: '/admin/v1/depts',
     method: 'post',
@@ -31,7 +31,7 @@ export function insertDept (data, token) {
 }
 
 // 修改部门
-export function updateDept (data) {
+export function modify (data) {
   return request({
     url: '/admin/v1/depts',
     method: 'put',
@@ -40,25 +40,18 @@ export function updateDept (data) {
 }
 
 // 删除部门
-export function deleteDeptById (id) {
+export function remove (ids) {
   return request({
-    url: '/admin/v1/depts' + '/' + id,
-    method: 'delete'
+    url: '/admin/v1/depts',
+    method: 'delete',
+    data: ids
   })
 }
 
 // 根据角色ID查询部门IDS
-export function listRoleDeptIDS (roleId) {
+export function findIds (roleId) {
   return request({
     url: '/admin/v1/depts/' + roleId + '/ids',
-    method: 'get'
-  })
-}
-
-// 查询树形下拉部门列表
-export function listDeptTree () {
-  return request({
-    url: '/admin/v1/depts/tree',
     method: 'get'
   })
 }

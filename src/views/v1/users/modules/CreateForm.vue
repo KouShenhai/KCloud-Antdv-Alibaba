@@ -57,8 +57,8 @@
 
 <script>
 
-import { getUserById, insertUser, updateUser } from '@/api/v1/user'
-import { listRoleOption } from '@/api/v1/role'
+import { findById, create, modify } from '@/api/v1/user'
+import { findOptionList } from '@/api/v1/role'
 import { getToken } from '@/api/v1/token'
 export default {
     name: 'CreateForm',
@@ -175,7 +175,7 @@ export default {
         this.token()
         this.superAdminDisable = false
         this.$emit('select-tree')
-        listRoleOption().then(response => {
+        findOptionList().then(response => {
           const roles = []
           response.data.forEach(item => {
             roles.push({
@@ -195,7 +195,7 @@ export default {
         this.$emit('select-tree')
         // eslint-disable-next-line no-unused-vars
         const id = row.id
-        listRoleOption().then(response => {
+        findOptionList().then(response => {
           const roles = []
           response.data.forEach(item => {
             roles.push({
@@ -205,12 +205,11 @@ export default {
           })
           this.roleOptions = roles
         })
-        getUserById(id).then(response => {
-          this.form = response.data
+        findById(id).then(response => {
           this.open = true
           this.formTitle = '用户修改'
-          this.form.password = ''
           this.superAdminDisable = response.data.superAdmin === 1
+          this.form = response.data
         })
       },
       /** 提交按钮 */
@@ -220,7 +219,7 @@ export default {
             this.submitLoading = true
             if (this.form.id !== undefined) {
               const data = { userCO: this.form }
-              updateUser(data).then(() => {
+              modify(data).then(() => {
                 this.$message.success(
                   '修改成功',
                   3
@@ -232,7 +231,7 @@ export default {
               })
             } else {
               const data = { userCO: this.form }
-              insertUser(data, this.accessToken).then(() => {
+              create(data, this.accessToken).then(() => {
                 this.$message.success(
                   '新增成功',
                   3

@@ -20,7 +20,7 @@
         </a-form>
       </div>
       <div class="table-operations">
-        <a-button type="primary" @click="$refs.createForm.handleAdd()" v-hasPermi="['roles:insert']">
+        <a-button type="primary" @click="$refs.createForm.handleAdd()" v-hasPermi="['roles:create']">
           <a-icon type="plus" />新增
         </a-button>
       </div>
@@ -39,17 +39,17 @@
         :pagination="false"
         :bordered="tableBordered">
         <span slot="operation" slot-scope="text, record">
-          <a @click="$refs.createForm.handleUpdate(record, undefined)" v-hasPermi="['roles:update']">
+          <a @click="$refs.createForm.handleUpdate(record, undefined)" v-hasPermi="['roles:modify']">
             <a-icon type="edit" />
             修改
           </a>
-          <a-divider type="vertical" v-hasPermi="['roles:insert']" />
-          <a @click="$refs.createForm.handleAdd()" v-hasPermi="['roles:insert']">
+          <a-divider type="vertical" v-hasPermi="['roles:create']" />
+          <a @click="$refs.createForm.handleAdd()" v-hasPermi="['roles:create']">
             <a-icon type="plus" />
             新增
           </a>
-          <a-divider type="vertical" v-hasPermi="['roles:delete']" />
-          <a @click="handleDelete(record)" v-hasPermi="['roles:delete']">
+          <a-divider type="vertical" v-hasPermi="['roles:remove']" />
+          <a @click="handleDelete(record)" v-hasPermi="['roles:remove']">
             <a-icon type="delete" />
             删除
           </a>
@@ -73,7 +73,7 @@
 
 <script>
 
-import { listRole, deleteRoleById } from '@/api/v1/role'
+import { list, remove } from '@/api/v1/role'
 import CreateForm from './modules/CreateForm'
 import { tableMixin } from '@/store/table-mixin'
 
@@ -131,7 +131,7 @@ export default {
     /** 查询角色列表 */
     getList () {
       this.loading = true
-      listRole(this.queryParam).then(response => {
+      list(this.queryParam).then(response => {
           this.list = response.data.records
           this.total = response.data.total - 0
           this.loading = false
@@ -170,7 +170,7 @@ export default {
         title: '确认删除所选中数据?',
         content: '当前选中编号为' + id + '的数据',
         onOk () {
-          return deleteRoleById(id)
+          return remove([ id ])
             .then(() => {
               that.getList()
               that.$message.success(
