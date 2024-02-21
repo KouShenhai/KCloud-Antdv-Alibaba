@@ -1,7 +1,7 @@
 import request from '@/utils/request'
 
 // 查询套擦
-export function listPackage (query) {
+export function list (query) {
   return request({
     url: '/admin/v1/packages/list',
     method: 'post',

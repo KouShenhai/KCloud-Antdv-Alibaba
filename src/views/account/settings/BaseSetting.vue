@@ -43,7 +43,7 @@
 </template>
 
 <script>
-import { updateUserProfile, uploadAvatar } from '@/api/v1/user'
+import { modifyProfile, uploadAvatar } from '@/api/v1/user'
 import { mapGetters } from 'vuex'
 import { info } from '@/api/v1/login'
 export default {
@@ -114,7 +114,7 @@ export default {
         if (valid) {
           this.submitLoading = true
           const data = { userProfileCO: this.user }
-          updateUserProfile(data).then(() => {
+          modifyProfile(data).then(() => {
             this.$notification.success({
               message: '提示',
               description: '修改成功,请退出登录后生效'

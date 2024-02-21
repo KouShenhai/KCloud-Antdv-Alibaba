@@ -105,7 +105,7 @@
 </template>
 <script>
 
-import { list, remove, updateUserStatus } from '@/api/v1/user'
+import { list, remove, modifyStatus } from '@/api/v1/user'
 import { list as listDept } from '@/api/v1/dept'
 import ResetPassword from './modules/ResetPassword'
 import CreateForm from './modules/CreateForm'
@@ -145,6 +145,10 @@ export default {
         status: undefined,
         startTime: '',
         endTime: ''
+      },
+      queryTreeParam: {
+        name: '',
+        type: 'TREE_LIST'
       },
       columns: [
         {
@@ -194,7 +198,7 @@ export default {
       const id = row.id
       const status = (row.status + 1) % 2
       const data = { id: id, status: status }
-      updateUserStatus(data).then(() => {
+      modifyStatus(data).then(() => {
         const notice = status === 1 ? '锁定' : '启用'
         this.$message.success(
            notice + '成功',
@@ -214,8 +218,8 @@ export default {
     },
     /** 查询部门下拉树结构 */
     getTreeSelect () {
-      listDept().then(response => {
-        this.deptOptions = response.data.children
+      listDept(this.queryTreeParam).then(response => {
+        this.deptOptions = response.data
       })
     },
     /** 查询用户列表 */

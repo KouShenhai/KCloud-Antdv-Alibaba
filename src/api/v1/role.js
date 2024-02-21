@@ -18,7 +18,7 @@ export function findById (id) {
 }
 
 // 查询角色列表
-export function listRoleOption () {
+export function findOptionList () {
   return request({
     url: '/admin/v1/roles/option-list',
     method: 'get'

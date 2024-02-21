@@ -37,7 +37,7 @@
 <script>
 
 import { getPackageById, insertPackage, updatePackage } from '@/api/v1/package'
-import { listTenantTree } from '@/api/v1/menu'
+import { findTenantMenuList } from '@/api/v1/menu'
 import { getToken } from '@/api/v1/token'
 
 export default {
@@ -65,6 +65,9 @@ export default {
         name: undefined,
         menuIds: [],
         menuCheckStrictly: false
+      },
+      queryTreeParam: {
+        type: 'TREE_LIST'
       },
       open: false,
       rules: {
@@ -98,7 +101,7 @@ export default {
     },
     /** 查询菜单树结构 */
     getMenuTreeSelect () {
-      listTenantTree().then(response => {
+      findTenantMenuList(this.queryTreeParam).then(response => {
         this.menuOptions = response.data.children
         this.menuOptionsAll = this.menuOptions
       })

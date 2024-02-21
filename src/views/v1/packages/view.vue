@@ -73,7 +73,7 @@
 
 <script>
 
-import { listPackage, deletePackageById } from '@/api/v1/package'
+import { list, deletePackageById } from '@/api/v1/package'
 import CreateForm from './modules/CreateForm'
 import { tableMixin } from '@/store/table-mixin'
 
@@ -123,7 +123,7 @@ export default {
     /** 查询套餐列表 */
     getList () {
       this.loading = true
-      listPackage(this.queryParam).then(response => {
+      list(this.queryParam).then(response => {
           this.list = response.data.records
           this.total = response.data.total - 0
           this.loading = false
