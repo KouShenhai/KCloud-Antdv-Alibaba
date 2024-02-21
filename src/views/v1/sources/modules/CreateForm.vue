@@ -42,7 +42,7 @@
 
 <script>
 
-import { insertSource, updateSource, getSourceById } from '@/api/v1/source'
+import { create, modify, findById } from '@/api/v1/source'
 import { listDictByType } from '@/api/v1/dict'
 import { getToken } from '@/api/v1/token'
 
@@ -141,7 +141,7 @@ import { getToken } from '@/api/v1/token'
         this.reset()
         this.open = true
         const id = row.id
-        getSourceById(id).then(res => {
+        findById(id).then(res => {
           this.form.id = res.data.id
           this.form.name = res.data.name
           this.form.driverClassName = res.data.driverClassName
@@ -158,7 +158,7 @@ import { getToken } from '@/api/v1/token'
             this.submitLoading = true
             if (this.form.id !== undefined) {
               const data = { sourceCO: this.form }
-              updateSource(data).then(() => {
+              modify(data).then(() => {
                 this.$message.success(
                   '修改成功',
                   3
@@ -170,7 +170,7 @@ import { getToken } from '@/api/v1/token'
               })
             } else {
               const data = { sourceCO: this.form }
-              insertSource(data, this.accessToken).then(() => {
+              create(data, this.accessToken).then(() => {
                 this.$message.success(
                   '新增成功',
                   3

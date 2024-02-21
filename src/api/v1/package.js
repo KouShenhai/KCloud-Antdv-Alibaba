@@ -49,7 +49,7 @@ export function remove (ids) {
 }
 
 // 套餐下拉列表
-export function packageOption () {
+export function findOptionList () {
   return request({
     url: '/admin/v1/packages/option-list',
     method: 'get'
