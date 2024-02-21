@@ -57,9 +57,10 @@ export function findIds (roleId) {
 }
 
 // 租户菜单
-export function findTenantMenuList () {
+export function findTenantMenuList (data) {
   return request({
     url: '/admin/v1/menus/tenant-menu-list',
-    method: 'get'
+    method: 'post',
+    data: data
   })
 }

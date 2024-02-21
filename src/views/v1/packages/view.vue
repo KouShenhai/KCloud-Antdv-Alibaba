@@ -73,7 +73,7 @@
 
 <script>
 
-import { list, deletePackageById } from '@/api/v1/package'
+import { list, remove } from '@/api/v1/package'
 import CreateForm from './modules/CreateForm'
 import { tableMixin } from '@/store/table-mixin'
 
@@ -162,7 +162,7 @@ export default {
         title: '确认删除所选中数据?',
         content: '当前选中编号为' + id + '的数据',
         onOk () {
-          return deletePackageById(id)
+          return remove([ id ])
             .then(() => {
               that.getList()
               that.$message.success(
