@@ -42,9 +42,9 @@
 
 <script>
 
-  import { getTenantById, insertTenant, updateTenant } from '@/api/v1/tenant'
-  import { listSourceOption } from '@/api/v1/source'
-  import { packageOption } from '@/api/v1/package'
+  import { findById, create, modify } from '@/api/v1/tenant'
+  import { findOptionList as findSourceOptionList } from '@/api/v1/source'
+  import { findOptionList as findPackageOptionList } from '@/api/v1/package'
   import { getToken } from '@/api/v1/token'
 
   export default {
@@ -97,12 +97,12 @@
         })
       },
       getSourceOption () {
-        listSourceOption().then(res => {
+        findSourceOptionList().then(res => {
           this.sourceOption = res.data
         })
       },
       getPackageOption () {
-        packageOption().then(res => {
+        findPackageOptionList().then(res => {
           this.packageOption = res.data
         })
       },
@@ -134,7 +134,7 @@
       handleUpdate (row) {
         this.reset()
         const id = row.id
-        getTenantById(id).then(response => {
+        findById(id).then(response => {
           this.form = response.data
           this.open = true
           this.formTitle = '租户修改'
@@ -147,7 +147,7 @@
             this.submitLoading = true
             if (this.form.id !== undefined) {
               const data = { tenantCO: this.form }
-              updateTenant(data).then(() => {
+              modify(data).then(() => {
                 this.$message.success(
                   '修改成功',
                   3
@@ -159,7 +159,7 @@
               })
             } else {
               const data = { tenantCO: this.form }
-              insertTenant(data, this.accessToken).then(() => {
+              create(data, this.accessToken).then(() => {
                 this.$message.success(
                   '新增成功',
                   3

@@ -1,7 +1,7 @@
 import request from '@/utils/request'
 
 // 查询数据源列表
-export function listSource (query) {
+export function list (query) {
   return request({
     url: '/admin/v1/sources/list',
     method: 'post',
@@ -10,7 +10,7 @@ export function listSource (query) {
 }
 
 // 查询数据源
-export function getSourceById (id) {
+export function findById (id) {
   return request({
     url: '/admin/v1/sources/' + id,
     method: 'get'
@@ -18,7 +18,7 @@ export function getSourceById (id) {
 }
 
 // 新增数据源
-export function insertSource (data, token) {
+export function create (data, token) {
   return request({
     url: '/admin/v1/sources',
     method: 'post',
@@ -31,7 +31,7 @@ export function insertSource (data, token) {
 }
 
 // 修改数据源
-export function updateSource (data) {
+export function modify (data) {
   return request({
     url: '/admin/v1/sources',
     method: 'put',
@@ -40,15 +40,16 @@ export function updateSource (data) {
 }
 
 // 删除数据源
-export function deleteSourceById (userId) {
+export function remove (ids) {
   return request({
-    url: '/admin/v1/sources/' + userId,
-    method: 'delete'
+    url: '/admin/v1/sources',
+    method: 'delete',
+    data: ids
   })
 }
 
 // 数据源下拉列表
-export function listSourceOption () {
+export function findOptionList () {
   return request({
     url: '/admin/v1/sources/option-list',
     method: 'get'

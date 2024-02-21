@@ -75,7 +75,7 @@
 </template>
 <script>
 
-import { listSource, deleteSourceById } from '@/api/v1/source'
+import { list, remove } from '@/api/v1/source'
 import CreateForm from './modules/CreateForm'
 import { tableMixin } from '@/store/table-mixin'
 export default {
@@ -138,7 +138,7 @@ export default {
     /** 查询数据源列表 */
     getList () {
       this.loading = true
-      listSource(this.queryParam).then(response => {
+      list(this.queryParam).then(response => {
           this.list = response.data.records
           this.total = response.data.total - 0
           this.loading = false
@@ -178,7 +178,7 @@ export default {
         title: '确认删除所选中数据?',
         content: '当前选中编号为' + id + '的数据',
         onOk () {
-          return deleteSourceById(id)
+          return remove([ id ])
             .then(() => {
               that.getList()
               that.$message.success(

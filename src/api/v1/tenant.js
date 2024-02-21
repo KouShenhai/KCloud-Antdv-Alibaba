@@ -1,6 +1,6 @@
 import request from '@/utils/request'
 // 查询租户列表
-export function listTenant (query) {
+export function list (query) {
   return request({
     url: '/admin/v1/tenants/list',
     method: 'post',
@@ -9,7 +9,7 @@ export function listTenant (query) {
 }
 
 // 查询租户详细
-export function getTenantById (id) {
+export function findById (id) {
   return request({
     url: '/admin/v1/tenants/' + id,
     method: 'get'
@@ -17,7 +17,7 @@ export function getTenantById (id) {
 }
 
 // 新增租户
-export function insertTenant (data, token) {
+export function create (data, token) {
   return request({
     url: '/admin/v1/tenants',
     method: 'post',
@@ -30,7 +30,7 @@ export function insertTenant (data, token) {
 }
 
 // 修改租户
-export function updateTenant (data) {
+export function modify (data) {
   return request({
     url: '/admin/v1/tenants',
     method: 'put',
@@ -39,22 +39,23 @@ export function updateTenant (data) {
 }
 
 // 删除租户
-export function deleteTenantById (id) {
+export function remove (ids) {
   return request({
-    url: '/admin/v1/tenants/' + id,
-    method: 'delete'
+    url: '/admin/v1/tenants',
+    method: 'delete',
+    data: ids
   })
 }
 
 // 解析域名查看ID
-export function getTenantIdByDomainName () {
+export function findIdByDomainName () {
   return request({
     url: '/admin/v1/tenants/id',
     method: 'get'
   })
 }
 
-export function downloadTenantDatasource (id) {
+export function downloadDatasource (id) {
   return request({
     url: '/admin/v1/tenants/' + id + '/download-datasource',
     method: 'get',

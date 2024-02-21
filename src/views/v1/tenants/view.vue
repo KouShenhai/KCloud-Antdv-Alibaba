@@ -79,7 +79,7 @@
 </template>
 <script>
 
-import { listTenant, deleteTenantById, downloadTenantDatasource } from '@/api/v1/tenant'
+import { list, remove, downloadDatasource } from '@/api/v1/tenant'
 import CreateForm from '@/views/v1/tenants/modules/CreateForm'
 import { tableMixin } from '@/store/table-mixin'
 import moment from 'moment/moment'
@@ -132,7 +132,7 @@ export default {
     /** 查询租户列表 */
     getList () {
       this.loading = true
-      listTenant(this.queryParam).then(response => {
+      list(this.queryParam).then(response => {
           this.list = response.data.records
           this.total = response.data.total - 0
           this.loading = false
@@ -141,7 +141,7 @@ export default {
     },
     download (row) {
       this.loading = true
-      downloadTenantDatasource(row.id).then(res => {
+      downloadDatasource(row.id).then(res => {
         const url = window.URL.createObjectURL(res) // 创建下载链接
         const link = document.createElement('a') // 赋值给a标签的href属性
         link.style.display = 'none'
@@ -189,7 +189,7 @@ export default {
         title: '确认删除所选中数据?',
         content: '当前选中编号为' + id + '的数据',
         onOk () {
-          return deleteTenantById(id)
+          return remove([ id ])
             .then(() => {
               that.getList()
               that.$message.success(

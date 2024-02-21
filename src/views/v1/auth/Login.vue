@@ -86,7 +86,7 @@
 import { mapActions } from 'vuex'
 import { timeFix } from '@/utils/util'
 import { captcha, tenant, secret } from '@/api/v1/login'
-import { getTenantIdByDomainName } from '@/api/v1/tenant'
+import { findIdByDomainName } from '@/api/v1/tenant'
 import { JSEncrypt } from 'jsencrypt'
 export default {
   name: 'Login',
@@ -125,7 +125,7 @@ export default {
   },
   methods: {
     getTenantId () {
-      getTenantIdByDomainName().then(res => {
+      findIdByDomainName().then(res => {
         this.form.tenantId = res.data
       })
     },
