@@ -45,7 +45,7 @@
 
 <script>
 
-import { getOssById, updateOss, insertOss } from '@/api/v1/oss'
+import { findById, modify, create } from '@/api/v1/oss'
 import { getToken } from '@/api/v1/token'
 
   export default {
@@ -140,7 +140,7 @@ import { getToken } from '@/api/v1/token'
       handleUpdate (row) {
         this.reset()
         const id = row.id
-        getOssById(id).then(response => {
+        findById(id).then(response => {
           this.form = response.data
           this.form.pathStyleAccessEnabled = '' + response.data.pathStyleAccessEnabled
           this.form.status = '' + response.data.status
@@ -155,7 +155,7 @@ import { getToken } from '@/api/v1/token'
             this.submitLoading = true
             if (this.form.id !== undefined) {
               const data = { ossCO: this.form }
-              updateOss(data).then(() => {
+              modify(data).then(() => {
                 this.$message.success(
                   '修改成功',
                   3
@@ -167,7 +167,7 @@ import { getToken } from '@/api/v1/token'
               })
             } else {
               const data = { ossCO: this.form }
-              insertOss(data, this.accessToken).then(() => {
+              create(data, this.accessToken).then(() => {
                 this.$message.success(
                   '新增成功',
                   3

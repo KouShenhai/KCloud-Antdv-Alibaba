@@ -10,7 +10,7 @@ export function list (query) {
 }
 
 // 根据类型查询字典
-export function listDictByType (type) {
+export function findOptionList (type) {
   return request({
     url: '/admin/v1/dicts/' + type + '/option-list',
     method: 'get'
@@ -26,7 +26,7 @@ export function findById (id) {
 }
 
 // 新增字典
-export function insertDict (data, token) {
+export function create (data, token) {
   return request({
     url: '/admin/v1/dicts',
     method: 'post',

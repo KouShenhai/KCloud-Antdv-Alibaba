@@ -73,15 +73,6 @@ export function modifyProfile (data) {
   })
 }
 
-// 用户头像上传
-export function uploadAvatar (data) {
-  return request({
-    url: '/admin/v1/oss/upload',
-    method: 'post',
-    data: data
-  })
-}
-
 // 用户下拉列表
 export function findOptionList () {
   return request({

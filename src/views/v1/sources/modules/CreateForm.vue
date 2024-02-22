@@ -43,7 +43,7 @@
 <script>
 
 import { create, modify, findById } from '@/api/v1/source'
-import { listDictByType } from '@/api/v1/dict'
+import { findOptionList } from '@/api/v1/dict'
 import { getToken } from '@/api/v1/token'
 
   export default {
@@ -106,7 +106,7 @@ import { getToken } from '@/api/v1/token'
         })
       },
       getDict () {
-        listDictByType('DRIVER_CLASS').then(res => {
+        findOptionList('DRIVER_CLASS').then(res => {
           this.dictOption = res.data
         })
       },

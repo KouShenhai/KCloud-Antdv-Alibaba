@@ -78,7 +78,7 @@
 </template>
 <script>
 
-import { listOss, deleteOssById } from '@/api/v1/oss'
+import { list, remove } from '@/api/v1/oss'
 import CreateForm from './modules/CreateForm'
 import { tableMixin } from '@/store/table-mixin'
 export default {
@@ -179,7 +179,7 @@ export default {
     /** 查询OSS列表 */
     getList () {
       this.loading = true
-      listOss(this.queryParam).then(response => {
+      list(this.queryParam).then(response => {
           this.list = response.data.records
           this.total = response.data.total - 0
           this.loading = false
@@ -220,7 +220,7 @@ export default {
         title: '确认删除所选中数据?',
         content: '当前选中编号为' + id + '的数据',
         onOk () {
-          return deleteOssById(id)
+          return remove([ id ])
             .then(() => {
               that.getList()
               that.$message.success(

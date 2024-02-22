@@ -43,7 +43,8 @@
 </template>
 
 <script>
-import { modifyProfile, uploadAvatar } from '@/api/v1/user'
+import { modifyProfile } from '@/api/v1/user'
+import { upload } from '@/api/v1/oss'
 import { mapGetters } from 'vuex'
 import { info } from '@/api/v1/login'
 export default {
@@ -93,7 +94,7 @@ export default {
     uploadImg (data) {
       const formData = new FormData()
       formData.append('file', data.file)
-      uploadAvatar(formData).then(response => {
+      upload(formData).then(response => {
         this.user.avatar = response.data.url
       })
     },

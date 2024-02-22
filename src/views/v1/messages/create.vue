@@ -63,7 +63,7 @@
 import { insertMessage } from '@/api/v1/message'
 import Editor from '@/components/Editor'
 import { findOptionList } from '@/api/v1/user'
-import { uploadOss } from '@/api/v1/oss'
+import { upload } from '@/api/v1/oss'
 import { getToken } from '@/api/v1/token'
 export default {
   name: 'NoticeForm',
@@ -165,7 +165,7 @@ export default {
     imgAdd (pos, file) {
       const imgData = new FormData()
       imgData.append('file', file)
-      uploadOss(imgData).then(res => {
+      upload(imgData).then(res => {
         this.$refs.content.$img2Url(pos, res.data.url)
       })
     },

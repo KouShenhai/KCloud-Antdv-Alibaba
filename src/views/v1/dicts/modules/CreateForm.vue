@@ -39,7 +39,7 @@
 
 <script>
 
-import { findById, insertDict, modify } from '@/api/v1/dict'
+import { findById, create, modify } from '@/api/v1/dict'
 import { getToken } from '@/api/v1/token'
 
 export default {
@@ -140,7 +140,7 @@ export default {
             })
           } else {
             const data = { dictCO: this.form }
-            insertDict(data, this.accessToken).then(() => {
+            create(data, this.accessToken).then(() => {
               this.$message.success(
                 '新增成功',
                 3
