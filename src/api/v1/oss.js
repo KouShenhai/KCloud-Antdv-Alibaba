@@ -1,7 +1,7 @@
 import request from '@/utils/request'
 
 // OSS上传文件
-export function uploadOss (data) {
+export function upload (data) {
   return request({
     url: '/admin/v1/oss/upload',
     method: 'post',
@@ -10,7 +10,7 @@ export function uploadOss (data) {
 }
 
 // 查询OSS列表
-export function listOss (query) {
+export function list (query) {
   return request({
     url: '/admin/v1/oss/list',
     method: 'post',
@@ -19,7 +19,7 @@ export function listOss (query) {
 }
 
 // 根据ID查看OSS
-export function getOssById (id) {
+export function findById (id) {
   return request({
     url: '/admin/v1/oss/' + id,
     method: 'get'
@@ -27,7 +27,7 @@ export function getOssById (id) {
 }
 
 // 新增OSS
-export function insertOss (data, token) {
+export function create (data, token) {
   return request({
     url: '/admin/v1/oss',
     method: 'post',
@@ -40,7 +40,7 @@ export function insertOss (data, token) {
 }
 
 // 修改OSS
-export function updateOss (data) {
+export function modify (data) {
   return request({
     url: '/admin/v1/oss',
     method: 'put',
@@ -49,9 +49,10 @@ export function updateOss (data) {
 }
 
 // 删除OSS
-export function deleteOssById (id) {
+export function remove (ids) {
   return request({
-    url: '/admin/v1/oss/' + id,
-    method: 'delete'
+    url: '/admin/v1/oss',
+    method: 'delete',
+    data: ids
   })
 }
