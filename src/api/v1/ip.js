@@ -8,14 +8,15 @@ export function listWhite (query) {
   })
 }
 
-export function deleteWhiteById (id) {
+export function removeWhite (ids) {
   return request({
-    url: '/admin/v1/ips/white/' + id,
-    method: 'delete'
+    url: '/admin/v1/ips/white',
+    method: 'delete',
+    data: ids
   })
 }
 
-export function insertWhite (data, token) {
+export function createWhite (data, token) {
   return request({
     url: '/admin/v1/ips/white',
     method: 'post',
@@ -35,14 +36,15 @@ export function listBlack (query) {
   })
 }
 
-export function deleteBlackById (id) {
+export function removeBlack (ids) {
   return request({
-    url: '/admin/v1/ips/black/' + id,
-    method: 'delete'
+    url: '/admin/v1/ips/black',
+    method: 'delete',
+    data: ids
   })
 }
 
-export function insertBlack (data, token) {
+export function createBlack (data, token) {
   return request({
     url: '/admin/v1/ips/black',
     method: 'post',

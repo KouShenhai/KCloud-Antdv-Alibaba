@@ -60,7 +60,7 @@
 
 <script>
 
-import { insertMessage } from '@/api/v1/message'
+import { create } from '@/api/v1/message'
 import Editor from '@/components/Editor'
 import { findOptionList } from '@/api/v1/user'
 import { upload } from '@/api/v1/oss'
@@ -190,7 +190,7 @@ export default {
         if (valid) {
           this.submitLoading = true
           const data = { messageCO: this.form }
-          insertMessage(data, this.accessToken).then(() => {
+          create(data, this.accessToken).then(() => {
             this.$message.success(
               '发送成功',
               3

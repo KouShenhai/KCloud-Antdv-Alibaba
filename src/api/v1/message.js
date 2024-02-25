@@ -1,6 +1,6 @@
 import request from '@/utils/request'
 
-export function listMessage (query) {
+export function list (query) {
   return request({
     url: '/admin/v1/messages/list',
     method: 'post',
@@ -8,7 +8,7 @@ export function listMessage (query) {
   })
 }
 
-export function listUnreadMessage (query) {
+export function findUnreadList (query) {
   return request({
     url: '/admin/v1/messages/unread-list',
     method: 'post',
@@ -16,7 +16,7 @@ export function listUnreadMessage (query) {
   })
 }
 
-export function insertMessage (data, token) {
+export function create (data, token) {
   return request({
     url: '/admin/v1/messages',
     method: 'post',
@@ -28,21 +28,21 @@ export function insertMessage (data, token) {
   })
 }
 
-export function getUnreadMessageCount () {
+export function findUnreadCount () {
   return request({
     url: '/admin/v1/messages/unread-count',
     method: 'get'
   })
 }
 
-export function getMessageByDetailId (id) {
+export function findByDetailId (id) {
   return request({
     url: '/admin/v1/messages/' + id,
     method: 'post'
   })
 }
 
-export function getMessageById (id) {
+export function findById (id) {
   return request({
     url: '/admin/v1/messages/' + id,
     method: 'get'

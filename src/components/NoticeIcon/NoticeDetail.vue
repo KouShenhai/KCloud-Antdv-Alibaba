@@ -22,7 +22,7 @@
 </template>
 
 <script>
-  import { getMessageByDetailId } from '@/api/v1/message'
+  import { findByDetailId } from '@/api/v1/message'
 export default {
   name: 'NoticeDetail',
   components: {
@@ -54,7 +54,7 @@ export default {
     /** 修改按钮操作 */
     getNotice (row) {
       this.visible = true
-      getMessageByDetailId(row.id).then(response => {
+      findByDetailId(row.id).then(response => {
         this.form.title = response.data.title
         this.form.content = response.data.content
       })

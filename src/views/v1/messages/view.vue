@@ -92,7 +92,7 @@
 
 <script>
 
-import { listMessage, getMessageById } from '@/api/v1/message'
+import { list, findById } from '@/api/v1/message'
 import { tableMixin } from '@/store/table-mixin'
 export default {
   name: 'Notice',
@@ -162,7 +162,7 @@ export default {
   },
   methods: {
     getMessage (row) {
-      getMessageById(row.id).then(response => {
+      findById(row.id).then(response => {
         this.form.content = response.data.content
         this.form.title = response.data.title
         this.visible = true
@@ -177,7 +177,7 @@ export default {
     /** 查询公告列表 */
     getList () {
       this.loading = true
-      listMessage(this.queryParam).then(response => {
+      list(this.queryParam).then(response => {
           this.list = response.data.records
           this.total = response.data.total - 0
           this.loading = false

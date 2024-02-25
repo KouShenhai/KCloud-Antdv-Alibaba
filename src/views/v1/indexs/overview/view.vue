@@ -56,7 +56,7 @@
   </page-header-wrapper>
 </template>
 <script>
-import { listIndex } from '@/api/v1/idx'
+import { list } from '@/api/v1/idx'
 import { tableMixin } from '@/store/table-mixin'
 import Look from './modules/Look'
 export default {
@@ -108,7 +108,7 @@ export default {
     /** 查询服务列表 */
     getList () {
       this.loading = true
-      listIndex(this.queryParam).then(res => {
+      list(this.queryParam).then(res => {
         this.list = res.data.records
         this.total = res.data.total - 0
       }).finally(() => {

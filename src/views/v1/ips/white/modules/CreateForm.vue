@@ -24,7 +24,7 @@
 
 <script>
 
-import { insertWhite } from '@/api/v1/ip'
+import { createWhite } from '@/api/v1/ip'
 import { getToken } from '@/api/v1/token'
 
   export default {
@@ -95,7 +95,7 @@ import { getToken } from '@/api/v1/token'
           if (valid) {
             this.submitLoading = true
             const data = { ipCO: this.form }
-            insertWhite(data, this.accessToken).then(() => {
+            createWhite(data, this.accessToken).then(() => {
               this.$message.success(
                 '新增成功',
                 3
