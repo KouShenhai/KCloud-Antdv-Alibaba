@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import { getTraceIndexById } from '@/api/v1/idx'
+import { findTraceById } from '@/api/v1/idx'
 import { tableMixin } from '@/store/table-mixin'
 import JsonViewer from 'vue-json-viewer'
 export default {
@@ -48,7 +48,7 @@ export default {
     },
     get (r) {
       this.loading = true
-      getTraceIndexById(r.id).then(res => {
+      findTraceById(r.id).then(res => {
         this.data = res.data
       }).finally(() => {
         this.loading = false

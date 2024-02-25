@@ -54,7 +54,7 @@
 </template>
 <script>
 
-import { listWhite, deleteWhiteById, refreshWhite } from '@/api/v1/ip'
+import { listWhite, removeWhite, refreshWhite } from '@/api/v1/ip'
 import CreateForm from '@/views/v1/ips/white/modules/CreateForm.vue'
 import { tableMixin } from '@/store/table-mixin'
 export default {
@@ -154,7 +154,7 @@ export default {
         title: '确认删除所选中数据?',
         content: '当前选中编号为' + id + '的数据',
         onOk () {
-          return deleteWhiteById(id)
+          return removeWhite([ id ])
             .then(() => {
               that.getList()
               that.$message.success(

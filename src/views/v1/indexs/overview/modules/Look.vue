@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import { getIndexByIndexName } from '@/api/v1/idx'
+import { findByIndexName } from '@/api/v1/idx'
 import { tableMixin } from '@/store/table-mixin'
 import JsonViewer from 'vue-json-viewer'
 export default {
@@ -48,7 +48,7 @@ export default {
     },
     get (r) {
       this.loading = true
-      getIndexByIndexName(r.indexName).then(res => {
+      findByIndexName(r.indexName).then(res => {
         this.data = { settings: JSON.parse(res.data.settings), mappings: JSON.parse(res.data.mappings) }
       }).finally(() => {
         this.loading = false

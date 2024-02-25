@@ -35,7 +35,7 @@
 </template>
 
 <script>
-import { listClusterInstance, gracefulShutdownInstance } from '@/api/v1/cluster'
+import { findInstanceList, gracefulShutdown } from '@/api/v1/cluster'
 import { tableMixin } from '@/store/table-mixin'
 export default {
   name: 'GracefulShutdown',
@@ -55,7 +55,8 @@ export default {
       total: 0,
       queryParam: {
         pageNum: 1,
-        pageSize: 10
+        pageSize: 10,
+        serviceId: ''
       },
       columns: [
         {
@@ -90,7 +91,7 @@ export default {
       this.open = false
     },
     shutdown (r) {
-      gracefulShutdownInstance(r).then(() => {
+      gracefulShutdown(r).then(() => {
         this.$message.success(
           '请求成功',
           3
@@ -100,12 +101,12 @@ export default {
     get (r) {
       this.open = true
       this.title = '实例列表'
-      this.queryParam.serviceId = r.id
+      this.queryParam.serviceId = r.serviceId
       this.getList()
     },
     getList () {
       this.loading = true
-      listClusterInstance(this.queryParam).then(res => {
+      findInstanceList(this.queryParam).then(res => {
         this.list = res.data.records
         this.total = res.data.total - 0
         this.loading = false

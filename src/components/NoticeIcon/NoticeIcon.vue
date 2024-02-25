@@ -47,7 +47,7 @@
 </template>
 
 <script>
-import { getUnreadMessageCount, listUnreadMessage } from '@/api/v1/message'
+import { findUnreadCount, findUnreadList } from '@/api/v1/message'
 import Ellipsis from '@/components/Ellipsis'
 import NoticeDetail from './NoticeDetail'
 import { socketApi } from '@/api/v1/socket'
@@ -94,7 +94,7 @@ export default {
   methods: {
     getList () {
       this.loading = true
-      listUnreadMessage(this.queryParam).then(response => {
+      findUnreadList(this.queryParam).then(response => {
           this.list = this.list.concat(response.data.records)
           this.total = response.data.total - 0
           this.showLoadingMore = this.total > this.queryParam.pageNum * this.queryParam.pageSize
@@ -129,7 +129,7 @@ export default {
       this.loadingMore = false
     },
     getUnReadCount () {
-      getUnreadMessageCount().then(response => {
+      findUnreadCount().then(response => {
           this.count = response.data
         }
       )

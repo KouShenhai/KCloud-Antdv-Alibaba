@@ -9,7 +9,7 @@
               <a-row :gutter="48">
                 <a-col :md="8" :sm="24">
                   <a-form-item label="服务名称">
-                    <a-input v-model="queryParam.id" placeholder="请输入" allow-clear />
+                    <a-input v-model="queryParam.serviceId" placeholder="请输入" allow-clear />
                   </a-form-item>
                 </a-col>
                 <a-col :md="8" :sm="24">
@@ -28,7 +28,7 @@
           <a-table
             :loading="loading"
             :size="tableSize"
-            rowKey="id"
+            rowKey="serviceId"
             :columns="columns"
             :data-source="list"
             :pagination="false"
@@ -58,7 +58,7 @@
   </page-header-wrapper>
 </template>
 <script>
-import { listClusterService } from '@/api/v1/cluster'
+import { findServiceList } from '@/api/v1/cluster'
 import { tableMixin } from '@/store/table-mixin'
 import GracefulShutdown from './modules/GracefulShutdown'
 export default {
@@ -75,12 +75,12 @@ export default {
       queryParam: {
         pageNum: 1,
         pageSize: 10,
-        id: undefined
+        serviceId: undefined
       },
       columns: [
         {
           title: '服务ID',
-          dataIndex: 'id',
+          dataIndex: 'serviceId',
           align: 'center'
         },
         {
@@ -105,7 +105,7 @@ export default {
     /** 查询服务列表 */
     getList () {
       this.loading = true
-      listClusterService(this.queryParam).then(res => {
+      findServiceList(this.queryParam).then(res => {
         this.list = res.data.records
         this.total = res.data.total - 0
         this.loading = false
@@ -121,7 +121,7 @@ export default {
       this.queryParam = {
         pageNum: 1,
         pageSize: 10,
-        id: undefined
+        serviceId: undefined
       }
       this.handleQuery()
     },

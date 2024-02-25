@@ -56,7 +56,7 @@
   </page-header-wrapper>
 </template>
 <script>
-import { listTraceIndex } from '@/api/v1/idx'
+import { findTraceList } from '@/api/v1/idx'
 import { tableMixin } from '@/store/table-mixin'
 import Look from './modules/Look'
 export default {
@@ -131,7 +131,7 @@ export default {
     /** 查询服务列表 */
     getList () {
       this.loading = true
-      listTraceIndex(this.queryParam).then(res => {
+      findTraceList(this.queryParam).then(res => {
         this.list = res.data.records
         this.total = res.data.total - 0
       }).finally(() => {
