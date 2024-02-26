@@ -34,7 +34,7 @@
 
 <script>
 
-import { insertDefinition } from '@/api/v1/definition'
+import { create } from '@/api/v1/definition'
 import { getToken } from '@/api/v1/token'
 export default {
   name: 'CreateForm',
@@ -116,7 +116,7 @@ export default {
             this.submitLoading = true
             const formData = new FormData()
             formData.append('file', this.fileData)
-            insertDefinition(formData, this.accessToken).then(() => {
+            create(formData, this.accessToken).then(() => {
               this.$message.success(
                 '新增成功',
                 3
