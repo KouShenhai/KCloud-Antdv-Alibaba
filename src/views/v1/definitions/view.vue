@@ -100,7 +100,7 @@
 
 <script>
 
-import { listDefinition, delDefinition, suspendDefinition, activateDefinition, getDefinitionDiagram, definitionTemplate } from '@/api/v1/definition'
+import { list, delDefinition, suspendDefinition, activateDefinition, findDiagram, definitionTemplate } from '@/api/v1/definition'
 import CreateForm from './modules/CreateForm'
 import { tableMixin } from '@/store/table-mixin'
 import moment from 'moment'
@@ -195,7 +195,7 @@ export default {
     /** 查询流程定义列表 */
     getList () {
       this.loading = true
-      listDefinition(this.queryParam).then(response => {
+      list(this.queryParam).then(response => {
           this.list = response.data.records
           this.total = response.data.total - 0
           this.loading = false
@@ -204,7 +204,7 @@ export default {
     },
     getDefinition (row) {
       this.visible = true
-      getDefinitionDiagram(row.definitionId).then(res => {
+      findDiagram(row.definitionId).then(res => {
          this.flowUri = 'data:image/png;base64,' + res.data
       })
     },

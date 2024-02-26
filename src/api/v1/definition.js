@@ -1,18 +1,18 @@
 import request from '@/utils/request'
 
 // 分页
-export function listDefinition (query) {
+export function list (query) {
   return request({
-    url: '/admin/v1/definitions/list',
+    url: '/flowable/v1/definitions/list',
     method: 'post',
     data: query
   })
 }
 
 // 新增
-export function insertDefinition (data, token) {
+export function create (data, token) {
   return request({
-    url: '/admin/v1/definitions',
+    url: '/flowable/v1/definitions',
     method: 'post',
     data: data,
     headers: {
@@ -46,9 +46,9 @@ export function delDefinition (deploymentId) {
   })
 }
 
-export function getDefinitionDiagram (id) {
+export function findDiagram (id) {
   return request({
-    url: '/admin/v1/definitions/' + id + '/diagram',
+    url: '/flowable/v1/definitions/' + id + '/diagram',
     method: 'get'
   })
 }
