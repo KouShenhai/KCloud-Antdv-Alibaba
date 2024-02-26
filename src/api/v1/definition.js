@@ -23,25 +23,25 @@ export function create (data, token) {
 }
 
 // 挂起
-export function suspendDefinition (definitionId) {
+export function suspend (definitionId) {
   return request({
-    url: '/admin/v1/definitions/' + definitionId + '/suspend',
+    url: '/flowable/v1/definitions/' + definitionId + '/suspend',
     method: 'put'
   })
 }
 
 // 激活
-export function activateDefinition (definitionId) {
+export function activate (definitionId) {
   return request({
-    url: '/admin/v1/definitions/' + definitionId + '/activate',
+    url: '/flowable/v1/definitions/' + definitionId + '/activate',
     method: 'put'
   })
 }
 
 // 删除
-export function delDefinition (deploymentId) {
+export function remove (deploymentId) {
   return request({
-    url: '/admin/v1/definitions/' + deploymentId,
+    url: '/flowable/v1/definitions/' + deploymentId,
     method: 'delete'
   })
 }
@@ -53,9 +53,9 @@ export function findDiagram (id) {
   })
 }
 
-export function definitionTemplate () {
+export function downloadTemplate () {
   return request({
-    url: '/admin/v1/definitions/template',
+    url: '/admin/v1/definitions/download-template',
     method: 'get',
     responseType: 'blob'
   })

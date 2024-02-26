@@ -23,7 +23,7 @@
         <a-button type="primary" @click="$refs.createForm.handleAdd()" v-hasPermi="['definitions:create']">
           <a-icon type="plus" />新增
         </a-button>
-        <a-button @click="downloadTemplate" v-hasPermi="['definitions:template']">
+        <a-button @click="downloadTemplate" v-hasPermi="['definitions:download-template']">
           <a-icon type="download" />模板
         </a-button>
       </div>
@@ -100,7 +100,14 @@
 
 <script>
 
-import { list, delDefinition, suspendDefinition, activateDefinition, findDiagram, definitionTemplate } from '@/api/v1/definition'
+import {
+  list,
+  remove,
+  suspend,
+  activate,
+  findDiagram,
+  downloadTemplate
+} from '@/api/v1/definition'
 import CreateForm from './modules/CreateForm'
 import { tableMixin } from '@/store/table-mixin'
 import moment from 'moment'
@@ -166,7 +173,7 @@ export default {
   },
   methods: {
     downloadTemplate () {
-      definitionTemplate().then(res => {
+      downloadTemplate().then(res => {
         const url = window.URL.createObjectURL(res) // 创建下载链接
         const link = document.createElement('a') // 赋值给a标签的href属性
         link.style.display = 'none'
@@ -225,7 +232,7 @@ export default {
     },
     suspendFlow (row) {
       const that = this
-      suspendDefinition(row.definitionId).then(() => {
+      suspend(row.definitionId).then(() => {
         that.getList()
         this.$message.success(
           '挂起成功',
@@ -235,7 +242,7 @@ export default {
     },
     activateFlow (row) {
       const that = this
-      activateDefinition(row.definitionId).then(() => {
+      activate(row.definitionId).then(() => {
         that.getList()
         this.$message.success(
           '激活成功',
@@ -260,7 +267,7 @@ export default {
         title: '确认删除所选中数据?',
         content: '当前选中编号为' + deploymentId + '的数据',
         onOk () {
-          return delDefinition(deploymentId)
+          return remove(deploymentId)
             .then(() => {
               that.getList()
               that.$message.success(
