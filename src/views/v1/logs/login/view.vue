@@ -28,7 +28,7 @@
               <span class="table-page-search-submitButtons">
                 <a-button type="primary" @click="handleQuery"><a-icon type="search" />查询</a-button>
                 <a-button style="margin-left: 8px" @click="resetQuery"><a-icon type="redo" />重置</a-button>
-                <a-button v-hasPermi="['logs:login-export']" :loading="exportLoading" type="danger" style="margin-left: 8px" @click="exportList"><a-icon type="export" />导出</a-button>
+                <a-button v-hasPermi="['logs:export-login']" :loading="exportLoading" type="danger" style="margin-left: 8px" @click="exportList"><a-icon type="export" />导出</a-button>
               </span>
             </a-col>
           </a-row>
@@ -67,7 +67,7 @@
 
 <script>
 
-import { listLogin, exportLogin } from '@/api/v1/loginlog'
+import { findLoginList, exportLogin } from '@/api/v1/log'
 import { tableMixin } from '@/store/table-mixin'
 import moment from 'moment/moment'
 
@@ -212,7 +212,7 @@ export default {
       }
       this.queryParam.startTime = this.dateRange[0] + ' 00:00:00'
       this.queryParam.endTime = this.dateRange[1] + ' 23:59:59'
-      listLogin(this.queryParam).then(response => {
+      findLoginList(this.queryParam).then(response => {
           this.list = response.data.records
           this.total = response.data.total - 0
           this.loading = false

@@ -21,7 +21,7 @@
               <span class="table-page-search-submitButtons">
                 <a-button type="primary" @click="handleQuery"><a-icon type="search" />查询</a-button>
                 <a-button style="margin-left: 8px" @click="resetQuery"><a-icon type="redo" />重置</a-button>
-                <a-button v-hasPermi="['logs:operate-export']" :loading="exportLoading" type="danger" style="margin-left: 8px" @click="exportList"><a-icon type="export" />导出</a-button>
+                <a-button v-hasPermi="['logs:export-operate']" :loading="exportLoading" type="danger" style="margin-left: 8px" @click="exportList"><a-icon type="export" />导出</a-button>
               </span>
             </a-col>
           </a-row>
@@ -60,7 +60,7 @@
 
 <script>
 
-import { operateExport, listOperate } from '@/api/v1/operate'
+import { exportOperate, findOperateList } from '@/api/v1/log'
 import { tableMixin } from '@/store/table-mixin'
 import moment from 'moment'
 export default {
@@ -202,7 +202,7 @@ export default {
     },
     exportList () {
       this.exportLoading = true
-      operateExport(this.queryParam).then(res => {
+      exportOperate(this.queryParam).then(res => {
         const filename = '操作日志_' + moment(new Date()).format('YYYYMMDDHHmmss') + '.xlsx'
         const url = window.URL.createObjectURL(res) // 创建下载链接
         const link = document.createElement('a') // 赋值给a标签的href属性
@@ -223,7 +223,7 @@ export default {
     /** 查询登录日志列表 */
     getList () {
       this.loading = true
-      listOperate(this.queryParam).then(response => {
+      findOperateList(this.queryParam).then(response => {
           this.list = response.data.records
           this.total = response.data.total - 0
           this.loading = false
