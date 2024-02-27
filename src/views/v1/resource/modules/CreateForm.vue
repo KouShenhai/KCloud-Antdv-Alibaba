@@ -61,7 +61,8 @@
 
 <script>
 
-  import { getResourceById, insertResource, updateResource, uploadResource } from '@/api/v1/resource'
+  import { getResourceById, insertResource, updateResource } from '@/api/v1/resource'
+  import { upload } from '@/api/v1/oss'
   import { getToken } from '@/api/v1/token'
   export default {
     name: 'CreateForm',
@@ -151,7 +152,7 @@
           this.disabled = true
           const formData = new FormData()
           formData.append('file', data.file)
-          uploadResource(formData).then(response => {
+          upload(formData).then(response => {
             this.form.url = response.data.url
             this.display()
           })

@@ -70,28 +70,28 @@
           <a @click="$refs.createForm.handleAdd()" v-hasPermi="['resource:create']">
             <a-icon type="plus" />新增
           </a>
-          <a-divider type="vertical" v-hasPermi="['resource:modify']" v-if="record.status == 2 || record.status == -1"/>
-          <a v-hasPermi="['resource:modify']" @click="$refs.createForm.handleUpdate(record, undefined)" v-if="record.status == 2 || record.status == -1">
+          <a-divider type="vertical" v-hasPermi="['resource:modify']" v-if="record.status === 2 || record.status === -1"/>
+          <a v-hasPermi="['resource:modify']" @click="$refs.createForm.handleUpdate(record, undefined)" v-if="record.status === 2 || record.status === -1">
             <a-icon type="edit" />修改
           </a>
-          <a-divider type="vertical" v-if="record.status == 2 || record.status == -1" v-hasPermi="['resource:detail']"/>
-          <a @click="handleQuery1(record)" v-if="record.status == 2 || record.status == -1" v-hasPermi="['resource:detail']">
+          <a-divider type="vertical" v-if="record.status === 2 || record.status === -1" v-hasPermi="['resource:detail']"/>
+          <a @click="handleQuery1(record)" v-if="record.status === 2 || record.status === -1" v-hasPermi="['resource:detail']">
             <a-icon type="eye" />查看
           </a>
-          <a-divider type="vertical" v-if="record.status == 2 || record.status == -1" v-hasPermi="['resource:download']"/>
-          <a @click="download(record)" v-if="record.status == 2 || record.status == -1" v-hasPermi="['resource:download']">
+          <a-divider type="vertical" v-if="record.status === 2 || record.status === -1" v-hasPermi="['resource:download']"/>
+          <a @click="download(record)" v-if="record.status === 2 || record.status === -1" v-hasPermi="['resource:download']">
             <a-icon type="download" />下载
           </a>
-          <a-divider type="vertical" v-if="record.status != 2 && record.status != -1" v-hasPermi="['resource:diagram']"/>
-          <a @click="handleQuery2(record)" v-if="record.status != 2 && record.status != -1" v-hasPermi="['resource:diagram']">
+          <a-divider type="vertical" v-if="record.status !== 2 && record.status !== -1" v-hasPermi="['resource:diagram']"/>
+          <a @click="handleQuery2(record)" v-if="record.status !== 2 && record.status !== -1" v-hasPermi="['resource:diagram']">
             <a-icon type="gold" />查看
           </a>
           <a-divider type="vertical" v-hasPermi="['resource:audit-log']"/>
           <a @click="handleQuery3(record)" v-hasPermi="['resource:audit-log']">
             <a-icon type="file" />审批日志
           </a>
-          <a-divider type="vertical" v-if="record.status == 2 || record.status == -1" v-hasPermi="['resource:remove']"/>
-          <a @click="handleDelete(record)" v-if="record.status == 2 || record.status == -1" v-hasPermi="['resource:remove']">
+          <a-divider type="vertical" v-if="record.status === 2 || record.status === -1" v-hasPermi="['resource:remove']"/>
+          <a @click="handleDelete(record)" v-if="record.status === 2 || record.status === -1" v-hasPermi="['resource:remove']">
             <a-icon type="delete" />删除
           </a>
         </span>

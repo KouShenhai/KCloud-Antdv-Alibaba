@@ -107,15 +107,6 @@ export function searchResource (query) {
   })
 }
 
-// 上传资源
-export function uploadResource (data) {
-  return request({
-    url: '/admin/v1/resource/upload',
-    method: 'post',
-    data: data
-  })
-}
-
 // 同步资源
 export function syncResourceIndex () {
   return request({
