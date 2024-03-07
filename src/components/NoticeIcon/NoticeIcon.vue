@@ -148,7 +148,7 @@ export default {
           // test 使用 wss
           // dev 使用 ws
           // url = `wss://127.0.0.1:5555` + socketApi.URI
-          url = `ws://localhost:5555` + socketApi.URI
+          url = `ws://127.0.0.1:5555` + socketApi.URI
         }
         // 打开一个websocket
         websocket = new WebSocket(url)
